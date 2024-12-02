@@ -1,0 +1,33 @@
+<svg
+    width="200"
+    height="200"
+    viewBox="0 0 200 200"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+    <!-- Janitor's Body -->
+    <rect x="85" y="100" width="30" height="60" fill="#87CEEB" />
+
+    <!-- Janitor's Head -->
+    <circle cx="100" cy="80" r="20" fill="#FFDAB9" />
+
+    <!-- Janitor's Smile -->
+    <path
+        d="M90 80 Q100 95 110 80"
+        stroke="#000"
+        stroke-width="2"
+        fill="none"
+    />
+
+    <!-- Janitor's Eyes -->
+    <circle cx="93" cy="75" r="3" fill="#000" />
+    <circle cx="107" cy="75" r="3" fill="#000" />
+
+    <!-- Janitor's Hat -->
+    <rect x="80" y="60" width="40" height="15" fill="#00008B" />
+    <rect x="85" y="50" width="30" height="10" fill="#00008B" />
+
+    <!-- Janitor's Broom -->
+    <rect x="70" y="90" width="10" height="70" fill="#8B4513" />
+    <polygon points="65,160 85,160 75,180" fill="#D2B48C" />
+

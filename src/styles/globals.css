@@ -1,0 +1,70 @@
+/* src/styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add any custom global styles here if needed */
+
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+@layer utilities {
+  .slanted-divider {
+    width: 80px;
+    height: 100px;
+    background-color: #38a169; /* Green background matching the header */
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    
+    transform: skewX(-15deg); /* Apply a slant */
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
+
+@keyframes reverse-spin-slow {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 5s linear infinite;
+}
+
+.animate-reverse-spin-slow {
+  animation: reverse-spin-slow 5s linear infinite;
+}
+@keyframes continuous-fade {
+  0% {
+    background-position: 0% 0;
+  }
+  50% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-continuous-fade {
+  animation: continuous-fade 6s linear infinite; /* Smooth and continuous fading */
+}
