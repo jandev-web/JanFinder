@@ -91,7 +91,7 @@ const Header = () => {
             {/* Right side */}
             <div>
               <Link
-                href="/login"
+                href="/members/sign-in"
                 className="text-white text-lg mr-6 font-medium hover:text-yellow-500 transition duration-300"
               >
                 Log In
