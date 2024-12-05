@@ -15,13 +15,7 @@ const CustomProgressBar: React.FC<CustomProgressBarProps> = ({ stepNumber }) => 
       </div>
 
       {/* Step Numbers */}
-      <div className="flex justify-between text-sm font-medium mb-2">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="text-gray-700">
-            Step {index + 1}
-          </div>
-        ))}
-      </div>
+      
 
       {/* Outer Bar Container */}
       <div className="relative h-6 w-full bg-gray-300 rounded-lg overflow-hidden">

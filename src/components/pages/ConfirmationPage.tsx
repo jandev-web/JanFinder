@@ -79,7 +79,9 @@ const ConfirmationPage: React.FC = () => {
   const handleConfirm = async () => {
     if (!quoteID || !customerInfo) return;
     try {
-      await confirmQuote(quoteID);
+      const confirmedQuote = await confirmQuote(quoteID);
+      const confirmationNumber = confirmedQuote.confirmationNumber
+      console.log(confirmationNumber)
       const name = `${customerInfo.firstName} ${customerInfo.lastName}`;
       const queryString = new URLSearchParams({ name }).toString();
       router.push(`/congratulations?${queryString}`);

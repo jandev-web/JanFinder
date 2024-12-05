@@ -94,7 +94,7 @@ const CustomerInfo: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover pt-20 pb-20 bg-center flex flex-col items-center justify-center"
+      className="min-h-screen bg-cover pb-20 bg-center flex flex-col items-center justify-center"
       style={{ backgroundImage: "url('/images/customerInfoPic.jpeg')" }}
     >
       <QuoteProgressBar stepNumber={1} />

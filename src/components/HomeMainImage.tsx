@@ -19,6 +19,9 @@ const HomeMainImage: React.FC = () => {
     <h1 className="text-5xl lg:text-6xl font-bold pt-24 pb-4 text-yellow-400 drop-shadow-md">
       JanFinder
     </h1>
+    <h2 className="text-3xl pb-4 text-yellow-400 drop-shadow-md">
+      "Where Service providers pay for the privelege to service your facility, they bid you win!"
+    </h2>
 
     {/* Catchy Description */}
     <p className="text-lg lg:text-2xl text-white pt-10 font-medium max-w-4xl pb-10 drop-shadow-lg">

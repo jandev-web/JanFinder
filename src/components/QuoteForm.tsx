@@ -125,7 +125,7 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID }) => {
         </div>
 
         <div className="flex flex-col text-gray-700">
-          <label className="block text-gray-700 font-semibold mb-2">Square Feet:</label>          <select
+          <label className="block text-gray-700 font-semibold mb-2">Industry:</label>          <select
             name="facilityType"
             value={formData.facilityType}
             onChange={handleChange}

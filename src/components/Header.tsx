@@ -28,12 +28,12 @@ const dropdownData = {
     title: 'Quote Seekers',
     image: '/images/dropdownCustomer.png',
     links: [
-      { name: 'How It Works', href: '/howItWorks' },
+      { name: 'How It Works', href: '/how-it-works' },
       { name: 'Our Quote Process', href: '/quote-process' },
       { name: 'Our Bidding Process', href: '/bidding-process' },
       { name: 'Start a Quote Now!', href: '/faq' },
-      { name: 'Check Quote Status', href: '/quoteStatus' },
-      { name: 'Quote Seeker Home Page', href: '/quoteSeeker' },
+      { name: 'Check Quote Status', href: '/quote-status' },
+      { name: 'Quote Seeker Home Page', href: '/quote-seeker' },
     ],
   },
   owners: {
