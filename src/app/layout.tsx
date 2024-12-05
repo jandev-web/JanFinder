@@ -28,14 +28,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/public/favicon.ico" type="image/x-icon" />
-        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
+        <title>{metadata.title}</title>
+        <link
+          rel="icon"
+          href="/icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
       </head>
-      <body className="w-full">
-        <UserProvider> 
-          {children}
-        </UserProvider>
+      <body className={`${inter.className} w-full`}>
+        <UserProvider>{children}</UserProvider>
       </body>
     </html>
   );
