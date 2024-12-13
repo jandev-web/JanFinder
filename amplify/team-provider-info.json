@@ -10,6 +10,11 @@
       "StackName": "amplify-janfinder-dev-16acf",
       "StackId": "arn:aws:cloudformation:us-east-1:058264180666:stack/amplify-janfinder-dev-16acf/a578ee50-b10a-11ef-b364-0e91fe46cb77",
       "AmplifyAppId": "d1kh3wiq6fgdpg"
+    },
+    "categories": {
+      "auth": {
+        "janfinderae19edbe": {}
+      }
     }
   }
 }
