@@ -84,7 +84,7 @@
     "three-mesh-bvh": "^0.8.0"
   },
   "engines": {
-    "node": ">=22",
+    "node": ">=20",
     "npm": ">=7"
   }
 }

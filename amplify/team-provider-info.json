@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-janfinder-dev-1c1b5-authRole",
+      "UnauthRoleArn": "arn:aws:iam::058264180666:role/amplify-janfinder-dev-1c1b5-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::058264180666:role/amplify-janfinder-dev-1c1b5-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-janfinder-dev-1c1b5-deployment",
+      "UnauthRoleName": "amplify-janfinder-dev-1c1b5-unauthRole",
+      "StackName": "amplify-janfinder-dev-1c1b5",
+      "StackId": "arn:aws:cloudformation:us-east-1:058264180666:stack/amplify-janfinder-dev-1c1b5/d0e06970-b98d-11ef-83d4-0affcebb962b",
+      "AmplifyAppId": "dxu8x9ozkcxx7"
+    },
+    "categories": {
+      "auth": {
+        "janfindere113d7e0": {}
+      }
+    }
+  }
+}
