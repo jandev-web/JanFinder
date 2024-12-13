@@ -5,7 +5,7 @@ import '@aws-amplify/ui-react/styles.css'; // Ensure the styles are imported
 import CBO from '@/components/pages/CBO';
 import MemberLoadingScreen from '@/components/pages/MemberPageLoading';
 
-import { AuthGetCurrentUserServer, cookiesClient } from "@/utils/amplify-utils";
+import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
 
 

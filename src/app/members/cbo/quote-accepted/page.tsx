@@ -1,23 +1,23 @@
-'use client'
-import React from 'react';
-import CBOHeader from '@/components/CBOHeader';
-import { useUser } from '@/components/UserContext';
-
+import React from "react";
+import CBOHeader from "@/components/CBOHeader";
 import { CBOQuoteAccepted } from "@/components";
+import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
+export default async function QuoteAcceptedPage() {
+  // Fetch user data server-side
+  const user = await AuthGetCurrentUserServer();
 
+  if (!user) {
+    return <div>User not authenticated</div>; // Handle unauthenticated state
+  }
 
-function QuoteAcceptedPage() {
-  const { attributes } = useUser();
-  const user = attributes
-  
   return (
-    
-        <div>
-          <CBOHeader user={user} />
-          <CBOQuoteAccepted/>
-        </div>
+    <div>
+      {/* Header Section */}
+      <CBOHeader user={user} />
       
+      {/* Quote Accepted Section */}
+      <CBOQuoteAccepted />
+    </div>
   );
-};
-export default QuoteAcceptedPage;
+}

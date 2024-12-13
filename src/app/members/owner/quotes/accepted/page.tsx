@@ -1,31 +1,35 @@
-'use client';
 
 import React from 'react';
-import fetchFilteredQuotes from '@/utils/getFilteredQuotesOwner';
+import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
+import { redirect } from 'next/navigation';
 import OwnerAccQuotes from '@/components/OwnerAcceptedQuotes'
 import OwnerHeader from '@/components/OwnerHeader';
 
 
-import { useUser } from '@/components/UserContext';
+export default async function AllQuotesPage() {
+  try {
+    // Fetch the authenticated user on the server
+    const user = await AuthGetCurrentUserServer();
 
+    // Redirect to the login page if the user is not authenticated
+    if (!user) {
+      redirect('/login');
+    }
 
-const AllQuotesPage: React.FC = () => {
-  const { attributes } = useUser();
-  const user = attributes
-
-
-  return (
-
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="pt-10">
-        <OwnerHeader user={user} />
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="pt-10">
+          <OwnerHeader user={user} />
+        </div>
+        <div className="flex-1 flex pt-10">
+          <OwnerAccQuotes user={user} />
+        </div>
       </div>
-      <div className="flex-1 flex pt-10">
-      <OwnerAccQuotes user={user} />
-      </div>
-    </div>
+    );
+  } catch (error) {
+    console.error('Error fetching user:', error);
 
-  );
-};
-
-export default AllQuotesPage;
+    // Redirect to login if an error occurs
+    redirect('/login');
+  }
+}

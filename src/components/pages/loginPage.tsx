@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { fetchUserAttributes } from 'aws-amplify/auth';
-import { useUser } from '@/components/UserContext';
+
 import { checkIsOwner } from '@/utils/checkIsOwner';
 import MemberLoadingScreen from '@/components/pages/MemberPageLoading';
 
@@ -15,7 +15,6 @@ interface LoginPageProps {
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ user, signOut, isSigningOut, isRedirect }) => {
-  const { setAttributes } = useUser();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,7 +31,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ user, signOut, isSigningOut, isRe
     const handleUserCheck = async () => {
       if (user) {
         const attributes = await fetchUserAttributes();
-        setAttributes(attributes);
+        //setAttributes(attributes);
 
         const isOwner = await checkIsOwner(attributes);
         router.push(isOwner ? '/members/owner' : '/members/cbo');
@@ -42,7 +41,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ user, signOut, isSigningOut, isRe
     };
 
     handleUserCheck();
-  }, [isSigningOut, user, router, isRedirect, setAttributes]);
+  }, [isSigningOut, user, router, isRedirect]);
 
   if (isLoading) {
     return <MemberLoadingScreen />;

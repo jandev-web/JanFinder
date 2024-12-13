@@ -1,32 +1,29 @@
-'use client';
-
 import React from 'react';
-import { useUser } from '@/components/UserContext';
+import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
+import { redirect } from 'next/navigation';
 import SubscriptionPage from '@/components/pages/Subscribe';
-
 import OwnerHeader from '@/components/OwnerHeader';
 
+export default async function OwnerSubscribePage() {
+  try {
+    const user = await AuthGetCurrentUserServer();
 
-const OwnerSubscribePage: React.FC = () => {
-  const { attributes } = useUser();
-  const currentUser = attributes
-  
+    if (!user) {
+      redirect('/login');
+    }
 
-  return (
-    <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100">
-      {/* Header Section */}
-      <div className="w-full pb-12">
-        <OwnerHeader user={currentUser} />
+    return (
+      <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100">
+        <div className="w-full pb-12">
+          <OwnerHeader user={user} />
+        </div>
+        <div className="w-full flex flex-col items-center mt-10">
+          <SubscriptionPage user={user} />
+        </div>
       </div>
-
-      {/* Main Content */}
-      <div className="w-full flex flex-col items-center mt-10">
-        
-          <SubscriptionPage user={currentUser} />
-        
-      </div>
-    </div>
-  );
-};
-
-export default OwnerSubscribePage;
+    );
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    redirect('/login');
+  }
+}

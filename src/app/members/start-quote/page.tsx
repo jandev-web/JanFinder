@@ -1,34 +1,29 @@
-'use client';
-
 import React from 'react';
-
-
+import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
+import { redirect } from 'next/navigation';
 import OwnerHeader from '@/components/OwnerHeader';
-import CBOBuildingData from '@/components/pages/CBOBuildingData'
-import MemberStartQuotePage from '@/components/pages/MemberStartQuotePage'
+import MemberStartQuotePage from '@/components/pages/MemberStartQuotePage';
 
-import { useUser } from '@/components/UserContext';
+export default async function StartQuotePage() {
+  try {
+    const user = await AuthGetCurrentUserServer();
 
+    if (!user) {
+      redirect('/login');
+    }
 
-
-
-const StartQuotePage: React.FC = () => {
-  const { attributes } = useUser();
-  const currentUser = attributes
-
-
-  return (
-
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="pt-10">
-        <OwnerHeader user={currentUser} />
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="pt-10">
+          <OwnerHeader user={user} />
+        </div>
+        <div className="flex-1 flex pt-10">
+          <MemberStartQuotePage user={user} />
+        </div>
       </div>
-      <div className="flex-1 flex pt-10">
-        <MemberStartQuotePage user={currentUser} />
-      </div>
-    </div>
-
-  );
-};
-
-export default StartQuotePage;
+    );
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    redirect('/login');
+  }
+}

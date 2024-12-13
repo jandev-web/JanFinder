@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import OwnerHeader from '@/components/OwnerHeader';
-import { useUser } from '@/components/UserContext';
 import getFranchiseInfo from '@/utils/getFranchiseInfo';
 import fetchOwnerById from '@/utils/getOwnerById';
 

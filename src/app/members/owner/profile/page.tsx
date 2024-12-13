@@ -1,26 +1,33 @@
-'use client';
+import React from 'react';
+import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
+import { redirect } from 'next/navigation';
+import OwnerProfilePage from '@/components/pages/OwnerProfilePage';
+import OwnerHeader from '@/components/OwnerHeader';
 
-import React, { useState } from 'react';
-import { useUser } from '@/components/UserContext'; // Import the useUser hook
-import OwnerProfilePage from '@/components/pages/OwnerProfilePage'
-import OwnerHeader from '@/components/OwnerHeader'
-const ProfilePage: React.FC = () => {
-  const { attributes } = useUser(); // Access the user from the context
-  const user = attributes
-  
-  return (
-    <div className="flex w-full flex-col min-h-screen">
-     
-      
+export default async function ProfilePage() {
+  try {
+    // Fetch the authenticated user on the server
+    const user = await AuthGetCurrentUserServer();
+
+    // Redirect to the login page if the user is not authenticated
+    if (!user) {
+      redirect('/login');
+    }
+
+    // Render the page content with the authenticated user
+    return (
+      <div className="flex w-full flex-col min-h-screen">
+        {/* Header */}
         <OwnerHeader user={user} />
-      
 
-      
-      
+        {/* Main Content */}
         <OwnerProfilePage user={user} />
-      
-    </div>
-  );
-};
+      </div>
+    );
+  } catch (error) {
+    console.error('Error fetching user:', error);
 
-export default ProfilePage;
+    // Redirect to the login page if an error occurs
+    redirect('/login');
+  }
+}
