@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 
 function MemberLoadingScreen() {
     return (
@@ -9,7 +10,7 @@ function MemberLoadingScreen() {
                 <div className="flex justify-center mt-6">
                     <div className="relative w-64 h-64 rounded-full p-1 bg-gradient-to-r from-green-700 via-yellow-400 to-yellow-200 animate-spin-slow">
                         <div className="w-full h-full bg-gray-100 p-1 rounded-full animate-reverse-spin-slow">
-                            <img
+                            <Image
                                 src="/images/singleJan.jpeg"
                                 alt="Cleaning janitor"
                                 className="w-full h-full object-cover rounded-full shadow-lg"

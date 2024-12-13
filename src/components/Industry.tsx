@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface IndustryPageProps {
     name: string;
@@ -14,7 +15,7 @@ const IndustryPage: React.FC<IndustryPageProps> = ({ name, image, blurb }) => {
         <div className="container mx-auto px-6 py-16">
             {/* Industry Image */}
             <div className="mb-8 flex justify-center">
-                <img
+                <Image
                     src={image}
                     alt={`${name} Cleaning Services`}
                     className="w-full max-w-2xl rounded-lg shadow-lg"

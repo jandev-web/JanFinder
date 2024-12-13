@@ -1,4 +1,7 @@
 // CustomerInfo.tsx
+
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import AddressForm from '@/components/AddressForm';
 import { startQuote } from '../../utils/startQuote';

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface DropdownProps {
   title: string;
@@ -25,7 +26,7 @@ const HomeHeaderDropdown: React.FC<DropdownProps> = ({
     <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-[1000px] bg-white border border-yellow-600 shadow-lg z-50 rounded-lg">
       {/* Header with Title and Image */}
       <div className="flex items-center bg-white p-8 pb-0 pt-8 border-b border-yellow-600 rounded-t-lg">
-        <img
+        <Image
           src={image}
           alt={title}
           className="w-24 h-24 object-fill mr-6"

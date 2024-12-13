@@ -2,54 +2,31 @@ import React from 'react';
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 import ProfilePageComponent from '@/components/pages/ProfilePageComponent';
 import CBOHeader from '@/components/CBOHeader';
+import { redirect } from 'next/navigation';
 
-interface ProfilePageProps {
-  user: any;
-}
-
-const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
-  if (!user) {
-    return <div>No user found. Please log in.</div>;
-  }
-
-  return (
-    <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100">
-      <div className="w-full pb-12">
-        <CBOHeader user={user} />
-      </div>
-      <ProfilePageComponent user={user} />
-    </div>
-  );
-};
-
-export async function getServerSideProps() {
+const ProfilePage = async () => {
   try {
     const user = await AuthGetCurrentUserServer();
 
-    // If no user is found, redirect to login
+    // Redirect to login if no user is found
     if (!user) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: false,
-        },
-      };
+      redirect('/login');
     }
 
-    return {
-      props: { user },
-    };
+    return (
+      <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100">
+        <div className="w-full pb-12">
+          <CBOHeader user={user} />
+        </div>
+        <ProfilePageComponent user={user} />
+      </div>
+    );
   } catch (error) {
     console.error('Error fetching user:', error);
 
     // Redirect to login on error
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
+    redirect('/login');
   }
-}
+};
 
 export default ProfilePage;

@@ -3,7 +3,6 @@
 import '@/styles/globals.css';
 import { Inter } from "next/font/google";
 
-import { UserProvider } from '@/components/UserContext'; // Import the UserProvider
 import { Amplify } from 'aws-amplify';
 import awsExports from '@/aws-exports'; // Import your Amplify configuration
 import { metadata } from './metadata'; // Import the metadata

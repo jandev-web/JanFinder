@@ -6,6 +6,8 @@ import getFranchiseDayEvents from '@/utils/getDaysEventsFranchise';
 import getRecentQuotes from '@/utils/getRecentQuotes'
 import RecentQuotesList from '@/components/RecentQuotesList'
 import LoadingSpinner from '@/components/loadingScreen'
+import Image from 'next/image';
+
 interface OwnerComponentProps {
   user: any;
 }
@@ -53,7 +55,7 @@ const OwnerComponent: React.FC<OwnerComponentProps> = ({ user }) => {
       <div className="relative z-0 flex justify-center pb-8">
         <div className=" w-64 h-64 rounded-full p-1 bg-gradient-to-r from-green-700 via-yellow-400 to-yellow-200 animate-spin-slow">
           <div className="w-full h-full bg-gray-100 p-1 rounded-full animate-reverse-spin-slow">
-            <img
+            <Image
               src="/images/OwnerClipboard.jpeg"
               alt="Cleaning janitor"
               className="w-full h-full object-cover rounded-full shadow-lg"

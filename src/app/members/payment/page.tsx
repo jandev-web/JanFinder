@@ -1,37 +1,37 @@
-import React from 'react';
-import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
-import { redirect } from 'next/navigation';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import CBOHeader from '@/components/CBOHeader';
-import PaymentForm from '@/components/pages/paymentPage';
+import React from "react";
+import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
+import { redirect } from "next/navigation";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+import CBOHeader from "@/components/CBOHeader";
+import PaymentForm from "@/components/pages/paymentPage";
 
-export default async function PaymentPage({ searchParams }: { searchParams: { quoteId: string } }) {
+export default async function PaymentPage() {
   try {
+    // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();
 
+    // Redirect to login if no user is found
     if (!user) {
-      redirect('/login');
+      redirect("/login");
     }
-
-    const quoteID = searchParams.quoteId;
 
     return (
       <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100">
+        {/* Header Section */}
         <div className="w-full pb-12">
           <CBOHeader user={user} />
         </div>
+
+        {/* Main Content */}
         <div className="w-full flex flex-col items-center mt-10">
-          <Elements stripe={stripePromise}>
-            <PaymentForm user={user} quoteID={quoteID} />
-          </Elements>
+          <PaymentForm user={user} />
         </div>
       </div>
     );
   } catch (error) {
-    console.error('Error fetching user:', error);
-    redirect('/login');
+    console.error("Error fetching user:", error);
+
+    // Redirect to login on error
+    redirect("/login");
   }
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { getCBOBuildingTypes } from '@/utils/getCBOBuildingTypes';
 import MemberBuildingDataForm from '@/components/MemberBuildingDataForm';

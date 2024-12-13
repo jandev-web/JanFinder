@@ -8,6 +8,7 @@ import MemberLoadingScreen from '@/components/pages/MemberPageLoading'
 import { useRouter } from 'next/navigation';
 import { signOut } from 'aws-amplify/auth';
 import Link from 'next/link';
+import Image from 'next/image';
 
 
 const CreateOwnerForm: React.FC = () => {
@@ -106,7 +107,7 @@ const CreateOwnerForm: React.FC = () => {
         {/* Rotating Circle with Image */}
         <div className="flex justify-center mb-12">
           <div className="relative w-60 h-60 rounded-full bg-gradient-to-r from-blue-800 to-yellow-400 animate-spin-slow flex items-center justify-center">
-              <img
+              <Image
                 src="/images/signUpOwnerPic.jpeg"
                 alt="Business Owner"
                 className="w-56 h-56 animate-reverse-spin-slow rounded-full object-cover"
