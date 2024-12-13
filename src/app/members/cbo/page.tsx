@@ -22,13 +22,15 @@ export default async function MembersPage() {
     if (!user) {
       return<div>No</div>
     }
-    if (user && user.attributes['custom:isOwner'] === 'true') {
+    /*
+    if (user && user?.attributes['custom:isOwner'] === 'true') {
       return <div>Hello</div>
     }
 
     if (user && user.attributes['custom:isOwner'] === 'false') {
       return <div>There</div>
     }
+      */
 
     // Render loading screen if user data is incomplete
     return <MemberLoadingScreen />;
