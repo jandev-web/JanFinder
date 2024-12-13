@@ -22,7 +22,7 @@ const industries = [
 
 const Industry: React.FC = () => {
   return (
-    <section className="bg-gray-100 py-16">
+    <section className="bg-gray-100 md:pt-32 py-16">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <h1 className="text-4xl font-bold text-[#001F54] mb-8 text-center">

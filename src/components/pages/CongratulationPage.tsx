@@ -7,7 +7,7 @@ const CongratulationsPage: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const name = searchParams.get('name') || 'Customer'; // Default to "Customer" if no name is provided
-
+  const conNum = searchParams.get('con')
   const handleReturnHome = () => {
     router.push('/');
   };
@@ -19,6 +19,13 @@ const CongratulationsPage: React.FC = () => {
         <p className="text-gray-700 text-lg mb-8">
           Your quote has been submitted for bidding, and you will be notified within 24 hours when a winner emerges! Sit tight!
         </p>
+        <h2 className="text-gray-700 text-lg mb-8">
+          Your Confirmation Number:
+        </h2>
+        <p className="text-gray-700 text-lg mb-8">
+          {conNum}
+        </p>
+
         <button
           onClick={handleReturnHome}
           className="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 transition"

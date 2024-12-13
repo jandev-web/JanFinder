@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const Welcome: React.FC = () => {
     return (
-        <section className="bg-gradient-to-r from-[#001F54] to-[#003a85] text-white py-16">
+        <section className="bg-gradient-to-r from-[#001F54] to-[#003a85] text-white py-16 z-20">
             <div className="container mx-auto px-6 text-center">
                 {/* Main Heading */}
                 <h1 className="text-4xl lg:text-5xl font-extrabold mb-2">

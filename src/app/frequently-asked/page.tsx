@@ -2,13 +2,14 @@
 
 import React from 'react';
 import Header from '@/components/Header';
+import FAQS from '@/components/pages/FAQS';
 import Footer from '@/components/Footer';
-import Industry from '@/components/pages/IndustryPage';
 import SmallHeader from '@/components/SmallHeader';
 
-const IndustryPage = () => {
+const FAQPage = () => {
   return (
     <div className="flex flex-col w-full min-h-screen">
+      {/* Conditional Rendering Based on Screen Size */}
       <div className="hidden md:block">
         <Header />
       </div>
@@ -16,18 +17,15 @@ const IndustryPage = () => {
         <SmallHeader />
       </div>
 
-
       {/* Ensures Home takes up all available space between Header and Footer */}
-      <div className="flex-grow pt-10 md:pt-24 pb-0 mb-0">
-        <Industry />
+      <div className="flex-grow">
+        <FAQS />
       </div>
       <div className="pt-0 mt-0">
         <Footer />
       </div>
-
     </div>
-
   );
 };
 
-export default IndustryPage;
+export default FAQPage;

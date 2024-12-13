@@ -80,15 +80,22 @@ const ConfirmationPage: React.FC = () => {
     if (!quoteID || !customerInfo) return;
     try {
       const confirmedQuote = await confirmQuote(quoteID);
-      const confirmationNumber = confirmedQuote.confirmationNumber
-      console.log(confirmationNumber)
-      const name = `${customerInfo.firstName} ${customerInfo.lastName}`;
-      const queryString = new URLSearchParams({ name }).toString();
-      router.push(`/congratulations?${queryString}`);
+      const con = confirmedQuote.confirmationNumber;
+      console.log(con);
+    
+      // Construct query string parameters
+      const queryParams = new URLSearchParams({
+        con,
+        name: `${customerInfo.firstName} ${customerInfo.lastName}`
+      });
+    
+      // Navigate to the congratulations page with the query string
+      router.push(`/congratulations?${queryParams.toString()}`);
     } catch (error) {
       console.error("Confirmation failed:", error);
       alert("Failed to confirm. Please try again.");
     }
+    
   };
 
   if (!customerInfo || !selectedPackage) {

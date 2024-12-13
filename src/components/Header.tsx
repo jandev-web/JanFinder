@@ -45,13 +45,13 @@ const dropdownData = {
     ],
   },
   why: {
-    title: 'Why Use JanFinder?',
+    title: 'Why Use anFinder?',
     image: '/images/dropdownWhy.png',
     links: [
       { name: 'Our Quote Process', href: '/quote-process' },
       { name: 'Our Bidding Process', href: '/bidding-process' },
       { name: 'Reviews', href: '/reviews' },
-      { name: 'FAQs', href: '/faq' },
+      { name: 'FAQs', href: '/frequently-asked' },
       { name: 'Why use JanFinder', href: '/why-janfinder' },
       { name: 'About Us', href: '/about' },
     ],

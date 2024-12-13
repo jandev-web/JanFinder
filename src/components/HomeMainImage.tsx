@@ -7,7 +7,7 @@ const HomeMainImage: React.FC = () => {
   return (
     <section
       id="main-image-section"
-      className="relative bg-cover bg-center bg-no-repeat w-full h-[700px] lg:h-[900px]"
+      className="relative bg-cover bg-center bg-no-repeat w-full h-[700px] lg:h-[900px] z-10"
       style={{ backgroundImage: "url('/images/firstHome.jpeg')" }}
     >
       {/* Dark Overlay */}
@@ -39,7 +39,7 @@ const HomeMainImage: React.FC = () => {
 
         {/* Mirrored Title */}
         <h1
-          className="text-5xl lg:text-6xl font-bold mt-38 text-yellow-400 opacity-20 drop-shadow-md transform scale-y-[-1]"
+          className="text-5xl lg:text-6xl font-bold mt-38 text-yellow-400 opacity-20 drop-shadow-md transform scale-y-[-1] z-0"
           style={{ transform: 'scaleY(-1)' }}
         >
           JanFinder
