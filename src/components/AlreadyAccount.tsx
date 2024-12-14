@@ -16,7 +16,7 @@ const AlreadyAccount: React.FC = () => {
       </p>
       <button
         className="bg-white text-green-700 hover:bg-yellow-500 font-semibold py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
-        onClick={() => router.push('/members/signIn')}
+        onClick={() => router.push('/members/sign-in')}
       >
         Sign In Here!
       </button>

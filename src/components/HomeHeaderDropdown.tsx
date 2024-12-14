@@ -29,6 +29,8 @@ const HomeHeaderDropdown: React.FC<DropdownProps> = ({
         <Image
           src={image}
           alt={title}
+          width={50} // Explicit width
+          height={50} // Explicit height
           className="w-24 h-24 object-fill mr-6"
         />
         <h1 className="text-3xl font-bold text-[#001F54]">{title}</h1>
