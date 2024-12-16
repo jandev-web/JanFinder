@@ -2,6 +2,8 @@ import React from "react";
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 import CBOHeader from "@/components/CBOHeader";
 import PaymentForm from "@/components/pages/paymentPage";
 

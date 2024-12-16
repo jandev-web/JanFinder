@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap"
   },
   "keywords": [],
   "author": "",
@@ -73,6 +74,7 @@
     "jspdf-autotable": "^3.8.2",
     "lru-cache": "^11.0.2",
     "next": "^14.2.12",
+    "next-sitemap": "^4.2.3",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-device-detect": "^2.2.3",

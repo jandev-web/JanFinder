@@ -4,6 +4,9 @@ import EditProfileComponent from '@/components/pages/EditProfileComponent';
 import CBOHeader from '@/components/CBOHeader';
 import Link from 'next/link';
 
+export const dynamic = "force-dynamic";
+
+
 export default async function ProfilePage() {
   // Fetch user data server-side
   const user = await AuthGetCurrentUserServer();

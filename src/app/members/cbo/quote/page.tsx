@@ -4,6 +4,9 @@ import { cookiesClient, AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 import CBOQuote from '@/components/pages/SingleCBOQuotePage';
 import CBOHeader from '@/components/CBOHeader';
 
+export const dynamic = "force-dynamic";
+
+
 export default async function SingleCBOQuotePage({ searchParams }: { searchParams: { quoteID: string; page: string } }) {
   // Fetch user data server-side
   const user = await AuthGetCurrentUserServer();

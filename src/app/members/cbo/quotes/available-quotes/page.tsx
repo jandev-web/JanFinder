@@ -1,15 +1,20 @@
 import React from "react";
-import "@aws-amplify/ui-react/styles.css"; // Ensure the styles are imported
+import "@aws-amplify/ui-react/styles.css";
 import CBOHeader from "@/components/CBOHeader";
 import AvailableQuotes from "@/components/pages/AvailableQuotes";
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
+import { redirect } from "next/navigation";
+
+export const dynamic = "force-dynamic";
+
 
 export default async function AvailableQuotesPage() {
   // Fetch user data server-side
   const user = await AuthGetCurrentUserServer();
 
   if (!user) {
-    return <div>User not authenticated</div>; // Handle unauthenticated state
+    // Redirect to login if unauthenticated
+    redirect("/login");
   }
 
   return (

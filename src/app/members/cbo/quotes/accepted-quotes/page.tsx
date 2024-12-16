@@ -4,6 +4,9 @@ import CBOHeader from "@/components/CBOHeader";
 import { AcceptedQuotes } from "@/components";
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
+export const dynamic = "force-dynamic";
+
+
 export default async function AcceptedQuotesPage() {
   // Fetch user data server-side
   const user = await AuthGetCurrentUserServer();

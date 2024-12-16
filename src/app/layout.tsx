@@ -9,7 +9,7 @@ import { metadata } from './metadata'; // Import the metadata
 import "@aws-amplify/ui-react/styles.css";
 import type { Metadata } from "next";
 
-import ConfigureAmplifyClientSide from "@/components/config/ConfigureAmplify";
+import ConfigureAmplifyClientSide from "@/components/ConfigureAmplify";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -7,6 +7,7 @@ import AllQuotes from '@/components/pages/AllQuotes';
 
 
 
+export const dynamic = "force-dynamic";
 
 
 

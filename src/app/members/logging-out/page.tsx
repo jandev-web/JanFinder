@@ -3,6 +3,8 @@ import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
 import LoggingOut from '@/components/pages/LoggingOut';
 
+export const dynamic = "force-dynamic";
+
 export default async function FranchiseListPage() {
   try {
     // Fetch the authenticated user on the server

@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import OwnerHeader from '@/components/OwnerHeader';
 import FranchisePage from '@/components/pages/FranchisePage';
 
+export const dynamic = "force-dynamic";
+
 export default async function OwnerFranchisePage() {
   try {
     // Fetch the authenticated user on the server

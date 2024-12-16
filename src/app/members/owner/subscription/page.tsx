@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import OwnerSubscription from '@/components/pages/OwnerSubscriptionPage';
 import OwnerHeader from '@/components/OwnerHeader';
 
+export const dynamic = "force-dynamic";
+
 export default async function OwnerSubPage() {
   try {
     const user = await AuthGetCurrentUserServer();

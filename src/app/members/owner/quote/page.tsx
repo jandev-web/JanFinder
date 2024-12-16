@@ -4,6 +4,9 @@ import { redirect } from 'next/navigation';
 import OwnerQuote from '@/components/pages/SingleOwnerQuote';
 import OwnerHeader from '@/components/OwnerHeader';
 
+export const dynamic = "force-dynamic";
+
+
 export default async function SingleOwnerQuotePage({ searchParams }: { searchParams: { quoteID?: string; page?: string } }) {
   try {
     // Fetch the authenticated user on the server

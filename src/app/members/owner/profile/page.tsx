@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import OwnerProfilePage from '@/components/pages/OwnerProfilePage';
 import OwnerHeader from '@/components/OwnerHeader';
 
+export const dynamic = "force-dynamic";
+
 export default async function ProfilePage() {
   try {
     // Fetch the authenticated user on the server

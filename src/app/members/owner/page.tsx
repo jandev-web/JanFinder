@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import Owner from '@/components/pages/Owner';
 import LoginError from '@/components/LoginErrorComponent';
 
+export const dynamic = "force-dynamic";
+
 export default async function OwnerLanding() {
   try {
     // Fetch the authenticated user on the server

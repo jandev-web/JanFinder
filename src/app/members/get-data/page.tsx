@@ -3,6 +3,9 @@ import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
 import CBOBuildingData from '@/components/pages/CBOBuildingData';
 
+export const dynamic = "force-dynamic";
+
+
 export default async function GetDataPage() {
   try {
     // Fetch the authenticated user on the server

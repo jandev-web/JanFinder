@@ -6,6 +6,8 @@ import LoadingSpinner from '@/components/loadingScreen';
 import OwnerHeader from '@/components/OwnerHeader';
 import CBOHeader from '@/components/CBOHeader';
 
+export const dynamic = "force-dynamic";
+
 export default async function AllQuotesPage() {
   try {
     const user = await AuthGetCurrentUserServer();

@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import CreateCBOForm from '@/components/pages/AddCBO';
 import OwnerHeader from '@/components/OwnerHeader';
 
+export const dynamic = "force-dynamic";
+
 export default async function CBOListPage() {
   try {
     // Fetch the authenticated user on the server

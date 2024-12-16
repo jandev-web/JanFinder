@@ -4,6 +4,9 @@ import ProfilePageComponent from '@/components/pages/ProfilePageComponent';
 import CBOHeader from '@/components/CBOHeader';
 import { redirect } from 'next/navigation';
 
+export const dynamic = "force-dynamic";
+
+
 const ProfilePage = async () => {
   try {
     const user = await AuthGetCurrentUserServer();

@@ -7,6 +7,7 @@ import MemberLoadingScreen from '@/components/pages/MemberPageLoading';
 
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
+export const dynamic = "force-dynamic";
 
 
 

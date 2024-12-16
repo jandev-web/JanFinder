@@ -5,6 +5,8 @@ import AllCBOs from '@/components/pages/AllCBOs';
 import OwnerHeader from '@/components/OwnerHeader';
 import { userAgent } from 'next/server';
 
+export const dynamic = "force-dynamic";
+
 export default async function CBOListPage() {
   try {
     // Fetch the authenticated user on the server

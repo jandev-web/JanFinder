@@ -3,6 +3,9 @@ import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
 import RouteSignInUser from '@/components/RouteSignInUser';
 
+export const dynamic = "force-dynamic";
+
+
 export default async function GetDataPage() {
   try {
     // Fetch the authenticated user on the server

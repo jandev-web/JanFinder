@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import OwnerAccQuotes from '@/components/OwnerAcceptedQuotes'
 import OwnerHeader from '@/components/OwnerHeader';
 
+export const dynamic = "force-dynamic";
 
 export default async function AllQuotesPage() {
   try {

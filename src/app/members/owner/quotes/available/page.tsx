@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import OwnerHeader from '@/components/OwnerHeader';
 import OwnerAvaQuotes from '@/components/OwnerAvailableQuotes';
 
+export const dynamic = "force-dynamic";
+
 export default async function AvaQuotesPage() {
   try {
     // Fetch the authenticated user on the server

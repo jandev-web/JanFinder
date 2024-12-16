@@ -4,6 +4,9 @@ import CBOHeader from "@/components/CBOHeader";
 import CBOSubPage from "@/components/pages/CBOSubscribe";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
+
 export default async function PaymentPage() {
   try {
     // Fetch authenticated user server-side

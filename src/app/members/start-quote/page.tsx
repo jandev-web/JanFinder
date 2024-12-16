@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import OwnerHeader from '@/components/OwnerHeader';
 import MemberStartQuotePage from '@/components/pages/MemberStartQuotePage';
 
+export const dynamic = "force-dynamic";
+
 export default async function StartQuotePage() {
   try {
     const user = await AuthGetCurrentUserServer();
