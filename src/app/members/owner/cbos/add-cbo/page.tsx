@@ -1,32 +1,27 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import CreateCBOForm from '@/components/pages/AddCBO';
+import AddCBOPage from '@/components/pages/OwnerAddCBOPage';
 import OwnerHeader from '@/components/OwnerHeader';
 
 export const dynamic = "force-dynamic";
 
-export default async function CBOListPage() {
+export default async function OwnerAddCBO() {
   try {
     // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();
 
     // Redirect to the login page if the user is not authenticated
     if (!user) {
-      redirect('/login');
+      redirect('/members/sign-in');
     }
 
     // Render the page content with the authenticated user
     return (
       <div className="flex w-full flex-col min-h-screen bg-gray-100">
-        {/* Header */}
-        <OwnerHeader user={user} />
-
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col min-h-screen w-full justify-center items-start pt-14">
-          <CreateCBOForm user={user} />
-        </div>
+        <AddCBOPage user={user} />
       </div>
+
     );
   } catch (error) {
     console.error('Error fetching user:', error);

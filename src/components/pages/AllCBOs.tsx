@@ -20,7 +20,7 @@ interface UserProps {
 const AllCBOs: React.FC<UserProps> = ({ user }) => {
     //console.log('AllCBOs.tsx')
     //console.log(user?.signInDetails?.loginId)
-    const id = user?.sub
+    const id = user?.OwnerID
     //console.log('Email: ', user)
     const [cbos, setCBOs] = useState<CBO[]>([]);
     const [loading, setLoading] = useState(true);
@@ -49,11 +49,11 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
     const handleClick = (cbo: CBO) => {
         //console.log('CBO:')
         //console.log(cbo.franchiseID)
-        router.push(`/members/owner/singleCBO?cboID=${cbo.CBOID}`);
+        router.push(`/members/owner/single-cbo?cboID=${cbo.CBOID}`);
     };
 
     const handleAddCBO = () => {
-        router.push('/members/owner/CBOs/AddCBO'); // Adjust the path to match your routing structure
+        router.push('/members/owner/cbos/add-cbo'); // Adjust the path to match your routing structure
     };
 
     //console.log('CBOs:')

@@ -75,13 +75,13 @@ const CreateCBOForm: React.FC<AddCBOPageProps> = ({ user }) => {
       }
 
     try {
-      if (user.sub) {
-        const ownerID = user.sub
+      if (user) {
+        const ownerID = user.OwnerID
 
         const cboData = { email, firstName, lastName, ownerID, address, phone };
         const result = await createCBO(cboData);
         setSuccess('CBO created successfully!');
-        router.push('/members/owner/CBOs')
+        router.push('/members/owner/cbos')
       }
       else {
         console.error('No User ID')

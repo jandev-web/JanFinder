@@ -50,36 +50,16 @@ const SingleCBOPage: React.FC<SingleCBOPageProps> = ({ user }) => {
   const searchParams = useSearchParams();
 
   const [cbo, setCBO] = useState<CBO | null>(null);
-  const [isOwner, setIsOwner] = useState(false);
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const id = searchParams.get('cboID')
-  
-
-  // Check user role on initial render
-  useEffect(() => {
-    const checkRole = async () => {
-      if (user) {
-        try {
-          const result = await checkIsOwner(user);
-          setIsOwner(result !== undefined ? result : false);
-        } catch (error) {
-          console.error('Error checking user role:', error);
-          setError('Failed to check user role.');
-        }
-      }
-      setLoading(false);
-    };
-
-    checkRole();
-  }, [user]);
 
   // Fetch CBO details and quotes if the user is an owner and ID is available
   useEffect(() => {
     const fetchData = async () => {
-      if (id && isOwner) {
+      if (id) {
         setLoading(true);
         try {
           const data = await fetchCBOById(id as string);
@@ -100,7 +80,7 @@ const SingleCBOPage: React.FC<SingleCBOPageProps> = ({ user }) => {
     };
 
     fetchData();
-  }, [id, isOwner]);
+  }, [id]);
 
   const handleQuoteClick = (quote: Quote) => {
     if (cbo) {
@@ -135,53 +115,48 @@ const SingleCBOPage: React.FC<SingleCBOPageProps> = ({ user }) => {
     return <div>{error}</div>;
   }
 
-  if (!isOwner) {
-    return <div>Not authorized to view this page</div>;
-  }
+
 
   if (!cbo) {
     return <div>CBO not found</div>;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-green-100 p-10">
+    <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 p-10">
+      {/* Back Button */}
       <button
-        className="absolute top-4 left-4 pt-16 text-green-700 hover:text-yellow-500 transition duration-300"
+        className="absolute top-6 left-6 text-blue-800 font-medium hover:text-yellow-500 transition-colors duration-300"
         onClick={() => router.push('/members/owner/CBOs')}
       >
-        Back
+        &larr; Back
       </button>
+
+      {/* Main Content */}
       <div className="container mx-auto">
-        {/* Side by Side Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-          {/* Left: CBO Profile with Delete Button */}
-          <div className="flex flex-col items-center bg-white border-l-8 border-yellow-500 shadow-lg rounded-lg p-8">
-            <div className="w-full">
-              {/* Profile section with fixed height */}
-              <div className="min-h-64">
-                <CheckProfilePage cbo={cbo} />
-              </div>
-            </div>
-
-            {/* Delete Button right under profile */}
-            <div className="mt-6 w-full flex justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          {/* CBO Profile Section */}
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-2xl font-semibold text-blue-900 mb-6 text-center">
+              CBO Profile
+            </h2>
+            <CheckProfilePage cbo={cbo} />
+            <div className="mt-8 flex justify-center">
               <button
                 onClick={handleDeleteClick}
-                className="bg-yellow-500 hover:bg-yellow-600 text-green-900 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105"
+                className="bg-red-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-red-600 transition-transform duration-300 transform hover:scale-105"
               >
                 Delete CBO
               </button>
             </div>
           </div>
 
-          {/* Right: Quotes List */}
-          <div className="bg-white border-l-8 border-yellow-500 shadow-lg rounded-lg p-10">
-            <h2 className="text-3xl font-bold text-green-800 mb-6 text-center">
+          {/* Quotes List Section */}
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-2xl font-semibold text-blue-900 mb-6 text-center">
               Quotes
             </h2>
             {quotes.length === 0 ? (
-              <p className="text-gray-600 text-center">No quotes available</p>
+              <p className="text-gray-500 text-center">No quotes available</p>
             ) : (
               <SingleCBOQuoteList quotes={quotes} />
             )}
@@ -189,10 +164,9 @@ const SingleCBOPage: React.FC<SingleCBOPageProps> = ({ user }) => {
         </div>
       </div>
     </div>
-
-
-
   );
+
+
 };
 
 export default SingleCBOPage;

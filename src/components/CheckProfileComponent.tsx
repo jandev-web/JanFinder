@@ -63,11 +63,8 @@ const CheckProfilePage: React.FC<CheckProfilePageProps> = ({ cbo }) => {
     fetchCBOData();
   }, [cbo]);
   return (
-
-    <div className="bg-white p-8 w-full max-w-md">
-      <h2 className="text-3xl font-bold text-green-800 mb-6 text-center">
-        CBO Profile
-      </h2>
+    <div className="bg-white p-8 w-full max-w-lg shadow-lg rounded-lg border border-gray-300">
+      <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">CBO Profile</h2>
       <div className="flex justify-center mb-6">
         {profilePic ? (
           <Image
@@ -75,7 +72,7 @@ const CheckProfilePage: React.FC<CheckProfilePageProps> = ({ cbo }) => {
             alt="Profile Picture"
             width={150}
             height={150}
-            className="rounded-full border-2 border-gray-300 shadow-lg"
+            className="rounded-full border-2 border-yellow-400 shadow-lg"
             priority
           />
         ) : (
@@ -83,28 +80,28 @@ const CheckProfilePage: React.FC<CheckProfilePageProps> = ({ cbo }) => {
         )}
       </div>
       <div className="space-y-4 text-center">
-        <p className="text-xl text-gray-700">
-          <strong>First Name:</strong> {cbo.firstName}
+        <p className="text-lg text-gray-700">
+          <strong className="font-semibold text-blue-900">First Name:</strong> {cbo.firstName}
         </p>
-        <p className="text-xl text-gray-700">
-          <strong>Last Name:</strong> {cbo.lastName}
+        <p className="text-lg text-gray-700">
+          <strong className="font-semibold text-blue-900">Last Name:</strong> {cbo.lastName}
         </p>
-        <p className="text-xl text-gray-700">
-          <strong>Phone:</strong> {cbo.phone}
+        <p className="text-lg text-gray-700">
+          <strong className="font-semibold text-blue-900">Phone:</strong> {cbo.phone}
         </p>
-        <p className="text-xl text-gray-700">
-          <strong>Email:</strong> {cbo.email}
+        <p className="text-lg text-gray-700">
+          <strong className="font-semibold text-blue-900">Email:</strong> {cbo.email}
         </p>
-        <p className="text-xl text-gray-700">
-          <strong>Address:</strong> {cbo.address.street}, {cbo.address.city} {cbo.address.state}, {cbo.address.postalCode}
+        <p className="text-lg text-gray-700">
+          <strong className="font-semibold text-blue-900">Address:</strong> {cbo.address.street}, {cbo.address.city}, {cbo.address.state}, {cbo.address.postalCode}
         </p>
-        <p className="text-xl text-gray-700">
-          <strong>Franchise:</strong> {franchiseName}
+        <p className="text-lg text-gray-700">
+          <strong className="font-semibold text-blue-900">Franchise:</strong> {franchiseName}
         </p>
       </div>
     </div>
-
   );
+  
 };
 
 export default CheckProfilePage;
