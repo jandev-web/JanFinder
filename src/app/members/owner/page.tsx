@@ -13,7 +13,7 @@ export default async function OwnerLanding() {
 
     // Redirect to the login page if the user is not authenticated
     if (!user) {
-      redirect('/login');
+      redirect('/members/sign-in');
     }
 
     // Render the Owner component with the user's data

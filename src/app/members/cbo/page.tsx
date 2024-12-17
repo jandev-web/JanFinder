@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
+
 import '@aws-amplify/ui-react/styles.css'; // Ensure the styles are imported
 import CBO from '@/components/pages/CBO';
 import MemberLoadingScreen from '@/components/pages/MemberPageLoading';
@@ -11,17 +13,14 @@ export const dynamic = "force-dynamic";
 
 
 
-export default async function MembersPage() {
+export default async function CBOPage() {
   try {
-    // Retrieve cookies for SSR
     
-
-    // Fetch the current user from Amplify
     const user = await AuthGetCurrentUserServer();
     console.log(user)
     // Determine user role and render appropriate component
     if (!user) {
-      return<div>No</div>
+      redirect('/members/sign-in');
     }
     /*
     if (user && user?.attributes['custom:isOwner'] === 'true') {
@@ -34,7 +33,7 @@ export default async function MembersPage() {
       */
 
     // Render loading screen if user data is incomplete
-    return <MemberLoadingScreen />;
+    return <CBO user={user} />;
   } catch (error) {
     console.error('Error fetching authenticated user:', error);
 

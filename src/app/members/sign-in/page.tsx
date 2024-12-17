@@ -9,9 +9,10 @@ import { Amplify } from 'aws-amplify';
 import awsExports from '@/aws-exports';
 import { cognitoUserPoolsTokenProvider } from 'aws-amplify/auth/cognito';
 import { sessionStorage } from 'aws-amplify/utils';
+import { signOut } from "aws-amplify/auth";
 
 
-cognitoUserPoolsTokenProvider.setKeyValueStorage(sessionStorage);
+//cognitoUserPoolsTokenProvider.setKeyValueStorage(sessionStorage);
 
 const customTheme: Theme = {
   name: 'custom-theme',
@@ -93,15 +94,18 @@ const components = {
 function CustomAuthenticator() {
   const { user } = useAuthenticator((context) => [context.user]);
 
+  console.log(user)
   useEffect(() => {
     if (user) {
+      console.log('Is User')
+      //signOut();
       redirect("/members/home");
     }
   }, [user]);
 
   return (
     <ThemeProvider theme={customTheme}>
-      <Authenticator hideSignUp components={components} />
+      <Authenticator components={components} />
     </ThemeProvider>
   )
 }

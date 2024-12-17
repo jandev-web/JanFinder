@@ -14,6 +14,7 @@ function MemberLoadingScreen() {
                                 src="/images/singleJan.jpeg"
                                 alt="Cleaning janitor"
                                 className="w-full h-full object-cover rounded-full shadow-lg"
+                                fill
                             />
                         </div>
                     </div>

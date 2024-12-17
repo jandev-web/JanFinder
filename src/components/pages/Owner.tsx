@@ -1,16 +1,15 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import { redirect } from 'next/navigation';
+import fetchOwnerById from '@/utils/getOwnerById';
+import LoadingSpinner from '@/components/loadingScreen'
 
 import OwnerComponent from '../OwnerComponent';
 import OwnerHeader from '../OwnerHeader';
 
 import { useRouter } from 'next/navigation';
 
-
-import { fetchUserAttributes } from 'aws-amplify/auth';
-import { getCurrentUser } from 'aws-amplify/auth';
-import { useAuthenticator } from '@aws-amplify/ui-react';
 
 
 interface OwnerPageProps {
@@ -19,32 +18,44 @@ interface OwnerPageProps {
 
 const OwnerPage: React.FC<OwnerPageProps> = ({ user }) => {
     const router = useRouter()
-    const [isOwner, setIsOwner] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [currentUser, setCurrentUser] = useState<any>(null);
-    //const { user, signOut } = useAuthenticator((context) => [context.user]);
+    const [ownerData, setOwnerData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         const fetchUser = async () => {
-            try {
-
-                setCurrentUser(user);
-                console.log("Current User:", user);
-                if (user === null) {
-                    router.push('/members/signIn?logOut=true')
-                }
-                //console.log("Attributes: ", attributes)
-            } catch (error) {
-                console.error('Error fetching current user:', error);
+          try {
+            if (!user) {
+              redirect('/members/sign-in');
+              return;
             }
+    
+            // Fetch owner data by user ID
+            const fetchedOwnerData = await fetchOwnerById(user.userId);
+            setOwnerData(fetchedOwnerData);
+          } catch (error) {
+            console.error('Error fetching current user:', error);
+            router.push('/error'); // Redirect to an error page if needed
+          } finally {
+            setIsLoading(false);
+          }
         };
-
+    
         fetchUser();
-    }, []);
+      }, [user, router]);
 
 
 
 
-
+      if (isLoading) {
+        return <LoadingSpinner />
+      }
+      if (!ownerData) {
+        return (
+          <div className="flex items-center justify-center min-h-screen">
+            <p>Owner data not found.</p>
+          </div>
+        );
+      }
 
 
     //console.log("pages/MemberPage.tsx:", user);
@@ -53,13 +64,13 @@ const OwnerPage: React.FC<OwnerPageProps> = ({ user }) => {
         <div className="flex flex-col min-h-screen">
             {/* Header with padding-bottom */}
             <div className="pt-10">
-                <OwnerHeader user={user} />
+                <OwnerHeader user={ownerData} />
             </div>
 
             {/* Main content area */}
-            
-                <OwnerComponent user={user} />
-            
+
+            <OwnerComponent user={ownerData} />
+
         </div>
     );
 

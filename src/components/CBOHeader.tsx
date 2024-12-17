@@ -68,7 +68,7 @@ const CBOHeader: React.FC<CBOHeaderProps> = ({ user }) => {
             </li>
             {user && (
               <li>
-                <Link href="/members/signIn?logOut=true" className="hover:text-yellow-300">
+                <Link href="/members/logging-out" className="hover:text-yellow-300">
                   Log Out
                 </Link>
               </li>

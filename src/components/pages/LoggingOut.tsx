@@ -1,46 +1,26 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect } from "react";
+import { signOut } from "aws-amplify/auth";
+import { useRouter } from "next/navigation";
 
-import { signOut } from 'aws-amplify/auth';
+export default function LoggingOut() {
+  const router = useRouter();
 
-interface LoggingOutProps {
-    user: any;
+  useEffect(() => {
+    const logout = async () => {
+      try {
+        await signOut(); // Sign out the user
+        router.push("/members/sign-in"); // Redirect to the login page
+      } catch (error) {
+        console.error("Error signing out:", error);
+      }
+    };
+
+    logout();
+  }, [router]); // Empty dependency array ensures it runs once on mount
+
+  return (
+    <div>Logging out...</div>
+  ); // Render nothing during the logout process
 }
-
-const LoggingOut: React.FC<LoggingOutProps> = ({ user }) => {
-    const [loading, setLoading] = useState(true);
-    const router = useRouter();
-
-    // useEffect to handle the logout process
-    useEffect(() => {
-        const handleLogout = async () => {
-            try {
-                // Perform logout
-                await signOut();
-                sessionStorage.removeItem('attributes');
-            } catch (error) {
-                console.error('Error during logout:', error);
-            } finally {
-                setLoading(false);
-                // Redirect to the members page after logging out
-                router.push('/members');
-            }
-        };
-
-        handleLogout();
-    }, [user, router]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    return (
-        <div className="logging-out">
-            <p>Logging Out {user?.sub}...</p>
-        </div>
-    );
-};
-
-export default LoggingOut;

@@ -19,12 +19,15 @@ export const cookiesClient = generateServerClientUsingCookies<Schema>({
 
 export async function AuthGetCurrentUserServer() {
   try {
+    //console.log('Cookies:', cookies());
+
     const currentUser = await runWithAmplifyServerContext({
       nextServerContext: { cookies },
       operation: (contextSpec) => getCurrentUser(contextSpec),
     });
+    //console.log('Current User:', currentUser);
     return currentUser;
   } catch (error) {
-    console.error(error);
+    console.error('Error in AuthGetCurrentUserServer:', error);
   }
 }

@@ -66,7 +66,7 @@ const CreateOwnerForm: React.FC = () => {
 
         setSuccess('Account created successfully!');
 
-        router.push('/members/signIn?logOut=true?redirect=true');
+        router.push('/members/sign-in');
         return (
 
           <MemberLoadingScreen />
@@ -107,12 +107,13 @@ const CreateOwnerForm: React.FC = () => {
         {/* Rotating Circle with Image */}
         <div className="flex justify-center mb-12">
           <div className="relative w-60 h-60 rounded-full bg-gradient-to-r from-blue-800 to-yellow-400 animate-spin-slow flex items-center justify-center">
-              <Image
-                src="/images/signUpOwnerPic.jpeg"
-                alt="Business Owner"
-                className="w-56 h-56 animate-reverse-spin-slow rounded-full object-cover"
-              />
-            
+            <Image
+              src="/images/signUpOwnerPic.jpeg"
+              alt="Business Owner"
+              className="animate-reverse-spin-slow rounded-full object-cover"
+              fill
+            />
+
           </div>
         </div>
 

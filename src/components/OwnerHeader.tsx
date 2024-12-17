@@ -12,27 +12,7 @@ interface OwnerHeaderProps {
 const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
   //console.log(user);
   const [loading, setLoading] = useState(false);
-  const [ownerInfo, setOwnerInfo] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    const fetchOwnerInfo = async () => {
-      if (user?.sub) {
-        try {
-          const fetchedOwnerInfo = await fetchOwnerById(user.sub);
-          //console.log(fetchedOwnerInfo)
-          setOwnerInfo(fetchedOwnerInfo);
-          
-        } catch (err) {
-          setError('Failed to fetch owner information');
-          console.error('Error fetching owner info:', err);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchOwnerInfo();
-  }, [user]);
+  
   if (loading) {
     return <div>Loading...</div>;
   } else {
@@ -43,7 +23,7 @@ const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
           <ul className="flex items-center space-x-6">
             <li>
               <Link href="/members/owner" className="hover:text-yellow-300">
-                {ownerInfo?.firstName}&apos;s Dashboard
+                {user?.firstName}&apos;s Dashboard
               </Link>
             </li>
             <li>

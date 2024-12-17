@@ -12,19 +12,19 @@ export default async function FranchiseListPage() {
 
     // Redirect to the login page if the user is not authenticated
     if (!user) {
-      redirect('/login');
+      redirect('/members/sign-in');
     }
 
     // Pass the user's attributes to the LoggingOut component
     return (
       <div>
-        <LoggingOut user={user} />
+        <LoggingOut />
       </div>
     );
   } catch (error) {
     console.error('Error fetching user:', error);
 
     // Handle errors by redirecting to the login page
-    redirect('/login');
+    redirect('/members/sign-in');
   }
 }

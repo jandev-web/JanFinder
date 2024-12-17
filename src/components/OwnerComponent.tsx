@@ -13,22 +13,19 @@ interface OwnerComponentProps {
 }
 
 const OwnerComponent: React.FC<OwnerComponentProps> = ({ user }) => {
-  const [ownerInfo, setOwnerInfo] = useState<any>(null);
+  console.log(user)
   const [recentQuotes, setRecentQuoteInfo] = useState<any>(null);
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (user?.sub) {
+      if (user?.OwnerID) {
         try {
-          const ownerData = await fetchOwnerById(user.sub);
-          console.log(ownerData)
-          setOwnerInfo(ownerData);
-          const recentQuoteData = await getRecentQuotes(user.sub)
+          const recentQuoteData = await getRecentQuotes(user.OwnerID)
           setRecentQuoteInfo(recentQuoteData)
-          if (ownerData.franchiseID) {
-            const franchiseEvents = await getFranchiseDayEvents(ownerData.franchiseID);
+          if (user.franchiseID) {
+            const franchiseEvents = await getFranchiseDayEvents(user.franchiseID);
             console.log(franchiseEvents)
             setEvents(franchiseEvents);
           }
@@ -50,7 +47,7 @@ const OwnerComponent: React.FC<OwnerComponentProps> = ({ user }) => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6 space-y-6">
       {/* Welcome Banner */}
       <div className="w-full text-green-500 py-6 px-10 text-center">
-        {user && <h2 className="text-2xl font-semibold">Welcome to the Owner Homepage, {ownerInfo?.firstName}</h2>}
+        {user && <h2 className="text-2xl font-semibold">Welcome to the Owner Homepage, {user?.firstName}</h2>}
       </div>
       <div className="relative z-0 flex justify-center pb-8">
         <div className=" w-64 h-64 rounded-full p-1 bg-gradient-to-r from-green-700 via-yellow-400 to-yellow-200 animate-spin-slow">
@@ -59,6 +56,7 @@ const OwnerComponent: React.FC<OwnerComponentProps> = ({ user }) => {
               src="/images/OwnerClipboard.jpeg"
               alt="Cleaning janitor"
               className="w-full h-full object-cover rounded-full shadow-lg"
+              fill
             />
           </div>
         </div>

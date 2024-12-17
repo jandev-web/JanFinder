@@ -1,43 +1,48 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { fetchUserAttributes } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation'; // Use useRouter from next/navigation
-import checkUserRole from '@/utils/checkOwnerStatus';
+import { checkIsOwner } from '@/utils/checkIsOwner';
 import MemberLoadingScreen from '@/components/pages/MemberPageLoading';
 
 interface RoleRouterProps {
   user: any;
 }
 
+
+
 const RoleRouter: React.FC<RoleRouterProps> = ({ user }) => {
   const router = useRouter();
-
-
-  console.log(user)
-  
-  // State for loading and role
   const [isLoading, setIsLoading] = useState(true);
-
+  
 
   useEffect(() => {
-    const fetchUserRole = async () => {
+    const fetchUserDetails = async () => {
       try {
-        const isOwner = await checkUserRole(user?.username);
-        if (isOwner === true) {
-          
+        // Fetch user attributes
+        const fetchedAttributes = await fetchUserAttributes();
+        //console.log(fetchedAttributes)
+        
+
+        // Check user role
+        const isOwner = await checkIsOwner(fetchedAttributes);
+
+        if (isOwner) {
+          console.log('Owner')
           router.push('/members/owner');
-        } else if (isOwner === false) {
-          
+        } else {
+          console.log('Not Owner')
           router.push('/members/cbo');
         }
       } catch (error) {
-        console.error('Error checking user role:', error);
+        console.error('Error fetching user details or role:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchUserRole();
+    fetchUserDetails();
   }, [user?.username, router]);
 
   if (isLoading) {
