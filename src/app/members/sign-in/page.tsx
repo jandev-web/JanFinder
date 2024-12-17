@@ -5,11 +5,6 @@
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 import { Authenticator, useAuthenticator, View, Heading, Text, useTheme, ThemeProvider, Theme } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
-import awsExports from '@/aws-exports';
-import { cognitoUserPoolsTokenProvider } from 'aws-amplify/auth/cognito';
-import { sessionStorage } from 'aws-amplify/utils';
-import { signOut } from "aws-amplify/auth";
 
 
 //cognitoUserPoolsTokenProvider.setKeyValueStorage(sessionStorage);
