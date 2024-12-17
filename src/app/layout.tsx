@@ -3,11 +3,9 @@
 import '@/styles/globals.css';
 import { Inter } from "next/font/google";
 
-import { Amplify } from 'aws-amplify';
-import awsExports from '@/aws-exports'; // Import your Amplify configuration
+
 import { metadata } from './metadata'; // Import the metadata
 import "@aws-amplify/ui-react/styles.css";
-import type { Metadata } from "next";
 
 import ConfigureAmplifyClientSide from "@/components/ConfigureAmplify";
 
