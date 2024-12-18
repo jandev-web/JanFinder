@@ -18,10 +18,14 @@ export default function RootLayout({
       <head>
         <title>JanFinder - The Best Commercial Cleaning Quote Platform</title>
         <meta name="description" content="JanFinder offers the best commercial cleaning quotes and innovative tools for businesses and customers. Get quick and easy quotes today!" />
+        <meta name="keywords" content="commercial cleaning, cleaning services, janitorial services, cleaning quotes, JanFinder" />
+        <meta name="author" content="JanFinder Team" />
+        <meta property="og:description" content="JanFinder connects cleaning companies and customers with fast, reliable quotes and innovative tools to streamline operations." />
+        <meta property="twitter:description" content="Get quick and easy commercial cleaning quotes with JanFinder. Streamline your business or find the perfect cleaner today!" />
 
-        <meta property="og:title" content="Jan Finder" />
+        <meta property="og:title" content="JanFinder - The Best Commercial Cleaning Quote Platform" />
         <meta property="og:site_name" content="Jan Finder" />
-        <meta property="twitter:title" content="Jan Finder" />
+        <meta property="twitter:title" content="JanFinder - The Best Commercial Cleaning Quote Platform" />
         <meta property="twitter:site" content="@janfinder" />
 
         {/* Favicon Links */}
