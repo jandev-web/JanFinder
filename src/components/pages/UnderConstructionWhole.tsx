@@ -54,6 +54,9 @@ const UnderConstruction: React.FC = () => {
         <p className="text-base sm:text-lg lg:text-xl text-yellow-500 italic mb-6">
           Our site is under development and will be launching soon. Stay tuned for the next big thing in the cleaning industry!
         </p>
+        <p className="text-base sm:text-lg lg:text-xl text-blue-800 italic mb-6">
+          Any Questions? Send them to info@janfinder.com
+        </p>
         <p className="text-sm text-gray-500 italic">
           Thank you for your patience while we create something amazing for you.
         </p>
