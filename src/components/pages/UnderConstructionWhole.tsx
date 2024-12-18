@@ -13,7 +13,7 @@ const UnderConstruction: React.FC = () => {
         </h1>
         <p className="text-xl text-gray-700 mb-6 leading-relaxed">
           Welcome to <span className="font-bold text-blue-900">Jan<span className="text-yellow-500">Finder</span></span> — the first commercial cleaning quote bidding platform. 
-          We’re revolutionizing the way cleaning companies and customers connect. Whether you're a customer searching for quick, easy quotes 
+          We&apos;re revolutionizing the way cleaning companies and customers connect. Whether you're a customer searching for quick, easy quotes 
           to hire a cleaning company, or a cleaning business looking for innovative tools to streamline operations, attract clients, 
           and build strong customer relationships, <span className="font-bold text-blue-900">Jan<span className="text-yellow-500">Finder</span></span> has you covered.
         </p>
