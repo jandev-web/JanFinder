@@ -1,16 +1,22 @@
 "use client";
 
-import React, { useEffect, Suspense } from 'react';
+import React, { Suspense } from "react";
 import UnderConstruction from "@/components/pages/UnderConstructionWhole";
-
-// Amplify.configure(awsExports);
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function Page() {
-
   return (
-    
     <Suspense fallback={<div>Loading...</div>}>
-      <UnderConstruction />
+      <div className="flex flex-col w-full min-h-screen">
+        <Header />
+        <div className="flex-grow pt-26">
+          <UnderConstruction />
+        </div> {/* Correctly closed */}
+        <div className="pt-0 mt-0">
+          <Footer />
+        </div>
+      </div> {/* Correctly closed */}
     </Suspense>
   );
 }
