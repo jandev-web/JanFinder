@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>{metadata.title}</title>
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
       </head>
       <body className={`${inter.className} w-full`}>
         <ConfigureAmplifyClientSide />

@@ -10,13 +10,13 @@ export default function Page() {
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col w-full min-h-screen">
         <Header />
-        <div className="flex-grow pt-26">
+        <main className="flex-grow pt-20">
           <UnderConstruction />
-        </div> {/* Correctly closed */}
-        <div className="pt-0 mt-0">
+        </main>
+        <footer className="text-white">
           <Footer />
-        </div>
-      </div> {/* Correctly closed */}
+        </footer>
+      </div>
     </Suspense>
   );
 }
