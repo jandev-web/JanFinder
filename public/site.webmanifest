@@ -1,0 +1,17 @@
+{
+    "name": "JanFinder",
+    "short_name": "JanFinder",
+    "description": "JanFinder: The first commercial cleaning quote bidding platform.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#001F54",
+    "theme_color": "#001F54",
+    "icons": [
+      {
+        "src": "/favicon.png",
+        "sizes": "32x32",
+        "type": "image/png"
+      }
+    ]
+  }
+  

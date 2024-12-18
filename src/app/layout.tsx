@@ -17,10 +17,18 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>{metadata.title}</title>
+        <meta property="og:title" content="Jan Finder" />
+        <meta property="og:site_name" content="Jan Finder" />
+        <meta property="twitter:title" content="Jan Finder" />
+        <meta property="twitter:site" content="@janfinder" />
+
         {/* Favicon Links */}
         <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
         <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon" />
+        <link rel="apple" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/favicon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+
         {/* Meta Tags for Browsers */}
         <meta name="theme-color" content="#001F54" />
         <meta name="msapplication-TileColor" content="#001F54" />
