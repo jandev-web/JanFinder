@@ -19,7 +19,7 @@ function Footer() {
         {/* Footer Bottom */}
         <div className="mt-8 text-center border-t border-yellow-400 pt-4">
           <p className="text-sm">&copy; 2024 JanFinder. All rights reserved.</p>
-          <p className="text-sm">&copy; Created by Synergy Technology Developers LLC</p>
+          <p className="text-sm">Created by Synergy Technology Developers LLC</p>
         </div>
       </div>
     </footer>
