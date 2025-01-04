@@ -2,42 +2,38 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
 import MemberLoadingScreen from '@/components/pages/MemberPageLoading'
-import Image from 'next/image';
+import MemberLandingHeader from '@/components/MemberLandingHeader';
 import GetStarted from '@/components/ComeSignUp'
 import AlreadyAccount from '@/components/AlreadyAccount'
 const MemberLandingPage: React.FC = () => {
-  const router = useRouter();
 
   return (
-    <div>
-      <button
-        className="absolute top-4 left-4 text-green-700 hover:text-yellow-500 transition duration-300"
-        onClick={() => router.push('/')}
+    <div className="bg-[#001F54] min-h-screen text-white">
+      <MemberLandingHeader />
+      <div
+        className="flex flex-col justify-center items-center p-6 bg-cover bg-center h-screen"
+        style={{ backgroundImage: "url('/images/MembersPageIcon.jpeg')", backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
       >
-        Return to Main Page
-      </button>
-      <div className="flex flex-col justify-center items-center p-6">
-          <Image
-            src="/images/logo.jpeg"
-            alt="JanFinder Logo"
-            width={120} // Adjust the size of the logo
-            height={120}
-            className="rounded-full border-2 border-gray-300 shadow-lg"
-            priority
-          />
-          <h1 className="text-3xl text-green-700 font-bold mt-4">
-            Members Area
-          </h1>
+
+        <div className="bg-black bg-opacity-50 p-10 rounded-lg">
+          <div className="flex justify-center pb-6">
+            <h2 className="text-5xl text-white font-extrabold">Members Area</h2>
+          </div>
+          <div className='pb-10'>
+            <GetStarted />
+          </div>
+
+          <AlreadyAccount />
         </div>
-      <div className="pt-16">
-        <GetStarted />
-      </div>
-      <div className="pt-16">
-        <AlreadyAccount />
+
       </div>
     </div>
   );
+
+
 };
 
 export default MemberLandingPage;

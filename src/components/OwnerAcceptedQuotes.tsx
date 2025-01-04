@@ -9,10 +9,17 @@ import getFranchiseInfo from '@/utils/getFranchiseInfo'
 import fetchFilteredQuotes from '@/utils/getFilteredQuotesOwner';
 
 
+type Address = {
+  city: string;
+  postalCode: string;
+  state: string;
+};
+
 interface Quote {
   QuoteID: string;
   Franchise: string;
-  CBO: string,
+  CBO: string;
+  Timestamp: string;
   Package: {
     name: string;
     cost: number;
@@ -21,6 +28,10 @@ interface Quote {
     firstName: string;
     lastName: string;
     company: string;
+    address: Address;
+  };
+  quoteInfo: {
+    sqft: string;
   };
 }
 

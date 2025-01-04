@@ -68,6 +68,10 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
   const [sqft, setSqft] = useState<string>('Not Set');
   const [phone, setPhone] = useState<string>('Not Set');
   const [email, setEmail] = useState<string>('Not Set');
+  const [franchiseID, setFranchiseID] = useState('None');
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isOwner, setIsOwner] = useState<boolean>(false);
+
   const [customer, setCustomer] = useState<string>('Not Set');
   const [cboName, setCBOName] = useState('None');
   const [franchiseName, setFranchiseName] = useState('None');
@@ -76,11 +80,17 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
     const fetchData = async () => {
       try {
         const roleStatus = await checkIsOwner(user);
+        setIsOwner(roleStatus ?? false);
 
         if (quoteID) {
           await fetchQuoteDetails(quoteID);
         } else {
           console.error('Quote ID not provided');
+        }
+        if (user.franchiseID) {
+          const franInfo = await getFranchiseInfo(user.franchiseID);
+          setFranchiseName(franInfo?.franchiseName ?? 'None');
+          setFranchiseID(franInfo?.FranchiseID)
         }
       } catch (error) {
         console.error('Error fetching user role or quote details:', error);
@@ -138,6 +148,15 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
 
     } catch (error) {
       console.error('Error fetching quote details:', error);
+    }
+  };
+
+  const acceptAvailableQuote = async (quoteID: string, franchiseID: string, cboID: string) => {
+    try {
+      //await acceptQuote(quoteID, franchiseID, cboID);
+      router.push(`/members/payment?quoteId=${quoteID}`);
+    } catch (error) {
+      console.error('Error accepting quote:', error);
     }
   };
 
@@ -248,6 +267,35 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
                 <p className="text-gray-600">Loading PDF...</p>
               )}
             </div>
+          )}
+
+          {/* Accept Quote Button with Confirmation */}
+          {prevPage === 'ava' && (
+            <div className="mt-8 text-center">
+            {!showConfirmation ? (
+              <button
+                onClick={() => setShowConfirmation(true)}
+                className="px-6 py-3 bg-green-700 text-white font-semibold rounded-lg hover:bg-green-600 transition"
+              >
+                Accept Quote
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => acceptAvailableQuote(quoteID, franchiseID, user.sub)}
+                  className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition mr-4"
+                >
+                  Confirm Acceptance
+                </button>
+                <button
+                  onClick={() => setShowConfirmation(false)}
+                  className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-400 transition"
+                >
+                  Cancel
+                </button>
+              </>
+            )}
+          </div>
           )}
         </div>
       </div>

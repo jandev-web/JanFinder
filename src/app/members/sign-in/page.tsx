@@ -4,8 +4,10 @@
 
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
-import { Authenticator, useAuthenticator, View, Heading, Text, useTheme, ThemeProvider, Theme } from '@aws-amplify/ui-react';
-
+import { Authenticator, useAuthenticator, Button, View, Heading, Text, useTheme, ThemeProvider, Theme } from '@aws-amplify/ui-react';
+import { useRouter } from 'next/navigation';
+import MemberLandingHeader from '@/components/MemberLandingHeader';
+import MemberLandingFooter from '@/components/MemberLandingFooter';
 
 //cognitoUserPoolsTokenProvider.setKeyValueStorage(sessionStorage);
 
@@ -15,15 +17,15 @@ const customTheme: Theme = {
     colors: {
       brand: {
         primary: {
-          '10': '#e3fcec', // Light green for backgrounds
-          '80': '#4caf50', // Primary green
-          '100': '#388e3c', // Darker green for emphasis
-        },
-        secondary: {
-          '10': '#fff9e6', // Light yellow for backgrounds
-          '80': '#ffeb3b', // Bright yellow for actions like buttons
-          '100': '#fbc02d', // Darker yellow for emphasis
-        },
+          '10': '#E3E7FC',  // Light blue for backgrounds
+          '80': '#001F54',  // Deep blue for primary elements
+          '100': '#003A85'  // Darker blue for emphasis
+      },
+      secondary: {
+          '10': '#FFFBEA',  // Soft yellow for backgrounds
+          '80': '#FFEB3B',  // Bright yellow for call-to-actions
+          '100': '#FBC02D'  // Darker yellow for emphasis
+      },
       },
     },
     components: {
@@ -63,7 +65,7 @@ const components = {
     return (
       <View textAlign="center" padding={tokens.space.large}>
         <Text color={tokens.colors.neutral[80]}>
-          &copy; JanFind All Rights Reserved
+          &copy; JanFinder All Rights Reserved
         </Text>
       </View>
     );
@@ -80,6 +82,31 @@ const components = {
         >
           Sign in to your Member account
         </Heading>
+      );
+    },
+    Footer() {
+      const router = useRouter();
+      const { toForgotPassword } = useAuthenticator();
+
+      return (
+        <View textAlign="center">
+          <Button
+            fontWeight="normal"
+            onClick={() => router.push('/members/sign-up')}  // Fixed here
+            size="small"
+            variation="link"
+          >
+            Create Account
+          </Button>
+          <Button
+            fontWeight="normal"
+            onClick={toForgotPassword}
+            size="small"
+            variation="link"
+          >
+            Forgot Password?
+          </Button>
+        </View>
       );
     },
   },
@@ -99,9 +126,24 @@ function CustomAuthenticator() {
   }, [user]);
 
   return (
-    <ThemeProvider theme={customTheme}>
-      <Authenticator components={components} />
-    </ThemeProvider>
+    <div className="flex flex-col w-full min-h-screen">
+      <MemberLandingHeader />
+
+      <div className="relative min-h-screen flex items-center pt-10 pb-10 justify-center bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/images/janitorSignUpPic.jpeg')",
+        }}>
+        <div className="pt-24">
+          <ThemeProvider theme={customTheme}>
+            <Authenticator components={components} hideSignUp />
+          </ThemeProvider>
+        </div>
+      </div>
+      <MemberLandingFooter />
+    </div>
+
+
+
   )
 }
 

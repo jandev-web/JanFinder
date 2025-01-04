@@ -7,7 +7,7 @@ import LoadingSpinner from '@/components/loadingScreen'
 
 import OwnerComponent from '../OwnerComponent';
 import OwnerHeader from '../OwnerHeader';
-
+import OwnerFooter from '../OwnerFooter';
 import { useRouter } from 'next/navigation';
 
 
@@ -61,15 +61,16 @@ const OwnerPage: React.FC<OwnerPageProps> = ({ user }) => {
     //console.log("pages/MemberPage.tsx:", user);
     //console.log(isOwner)
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col w-full min-h-screen">
             {/* Header with padding-bottom */}
-            <div className="pt-10">
+            <div className="pb-24">
                 <OwnerHeader user={ownerData} />
             </div>
 
             {/* Main content area */}
 
             <OwnerComponent user={ownerData} />
+            <OwnerFooter />
 
         </div>
     );

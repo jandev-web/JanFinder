@@ -2,11 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import fetchCBOById from '@/utils/getCBOByID';
 import getFranchiseInfo from '@/utils/getFranchiseInfo';
-
-type Quote = {
+type Address = {
+  city: string;
+  postalCode: string;
+  state: string;
+};
+interface Quote {
   QuoteID: string;
   Franchise: string;
   CBO: string;
+  Timestamp: string;
   Package: {
     name: string;
     cost: number;
@@ -15,8 +20,12 @@ type Quote = {
     firstName: string;
     lastName: string;
     company: string;
+    address: Address;
   };
-};
+  quoteInfo: {
+    sqft: string;
+  };
+}
 
 interface QuoteCardProps {
   quote: Quote;

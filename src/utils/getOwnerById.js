@@ -2,7 +2,7 @@
 export default async function fetchOwnerById(id) {
     const apiKey = process.env.NEXT_PUBLIC_GET_SINGLE_OWNER_KEY;
     const url = process.env.NEXT_PUBLIC_GET_SINGLE_OWNER_URL;
-    //console.log(id)
+    console.log(id)
     try {
       const response = await fetch(url, {
         method: 'POST',

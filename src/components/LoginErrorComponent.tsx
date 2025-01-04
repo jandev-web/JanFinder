@@ -8,7 +8,7 @@ const LoginError: React.FC = () => {
   const router = useRouter();
 
   const handleRetry = () => {
-    router.push('/members/signIn');
+    router.push('/members/sign-in');
   };
 
   return (

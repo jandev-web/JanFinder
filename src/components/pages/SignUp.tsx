@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { signOut } from 'aws-amplify/auth';
 import Link from 'next/link';
 import Image from 'next/image';
-
+import AddressForm from '@/components/AddressForm';
 
 const CreateOwnerForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -17,6 +17,12 @@ const CreateOwnerForm: React.FC = () => {
   const [lastName, setLastName] = useState('');
   const [franchiseName, setFranchiseName] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [country, setCountry] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -25,6 +31,37 @@ const CreateOwnerForm: React.FC = () => {
   const [success, setSuccess] = useState('');
   const router = useRouter();
 
+  const formatPhoneNumber = (value: string) => {
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length <= 3) return `(${cleaned}`;
+    if (cleaned.length <= 6) return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6, 10)}`;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedPhone = formatPhoneNumber(e.target.value);
+    setPhone(formattedPhone);
+  };
+
+  const handleAddressChange = (field: string, value: string) => {
+    switch (field) {
+      case 'street':
+        setStreet(value);
+        break;
+      case 'city':
+        setCity(value);
+        break;
+      case 'state':
+        setState(value);
+        break;
+      case 'postalCode':
+        setPostalCode(value);
+        break;
+      case 'country':
+        setCountry(value);
+        break;
+    }
+  };
   // Password validation function
   const validatePassword = (password: string) => {
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -43,6 +80,15 @@ const CreateOwnerForm: React.FC = () => {
     setLoading(true);
     setError('');
     setSuccess('');
+    const address = 
+      {
+        'street': street,
+        'city': city,
+        'state': state,
+        'postalCode': postalCode,
+        'country': country
+      }
+
 
     if (!validatePassword(password)) {
       setError('Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.');
@@ -61,7 +107,7 @@ const CreateOwnerForm: React.FC = () => {
       if (franchiseResult.franchiseID) {
         const franchiseID = franchiseResult.franchiseID;
 
-        const ownerData = { email, firstName, lastName, franchiseID, password };
+        const ownerData = { email, firstName, lastName, phone, address, franchiseID, password };
         await createOwner(ownerData);
 
         setSuccess('Account created successfully!');
@@ -137,6 +183,20 @@ const CreateOwnerForm: React.FC = () => {
             />
           </div>
 
+          <div>
+            <label htmlFor="phone" className="block text-gray-700 font-semibold mb-2">
+              Phone #:
+            </label>
+            <input
+              type="tell"
+              id="phone"
+              value={phone}
+              onChange={handlePhoneChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54]"
+            />
+          </div>
+
           {/* First Name */}
           <div>
             <label htmlFor="firstName" className="block text-gray-700 font-semibold mb-2">
@@ -181,6 +241,15 @@ const CreateOwnerForm: React.FC = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54]"
             />
           </div>
+
+          <AddressForm
+              street={street}
+              city={city}
+              state={state}
+              postalCode={postalCode}
+              country={country}
+              onAddressChange={handleAddressChange}
+            />
 
           {/* Password */}
           <div>
@@ -245,7 +314,7 @@ const CreateOwnerForm: React.FC = () => {
 
         {/* Back Link */}
         <div className="mt-4 text-center">
-          <Link href="/members" className="text-[#001F54] text-sm hover:underline">
+          <Link href="/members/sign-in" className="text-[#001F54] text-sm hover:underline">
             Already Have a Members Account? Sign In
           </Link>
         </div>

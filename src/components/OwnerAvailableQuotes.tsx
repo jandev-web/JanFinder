@@ -7,10 +7,18 @@ import LoadingSpinner from '@/components/loadingScreen';
 import fetchOwnerById from '@/utils/getOwnerById'
 import fetchFilteredQuotes from '@/utils/getFilteredQuotesOwner';
 
+
+type Address = {
+  city: string;
+  postalCode: string;
+  state: string;
+};
+
 interface Quote {
   QuoteID: string;
   Franchise: string;
   CBO: string;
+  Timestamp: string;
   Package: {
     name: string;
     cost: number;
@@ -19,6 +27,10 @@ interface Quote {
     firstName: string;
     lastName: string;
     company: string;
+    address: Address;
+  };
+  quoteInfo: {
+    sqft: string;
   };
 }
 
@@ -27,16 +39,20 @@ interface AvaQuotesProps {
 }
 
 const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
+  const [range, setRange] = useState(25); // Initial range in miles
+  const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(true);
   const [quotes, setAvaQuotes] = useState<Quote[]>([]);
   const router = useRouter();
-  const ownerID = user?.sub;
+  const ownerID = user?.OwnerID;
   const [error, setError] = useState<string | null>(null);
 
-  // Set loading to false after the quotes are available
+  const type = 'available';
 
+  // Set loading to false after the quotes are available
+  console.log(user)
   const handleQuoteClick = (quote: Quote) => {
-    router.push(`/members/owner/quote?quoteID=${quote.QuoteID}`);
+    router.push(`/members/owner/quote?quoteID=${quote.QuoteID}&page=ava`);
   };
 
   useEffect(() => {

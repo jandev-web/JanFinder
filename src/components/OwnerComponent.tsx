@@ -44,45 +44,35 @@ const OwnerComponent: React.FC<OwnerComponentProps> = ({ user }) => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6 space-y-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#001F54] to-[#003a85] text-white p-6 space-y-10">
       {/* Welcome Banner */}
-      <div className="w-full text-green-500 py-6 px-10 text-center">
-        {user && <h2 className="text-2xl font-semibold">Welcome to the Owner Homepage, {user?.firstName}</h2>}
-      </div>
-      <div className="relative z-0 flex justify-center pb-8">
-        <div className=" w-64 h-64 rounded-full p-1 bg-gradient-to-r from-green-700 via-yellow-400 to-yellow-200 animate-spin-slow">
-          <div className="w-full h-full bg-gray-100 p-1 rounded-full animate-reverse-spin-slow">
-            <Image
-              src="/images/OwnerClipboard.jpeg"
-              alt="Cleaning janitor"
-              className="w-full h-full object-cover rounded-full shadow-lg"
-              fill
-            />
-          </div>
-        </div>
+      <div className="w-full py-6 px-10 text-center bg-yellow-400 text-[#001F54] rounded-lg shadow-lg">
+        {user && <h2 className="text-3xl font-extrabold">Welcome to the Owner Homepage, {user?.firstName}!</h2>}
       </div>
 
+  
+
       {/* Statistics Section */}
-      <div className="grid grid-cols-2 gap-6 w-full max-w-4xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full max-w-5xl">
         {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-md p-6 text-center hover:bg-gray-100 transition-all">
-          <p className="text-xl font-semibold text-gray-700">Recent Activity</p>
+        <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
+          <p className="text-2xl font-bold">Recent Activity</p>
           <FranchiseDayEventList events={events} />
         </div>
 
         {/* Top CBOs */}
-        <div className="bg-white rounded-lg shadow-md p-6 text-center hover:bg-gray-100 transition-all">
-          <p className="text-xl font-semibold text-gray-700">Top CBOs</p>
+        <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
+          <p className="text-2xl font-bold">Top CBOs</p>
         </div>
 
         {/* Total Quotes */}
-        <div className="bg-white rounded-lg shadow-md p-6 text-center hover:bg-gray-100 transition-all">
-          <p className="text-xl font-semibold text-gray-700">Total Quotes</p>
+        <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
+          <p className="text-2xl font-bold">Total Quotes</p>
         </div>
 
         {/* Recent Quotes */}
-        <div className="bg-white rounded-lg shadow-md p-6 text-center hover:bg-gray-100 transition-all">
-          <p className="text-xl font-semibold text-gray-700">Recent Quotes</p>
+        <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
+          <p className="text-2xl font-bold">Recent Quotes</p>
           <RecentQuotesList quotes={recentQuotes} />
         </div>
       </div>

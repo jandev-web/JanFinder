@@ -15,14 +15,14 @@ interface RoleRouterProps {
 const RoleRouter: React.FC<RoleRouterProps> = ({ user }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  
+  console.log(user)
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         // Fetch user attributes
         const fetchedAttributes = await fetchUserAttributes();
-        //console.log(fetchedAttributes)
+        console.log(fetchedAttributes)
         
 
         // Check user role

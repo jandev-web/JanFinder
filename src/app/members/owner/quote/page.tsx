@@ -3,7 +3,7 @@ import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
 import OwnerQuote from '@/components/pages/SingleOwnerQuote';
 import OwnerHeader from '@/components/OwnerHeader';
-
+import OwnerSingleQuote from '@/components/pages/OwnerSingleQuotePage';
 export const dynamic = "force-dynamic";
 
 
@@ -22,15 +22,9 @@ export default async function SingleOwnerQuotePage({ searchParams }: { searchPar
 
     return (
       <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100">
-        {/* Header Section */}
-        <div className="w-full pb-12">
-          <OwnerHeader user={user} />
-        </div>
-
-        {/* Main Content */}
-        <div className="w-full flex flex-col items-center mt-10">
-          <OwnerQuote user={user} quoteID={quoteParam} prevPage={prevPage} />
-        </div>
+        
+          <OwnerSingleQuote user={user} quoteID={quoteParam} prevPage={prevPage} />
+        
       </div>
     );
   } catch (error) {
