@@ -63,7 +63,7 @@ const OwnerPage: React.FC<OwnerPageProps> = ({ user }) => {
     return (
         <div className="flex flex-col w-full min-h-screen">
             {/* Header with padding-bottom */}
-            <div className="pb-24">
+            <div className="pb-14">
                 <OwnerHeader user={ownerData} />
             </div>
 

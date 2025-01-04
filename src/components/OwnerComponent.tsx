@@ -44,25 +44,50 @@ const OwnerComponent: React.FC<OwnerComponentProps> = ({ user }) => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#001F54] to-[#003a85] text-white p-6 space-y-10">
-      {/* Welcome Banner */}
-      <div className="w-full py-6 px-10 text-center bg-yellow-400 text-[#001F54] rounded-lg shadow-lg">
-        {user && <h2 className="text-3xl font-extrabold">Welcome to the Owner Homepage, {user?.firstName}!</h2>}
+    <div className="relative pt-16 items-center justify-center min-h-screen text-white overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0 w-full h-full">
+        <Image
+          src="/images/OwnerHomePic.jpeg"
+          alt="Owner Home Background"
+          layout="fill"
+          objectFit="cover"
+          quality={80}
+        />
       </div>
 
-  
+      {/* Welcome Banner with full width and height */}
+      <div className="relative z-10 bg-[#001F54] bg-opacity-80 w-full flex flex-col justify-center items-center p-12">
+        <h1 className="text-center text-5xl font-extrabold tracking-wide text-white font-sans">
+          Welcome to the Franchise Owner Homepage, {user?.firstName}!
+        </h1>
+      </div>
+      <div className="relative z-10 h-[2px] bg-yellow-500 w-full "></div>
 
       {/* Statistics Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full max-w-5xl">
+      <div className="relative flex flex-col pt-12 pb-12 items-center justify-center">
+      <div className="relative z-10 grid grid-cols-2 gap-10 w-full max-w-5xl">
         {/* Recent Activity */}
         <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
           <p className="text-2xl font-bold">Recent Activity</p>
           <FranchiseDayEventList events={events} />
         </div>
 
+        <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
+          <p className="text-2xl font-bold">Alerts</p>
+        </div>
+
         {/* Top CBOs */}
         <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
           <p className="text-2xl font-bold">Top CBOs</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
+          <p className="text-2xl font-bold">Revenue this Month</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
+          <p className="text-2xl font-bold">Upcoming Events</p>
         </div>
 
         {/* Total Quotes */}
@@ -75,7 +100,13 @@ const OwnerComponent: React.FC<OwnerComponentProps> = ({ user }) => {
           <p className="text-2xl font-bold">Recent Quotes</p>
           <RecentQuotesList quotes={recentQuotes} />
         </div>
+
+        <div className="bg-white rounded-lg shadow-2xl p-8 text-center text-[#001F54] hover:shadow-yellow-500 transition-all">
+          <p className="text-2xl font-bold">Created Quotes</p>
+        </div>
       </div>
+      </div>
+      
     </div>
   );
 };
