@@ -1,10 +1,10 @@
-export const startQuote = async (firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, owner, memberMade) => {
+export const manualAddRoom = async (quoteID, room) => {
     
   
-    const customerInfo = { firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, owner, memberMade };
-    const apiKey = process.env.NEXT_PUBLIC_START_QUOTE_KEY;
-    const url = process.env.NEXT_PUBLIC_START_QUOTE_URL;
-    console.log(customerInfo)
+    
+    const apiKey = process.env.NEXT_PUBLIC_MANUAL_ADD_ROOM_INFO_KEY;
+    const url = process.env.NEXT_PUBLIC_MANUAL_ADD_ROOM_INFO_URL;
+    
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -12,7 +12,7 @@ export const startQuote = async (firstName, lastName, email, phone, company, add
           'x-api-key': apiKey,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(customerInfo)
+        body: JSON.stringify({quoteID, room})
       });
   
       if (!response.ok) {

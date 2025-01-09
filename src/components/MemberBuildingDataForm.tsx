@@ -1,16 +1,20 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import QuoteDetails from '@/components/MemberStartQuoteDetails';
 import CustomerInfo from '@/components/MemberAddCustomerInfo';
+import ChangeFacilityType from './MemberChangeFacilityType';
 import MeasurementChoice from '@/components/MemberMeasurementChoice';
-import RoomDetails from '@/components/MemberAddRoomDetails';
+import MemberSetFrequency from './MemberSetFrequency';
 import SelectedRoomsList from '@/components/MembersAddSelectRooms';
+import AddFacilityDetails from './MemberAddFacilityInfo';
 import getQuoteDetails from '@/utils/getQuoteDetails';
 import { getFacilityOptions } from '@/utils/getFacilityOptions'
 import getPackageRecs from '@/utils/getPackageRecs'
 import { setSelectedRooms } from '@/utils/setSelectedRooms'
 import { setSqftUtil } from '@/utils/setSqft'
-
+import MemberGetCost from './MemberGetCost';
 type Room = {
     roomName: string;
     sqft: string;
@@ -30,10 +34,12 @@ interface MemberBuildingDataFormProps {
 
 const steps = [
     "Customer Information",
-    "Measurements",
-    "Room Details",
+    "Facility Type",
+    "Facility Information",
+    "Add Rooms",
     "Selected Rooms",
-    "Facility Information"
+    "Cleaning Frequency",
+    "Get Time"
 ];
 
 const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildingData, user }) => {
@@ -46,7 +52,7 @@ const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildin
     const quoteID = searchParams.get('quoteID');
     const [facilityRooms, setFacilityRooms] = useState<any>(null);
     const [measureType, setMeasureType] = useState<any>('manual')
-
+    const [customerInfo, setCustomerInfo] = useState<any>(null);
     //console.log(buildingData[0])
 
     useEffect(() => {
@@ -54,11 +60,12 @@ const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildin
         const fetchQuoteDetails = async () => {
             if (quoteID) {
                 try {
-                    const areaMeasurementInfo = await getFacilityOptions()
+                    const facilityAreaInfo = await getFacilityOptions()
 
-                    //console.log(areaMeasurementInfo)
+                    console.log(facilityAreaInfo)
                     const details = await getQuoteDetails(quoteID);
-                    //console.log(details)
+                    console.log(details)
+                    setCustomerInfo(details.customerData)
                     const chosenFacility = details?.quoteInfo?.facilityType
                     //console.log(chosenFacility)
                     setFacilityType(chosenFacility)
@@ -83,92 +90,13 @@ const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildin
         fetchQuoteDetails();
     }, [quoteID, buildingData]);
 
-    const [facilityInfo, setFacilityInfo] = useState({
-        name: '',
-        email: '',
-        address: '',
-        phone: '',
-    });
 
     const handleFacilityInfo = (name: string, email: string, address: string, phone: string) => {
-        setFacilityInfo({ name, email, address, phone });
+        setCustomerInfo({ name, email, address, phone });
         setStep(2);
     };
 
-    const handleSqftChoice = (sqft: number, budget: number) => {
-        const submitSqft = async () => {
-            try {
-                // Assuming `setSqftUtil` sets sqft and budget and returns a result
-                const result = await setSqftUtil(quoteID, sqft, budget);
-                console.log(result);
 
-                // Fetch the package recommendations after setting sqft and budget
-                const packageRecs = await getPackageRecs(quoteID);
-                console.log(packageRecs.roomInfo);
-
-                // Transform packageRecs.roomInfo to an array of Room objects
-                const roomsArray: Room[] = Object.entries(packageRecs.roomInfo).map(([roomName, roomDetails]: [string, any]) => ({
-                    roomName,
-                    sqft: roomDetails.sqft.toString(),
-                    floorType: 'none',    // Default floorType to 'none'
-                    difficulty: 'none'     // Default difficulty to 'none'
-                }));
-
-                console.log(roomsArray); // Log the transformed array for debugging
-                // You can now use roomsArray as needed in your component
-                setRooms(roomsArray)
-                setStep(3)
-            } catch (error) {
-                console.error("Failed to set sqft:", error);
-            }
-        };
-
-        submitSqft();
-        // Additional logic if needed
-    };
-
-    const handleClearRooms = () => {
-        setRooms([]); // Set rooms to an empty array to clear all room data
-    };
-
-    const handleMeasurementChoice = (choice: 'total' | 'detailed') => {
-        if (choice === 'total') {
-            const fetchPackageRecs = async () => {
-                try {
-                    const selectRooms = setSelectedRooms(quoteID, facilityType)
-                    setMeasureType('auto')
-                    //setStep(3)
-                } catch (error) {
-                    console.error("Failed to fetch package recommendations:", error);
-                }
-            };
-            fetchPackageRecs();
-        }
-        else {
-
-            setMeasureType('manual')
-            //setStep(3)
-
-        }
-
-    };
-
-    const handleAddRoom = (newRoom: Room) => {
-        setRooms((prevRooms) => [...prevRooms, newRoom]);
-    };
-
-    const handleDeleteRoom = (index: number) => {
-        setRooms((prevRooms) => prevRooms.filter((_, i) => i !== index));
-    };
-
-
-    const handleRoomChange = (index: number, field: keyof Room, value: string) => {
-        setRooms((prevRooms) =>
-            prevRooms.map((room, i) =>
-                i === index ? { ...room, [field]: value } : room
-            )
-        );
-    };
 
     const renderStepComponent = () => {
         switch (step) {
@@ -177,25 +105,32 @@ const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildin
                 return (
                     <CustomerInfo
                         onNext={handleFacilityInfo}
-                        facilityInfo={facilityInfo} // Pass current data as props
+                        quoteID={quoteID}
                     />
                 );
             case 2:
-                return <MeasurementChoice onChoice={handleMeasurementChoice} onSubmit={handleSqftChoice} onClearRooms={handleClearRooms} rooms={rooms} />;
-            case 3:
-                return facilityType ? (
-                    <RoomDetails
-                        basicRooms={facilityRooms}
-                        rooms={rooms}
-                        onRoomChange={handleRoomChange}
-                        measureType={measureType}
-                        onAddRoom={handleAddRoom}
-                        onDeleteRoom={handleDeleteRoom} // Pass the delete room function
+                return (
+                    <ChangeFacilityType
+                        quoteID={quoteID}
+                        buildingData={buildingData}
                     />
+                );
+            case 3:
+                return (
+                    <AddFacilityDetails
+                        onNext={handleFacilityInfo}
+                        quoteID={quoteID}
+                    />
+                );
 
-                ) : null;
             case 4:
-                return <SelectedRoomsList rooms={rooms} />;
+                return <MeasurementChoice quoteID={quoteID} />;
+            case 5:
+                return <SelectedRoomsList quoteID={quoteID} />;
+            case 6:
+                return <MemberSetFrequency quoteID={quoteID} />;
+            case 7:
+                return <MemberGetCost quoteID={quoteID} />
             default:
                 return null;
         }
@@ -223,7 +158,7 @@ const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildin
             {/* Form content */}
             <div className="w-3/4 bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-3xl font-bold text-green-600 mb-4">Building Data Form</h1>
-                <p className="text-center text-lg text-gold-600 mb-6">Step {step} of 4</p>
+                <p className="text-center text-lg text-gold-600 mb-6">Step {step} of 7</p>
 
                 <div className="bg-green-100 p-6 rounded-lg shadow-inner">
                     {renderStepComponent()}

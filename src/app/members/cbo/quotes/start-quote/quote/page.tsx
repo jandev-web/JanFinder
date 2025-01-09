@@ -1,6 +1,6 @@
 import React from "react";
 import OwnerHeader from "@/components/OwnerHeader";
-import CBOBuildingData from "@/components/pages/CBOBuildingData";
+import CBOBuildingData from "@/components/pages/OwnerBuildingDataPage";
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
 export const dynamic = "force-dynamic";

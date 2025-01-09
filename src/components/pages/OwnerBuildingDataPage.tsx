@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { getCBOBuildingTypes } from '@/utils/getCBOBuildingTypes';
 import MemberBuildingDataForm from '@/components/MemberBuildingDataForm';
 
-interface CBOBuildingDataProps {
+interface OwnerBuildingDataProps {
   user: any; // Specify the exact type of `user` if available
 }
 
-const CBOBuildingData: React.FC<CBOBuildingDataProps> = ({ user }) => {
+const OwnerBuildingData: React.FC<OwnerBuildingDataProps> = ({ user }) => {
     const [buildingData, setBuildingData] = useState([]);
     //console.log(user)
     useEffect(() => {
@@ -28,4 +28,4 @@ const CBOBuildingData: React.FC<CBOBuildingDataProps> = ({ user }) => {
     );
 };
 
-export default CBOBuildingData;
+export default OwnerBuildingData;

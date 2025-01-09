@@ -2,21 +2,18 @@
 
 import React, { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
+import OwnerHeader from '@/components/OwnerHeader';
+import MemberStartQuotePage from '@/components/pages/MemberStartQuotePage';
 import fetchOwnerById from '@/utils/getOwnerById';
 import LoadingSpinner from '@/components/loadingScreen'
 import OwnerFooter from '../OwnerFooter';
-import AllQuotes from './AllQuotes';
-import OwnerHeader from '../OwnerHeader';
-
 import { useRouter } from 'next/navigation';
 
-
-
-interface OwnerAllQuotesPageProps {
+interface OwnerStartQuotePageProps {
     user: any;
 }
 
-const OwnerAllQuotesPage: React.FC<OwnerAllQuotesPageProps> = ({ user }) => {
+const OwnerStartQuotePage: React.FC<OwnerStartQuotePageProps> = ({ user }) => {
     const router = useRouter()
     const [ownerData, setOwnerData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +28,7 @@ const OwnerAllQuotesPage: React.FC<OwnerAllQuotesPageProps> = ({ user }) => {
     
             // Fetch owner data by user ID
             const fetchedOwnerData = await fetchOwnerById(user.userId);
+            console.log(fetchedOwnerData)
             setOwnerData(fetchedOwnerData);
           } catch (error) {
             console.error('Error fetching current user:', error);
@@ -56,27 +54,18 @@ const OwnerAllQuotesPage: React.FC<OwnerAllQuotesPageProps> = ({ user }) => {
           </div>
         );
       }
-
-
-    //console.log("pages/MemberPage.tsx:", user);
-    //console.log(isOwner)
     return (
-        <div className="flex flex-col min-h-screen">
-            {/* Header with padding-bottom */}
-            <div className="pb-10">
-                <OwnerHeader user={ownerData} />
-            </div>
-
-            <div className='pt-24'>
-              <AllQuotes user={ownerData} />
-            </div>
-            <OwnerFooter />
-            
-
+      <div className="flex flex-col w-full items-center justify-center min-h-screen">
+        <div className="w-full pt-10">
+          <OwnerHeader user={ownerData} />
         </div>
+        <div className="flex-1 flex pt-24">
+          <MemberStartQuotePage user={ownerData} />
+        </div>
+        <OwnerFooter />
+      </div>
     );
-
-
+  
 };
 
-export default OwnerAllQuotesPage;
+export default OwnerStartQuotePage;

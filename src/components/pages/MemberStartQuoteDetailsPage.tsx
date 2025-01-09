@@ -4,19 +4,18 @@ import React, { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
 import fetchOwnerById from '@/utils/getOwnerById';
 import LoadingSpinner from '@/components/loadingScreen'
-import OwnerFooter from '../OwnerFooter';
-import AllQuotes from './AllQuotes';
+import OwnerBuildingData from './OwnerBuildingDataPage';
 import OwnerHeader from '../OwnerHeader';
-
+import OwnerFooter from '../OwnerFooter';
 import { useRouter } from 'next/navigation';
 
 
 
-interface OwnerAllQuotesPageProps {
+interface MemberStartQuoteDetailsPageProps {
     user: any;
 }
 
-const OwnerAllQuotesPage: React.FC<OwnerAllQuotesPageProps> = ({ user }) => {
+const MemberStartQuoteDetailsPage: React.FC<MemberStartQuoteDetailsPageProps> = ({ user }) => {
     const router = useRouter()
     const [ownerData, setOwnerData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -61,17 +60,16 @@ const OwnerAllQuotesPage: React.FC<OwnerAllQuotesPageProps> = ({ user }) => {
     //console.log("pages/MemberPage.tsx:", user);
     //console.log(isOwner)
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col w-full min-h-screen">
             {/* Header with padding-bottom */}
-            <div className="pb-10">
+            <div className="pb-14">
                 <OwnerHeader user={ownerData} />
             </div>
 
-            <div className='pt-24'>
-              <AllQuotes user={ownerData} />
-            </div>
+            {/* Main content area */}
+
+            <OwnerBuildingData user={ownerData} />
             <OwnerFooter />
-            
 
         </div>
     );
@@ -79,4 +77,4 @@ const OwnerAllQuotesPage: React.FC<OwnerAllQuotesPageProps> = ({ user }) => {
 
 };
 
-export default OwnerAllQuotesPage;
+export default MemberStartQuoteDetailsPage;

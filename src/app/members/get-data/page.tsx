@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import CBOBuildingData from '@/components/pages/CBOBuildingData';
+import CBOBuildingData from '@/components/pages/OwnerBuildingDataPage';
 
 export const dynamic = "force-dynamic";
 

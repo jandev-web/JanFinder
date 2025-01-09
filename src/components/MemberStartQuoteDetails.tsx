@@ -1,35 +1,39 @@
 import React, { useState } from 'react';
 import { startQuote } from '@/utils/startQuote';
 import { useRouter } from 'next/navigation';
+import AddressForm from '@/components/AddressForm';
 
 interface QuoteDetailsProps {
     buildingData: { name: string; areas: string[] }[];
-    cbo: any;
-    franchise: any;
+    user: any;
 }
 
-const QuoteDetails: React.FC<QuoteDetailsProps> = ({ buildingData, cbo, franchise }) => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+const QuoteDetails: React.FC<QuoteDetailsProps> = ({ buildingData, user }) => {
+    
     const [company, setCompany] = useState('');
-    const [address, setAddress] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [facilityType, setFacilityType] = useState('');
-
+    const owner = user?.OwnerID
+    const franchise = user?.franchiseID
     const router = useRouter();
-    console.log(cbo)
+
+    const firstName = null
+    const lastName = null
+    const email = 'None'
+    const phone = null
+    const address = null
+    
+
+
+    
+
     const handleSubmit = async () => {
         try {
-            const memberMade = true
-            const quoteData = await startQuote(firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, cbo, memberMade);
-            
-            const quoteID = quoteData?.quoteID
-            if (quoteID) {
-                
-                router.push(`/members/startQuote/quote?quoteID=${quoteID}`);
-                
+            const memberMade = true;
+            console.log(confirmed)
+            const quoteData = await startQuote(firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, owner, memberMade);
+            if (quoteData?.quoteID) {
+                router.push(`/members/start-quote/quote?quoteID=${quoteData.quoteID}`);
             } else {
                 console.error("Quote ID not returned from startQuote");
             }
@@ -39,34 +43,36 @@ const QuoteDetails: React.FC<QuoteDetailsProps> = ({ buildingData, cbo, franchis
     };
 
     return (
-        <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold text-green-600 mb-4">Quote Details</h2>
+        <div className="bg-white p-10 rounded-lg shadow-2xl max-w-lg w-full border-2 border-gray-300">
 
-            <label className="block text-green-700 font-semibold mb-2">Company/Client</label>
+            {/* Company Name */}
+            <label className="block text-lg text-[#001F54] font-semibold mb-2">Company Name</label>
             <input
                 type="text"
-                placeholder="Enter company name"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
-                className="w-full p-2 mb-4 border-2 border-green-500 rounded-lg text-green-700 focus:outline-none focus:border-gold-500"
+                placeholder="Enter company name"
+                className="w-full p-4 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-500"
             />
 
-            <label className="block text-green-700 font-semibold mb-2">Status</label>
+            {/* Status Dropdown */}
+            <label className="block text-lg text-[#001F54] font-semibold mb-2">Status</label>
             <select
                 value={String(confirmed)}
                 onChange={(e) => setConfirmed(e.target.value === 'true')}
-                className="w-full p-2 mb-4 border-2 border-green-500 rounded-lg text-green-700 focus:outline-none focus:border-gold-500"
+                className="w-full p-4 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-500"
             >
                 <option value="" disabled>Status</option>
                 <option value="false">Prospect</option>
                 <option value="true">Confirmed</option>
             </select>
 
-            <label className="block text-green-700 font-semibold mb-2">Facility Type</label>
+            {/* Facility Type Dropdown */}
+            <label className="block text-lg text-[#001F54] font-semibold mb-2">Facility Type</label>
             <select
                 value={facilityType}
                 onChange={(e) => setFacilityType(e.target.value)}
-                className="w-full p-2 mb-6 border-2 border-green-500 rounded-lg text-green-700 focus:outline-none focus:border-gold-500"
+                className="w-full p-4 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-yellow-500"
             >
                 <option value="" disabled>Select Facility Type</option>
                 {buildingData.map((facility, index) => (
@@ -74,11 +80,12 @@ const QuoteDetails: React.FC<QuoteDetailsProps> = ({ buildingData, cbo, franchis
                 ))}
             </select>
 
+            {/* Submit Button */}
             <button
                 onClick={handleSubmit}
-                className="w-full py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
+                className="w-full py-3 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition duration-300"
             >
-                Next
+                Start Quote
             </button>
         </div>
     );

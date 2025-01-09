@@ -188,7 +188,7 @@ const CreateOwnerForm: React.FC = () => {
               Phone #:
             </label>
             <input
-              type="tell"
+              type="tel"
               id="phone"
               value={phone}
               onChange={handlePhoneChange}

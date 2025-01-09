@@ -36,7 +36,7 @@ const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
               {/* Right side */}
               <div>
                 <Link
-                  href="/logging-out"
+                  href="/members/logging-out"
                   className="text-white text-lg mr-6 font-medium hover:text-yellow-500 transition duration-300"
                 >
                   Log Out

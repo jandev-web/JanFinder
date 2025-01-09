@@ -1,10 +1,9 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import CBOBuildingData from '@/components/pages/CBOBuildingData';
+import MemberStartQuoteDetailsPage from '@/components/pages/MemberStartQuoteDetailsPage';
 import LoadingSpinner from '@/components/loadingScreen';
-import OwnerHeader from '@/components/OwnerHeader';
-import CBOHeader from '@/components/CBOHeader';
+import LoginError from '@/components/LoginErrorComponent';
 
 export const dynamic = "force-dynamic";
 
@@ -21,16 +20,14 @@ export default async function AllQuotesPage() {
 
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <div className="pt-10">
-          {isOwner ? <OwnerHeader user={user} /> : <CBOHeader user={user} />}
-        </div>
-        <div className="flex-1 flex pt-10">
-          <CBOBuildingData user={user} />
-        </div>
+       <MemberStartQuoteDetailsPage user={user} />
       </div>
     );
   } catch (error) {
-    console.error('Error fetching user:', error);
-    redirect('/login');
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <LoginError />
+      </div>
+    );
   }
 }

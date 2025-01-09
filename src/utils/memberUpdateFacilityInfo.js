@@ -1,10 +1,10 @@
-export const startQuote = async (firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, owner, memberMade) => {
+export const updateFacilityInfo = async (quoteID, street, city, postalCode, state, country) => {
     
   
-    const customerInfo = { firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, owner, memberMade };
-    const apiKey = process.env.NEXT_PUBLIC_START_QUOTE_KEY;
-    const url = process.env.NEXT_PUBLIC_START_QUOTE_URL;
-    console.log(customerInfo)
+    const address = { street, city, postalCode, state, country };
+    const apiKey = process.env.NEXT_PUBLIC_MEM_UPDATE_FACILITY_INFO_KEY;
+    const url = process.env.NEXT_PUBLIC_MEM_UPDATE_FACILITY_INFO_URL;
+    
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -12,7 +12,7 @@ export const startQuote = async (firstName, lastName, email, phone, company, add
           'x-api-key': apiKey,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(customerInfo)
+        body: JSON.stringify({quoteID, address})
       });
   
       if (!response.ok) {

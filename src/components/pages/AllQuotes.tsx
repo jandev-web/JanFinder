@@ -57,7 +57,7 @@ const AllQuotes: React.FC<AllQuotesProps> = ({ user }) => {
       </button>
       <button
         className="w-48 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
-        onClick={() => router.push('/members/startQuote')}
+        onClick={() => router.push('/members/start-quote')}
       >
         Start Quote
       </button>
