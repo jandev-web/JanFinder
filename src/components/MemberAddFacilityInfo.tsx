@@ -5,11 +5,10 @@ import MemberEditAddressForm from './MemberEditAddressForm';
 import getQuoteDetails from '@/utils/getQuoteDetails';
 
 interface AddFacilityDetailsProps {
-    onNext: (firstName: string, lastName: string, email: string, phone: string) => void;
     quoteID: any;
 }
 
-const AddFacilityDetails: React.FC<AddFacilityDetailsProps> = ({ onNext, quoteID }) => {
+const AddFacilityDetails: React.FC<AddFacilityDetailsProps> = ({ quoteID }) => {
     const [street, setStreet] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');

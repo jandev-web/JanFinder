@@ -55,14 +55,17 @@ const OwnerStartQuotePage: React.FC<OwnerStartQuotePageProps> = ({ user }) => {
         );
       }
     return (
-      <div className="flex flex-col w-full items-center justify-center min-h-screen">
+      <div className="flex flex-col w-full w-full items-center justify-center min-h-screen">
         <div className="w-full pt-10">
           <OwnerHeader user={ownerData} />
         </div>
-        <div className="flex-1 flex pt-24">
+        <div className="flex-1 flex">
           <MemberStartQuotePage user={ownerData} />
         </div>
-        <OwnerFooter />
+        <div className='w-full'>
+          <OwnerFooter />
+        </div>
+        
       </div>
     );
   

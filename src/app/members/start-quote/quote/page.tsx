@@ -15,8 +15,7 @@ export default async function AllQuotesPage() {
       redirect('/login');
     }
 
-    const isOwner = user
-    //attributes.['custom:isOwner'] === 'true';
+    
 
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">

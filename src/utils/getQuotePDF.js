@@ -1,9 +1,7 @@
-const getQuotePDF = async (quotePDF) => {
+const getQuotePDF = async (quoteID, userID) => {
     const url = process.env.NEXT_PUBLIC_RETRIEVE_QUOTE_PDF_URL;
     const apiKey = process.env.NEXT_PUBLIC_RETRIEVE_QUOTE_PDF_KEY; 
-    console.log("The quotePDF is:", quotePDF)
-    console.log("The url is:", url)
-    console.log("The apiKey is:", apiKey)
+    
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -11,7 +9,7 @@ const getQuotePDF = async (quotePDF) => {
                 'x-api-key': apiKey,
                 'Content-Type': 'application/json'
               },
-            body: JSON.stringify({ quotePDF }),
+            body: JSON.stringify({ quoteID, userID }),
         });
 
         if (!response.ok) {

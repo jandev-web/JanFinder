@@ -62,13 +62,15 @@ const MemberStartQuoteDetailsPage: React.FC<MemberStartQuoteDetailsPageProps> = 
     return (
         <div className="flex flex-col w-full min-h-screen">
             {/* Header with padding-bottom */}
-            <div className="pb-14">
+            <div className="pb-24">
                 <OwnerHeader user={ownerData} />
             </div>
 
             {/* Main content area */}
-
-            <OwnerBuildingData user={ownerData} />
+            <div className='pt-24 pb-24 bg-gray-100'>
+              <OwnerBuildingData user={ownerData} />
+            </div>
+            
             <OwnerFooter />
 
         </div>

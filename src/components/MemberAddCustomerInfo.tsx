@@ -5,11 +5,10 @@ import { updateCustomerInfo } from '@/utils/memberUpdateCustomerInfo';
 import getQuoteDetails from '@/utils/getQuoteDetails';
 
 interface CustomerInfoProps {
-    onNext: (firstName: string, lastName: string, email: string, phone: string) => void;
     quoteID: any;
 }
 
-const CustomerInfo: React.FC<CustomerInfoProps> = ({ onNext, quoteID }) => {
+const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
