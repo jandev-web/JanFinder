@@ -68,7 +68,7 @@ const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
                 </Link>
                 <div className="h-8 border-l border-gray-300"></div>
                 <Link
-                  href="members/owner/cbos"
+                  href="/members/owner/cbos"
                   className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
 
                 >
@@ -78,7 +78,7 @@ const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
                 </Link>
                 <div className="h-8 border-l border-gray-300"></div>
                 <Link
-                  href="members/owner/subscription"
+                  href="/members/owner/subscription"
                   className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
 
                 >
