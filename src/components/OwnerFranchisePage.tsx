@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import deleteFranchise from '@/utils/deleteFranchise'
-
+import UploadFranchisePDFTemplate from './UploadFranchisePDFTemplate';
 interface OwnerFranchisePageProps {
     user: any;
     franchise: any;
@@ -11,7 +11,7 @@ interface OwnerFranchisePageProps {
 
 const OwnerFranchisePage: React.FC<OwnerFranchisePageProps> = ({ user, franchise }) => {
     const router = useRouter();
-    
+    const franchiseID = user?.franchiseID
     const ownerID = user?.OwnerID
     const handleDelete = async () => {
         const confirmed = confirm('Are you sure you want to delete this franchise?');
@@ -40,6 +40,7 @@ const OwnerFranchisePage: React.FC<OwnerFranchisePageProps> = ({ user, franchise
                 >
                     Delete Franchise
                 </button>
+                <UploadFranchisePDFTemplate franchiseID={franchiseID} />
             </div>
         </div>
     );

@@ -28,7 +28,7 @@ const FranchisePage: React.FC<FranchisePageProps> = ({ user }) => {
           router.push('/members/sign-in');
           return;
         }
-        
+
         const fetchedUserInfo = await fetchOwnerById(user.userId);
         setUserInfo(fetchedUserInfo);
         const franchiseData = await getFranchiseInfo(fetchedUserInfo.franchiseID);
@@ -50,12 +50,14 @@ const FranchisePage: React.FC<FranchisePageProps> = ({ user }) => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="pt-10">
+    <div className="flex flex-col w-full min-h-screen">
+      <div className="pb-10">
         <OwnerHeader user={userInfo} />
       </div>
+      <div className='pt-36'>
+        <OwnerFranchisePage user={userInfo} franchise={franchise} />
 
-      <OwnerFranchisePage user={userInfo} franchise={franchise} />
+      </div>
 
     </div>
   );
