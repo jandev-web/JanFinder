@@ -12,8 +12,8 @@ const checkUserRole = async (ID) => {
         });
   
       const data = await response.json();
-      console.log('Ownership status is ', data.exists)
-      return data.exists; // Assuming Lambda returns { exists: true/false }
+      console.log('Ownership status is ', data)
+      return data; // Assuming Lambda returns { exists: true/false }
     } catch (error) {
       console.error('Error checking user role:', error);
       return false; // Default to CBOComponent if there's an error

@@ -64,7 +64,7 @@ interface CBOQuoteProps {
 const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID, prevPage }) => {
   const router = useRouter();
   const [quote, setQuote] = useState<Quote | null>(null);
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<any>(null);
   const [isOwner, setIsOwner] = useState<boolean>(false);
   const [franchiseName, setFranchiseName] = useState('None');
   const [franchiseID, setFranchiseID] = useState('None');

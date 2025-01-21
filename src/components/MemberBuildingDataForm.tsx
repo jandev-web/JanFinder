@@ -89,7 +89,7 @@ const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildin
     if (isFinished) {
         return (
             <div>
-                <ConfirmOwnerQuote handleBack={handleBack} quoteID={quoteID} userID={userID} />
+                <ConfirmOwnerQuote handleBack={handleBack} quoteID={quoteID} user={user} />
             </div>
         )
     }

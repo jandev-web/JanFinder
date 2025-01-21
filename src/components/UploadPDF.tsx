@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { uploadPDF } from '../utils/uploadPDF';
+import { uploadPDFTemplate } from '../utils/uploadPDF';
 import createCBOEvent from '@/utils/createCBOEvent'
 interface UploadPDFFormProps {
   quoteID: string;
@@ -26,7 +26,7 @@ const UploadPDFForm: React.FC<UploadPDFFormProps> = ({ quoteID }) => {
       return;
     }
     try {
-      const result = await uploadPDF(quoteID, pdfFile);
+      const result = await uploadPDFTemplate(quoteID, pdfFile);
       console.log('PDF uploaded successfully:', result);
       const eventResult = await createCBOEvent('quoteCreated', 'none', 'none', quoteID)
       setSuccessMessage('PDF uploaded successfully!');

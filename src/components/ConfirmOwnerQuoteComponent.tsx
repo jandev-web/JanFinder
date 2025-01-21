@@ -4,35 +4,55 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import getQuoteDetails from '@/utils/getQuoteDetails';
 import getQuotePDF from '@/utils/getQuotePDF';
+import makeQuotePDF from '@/utils/generateQuoteDoc'
 
 interface ConfirmOwnerQuoteProps {
     handleBack: () => void;
     quoteID: any;
-    userID: any;
+    user: any;
 }
 
-const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quoteID, userID }) => {
+const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quoteID, user }) => {
     const [quoteInfo, setQuoteInfo] = useState<any>(null);
-    const [quotePDF, setQuotePDF] = useState<string | null>(null);
+    const [hasPDF, setHasPDF] = useState(false)
     const router = useRouter();
-
+    const userID = user?.OwnerId
+    const franchiseID = user?.franchiseID
+    //console.log(user)
     const handleConfirm = () => {
         alert('Quote confirmed successfully!');
         router.push('/members/quotes');
     };
 
-    const downloadPDF = () => {
-        if (quotePDF) {
+    const downloadPDF = async () => {
+        try {
+            const quotePDF = await getQuotePDF(quoteID);
+            
+            const response = await fetch(quotePDF.url);
+            const blob = await response.blob();
+            console.log(response)
             const link = document.createElement('a');
-            link.href = quotePDF;
-            link.download = `quote_${quoteID}.pdf`;
+            link.href = URL.createObjectURL(blob);
+            link.download = `quote_${quoteID}.docx`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        } else {
-            alert('No PDF available to download.');
+        } catch (error) {
+            console.error('Error downloading PDF:', error);
         }
     };
+
+    const generatePDF = async () => {
+        try {
+            console.log(`Generating quote for franchiseID: ${franchiseID}`);
+
+            await makeQuotePDF(quoteID, franchiseID);
+
+        } catch (error) {
+            console.error('Error generating quote document:', error);
+        }
+    };
+
 
     useEffect(() => {
         const getQuoteInfo = async () => {
@@ -40,9 +60,10 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
                 try {
                     const quoteDetails = await getQuoteDetails(quoteID);
                     setQuoteInfo(quoteDetails);
-                    const pdfUrl = await getQuotePDF(quoteID, userID);
-                    console.log(pdfUrl)
-                    setQuotePDF(pdfUrl);
+                    if (quoteDetails.QuotePDF != null) {
+                        setHasPDF(true)
+                    }
+
                 } catch (error) {
                     console.error('Error fetching quote details:', error);
                 }
@@ -86,11 +107,21 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
                         Back
                     </button>
                     <button
-                        onClick={downloadPDF}
+                        onClick={generatePDF}
                         className="px-6 py-2 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
                     >
-                        Download PDF
+                        Generate PDF
                     </button>
+
+                    {hasPDF && (
+                        <button
+                            onClick={downloadPDF}
+                            className="px-6 py-2 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+                        >
+                            Download PDF
+                        </button>
+                    )}
+
                     <button
                         onClick={handleConfirm}
                         className="px-6 py-2 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
@@ -98,6 +129,7 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
                         Confirm
                     </button>
                 </div>
+
             </div>
         </div>
     );

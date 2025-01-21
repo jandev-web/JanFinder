@@ -55,7 +55,7 @@ const FranchisePage: React.FC<FranchisePageProps> = ({ user }) => {
         <OwnerHeader user={userInfo} />
       </div>
       <div className='pt-36'>
-        <OwnerFranchisePage user={userInfo} franchise={franchise} />
+        <OwnerFranchisePage userInfo={userInfo} user={user} franchise={franchise} />
 
       </div>
 

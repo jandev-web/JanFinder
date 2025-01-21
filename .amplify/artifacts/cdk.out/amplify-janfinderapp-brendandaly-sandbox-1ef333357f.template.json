@@ -43,6 +43,14 @@
     "amplifyApiModelSchemaS3Uri",
     "awsAppsyncAdditionalAuthenticationTypes"
    ]
+  },
+  "AWS::Amplify::Storage": {
+   "version": "1",
+   "stackOutputs": [
+    "buckets",
+    "storageRegion",
+    "bucketName"
+   ]
   }
  },
  "Outputs": {
@@ -199,6 +207,40 @@
   },
   "awsAppsyncAdditionalAuthenticationTypes": {
    "Value": "AMAZON_COGNITO_USER_POOLS"
+  },
+  "storageRegion": {
+   "Value": {
+    "Ref": "AWS::Region"
+   }
+  },
+  "bucketName": {
+   "Value": {
+    "Fn::GetAtt": [
+     "storage0EC3F24A",
+     "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fstorageJanFinderStorageBucket64FD9A50Ref"
+    ]
+   }
+  },
+  "buckets": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "[\"{\\\"name\\\":\\\"JanFinderStorage\\\",\\\"bucketName\\\":\\\"",
+      {
+       "Fn::GetAtt": [
+        "storage0EC3F24A",
+        "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fstorageJanFinderStorageBucket64FD9A50Ref"
+       ]
+      },
+      "\\\",\\\"storageRegion\\\":\\\"",
+      {
+       "Ref": "AWS::Region"
+      },
+      "\\\",\\\"paths\\\":{\\\"profile-pictures/*\\\":{\\\"guest\\\":[\\\"get\\\",\\\"list\\\"]},\\\"profile-pictures/${cognito-identity.amazonaws.com:sub}/*\\\":{\\\"entityidentity\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\",\\\"delete\\\"]},\\\"contract-templates/*\\\":{\\\"guest\\\":[\\\"get\\\",\\\"list\\\"]},\\\"contract-templates/${cognito-identity.amazonaws.com:sub}/*\\\":{\\\"entityidentity\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\",\\\"delete\\\"]}}}\"]"
+     ]
+    ]
+   }
   }
  },
  "Resources": {
@@ -299,7 +341,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/8502ac4ef63e5dc212e5e1fdbf636d3ae06c7444e2e090a57afbf374cfb0a952.json"
+       "/bc91d9389df49590e1bf5e23cb1a1e14428a718e148c2999b9f9b8f16cde4701.json"
       ]
      ]
     }
@@ -309,6 +351,62 @@
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data.NestedStack/data.NestedStackResource",
     "aws:asset:path": "amplifyjanfinderappbrendandalysandbox1ef333357fdataF3DB23BE.nested.template.json",
+    "aws:asset:property": "TemplateURL"
+   }
+  },
+  "storage0EC3F24A": {
+   "Type": "AWS::CloudFormation::Stack",
+   "Properties": {
+    "Parameters": {
+     "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref": {
+      "Fn::GetAtt": [
+       "auth179371D7",
+       "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
+      ]
+     },
+     "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref": {
+      "Fn::GetAtt": [
+       "auth179371D7",
+       "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
+      ]
+     }
+    },
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "TemplateURL": {
+     "Fn::Join": [
+      "",
+      [
+       "https://s3.",
+       {
+        "Ref": "AWS::Region"
+       },
+       ".",
+       {
+        "Ref": "AWS::URLSuffix"
+       },
+       "/",
+       {
+        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+       },
+       "/53756fa81fd6a7a1f647a5a9a8ef89d2d961ce28769f167f025ce6af496959ed.json"
+      ]
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage.NestedStack/storage.NestedStackResource",
+    "aws:asset:path": "amplifyjanfinderappbrendandalysandbox1ef333357fstorage2BF0969B.nested.template.json",
     "aws:asset:property": "TemplateURL"
    }
   },

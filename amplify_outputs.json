@@ -81,8 +81,10 @@
               "properties": {
                 "rules": [
                   {
-                    "allow": "public",
-                    "provider": "iam",
+                    "provider": "userPools",
+                    "ownerField": "owner",
+                    "allow": "owner",
+                    "identityClaim": "cognito:username",
                     "operations": [
                       "create",
                       "update",
@@ -104,6 +106,47 @@
       "enums": {},
       "nonModels": {}
     }
+  },
+  "storage": {
+    "aws_region": "us-east-1",
+    "bucket_name": "amplify-janfinderapp-bren-janfinderstoragebucketa0-qln2tmdf5bd9",
+    "buckets": [
+      {
+        "name": "JanFinderStorage",
+        "bucket_name": "amplify-janfinderapp-bren-janfinderstoragebucketa0-qln2tmdf5bd9",
+        "aws_region": "us-east-1",
+        "paths": {
+          "profile-pictures/*": {
+            "guest": [
+              "get",
+              "list"
+            ]
+          },
+          "profile-pictures/${cognito-identity.amazonaws.com:sub}/*": {
+            "entityidentity": [
+              "get",
+              "list",
+              "write",
+              "delete"
+            ]
+          },
+          "contract-templates/*": {
+            "guest": [
+              "get",
+              "list"
+            ]
+          },
+          "contract-templates/${cognito-identity.amazonaws.com:sub}/*": {
+            "entityidentity": [
+              "get",
+              "list",
+              "write",
+              "delete"
+            ]
+          }
+        }
+      }
+    ]
   },
   "version": "1.3"
 }

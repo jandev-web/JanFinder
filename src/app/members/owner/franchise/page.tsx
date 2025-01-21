@@ -10,7 +10,7 @@ export default async function OwnerFranchisePage() {
   try {
     // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();
-
+    
     // Redirect to the login page if the user is not authenticated
     if (!user) {
       redirect('/login');

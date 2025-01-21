@@ -63,7 +63,7 @@ interface OwnerQuoteProps {
 const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
   const router = useRouter();
   const [quote, setQuote] = useState<Quote | null>(null);
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<any>(null);
   const [cost, setCost] = useState<string>('Not Set');
   const [sqft, setSqft] = useState<string>('Not Set');
   const [phone, setPhone] = useState<string>('Not Set');

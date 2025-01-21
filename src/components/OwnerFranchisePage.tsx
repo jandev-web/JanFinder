@@ -6,13 +6,14 @@ import deleteFranchise from '@/utils/deleteFranchise'
 import UploadFranchisePDFTemplate from './UploadFranchisePDFTemplate';
 interface OwnerFranchisePageProps {
     user: any;
+    userInfo: any;
     franchise: any;
 }
 
-const OwnerFranchisePage: React.FC<OwnerFranchisePageProps> = ({ user, franchise }) => {
+const OwnerFranchisePage: React.FC<OwnerFranchisePageProps> = ({ userInfo, user, franchise }) => {
     const router = useRouter();
-    const franchiseID = user?.franchiseID
-    const ownerID = user?.OwnerID
+    const franchiseID = userInfo?.franchiseID
+    const ownerID = userInfo?.OwnerID
     const handleDelete = async () => {
         const confirmed = confirm('Are you sure you want to delete this franchise?');
         if (confirmed) {
@@ -40,7 +41,7 @@ const OwnerFranchisePage: React.FC<OwnerFranchisePageProps> = ({ user, franchise
                 >
                     Delete Franchise
                 </button>
-                <UploadFranchisePDFTemplate franchiseID={franchiseID} />
+                <UploadFranchisePDFTemplate user={user} franchiseID={franchiseID} />
             </div>
         </div>
     );

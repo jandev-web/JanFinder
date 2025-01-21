@@ -766,7 +766,7 @@
                               ]
                             },
                             "definitionS3Location": {
-                              "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/5d06176bcc3e592a227be94f877d286eb82f30e2066d478a8eeb091baf786836.graphql"
+                              "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/0c5da8f39ade5754b12bd8b532176fcc0a1946a7ce0cd09027f24964b4fa4e1b.graphql"
                             }
                           }
                         },
@@ -1907,7 +1907,7 @@
                                 "functionVersion": "2018-05-29",
                                 "name": "QuerygetTodoauth0Function",
                                 "requestMappingTemplateS3Location": {
-                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e7b2a5c2142d48e60eebe8e4beed7cc465c87e36229199889878edae668ef132.vtl"
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/6b25c9b572c67e0f7ad41cb8019a90825f3db4b02a0a15b837c7a82dcb302060.vtl"
                                 },
                                 "responseMappingTemplate": "$util.toJson({})"
                               }
@@ -2222,7 +2222,7 @@
                                 "functionVersion": "2018-05-29",
                                 "name": "QuerylistTodosauth0Function",
                                 "requestMappingTemplateS3Location": {
-                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e7b2a5c2142d48e60eebe8e4beed7cc465c87e36229199889878edae668ef132.vtl"
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/6b25c9b572c67e0f7ad41cb8019a90825f3db4b02a0a15b837c7a82dcb302060.vtl"
                                 },
                                 "responseMappingTemplate": "$util.toJson({})"
                               }
@@ -2598,7 +2598,7 @@
                                 "functionVersion": "2018-05-29",
                                 "name": "MutationcreateTodoauth0Function",
                                 "requestMappingTemplateS3Location": {
-                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/687e5bb5b18cd04d8e695d1f85ad9d43df05210383aba8097d72910c47b3e7e1.vtl"
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/bf864424d69e7e1edcc78ad523ed3923ffe243ccaa9b5d945feed220aba241a6.vtl"
                                 },
                                 "responseMappingTemplate": "$util.toJson({})"
                               }
@@ -3012,7 +3012,7 @@
                                   "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1f5fed297da9c32ae3af922bf3a38ccf23b956078887d16891ec06c20c64722c.vtl"
                                 },
                                 "responseMappingTemplateS3Location": {
-                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/035bca645c95ac13c5dbae712a5a00df2f0b40b2772e5077b865722057d0b2b7.vtl"
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/6d7ef5c76ed8367a26db5f3d21c6d6cf20b3f3226225dc974f8013ac9e700fab.vtl"
                                 }
                               }
                             },
@@ -3364,7 +3364,7 @@
                                   "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1f5fed297da9c32ae3af922bf3a38ccf23b956078887d16891ec06c20c64722c.vtl"
                                 },
                                 "responseMappingTemplateS3Location": {
-                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/04afff6c870576131ba15da50cb5c3c0278fbab9d12c4fd63520a49832c46482.vtl"
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/867fb7d7eb8e4127b6d0136b82c5c3f74a52eb410297086859986f8e7e4b02aa.vtl"
                                 }
                               }
                             },
@@ -3678,7 +3678,7 @@
                                 "functionVersion": "2018-05-29",
                                 "name": "SubscriptiononCreateTodoauth0Function",
                                 "requestMappingTemplateS3Location": {
-                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/d01a85a7e1c50273d7078990da300e811095a7671cd5d0d3ac8d475cc4c8b124.vtl"
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/3b6d810ef43cdbd93ef462c40b0df0328b89e04f1473a4f82f1178da1f1d5aa0.vtl"
                                 },
                                 "responseMappingTemplate": "$util.toJson({})"
                               }
@@ -3963,7 +3963,7 @@
                                 "functionVersion": "2018-05-29",
                                 "name": "SubscriptiononUpdateTodoauth0Function",
                                 "requestMappingTemplateS3Location": {
-                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/d01a85a7e1c50273d7078990da300e811095a7671cd5d0d3ac8d475cc4c8b124.vtl"
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/3b6d810ef43cdbd93ef462c40b0df0328b89e04f1473a4f82f1178da1f1d5aa0.vtl"
                                 },
                                 "responseMappingTemplate": "$util.toJson({})"
                               }
@@ -4248,7 +4248,7 @@
                                 "functionVersion": "2018-05-29",
                                 "name": "SubscriptiononDeleteTodoauth0Function",
                                 "requestMappingTemplateS3Location": {
-                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/d01a85a7e1c50273d7078990da300e811095a7671cd5d0d3ac8d475cc4c8b124.vtl"
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/3b6d810ef43cdbd93ef462c40b0df0328b89e04f1473a4f82f1178da1f1d5aa0.vtl"
                                 },
                                 "responseMappingTemplate": "$util.toJson({})"
                               }
@@ -4488,6 +4488,157 @@
                           "version": "2.173.0"
                         }
                       },
+                      "TodoOwnerDataResolverFn": {
+                        "id": "TodoOwnerDataResolverFn",
+                        "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/TodoOwnerDataResolverFn",
+                        "children": {
+                          "Templateresolvers--Todo.owner.req.vtl": {
+                            "id": "Templateresolvers--Todo.owner.req.vtl",
+                            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/TodoOwnerDataResolverFn/Templateresolvers--Todo.owner.req.vtl",
+                            "children": {
+                              "Stage": {
+                                "id": "Stage",
+                                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/TodoOwnerDataResolverFn/Templateresolvers--Todo.owner.req.vtl/Stage",
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.AssetStaging",
+                                  "version": "2.173.0"
+                                }
+                              },
+                              "AssetBucket": {
+                                "id": "AssetBucket",
+                                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/TodoOwnerDataResolverFn/Templateresolvers--Todo.owner.req.vtl/AssetBucket",
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                                  "version": "2.173.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                              "version": "2.173.0"
+                            }
+                          },
+                          "Templateresolvers--Todo.owner.res.vtl": {
+                            "id": "Templateresolvers--Todo.owner.res.vtl",
+                            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/TodoOwnerDataResolverFn/Templateresolvers--Todo.owner.res.vtl",
+                            "children": {
+                              "Stage": {
+                                "id": "Stage",
+                                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/TodoOwnerDataResolverFn/Templateresolvers--Todo.owner.res.vtl/Stage",
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.AssetStaging",
+                                  "version": "2.173.0"
+                                }
+                              },
+                              "AssetBucket": {
+                                "id": "AssetBucket",
+                                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/TodoOwnerDataResolverFn/Templateresolvers--Todo.owner.res.vtl/AssetBucket",
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                                  "version": "2.173.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                              "version": "2.173.0"
+                            }
+                          },
+                          "TodoOwnerDataResolverFn.AppSyncFunction": {
+                            "id": "TodoOwnerDataResolverFn.AppSyncFunction",
+                            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/TodoOwnerDataResolverFn/TodoOwnerDataResolverFn.AppSyncFunction",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::AppSync::FunctionConfiguration",
+                              "aws:cdk:cloudformation:props": {
+                                "apiId": {
+                                  "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPIACBD2C88ApiId"
+                                },
+                                "dataSourceName": {
+                                  "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPINONEDS4C7F37C2Name"
+                                },
+                                "functionVersion": "2018-05-29",
+                                "name": "TodoOwnerDataResolverFn",
+                                "requestMappingTemplateS3Location": {
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/041534e5fd916595f752318f161512d7c7f83b9f2cf32d0f0be381c12253ff68.vtl"
+                                },
+                                "responseMappingTemplateS3Location": {
+                                  "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/064303962e481067b44300212516363b99aaee539b6bafaf756fdd83ff0b60f0.vtl"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_appsync.CfnFunctionConfiguration",
+                              "version": "2.173.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.4.2"
+                        }
+                      },
+                      "todoOwnerResolver": {
+                        "id": "todoOwnerResolver",
+                        "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/todoOwnerResolver",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::AppSync::Resolver",
+                          "aws:cdk:cloudformation:props": {
+                            "apiId": {
+                              "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPIACBD2C88ApiId"
+                            },
+                            "fieldName": "owner",
+                            "kind": "PIPELINE",
+                            "pipelineConfig": {
+                              "functions": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "TodoOwnerDataResolverFnTodoOwnerDataResolverFnAppSyncFunction0C7BF45B",
+                                    "FunctionId"
+                                  ]
+                                }
+                              ]
+                            },
+                            "requestMappingTemplate": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "$util.qr($ctx.stash.put(\"typeName\", \"Todo\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"owner\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+                                  {
+                                    "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPIACBD2C88ApiId"
+                                  },
+                                  "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  ":assumed-role/",
+                                  {
+                                    "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
+                                  },
+                                  "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  ":assumed-role/",
+                                  {
+                                    "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
+                                  },
+                                  "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+                                  {
+                                    "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthIdentityPool723B7388Ref"
+                                  },
+                                  "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+                                ]
+                              ]
+                            },
+                            "responseMappingTemplate": "$util.toJson($ctx.prev.result)",
+                            "typeName": "Todo"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_appsync.CfnResolver",
+                          "version": "2.173.0"
+                        }
+                      },
                       "CDKMetadata": {
                         "id": "CDKMetadata",
                         "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/CDKMetadata",
@@ -4652,7 +4803,7 @@
                                   {
                                     "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                                   },
-                                  "/aa0a0faaab0d7d00d20269b46fbdba530f054957188cca136395c9b14354cfec.json"
+                                  "/aaa256bb540f17f77b2f08376743289c84acb0e9a2e76022d02f93498e8bb2f0.json"
                                 ]
                               ]
                             }
@@ -4667,388 +4818,6 @@
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.4.2"
-                    }
-                  },
-                  "auth-role-name": {
-                    "id": "auth-role-name",
-                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/auth-role-name",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.Resource",
-                      "version": "2.173.0"
-                    }
-                  },
-                  "AuthRolePolicy01": {
-                    "id": "AuthRolePolicy01",
-                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AuthRolePolicy01",
-                    "children": {
-                      "ImportedAuthRolePolicy01": {
-                        "id": "ImportedAuthRolePolicy01",
-                        "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AuthRolePolicy01/ImportedAuthRolePolicy01",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.Resource",
-                          "version": "2.173.0"
-                        }
-                      },
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AuthRolePolicy01/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::ManagedPolicy",
-                          "aws:cdk:cloudformation:props": {
-                            "description": "",
-                            "path": "/",
-                            "policyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": "appsync:GraphQL",
-                                  "Effect": "Allow",
-                                  "Resource": [
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Todo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Query",
-                                          "fieldName": "getTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Query",
-                                          "fieldName": "listTodos"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Mutation",
-                                          "fieldName": "createTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Mutation",
-                                          "fieldName": "updateTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Mutation",
-                                          "fieldName": "deleteTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Subscription",
-                                          "fieldName": "onCreateTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Subscription",
-                                          "fieldName": "onUpdateTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Subscription",
-                                          "fieldName": "onDeleteTodo"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "roles": [
-                              {
-                                "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
-                              }
-                            ]
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.CfnManagedPolicy",
-                          "version": "2.173.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.ManagedPolicy",
-                      "version": "2.173.0"
-                    }
-                  },
-                  "unauth-role-name": {
-                    "id": "unauth-role-name",
-                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/unauth-role-name",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.Resource",
-                      "version": "2.173.0"
-                    }
-                  },
-                  "UnauthRolePolicy01": {
-                    "id": "UnauthRolePolicy01",
-                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/UnauthRolePolicy01",
-                    "children": {
-                      "ImportedUnauthRolePolicy01": {
-                        "id": "ImportedUnauthRolePolicy01",
-                        "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/UnauthRolePolicy01/ImportedUnauthRolePolicy01",
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.Resource",
-                          "version": "2.173.0"
-                        }
-                      },
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/UnauthRolePolicy01/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::ManagedPolicy",
-                          "aws:cdk:cloudformation:props": {
-                            "description": "",
-                            "path": "/",
-                            "policyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": "appsync:GraphQL",
-                                  "Effect": "Allow",
-                                  "Resource": [
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Todo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Query",
-                                          "fieldName": "getTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Query",
-                                          "fieldName": "listTodos"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Mutation",
-                                          "fieldName": "createTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Mutation",
-                                          "fieldName": "updateTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Mutation",
-                                          "fieldName": "deleteTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Subscription",
-                                          "fieldName": "onCreateTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Subscription",
-                                          "fieldName": "onUpdateTodo"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Sub": [
-                                        "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-                                        {
-                                          "apiId": {
-                                            "Fn::GetAtt": [
-                                              "amplifyDataGraphQLAPI42A6FA33",
-                                              "ApiId"
-                                            ]
-                                          },
-                                          "typeName": "Subscription",
-                                          "fieldName": "onDeleteTodo"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "roles": [
-                              {
-                                "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
-                              }
-                            ]
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.CfnManagedPolicy",
-                          "version": "2.173.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.ManagedPolicy",
-                      "version": "2.173.0"
                     }
                   },
                   "AmplifyCodegenAssets": {
@@ -6272,7 +6041,7 @@
                           {
                             "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                           },
-                          "/8502ac4ef63e5dc212e5e1fdbf636d3ae06c7444e2e090a57afbf374cfb0a952.json"
+                          "/bc91d9389df49590e1bf5e23cb1a1e14428a718e148c2999b9f9b8f16cde4701.json"
                         ]
                       ]
                     }
@@ -6332,6 +6101,674 @@
           "awsAppsyncAdditionalAuthenticationTypes": {
             "id": "awsAppsyncAdditionalAuthenticationTypes",
             "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/awsAppsyncAdditionalAuthenticationTypes",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.173.0"
+            }
+          },
+          "storage": {
+            "id": "storage",
+            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage",
+            "children": {
+              "JanFinderStorage": {
+                "id": "JanFinderStorage",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage",
+                "children": {
+                  "Bucket": {
+                    "id": "Bucket",
+                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage/Bucket",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage/Bucket/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                          "aws:cdk:cloudformation:props": {
+                            "corsConfiguration": {
+                              "corsRules": [
+                                {
+                                  "maxAge": 3000,
+                                  "allowedHeaders": [
+                                    "*"
+                                  ],
+                                  "allowedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "PUT",
+                                    "POST",
+                                    "DELETE"
+                                  ],
+                                  "allowedOrigins": [
+                                    "*"
+                                  ],
+                                  "exposedHeaders": [
+                                    "x-amz-server-side-encryption",
+                                    "x-amz-request-id",
+                                    "x-amz-id-2",
+                                    "ETag"
+                                  ]
+                                }
+                              ]
+                            },
+                            "tags": [
+                              {
+                                "key": "amplify:deployment-type",
+                                "value": "sandbox"
+                              },
+                              {
+                                "key": "amplify:friendly-name",
+                                "value": "JanFinderStorage"
+                              },
+                              {
+                                "key": "aws-cdk:auto-delete-objects",
+                                "value": "true"
+                              },
+                              {
+                                "key": "created-by",
+                                "value": "amplify"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                          "version": "2.173.0"
+                        }
+                      },
+                      "Policy": {
+                        "id": "Policy",
+                        "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage/Bucket/Policy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage/Bucket/Policy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                              "aws:cdk:cloudformation:props": {
+                                "bucket": {
+                                  "Ref": "JanFinderStorageBucketA0AAEB6D"
+                                },
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "s3:*",
+                                      "Condition": {
+                                        "Bool": {
+                                          "aws:SecureTransport": "false"
+                                        }
+                                      },
+                                      "Effect": "Deny",
+                                      "Principal": {
+                                        "AWS": "*"
+                                      },
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "JanFinderStorageBucketA0AAEB6D",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "JanFinderStorageBucketA0AAEB6D",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Action": [
+                                        "s3:PutBucketPolicy",
+                                        "s3:GetBucket*",
+                                        "s3:List*",
+                                        "s3:DeleteObject*"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::GetAtt": [
+                                            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                                            "Arn"
+                                          ]
+                                        }
+                                      },
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "JanFinderStorageBucketA0AAEB6D",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "JanFinderStorageBucketA0AAEB6D",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                              "version": "2.173.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                          "version": "2.173.0"
+                        }
+                      },
+                      "AutoDeleteObjectsCustomResource": {
+                        "id": "AutoDeleteObjectsCustomResource",
+                        "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage/Bucket/AutoDeleteObjectsCustomResource",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage/Bucket/AutoDeleteObjectsCustomResource/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.173.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.173.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                      "version": "2.173.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.4.2"
+                }
+              },
+              "LatestNodeRuntimeMap": {
+                "id": "LatestNodeRuntimeMap",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/LatestNodeRuntimeMap",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnMapping",
+                  "version": "2.173.0"
+                }
+              },
+              "Custom::S3AutoDeleteObjectsCustomResourceProvider": {
+                "id": "Custom::S3AutoDeleteObjectsCustomResourceProvider",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/Custom::S3AutoDeleteObjectsCustomResourceProvider",
+                "children": {
+                  "Staging": {
+                    "id": "Staging",
+                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/Custom::S3AutoDeleteObjectsCustomResourceProvider/Staging",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.173.0"
+                    }
+                  },
+                  "Role": {
+                    "id": "Role",
+                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.173.0"
+                    }
+                  },
+                  "Handler": {
+                    "id": "Handler",
+                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.173.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CustomResourceProviderBase",
+                  "version": "2.173.0"
+                }
+              },
+              "JAN_FINDER_STORAGE_BUCKET_NAMEParameter": {
+                "id": "JAN_FINDER_STORAGE_BUCKET_NAMEParameter",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JAN_FINDER_STORAGE_BUCKET_NAMEParameter",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JAN_FINDER_STORAGE_BUCKET_NAMEParameter/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SSM::Parameter",
+                      "aws:cdk:cloudformation:props": {
+                        "name": "/amplify/resource_reference/janfinderapp/brendandaly-sandbox-1ef333357f/JAN_FINDER_STORAGE_BUCKET_NAME",
+                        "tags": {
+                          "amplify:deployment-type": "sandbox",
+                          "created-by": "amplify"
+                        },
+                        "type": "String",
+                        "value": {
+                          "Ref": "JanFinderStorageBucketA0AAEB6D"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ssm.CfnParameter",
+                      "version": "2.173.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ssm.StringParameter",
+                  "version": "2.173.0"
+                }
+              },
+              "storageAccess4": {
+                "id": "storageAccess4",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess4",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess4/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "s3:GetObject",
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "JanFinderStorageBucketA0AAEB6D",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/profile-pictures/*"
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "JanFinderStorageBucketA0AAEB6D",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/contract-templates/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": "s3:ListBucket",
+                              "Condition": {
+                                "StringLike": {
+                                  "s3:prefix": [
+                                    "profile-pictures/*",
+                                    "profile-pictures/",
+                                    "contract-templates/*",
+                                    "contract-templates/"
+                                  ]
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "JanFinderStorageBucketA0AAEB6D",
+                                  "Arn"
+                                ]
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "storageAccess472A5D2AC",
+                        "roles": [
+                          {
+                            "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.173.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.173.0"
+                }
+              },
+              "storageAccess5": {
+                "id": "storageAccess5",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess5",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess5/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "s3:GetObject",
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "JanFinderStorageBucketA0AAEB6D",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/profile-pictures/${cognito-identity.amazonaws.com:sub}/*"
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "JanFinderStorageBucketA0AAEB6D",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/contract-templates/${cognito-identity.amazonaws.com:sub}/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": "s3:ListBucket",
+                              "Condition": {
+                                "StringLike": {
+                                  "s3:prefix": [
+                                    "profile-pictures/${cognito-identity.amazonaws.com:sub}/*",
+                                    "profile-pictures/${cognito-identity.amazonaws.com:sub}/",
+                                    "contract-templates/${cognito-identity.amazonaws.com:sub}/*",
+                                    "contract-templates/${cognito-identity.amazonaws.com:sub}/"
+                                  ]
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "JanFinderStorageBucketA0AAEB6D",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": "s3:PutObject",
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "JanFinderStorageBucketA0AAEB6D",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/profile-pictures/${cognito-identity.amazonaws.com:sub}/*"
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "JanFinderStorageBucketA0AAEB6D",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/contract-templates/${cognito-identity.amazonaws.com:sub}/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": "s3:DeleteObject",
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "JanFinderStorageBucketA0AAEB6D",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/profile-pictures/${cognito-identity.amazonaws.com:sub}/*"
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "JanFinderStorageBucketA0AAEB6D",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/contract-templates/${cognito-identity.amazonaws.com:sub}/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "storageAccess524979CAB",
+                        "roles": [
+                          {
+                            "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.173.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.173.0"
+                }
+              },
+              "CDKMetadata": {
+                "id": "CDKMetadata",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/CDKMetadata",
+                "children": {
+                  "Default": {
+                    "id": "Default",
+                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/CDKMetadata/Default",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.173.0"
+                    }
+                  },
+                  "Condition": {
+                    "id": "Condition",
+                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/CDKMetadata/Condition",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnCondition",
+                      "version": "2.173.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.4.2"
+                }
+              },
+              "reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref": {
+                "id": "reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnParameter",
+                  "version": "2.173.0"
+                }
+              },
+              "reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref": {
+                "id": "reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnParameter",
+                  "version": "2.173.0"
+                }
+              },
+              "amplifyjanfinderappbrendandalysandbox1ef333357fstorageJanFinderStorageBucket64FD9A50Ref": {
+                "id": "amplifyjanfinderappbrendandalysandbox1ef333357fstorageJanFinderStorageBucket64FD9A50Ref",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/amplifyjanfinderappbrendandalysandbox1ef333357fstorageJanFinderStorageBucket64FD9A50Ref",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.173.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.NestedStack",
+              "version": "2.173.0"
+            }
+          },
+          "storage.NestedStack": {
+            "id": "storage.NestedStack",
+            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage.NestedStack",
+            "children": {
+              "storage.NestedStackResource": {
+                "id": "storage.NestedStackResource",
+                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage.NestedStack/storage.NestedStackResource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudFormation::Stack",
+                  "aws:cdk:cloudformation:props": {
+                    "parameters": {
+                      "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref": {
+                        "Fn::GetAtt": [
+                          "auth179371D7",
+                          "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
+                        ]
+                      },
+                      "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref": {
+                        "Fn::GetAtt": [
+                          "auth179371D7",
+                          "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
+                        ]
+                      }
+                    },
+                    "tags": [
+                      {
+                        "key": "amplify:deployment-type",
+                        "value": "sandbox"
+                      },
+                      {
+                        "key": "created-by",
+                        "value": "amplify"
+                      }
+                    ],
+                    "templateUrl": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "https://s3.",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ".",
+                          {
+                            "Ref": "AWS::URLSuffix"
+                          },
+                          "/",
+                          {
+                            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                          },
+                          "/53756fa81fd6a7a1f647a5a9a8ef89d2d961ce28769f167f025ce6af496959ed.json"
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnStack",
+                  "version": "2.173.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "storageRegion": {
+            "id": "storageRegion",
+            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storageRegion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.173.0"
+            }
+          },
+          "bucketName": {
+            "id": "bucketName",
+            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/bucketName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.173.0"
+            }
+          },
+          "buckets": {
+            "id": "buckets",
+            "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/buckets",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnOutput",
               "version": "2.173.0"

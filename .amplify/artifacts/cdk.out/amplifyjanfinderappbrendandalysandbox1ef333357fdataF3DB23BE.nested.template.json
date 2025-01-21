@@ -50,7 +50,7 @@
      ]
     },
     "DefinitionS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/5d06176bcc3e592a227be94f877d286eb82f30e2066d478a8eeb091baf786836.graphql"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/0c5da8f39ade5754b12bd8b532176fcc0a1946a7ce0cd09027f24964b4fa4e1b.graphql"
     }
    },
    "UpdateReplacePolicy": "Delete",
@@ -209,7 +209,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/aa0a0faaab0d7d00d20269b46fbdba530f054957188cca136395c9b14354cfec.json"
+       "/aaa256bb540f17f77b2f08376743289c84acb0e9a2e76022d02f93498e8bb2f0.json"
       ]
      ]
     }
@@ -223,330 +223,6 @@
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo.NestedStack/Todo.NestedStackResource",
     "aws:asset:path": "amplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataTodoB325A8A1.nested.template.json",
     "aws:asset:property": "TemplateURL"
-   }
-  },
-  "amplifyDataAuthRolePolicy01567A5654": {
-   "Type": "AWS::IAM::ManagedPolicy",
-   "Properties": {
-    "Description": "",
-    "Path": "/",
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": "appsync:GraphQL",
-       "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Todo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Query",
-           "fieldName": "getTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Query",
-           "fieldName": "listTodos"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Mutation",
-           "fieldName": "createTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Mutation",
-           "fieldName": "updateTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Mutation",
-           "fieldName": "deleteTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Subscription",
-           "fieldName": "onCreateTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Subscription",
-           "fieldName": "onUpdateTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Subscription",
-           "fieldName": "onDeleteTodo"
-          }
-         ]
-        }
-       ]
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "Roles": [
-     {
-      "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AuthRolePolicy01/Resource"
-   }
-  },
-  "amplifyDataUnauthRolePolicy01355B9DCF": {
-   "Type": "AWS::IAM::ManagedPolicy",
-   "Properties": {
-    "Description": "",
-    "Path": "/",
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": "appsync:GraphQL",
-       "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Todo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Query",
-           "fieldName": "getTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Query",
-           "fieldName": "listTodos"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Mutation",
-           "fieldName": "createTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Mutation",
-           "fieldName": "updateTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Mutation",
-           "fieldName": "deleteTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Subscription",
-           "fieldName": "onCreateTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Subscription",
-           "fieldName": "onUpdateTodo"
-          }
-         ]
-        },
-        {
-         "Fn::Sub": [
-          "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
-          {
-           "apiId": {
-            "Fn::GetAtt": [
-             "amplifyDataGraphQLAPI42A6FA33",
-             "ApiId"
-            ]
-           },
-           "typeName": "Subscription",
-           "fieldName": "onDeleteTodo"
-          }
-         ]
-        }
-       ]
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "Roles": [
-     {
-      "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/UnauthRolePolicy01/Resource"
    }
   },
   "amplifyDataAmplifyCodegenAssetsAmplifyCodegenAssetsBucket9CCB4ACA": {
@@ -722,7 +398,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "76b9cb787843795ad95966b867f6ef348480676166e6ac8fd4d53cef654a6b16.zip"
+     "5afa29dd7ad2ba076b33fd628f16a7a45d168dd3fc8eb5ec31505e08791122dc.zip"
     ],
     "SourceMarkers": [
      {}
@@ -1234,7 +910,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "8aeb4ca549a33370c42666525e2c318f84f0d26a7f54c6a8ecc60ce32b83123f.zip"
+     "33364f1eb084f55addf76c402f345d8423ddab4e685105751c6cb947c189c346.zip"
     ],
     "SourceMarkers": [
      {}
@@ -1312,7 +988,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VRy27DIBD8lt4JzePQs+OovaRRGku9WhvYOCQYXBbHsiz/e2Wo7eY0D1bDwK756m3Dly/Q0ELI+0KrM+8OSB5l5kHc2QnJ1k4gg4byDqqKWiN49+Gguv7opFJbIGTpxQTna59U6p/KxBVLYAdrcAceshiVXsysekabvAMi9MSTAZjEStu2ROP5thZ39LvJGKZ5F91wc6RD5B+LcLRaiXa2o+6ZgpJ3n2CgQDnPPBsnq0PHgPPQGKGhPEvgXXoxe2jRfaMjZQ3LlCk0emveayP84EwkvUxmz4hK3mXeKVMcwUGJHl3IH0Xfs/APmYdCmWI4i7tIa/K2nDYyVBx5LJXroVAODQmteNJQqlXo+JQfX1xVIfsp8ujsQ0l0405Ta6SKrY2VyG/0+liv+WrFly83UmrhauNVifwU8RdLbveITgIAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VRy26DMBD8ltwdN49Dz4SovaRRGqRe0cYsxImxqdcEIYt/r4wLaU87M2vN7K43fP265asFdLQUxX2p5IX7I5LDInMg7uyMZForkEFHuYemoV4L7t8tNNdvlTRyB4QsLfWofB6SRv5hmbhiDexoNO7BQRat0lI/2cBom3sgQkc8CYUV2CjT16gd37Xijm4/C+E191EdkyMMlr8olpNRUvRPOfKBKagvBXCflvoAPdovtCSNZpnUlUJn9FurhQvKDNJyFgcmoeb+bNS4xFifSVMGUc195qzU1Qks1OjQjv2JDAMbF80cVFJXoRePnbbkTD2fPERMOA6eqzB0Dh0JJXnSUarkuMc//0A+oGlG73+WJ2seskA7fVpqdCHjZtoUyG/08ths+HrNV4sbSbm0rXayRn6O9QeHK1D+LwIAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/CDKMetadata/Default"

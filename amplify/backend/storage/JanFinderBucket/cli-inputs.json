@@ -1,0 +1,13 @@
+{
+  "resourceName": "JanFinderBucket",
+  "policyUUID": "98d9a7b6",
+  "bucketName": "janfindbucket",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "groupAccess": {}
+}

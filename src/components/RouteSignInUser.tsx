@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation'; // Use useRouter from next/navigation
-import { checkIsOwner } from '@/utils/checkIsOwner';
+import checkUserRole from '@/utils/checkOwnerStatus';
 import MemberLoadingScreen from '@/components/pages/MemberPageLoading';
 
 interface RoleRouterProps {
@@ -26,14 +26,18 @@ const RoleRouter: React.FC<RoleRouterProps> = ({ user }) => {
         
 
         // Check user role
-        const isOwner = await checkIsOwner(fetchedAttributes);
-
-        if (isOwner) {
+        const userRole = await checkUserRole(fetchedAttributes.sub);
+        console.log(userRole)
+        const userStatus = userRole.status
+        if (userStatus === 'owner') {
           console.log('Owner')
           router.push('/members/owner');
-        } else {
+        } else if (userStatus === 'cbo'){
           console.log('Not Owner')
           router.push('/members/cbo');
+        }
+        else {
+          console.error('Not a user')
         }
       } catch (error) {
         console.error('Error fetching user details or role:', error);

@@ -22,7 +22,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a8c9b8e99c84091d8720d8fb967e99d19bcd951f1373091dcd4832775be2b4b2.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c3cae8ea23fd5be9bf81ab04ba8797ad9c0684b126871adb3f301c1d0630298c.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -835,6 +835,26 @@
             "data": "Subscription.onDeleteTodo"
           }
         ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/TodoOwnerDataResolverFn/TodoOwnerDataResolverFn.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoOwnerDataResolverFnTodoOwnerDataResolverFnAppSyncFunction0C7BF45B"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "TodoOwnerDataResolverFn"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/todoOwnerResolver": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoownerResolver"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "Todo.owner"
+          }
+        ],
         "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
@@ -887,18 +907,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "amplifyDataTodoNestedStackTodoNestedStackResource551CEA56"
-          }
-        ],
-        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AuthRolePolicy01/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyDataAuthRolePolicy01567A5654"
-          }
-        ],
-        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/UnauthRolePolicy01/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyDataUnauthRolePolicy01355B9DCF"
           }
         ],
         "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AmplifyCodegenAssets/AmplifyCodegenAssetsBucket/Resource": [
@@ -1163,6 +1171,120 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "awsAppsyncAdditionalAuthenticationTypes"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage/Bucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JanFinderStorageBucketA0AAEB6D"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage/Bucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JanFinderStorageBucketPolicy091D89D8"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JanFinderStorage/Bucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JanFinderStorageBucketAutoDeleteObjectsCustomResource1E42697A"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/LatestNodeRuntimeMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LatestNodeRuntimeMap"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/JAN_FINDER_STORAGE_BUCKET_NAMEParameter/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "JANFINDERSTORAGEBUCKETNAMEParameterEB42A900"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess4/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "storageAccess472A5D2AC"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess5/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "storageAccess524979CAB"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/amplifyjanfinderappbrendandalysandbox1ef333357fstorageJanFinderStorageBucket64FD9A50Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappbrendandalysandbox1ef333357fstorageJanFinderStorageBucket64FD9A50Ref"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage.NestedStack/storage.NestedStackResource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "storage0EC3F24A"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storageRegion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "storageRegion"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/bucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "bucketName"
+          }
+        ],
+        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/buckets": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "buckets"
           }
         ],
         "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/CDKMetadata/Default": [

@@ -1,27 +1,14 @@
-const getQuotePDF = async (quoteID, userID) => {
-    const url = process.env.NEXT_PUBLIC_RETRIEVE_QUOTE_PDF_URL;
-    const apiKey = process.env.NEXT_PUBLIC_RETRIEVE_QUOTE_PDF_KEY; 
-    
+import { getUrl } from 'aws-amplify/storage';
+
+const getQuotePDF = async (quoteID) => {
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'x-api-key': apiKey,
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify({ quoteID, userID }),
+        const linkToStorageFile = await getUrl({
+            path: `contracts/${quoteID}/contract.docx`,
         });
-
-        if (!response.ok) {
-            throw new Error('Failed to retrieve PDF');
-        }
-
-        const data = await response.json();
-        console.log('Get PDF Response: ', data)
-        return data.url;
+        return linkToStorageFile;
     } catch (error) {
-        console.error('Error retrieving PDF:', error);
-        return null;
+        console.error('Error fetching quote PDF:', error);
+        throw error;
     }
 };
 
