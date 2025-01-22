@@ -33,7 +33,7 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
             console.log(response)
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `quote_${quoteID}.docx`;
+            link.download = `contract.docx`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

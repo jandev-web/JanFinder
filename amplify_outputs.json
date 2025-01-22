@@ -26,7 +26,7 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://csgjlb7cojecvbhq4e22bg46bq.appsync-api.us-east-1.amazonaws.com/graphql",
+    "url": "https://xgzv6xwimnfqzhzjhxbun42cae.appsync-api.us-east-1.amazonaws.com/graphql",
     "aws_region": "us-east-1",
     "default_authorization_type": "AWS_IAM",
     "authorization_types": [
@@ -109,39 +109,25 @@
   },
   "storage": {
     "aws_region": "us-east-1",
-    "bucket_name": "amplify-janfinderapp-bren-janfinderstoragebucketa0-qln2tmdf5bd9",
+    "bucket_name": "janfindbucket1c1b5-dev",
     "buckets": [
       {
         "name": "JanFinderStorage",
-        "bucket_name": "amplify-janfinderapp-bren-janfinderstoragebucketa0-qln2tmdf5bd9",
+        "bucket_name": "janfindbucket1c1b5-dev",
         "aws_region": "us-east-1",
         "paths": {
-          "profile-pictures/*": {
-            "guest": [
-              "get",
-              "list"
-            ]
-          },
-          "profile-pictures/${cognito-identity.amazonaws.com:sub}/*": {
-            "entityidentity": [
+          "contracts/*": {
+            "authenticated": [
               "get",
               "list",
-              "write",
-              "delete"
+              "write"
             ]
           },
           "contract-templates/*": {
-            "guest": [
-              "get",
-              "list"
-            ]
-          },
-          "contract-templates/${cognito-identity.amazonaws.com:sub}/*": {
-            "entityidentity": [
+            "authenticated": [
               "get",
               "list",
-              "write",
-              "delete"
+              "write"
             ]
           }
         }

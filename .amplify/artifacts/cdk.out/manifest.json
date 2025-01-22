@@ -22,7 +22,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c3cae8ea23fd5be9bf81ab04ba8797ad9c0684b126871adb3f301c1d0630298c.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/568cc4947ca0b1591ce0ac8bf8255c4c605e3edfca62f3c506b6dda86ea37b35.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -1227,12 +1227,6 @@
             "data": "storageAccess472A5D2AC"
           }
         ],
-        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess5/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "storageAccess524979CAB"
-          }
-        ],
         "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
@@ -1243,12 +1237,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadataAvailable"
-          }
-        ],
-        "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
           }
         ],
         "/amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref": [

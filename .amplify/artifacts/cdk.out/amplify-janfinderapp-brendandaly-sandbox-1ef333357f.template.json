@@ -237,7 +237,7 @@
       {
        "Ref": "AWS::Region"
       },
-      "\\\",\\\"paths\\\":{\\\"profile-pictures/*\\\":{\\\"guest\\\":[\\\"get\\\",\\\"list\\\"]},\\\"profile-pictures/${cognito-identity.amazonaws.com:sub}/*\\\":{\\\"entityidentity\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\",\\\"delete\\\"]},\\\"contract-templates/*\\\":{\\\"guest\\\":[\\\"get\\\",\\\"list\\\"]},\\\"contract-templates/${cognito-identity.amazonaws.com:sub}/*\\\":{\\\"entityidentity\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\",\\\"delete\\\"]}}}\"]"
+      "\\\",\\\"paths\\\":{\\\"contracts/*\\\":{\\\"authenticated\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\"]},\\\"contract-templates/*\\\":{\\\"authenticated\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\"]}}}\"]"
      ]
     ]
    }
@@ -358,12 +358,6 @@
    "Type": "AWS::CloudFormation::Stack",
    "Properties": {
     "Parameters": {
-     "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref": {
-      "Fn::GetAtt": [
-       "auth179371D7",
-       "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
-      ]
-     },
      "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref": {
       "Fn::GetAtt": [
        "auth179371D7",
@@ -397,7 +391,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/53756fa81fd6a7a1f647a5a9a8ef89d2d961ce28769f167f025ce6af496959ed.json"
+       "/8f8a6cd859a1e37fa2e237d914fb33a702520f072fa529215a51edf545387e1e.json"
       ]
      ]
     }

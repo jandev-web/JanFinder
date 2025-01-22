@@ -284,7 +284,7 @@
              "Arn"
             ]
            },
-           "/profile-pictures/*"
+           "/contracts/*"
           ]
          ]
         },
@@ -309,85 +309,10 @@
        "Condition": {
         "StringLike": {
          "s3:prefix": [
-          "profile-pictures/*",
-          "profile-pictures/",
+          "contracts/*",
+          "contracts/",
           "contract-templates/*",
           "contract-templates/"
-         ]
-        }
-       },
-       "Effect": "Allow",
-       "Resource": {
-        "Fn::GetAtt": [
-         "JanFinderStorageBucketA0AAEB6D",
-         "Arn"
-        ]
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "PolicyName": "storageAccess472A5D2AC",
-    "Roles": [
-     {
-      "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess4/Resource"
-   }
-  },
-  "storageAccess524979CAB": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": "s3:GetObject",
-       "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/profile-pictures/${cognito-identity.amazonaws.com:sub}/*"
-          ]
-         ]
-        },
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/contract-templates/${cognito-identity.amazonaws.com:sub}/*"
-          ]
-         ]
-        }
-       ]
-      },
-      {
-       "Action": "s3:ListBucket",
-       "Condition": {
-        "StringLike": {
-         "s3:prefix": [
-          "profile-pictures/${cognito-identity.amazonaws.com:sub}/*",
-          "profile-pictures/${cognito-identity.amazonaws.com:sub}/",
-          "contract-templates/${cognito-identity.amazonaws.com:sub}/*",
-          "contract-templates/${cognito-identity.amazonaws.com:sub}/"
          ]
         }
        },
@@ -413,7 +338,7 @@
              "Arn"
             ]
            },
-           "/profile-pictures/${cognito-identity.amazonaws.com:sub}/*"
+           "/contracts/*"
           ]
          ]
         },
@@ -427,41 +352,7 @@
              "Arn"
             ]
            },
-           "/contract-templates/${cognito-identity.amazonaws.com:sub}/*"
-          ]
-         ]
-        }
-       ]
-      },
-      {
-       "Action": "s3:DeleteObject",
-       "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/profile-pictures/${cognito-identity.amazonaws.com:sub}/*"
-          ]
-         ]
-        },
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/contract-templates/${cognito-identity.amazonaws.com:sub}/*"
+           "/contract-templates/*"
           ]
          ]
         }
@@ -470,7 +361,7 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "storageAccess524979CAB",
+    "PolicyName": "storageAccess472A5D2AC",
     "Roles": [
      {
       "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
@@ -480,7 +371,7 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess5/Resource"
+    "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess4/Resource"
    }
   },
   "CDKMetadata": {
@@ -885,9 +776,6 @@
   }
  },
  "Parameters": {
-  "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref": {
-   "Type": "String"
-  },
   "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref": {
    "Type": "String"
   }

@@ -7,7 +7,27 @@ import AddressForm from '@/components/AddressForm';
 import { startQuote } from '../../utils/startQuote';
 import { useRouter } from 'next/navigation';
 import QuoteProgressBar from '../QuoteProgressBar';
-const CustomerInfo: React.FC = () => {
+
+type Building = {
+  name: string;
+  areas: string[];
+};
+
+interface CustomerInfoFormProps {
+  buildingData: Building[];
+}
+
+const steps = [
+  "Customer Information",
+  "Facility Type",
+  "Facility Information",
+  "Add Rooms",
+  "Selected Rooms",
+  "Cleaning Frequency",
+  "Get Time"
+];
+
+const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -89,7 +109,9 @@ const CustomerInfo: React.FC = () => {
 
     try {
       const result = await startQuote(firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, cbo, memberMade);
-      router.push(`/quote?quoteID=${result.quoteID}`);
+      console.log(result.quoteID)
+      sessionStorage.setItem('customerData', result.quoteID);
+      router.push(`/quote`);
     } catch (error) {
       console.error('Error creating quote:', error);
     }

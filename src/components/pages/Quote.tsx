@@ -1,18 +1,35 @@
 'use client';
 
-import React from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import QuoteForm from '../QuoteForm';
 import LoadingSpinner from '@/components/loadingScreen';
 
 const Quote: React.FC = () => {
-  const searchParams = useSearchParams();
-  const quoteID = searchParams.get('quoteID');
+  const [quoteID, setQuoteID] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedQuoteID = sessionStorage.getItem('customerData');
+      console.log(storedQuoteID )
+      setQuoteID(storedQuoteID);
+    }
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   if (!quoteID) {
     return (
       <div className="flex items-center justify-center h-screen">
         <LoadingSpinner />
+        <p className="text-white mt-4">No quote found, please start the process again.</p>
       </div>
     );
   }

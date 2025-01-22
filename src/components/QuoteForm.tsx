@@ -17,6 +17,7 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID }) => {
     selectedRooms: {} as Record<string, number>,
     budget: ''
   });
+  
 
   const [facilityOptions, setFacilityOptions] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(true);
@@ -27,6 +28,7 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID }) => {
     const fetchFacilityOptions = async () => {
       try {
         const options = await getFacilityOptions();
+        console.log(options)
         const quoteData = await getQuoteDetails(quoteID)
         if ((quoteData.customerData?.firstName && quoteData.customerData?.firstName != '') || (quoteData.customerData?.lastName && quoteData.customerData?.firstName != '')) {
           let firstName = ''
@@ -41,7 +43,7 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID }) => {
           setName(customerString)
         }
 
-        setFacilityOptions(options);
+        setFacilityOptions(options?.facility_options);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching facility options:', error);

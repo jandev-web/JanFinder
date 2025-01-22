@@ -6409,7 +6409,7 @@
                                           "Arn"
                                         ]
                                       },
-                                      "/profile-pictures/*"
+                                      "/contracts/*"
                                     ]
                                   ]
                                 },
@@ -6434,98 +6434,10 @@
                               "Condition": {
                                 "StringLike": {
                                   "s3:prefix": [
-                                    "profile-pictures/*",
-                                    "profile-pictures/",
+                                    "contracts/*",
+                                    "contracts/",
                                     "contract-templates/*",
                                     "contract-templates/"
-                                  ]
-                                }
-                              },
-                              "Effect": "Allow",
-                              "Resource": {
-                                "Fn::GetAtt": [
-                                  "JanFinderStorageBucketA0AAEB6D",
-                                  "Arn"
-                                ]
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "policyName": "storageAccess472A5D2AC",
-                        "roles": [
-                          {
-                            "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                      "version": "2.173.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_iam.Policy",
-                  "version": "2.173.0"
-                }
-              },
-              "storageAccess5": {
-                "id": "storageAccess5",
-                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess5",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/storageAccess5/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                      "aws:cdk:cloudformation:props": {
-                        "policyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "s3:GetObject",
-                              "Effect": "Allow",
-                              "Resource": [
-                                {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      {
-                                        "Fn::GetAtt": [
-                                          "JanFinderStorageBucketA0AAEB6D",
-                                          "Arn"
-                                        ]
-                                      },
-                                      "/profile-pictures/${cognito-identity.amazonaws.com:sub}/*"
-                                    ]
-                                  ]
-                                },
-                                {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      {
-                                        "Fn::GetAtt": [
-                                          "JanFinderStorageBucketA0AAEB6D",
-                                          "Arn"
-                                        ]
-                                      },
-                                      "/contract-templates/${cognito-identity.amazonaws.com:sub}/*"
-                                    ]
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Action": "s3:ListBucket",
-                              "Condition": {
-                                "StringLike": {
-                                  "s3:prefix": [
-                                    "profile-pictures/${cognito-identity.amazonaws.com:sub}/*",
-                                    "profile-pictures/${cognito-identity.amazonaws.com:sub}/",
-                                    "contract-templates/${cognito-identity.amazonaws.com:sub}/*",
-                                    "contract-templates/${cognito-identity.amazonaws.com:sub}/"
                                   ]
                                 }
                               },
@@ -6551,7 +6463,7 @@
                                           "Arn"
                                         ]
                                       },
-                                      "/profile-pictures/${cognito-identity.amazonaws.com:sub}/*"
+                                      "/contracts/*"
                                     ]
                                   ]
                                 },
@@ -6565,41 +6477,7 @@
                                           "Arn"
                                         ]
                                       },
-                                      "/contract-templates/${cognito-identity.amazonaws.com:sub}/*"
-                                    ]
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Action": "s3:DeleteObject",
-                              "Effect": "Allow",
-                              "Resource": [
-                                {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      {
-                                        "Fn::GetAtt": [
-                                          "JanFinderStorageBucketA0AAEB6D",
-                                          "Arn"
-                                        ]
-                                      },
-                                      "/profile-pictures/${cognito-identity.amazonaws.com:sub}/*"
-                                    ]
-                                  ]
-                                },
-                                {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      {
-                                        "Fn::GetAtt": [
-                                          "JanFinderStorageBucketA0AAEB6D",
-                                          "Arn"
-                                        ]
-                                      },
-                                      "/contract-templates/${cognito-identity.amazonaws.com:sub}/*"
+                                      "/contract-templates/*"
                                     ]
                                   ]
                                 }
@@ -6608,7 +6486,7 @@
                           ],
                           "Version": "2012-10-17"
                         },
-                        "policyName": "storageAccess524979CAB",
+                        "policyName": "storageAccess472A5D2AC",
                         "roles": [
                           {
                             "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
@@ -6653,14 +6531,6 @@
                   "version": "10.4.2"
                 }
               },
-              "reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref": {
-                "id": "reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref",
-                "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref",
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.CfnParameter",
-                  "version": "2.173.0"
-                }
-              },
               "reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref": {
                 "id": "reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref",
                 "path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/storage/reference-to-amplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref",
@@ -6694,12 +6564,6 @@
                   "aws:cdk:cloudformation:type": "AWS::CloudFormation::Stack",
                   "aws:cdk:cloudformation:props": {
                     "parameters": {
-                      "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref": {
-                        "Fn::GetAtt": [
-                          "auth179371D7",
-                          "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthunauthenticatedUserRole48B4AEB9Ref"
-                        ]
-                      },
                       "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref": {
                         "Fn::GetAtt": [
                           "auth179371D7",
@@ -6733,7 +6597,7 @@
                           {
                             "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                           },
-                          "/53756fa81fd6a7a1f647a5a9a8ef89d2d961ce28769f167f025ce6af496959ed.json"
+                          "/8f8a6cd859a1e37fa2e237d914fb33a702520f072fa529215a51edf545387e1e.json"
                         ]
                       ]
                     }
