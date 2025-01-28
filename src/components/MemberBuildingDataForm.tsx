@@ -12,6 +12,9 @@ import MemberGetCost from './MemberGetCost';
 import RestrictedQuote from './RestrictedQuote';
 import getQuoteDetails from '@/utils/getQuoteDetails';
 import ConfirmOwnerQuote from './ConfirmOwnerQuoteComponent';
+import ChoosePackage from '@/components/MemberPickPackage'
+
+
 type Building = {
     name: string;
     areas: string[];
@@ -29,7 +32,8 @@ const steps = [
     "Add Rooms",
     "Selected Rooms",
     "Cleaning Frequency",
-    "Get Time"
+    "Get Cost",
+    "Select Package"
 ];
 
 const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildingData, user }) => {
@@ -82,6 +86,7 @@ const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildin
             case 5: return <SelectedRoomsList quoteID={quoteID} />;
             case 6: return <MemberSetFrequency quoteID={quoteID} />;
             case 7: return <MemberGetCost quoteID={quoteID} />;
+            case 8: return <ChoosePackage quoteID={quoteID} />;
             default: return null;
         }
     };

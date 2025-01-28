@@ -92,10 +92,7 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID }) => {
     e.preventDefault();
     try {
       await updateQuote(quoteID, formData);
-      const queryString = new URLSearchParams({
-        quoteID,
-      }).toString();
-      router.push(`/packages?${queryString}`);
+      router.push(`/packages`);
     } catch (error) {
       console.error('Error updating quote:', error);
     }

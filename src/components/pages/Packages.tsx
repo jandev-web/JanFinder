@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import LoadingSpinner from '@/components/loadingScreen';
 import PackageComparison from '@/components/PackageCompare';
 import PackageCard from '@/components/PackageCard';
 import getQuoteDetails from '@/utils/getQuoteDetails';
 import getPackageRecs from '@/utils/getPackageRecs';
 import QuoteProgressBar from '../QuoteProgressBar';
+import { useRouter } from 'next/navigation';
 
 interface Task {
   taskName: string;
@@ -28,60 +29,87 @@ interface Package {
 }
 
 const Packages: React.FC = () => {
-  const searchParams = useSearchParams();
-  const quoteID = searchParams.get('quoteID');
-
+  const [quoteID, setQuoteID] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [packages, setPackages] = useState<Package[] | null>(null);
   const [recPackage, setRecPackage] = useState<Package | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchQuote = async () => {
-      if (!quoteID) {
-        setError('Quote ID is missing');
-        setLoading(false);
-        return;
-      }
-
+      setLoading(true);
       try {
-        const data = await getQuoteDetails(quoteID);
-        const packageInfo = await getPackageRecs(quoteID);
+        if (typeof window !== "undefined") {
+          const storedQuoteID = sessionStorage.getItem('customerData');
+          
+          if (!storedQuoteID) {
+            console.warn('No quoteID found in sessionStorage.');
+            router.push('/quote');
+            return;
+          }
 
-        const allPackageInfo = packageInfo?.packageInfo;
-        const allPackages = allPackageInfo?.allPackages ?? [];
-        const packageRec = allPackageInfo?.recPackage;
+          setQuoteID(storedQuoteID);
 
-        setPackages(allPackages);
+          console.log(`Fetching quote details for quoteID: ${storedQuoteID}`);
+          const data = await getQuoteDetails(storedQuoteID);
+          //console.log('Quote details:', data);
 
-        const recPackObject: Package = {
-          id: packageRec.id,
-          name: packageRec.name,
-          cost: packageRec.cost,
-          description: packageRec.description,
-          tasks: packageRec.tasks,
-          blurb: packageRec.blurb,
-        };
+          const packageInfo = await getPackageRecs(storedQuoteID);
+          console.log('Package recommendations:', packageInfo);
 
-        setRecPackage(recPackObject);
-      } catch (err) {
-        console.error('Error fetching quote:', err);
-        setError('Failed to fetch quote details.');
+          const allPackageInfo = packageInfo?.packageInfo;
+          const allPackages = allPackageInfo?.allPackages ?? [];
+          const packageRec = allPackageInfo?.recPackage;
+
+          setPackages(allPackages);
+
+          if (packageRec) {
+            setRecPackage({
+              id: packageRec.id,
+              name: packageRec.name,
+              cost: packageRec.cost,
+              description: packageRec.description,
+              tasks: packageRec.tasks,
+              blurb: packageRec.blurb,
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching quote or package details:', error);
+        setError('Failed to load packages. Please try again.');
       } finally {
         setLoading(false);
       }
     };
 
     fetchQuote();
-  }, [quoteID]);
+  }, [router]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="flex items-center justify-center h-screen text-red-500">
+        <p>{error}</p>
+      </div>
+    );
+  }
+
+  if (!quoteID) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner />
+        <p className="text-white mt-4">No quote found, please start the process again.</p>
+      </div>
+    );
   }
 
   return (
@@ -98,7 +126,6 @@ const Packages: React.FC = () => {
           facility.
         </p>
       </div>
-
 
       {/* Back Button */}
       {showComparison && (
