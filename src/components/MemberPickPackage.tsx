@@ -43,7 +43,7 @@ const ChoosePackage: React.FC<ChoosePackageProps> = ({ quoteID }) => {
                 const currentPackage = details.Package;
 
                 setChosenPackage(currentPackage); // Set the current package
-
+                console.log(costInfo.finalCost)
                 setCost(costInfo.finalCost);
                 setPackageOptions(packageRecs);
             } catch (error) {

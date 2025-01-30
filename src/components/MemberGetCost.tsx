@@ -44,6 +44,9 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
 
     const [customAmount, setCustomAmount] = useState<number>(0);
 
+    const [error, setError] = useState<string | null>(null);
+
+
     const calculatePreProfitCost = () => {
         const laborCost = monthTime * parseFloat(inputValues.salary);
         const finalPayroll = parseFloat(inputValues.payrollTax) * monthTime;
@@ -58,15 +61,27 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
     };
 
     const updateDB = async () => {
-        await updateQuoteCost(quoteID, { baseCost: totalCost, customCost: false });
+        await updateQuoteCost(quoteID, { baseCost: totalCost, finalCost: totalCost, customCost: false });
     }
 
     useEffect(() => {
         const setTimes = async () => {
             console.log(quoteID)
+            const quoteDetails: any = await getQuoteDetails(quoteID);
+            if (quoteDetails.quoteInfo.frequency === 'None') {
+                setIsLoading(false);
+                setError('Please set the frequency first.');
+                return;
+            }
+            if (!quoteDetails.quoteInfo.roomTypes) {
+                setIsLoading(false);
+                setError('Please add rooms first.');
+                return;
+            }
+
             const timeDetails = await calculateTime(quoteID);
             const totalTime = timeDetails.totalTime;
-            const quoteDetails: any = await getQuoteDetails(quoteID);
+            
             console.log(quoteDetails)
             const quoteCostInfo = quoteDetails.costInfo
             if (quoteCostInfo.customCost === true) {
@@ -167,6 +182,15 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
         setCustomAmount(customCost);
         await updateQuoteCost(quoteID, { baseCost: customCost, finalCost: customCost, customCost: true });
     };
+
+    if (error) {
+        return (
+            <div className="text-center text-red-500 font-semibold">
+                {error}
+            </div>
+        );
+    }
+    
 
     if (isLoading) {
         return <LoadingSpinner />;
