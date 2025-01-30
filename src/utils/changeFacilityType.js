@@ -1,7 +1,6 @@
 export const changeFacilityType = async (quoteID, facilityType) => {
     const apiKey = process.env.NEXT_PUBLIC_CHANGE_FACILITY_TYPE_KEY;
     const url = process.env.NEXT_PUBLIC_CHANGE_FACILITY_TYPE_URL;
-    console.log(apiKey)
     console.log(quoteID)
     try {
         const response = await fetch(url, {
