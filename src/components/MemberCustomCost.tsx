@@ -33,9 +33,12 @@ const MemberCustomCost: React.FC<MemberCustomCostProps> = ({ onConfirmCustom, on
     const handleInputChange = (value: string) => {
         console.log(`Changing cost to: ${value}`);
         // Allow non-negative numbers with optional decimals
-        if (!/^\d*\.?\d*$/.test(value)) {
+        if (!/^\d*\.?\d{0,2}$/.test(value)) {
             console.log('Invalid format');
             return;
+        }
+        if (value.startsWith('.')) {
+            value = '0' + value;
         }
         setCustomCost(value);
         setEditState(true);

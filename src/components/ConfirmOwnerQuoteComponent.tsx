@@ -14,6 +14,8 @@ interface ConfirmOwnerQuoteProps {
 
 const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quoteID, user }) => {
     const [quoteInfo, setQuoteInfo] = useState<any>(null);
+    const [address, setAddress] = useState<any>('None');
+
     const [hasPDF, setHasPDF] = useState(false)
     const router = useRouter();
     const userID = user?.OwnerId
@@ -47,6 +49,7 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
             console.log(`Generating quote for franchiseID: ${franchiseID}`);
 
             await makeQuotePDF(quoteID, franchiseID);
+            setHasPDF(true)
 
         } catch (error) {
             console.error('Error generating quote document:', error);
@@ -59,6 +62,14 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
             if (quoteID) {
                 try {
                     const quoteDetails = await getQuoteDetails(quoteID);
+                    const addressInfo = quoteDetails.customerData.address
+                    if (!addressInfo.city || !addressInfo.country || !addressInfo.postalCode || !addressInfo.state || !addressInfo.street) {
+                        setAddress('None')
+                    }
+                    else {
+                        const addressString = `${addressInfo.street}, ${addressInfo.city} ${addressInfo.state}, ${addressInfo.postalCode}, ${addressInfo.country}`
+                        setAddress(addressString)
+                    }
                     setQuoteInfo(quoteDetails);
                     if (quoteDetails.QuotePDF != null) {
                         setHasPDF(true)
@@ -70,13 +81,13 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
             }
         };
         getQuoteInfo();
-    }, [quoteID, userID]);
+    }, [quoteID, userID, hasPDF]);
 
     if (!quoteInfo) {
         return <p>Loading quote details...</p>;
     }
 
-    const { customerData, quoteInfo: quoteDetails } = quoteInfo;
+    const { customerData, quoteInfo: quoteDetails, costInfo } = quoteInfo;
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -85,18 +96,18 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
 
                 <div className="space-y-6">
                     <h2 className="text-xl font-semibold text-green-700">Customer Information</h2>
-                    <p><strong>Company:</strong> {customerData?.company || 'N/A'}</p>
-                    <p><strong>Email:</strong> {customerData?.email || 'N/A'}</p>
-                    <p><strong>Phone:</strong> {customerData?.phone || 'N/A'}</p>
-                    <p><strong>Address:</strong> {customerData?.address?.street || 'N/A'}, {customerData?.address?.city || 'N/A'}, {customerData?.address?.state || 'N/A'}, {customerData?.address?.postalCode || 'N/A'}</p>
+                    <p><strong>Company:</strong> {customerData?.company || 'None'}</p>
+                    <p><strong>Email:</strong> {customerData?.email || 'None'}</p>
+                    <p><strong>Phone:</strong> {customerData?.phone || 'None'}</p>
+                    <p><strong>Address:</strong> {address || 'None'}</p>
                 </div>
 
                 <div className="space-y-6 mt-6">
                     <h2 className="text-xl font-semibold text-green-700">Quote Information</h2>
-                    <p><strong>Facility Type:</strong> {quoteDetails?.facilityType || 'N/A'}</p>
-                    <p><strong>Frequency:</strong> {quoteDetails?.frequency || 'N/A'}</p>
-                    <p><strong>Budget:</strong> {quoteDetails?.budget || 'N/A'}</p>
-                    <p><strong>Square Footage:</strong> {quoteDetails?.sqft || 'N/A'}</p>
+                    <p><strong>Facility Type:</strong> {quoteDetails?.facilityType || 'None'}</p>
+                    <p><strong>Frequency:</strong> {quoteDetails?.frequency || 'None'}</p>
+                    <p><strong>Cost:</strong> {costInfo?.finalCost || 'None'}</p>
+                    <p><strong>Square Footage:</strong> {quoteDetails?.sqft || 'None'}</p>
                 </div>
 
                 <div className="flex justify-between mt-8">

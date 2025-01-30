@@ -34,6 +34,13 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
         profitPercentEdit: false,
     });
 
+    const [buttonState, setButtonState] = useState({
+        salaryButton: 'Confirm',
+        payrollTaxButton: 'Confirm',
+        overheadButton: 'Confirm',
+        profitPercentButton: 'Confirm',
+    });
+
     const [preProfitCost, setPreProfitCost] = useState<number>(0);
     const [totalCost, setTotalCost] = useState<number>(0);
     const [useCustomCost, setUseCustomCost] = useState(false);
@@ -51,14 +58,24 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
         const laborCost = monthTime * parseFloat(inputValues.salary);
         const finalPayroll = parseFloat(inputValues.payrollTax) * monthTime;
         const finalOverhead = parseFloat(inputValues.overhead) * monthTime;
-        const preProfit = laborCost + finalOverhead + finalPayroll;
+        let preProfit = laborCost + finalOverhead + finalPayroll;
+
+        // Round to the nearest cent (up or down based on standard rounding)
+        preProfit = Math.round(preProfit * 100) / 100;
+
         setPreProfitCost(preProfit);
     };
 
+
     const calculateCost = async () => {
-        const finalCost = preProfitCost / (1 - parseFloat(inputValues.profitPercent) / 100);
+        let finalCost = preProfitCost / (1 - parseFloat(inputValues.profitPercent) / 100);
+
+        // Round to the nearest cent (up or down based on standard rounding)
+        finalCost = Math.round(finalCost * 100) / 100;
+
         setTotalCost(finalCost);
     };
+
 
     const updateDB = async () => {
         await updateQuoteCost(quoteID, { baseCost: totalCost, finalCost: totalCost, customCost: false });
@@ -81,7 +98,7 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
 
             const timeDetails = await calculateTime(quoteID);
             const totalTime = timeDetails.totalTime;
-            
+
             console.log(quoteDetails)
             const quoteCostInfo = quoteDetails.costInfo
             if (quoteCostInfo.customCost === true) {
@@ -161,6 +178,7 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
 
     const onConfirmCustom = async (customCost: number) => {
         // Reset all values in the input state
+        const finalCustom = Math.round(Number(customCost) * 100) / 100;
         setInputValues({
             salary: '0',
             payrollTax: '0',
@@ -179,9 +197,20 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
         updateCostComponents(quoteID, { salary: 0, payrollTax: 0, overhead: 0, profitPercent: 0 });
         setIsUsingCustomCost(true)
         // Set and update the total cost
-        setCustomAmount(customCost);
-        await updateQuoteCost(quoteID, { baseCost: customCost, finalCost: customCost, customCost: true });
+        setCustomAmount(finalCustom);
+        await updateQuoteCost(quoteID, { baseCost: finalCustom, finalCost: finalCustom, customCost: true });
     };
+
+    const switchToCustom = () => {
+        setUseCustomCost(true)
+        setIsUsingCustomCost(true)
+    }
+
+    const confirmingInputHandler = (field: string) => () => {
+        setIsConfirming(true);
+        setButtonState((prev) => ({ ...prev, [`${field}Button`]: 'Loading...' }));
+    };
+    
 
     if (error) {
         return (
@@ -190,7 +219,7 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
             </div>
         );
     }
-    
+
 
     if (isLoading) {
         return <LoadingSpinner />;
@@ -208,38 +237,42 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
                 </div>
             </div>
 
-            {[
-                { label: 'Hourly Salary ($)', field: 'salary' as InputField },
-                { label: 'Payroll Tax (%)', field: 'payrollTax' as InputField },
-                { label: 'Overhead ($)', field: 'overhead' as InputField },
-                { label: 'Profit Percentage (%)', field: 'profitPercent' as InputField },
-            ].map(({ label, field }) => (
-                <div key={field}>
-                    <label className="block text-yellow-400 font-medium mb-2">{label}</label>
-                    <div className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            value={inputValues[field]}
-                            onChange={(e) => handleInputChange(field)(e.target.value)}
-                            onBlur={() => handleBlur(field)}
-                            className="w-full p-3 border-2 rounded-lg text-[#001F54] focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                        />
+            {!isUsingCustomCost && (
+                <>
+                    {[
+                        { label: 'Hourly Salary ($)', field: 'salary' as InputField },
+                        { label: 'Payroll Tax (%)', field: 'payrollTax' as InputField },
+                        { label: 'Overhead ($)', field: 'overhead' as InputField },
+                        { label: 'Profit Percentage (%)', field: 'profitPercent' as InputField },
+                    ].map(({ label, field }) => (
+                        <div key={field}>
+                            <label className="block text-yellow-400 font-medium mb-2">{label}</label>
+                            <div className="flex items-center space-x-2">
+                                <input
+                                    type="text"
+                                    value={inputValues[field]}
+                                    onChange={(e) => handleInputChange(field)(e.target.value)}
+                                    onBlur={() => handleBlur(field)}
+                                    className="w-full p-3 border-2 rounded-lg text-[#001F54] focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                />
 
-                        {(editState[`${field}Edit`] && inputValues[field].trim() !== '' && inputValues[field] !== originalValues[field]) && (
-                            <button
-                                onMouseDown={() => setIsConfirming(true)}  // Set the flag before the blur event fires
-                                onClick={() => {
-                                    handleConfirm(field);
-                                    setIsConfirming(false);  // Reset the flag after confirming
-                                }}
-                                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-400 transition"
-                            >
-                                Confirm
-                            </button>
-                        )}
-                    </div>
-                </div>
-            ))}
+                                {(editState[`${field}Edit`] && inputValues[field].trim() !== '' && inputValues[field] !== originalValues[field]) && (
+                                    <button
+                                        onMouseDown={confirmingInputHandler(field)}  // Set the flag before the blur event fires
+                                        onClick={() => {
+                                            handleConfirm(field);
+                                            setIsConfirming(false);  // Reset the flag after confirming
+                                        }}
+                                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-400 transition"
+                                    >
+                                        {buttonState[`${field}Button`] || 'Confirm'}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </>
+            )}
 
             <div className="space-y-4">
                 {isUsingCustomCost ? (
@@ -267,18 +300,34 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
 
             <div className="space-y-4">
                 {useCustomCost ? (
-                    <MemberCustomCost onConfirmCustom={onConfirmCustom} initialCustomCost={customAmount} onExit={() => setUseCustomCost(false)} />
+                    <MemberCustomCost
+                        onConfirmCustom={onConfirmCustom}
+                        initialCustomCost={customAmount}
+                        onExit={() => setUseCustomCost(false)}
+                    />
                 ) : (
-                    <button
-                        onClick={() => setUseCustomCost(true)}
-                        className="w-full bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-400 transition"
-                    >
-                        <span className="text-white">
-                            {isUsingCustomCost ? 'Edit' : 'Set'} Custom Cost Instead
-                        </span>
-                    </button>
+                    <>
+                        <button
+                            onClick={switchToCustom}
+                            className="w-full bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-400 transition"
+                        >
+                            <span className="text-white">
+                                {isUsingCustomCost ? 'Edit Custom Cost' : 'Set Custom Cost Instead'}
+                            </span>
+                        </button>
+
+                        {isUsingCustomCost && (
+                            <button
+                                onClick={() => setIsUsingCustomCost(false)}
+                                className="w-full bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-400 transition"
+                            >
+                                Use Calculator Instead
+                            </button>
+                        )}
+                    </>
                 )}
             </div>
+
         </div>
     );
 };
