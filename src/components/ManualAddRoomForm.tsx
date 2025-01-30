@@ -26,7 +26,7 @@ const ManualAddRoomForm: React.FC<ManualAddRoomFormProps> = ({ quoteID, facility
         if (roomType && sqft > 0) {
             const newRoom = { type: roomType, sqft };
         
-            console.log('Room Added:', newRoom);
+
             manualAddRoom(quoteID, newRoom)
         } else {
             alert('Please select a valid room and enter a positive sqft value.');

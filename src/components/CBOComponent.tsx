@@ -7,7 +7,6 @@ interface CBOComponentProps {
 }
 
 const CBOComponent: React.FC<CBOComponentProps> = ({user}) => {
-  //console.log(user.signInDetails)
   return (
     
       

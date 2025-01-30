@@ -7,7 +7,7 @@ interface ManualRoomCardProps {
 
 const ManualRoomCard: React.FC<ManualRoomCardProps> = ({ room }) => {
     // Extract the room name and sqft from the object
-    console.log(room)
+
     let roomName = room.type;
     const sqft = room.sqft;
 

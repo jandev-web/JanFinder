@@ -19,7 +19,7 @@ interface ScrollableEventListProps {
 
 const FranchiseDayEventList: React.FC<ScrollableEventListProps> = ({ events }) => {
   // Sort events by timestamp, newest first
-  console.log(events)
+
   const sortedEvents = events.sort((a, b) => new Date(b.Timestamp).getTime() - new Date(a.Timestamp).getTime());
 
   return (

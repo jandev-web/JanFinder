@@ -20,7 +20,6 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
     const router = useRouter();
     const userID = user?.OwnerId
     const franchiseID = user?.franchiseID
-    //console.log(user)
     const handleConfirm = () => {
         alert('Quote confirmed successfully!');
         router.push('/members/quotes');
@@ -32,7 +31,6 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
             
             const response = await fetch(quotePDF.url);
             const blob = await response.blob();
-            console.log(response)
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = `contract.docx`;
@@ -46,7 +44,6 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
 
     const generatePDF = async () => {
         try {
-            console.log(`Generating quote for franchiseID: ${franchiseID}`);
 
             await makeQuotePDF(quoteID, franchiseID);
             setHasPDF(true)

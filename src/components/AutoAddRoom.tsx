@@ -49,7 +49,6 @@ const AutoAddRoom: React.FC<AutoAddRoomProps> = ({ quoteID, facilityPercents }) 
 
         try {
             const finalRooms = await calculateRoomSqft(sqft, roomData);
-            console.log("Final Room Calculations:", finalRooms);
             await updateRoomInfo(quoteID, finalRooms, sqft);
             setErrorMessage('');
             alert('Room data successfully updated!');

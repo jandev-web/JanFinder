@@ -43,10 +43,8 @@ const CheckProfilePage: React.FC<CheckProfilePageProps> = ({ cbo }) => {
             const franInfo = await getFranchiseInfo(cbo.franchiseID)
             setFranchiseName(franInfo.franchiseName)
             const fetchedPic = await getProfilePic(cbo.CBOID);
-            console.log(fetchedPic)
             if (fetchedPic) {
               // Assuming fetchedPic.body is a base64 encoded image
-              console.log('FetchedPic: ', fetchedPic)
               setProfilePic(fetchedPic);
             }
           } else {

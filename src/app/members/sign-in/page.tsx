@@ -116,10 +116,8 @@ const components = {
 function CustomAuthenticator() {
   const { user } = useAuthenticator((context) => [context.user]);
 
-  console.log(user)
   useEffect(() => {
     if (user) {
-      console.log('Is User')
       //signOut();
       redirect("/members/home");
     }

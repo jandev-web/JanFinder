@@ -11,10 +11,8 @@ export default async function Home() {
   try {
     // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();
-    console.log(user)
     // Redirect to the login page if the user is not authenticated
     if (!user) {
-      console.log('uh oh')
       redirect('/members/sign-in');
     }
 

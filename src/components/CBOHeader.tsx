@@ -12,18 +12,15 @@ interface CBOHeaderProps {
 }
 
 const CBOHeader: React.FC<CBOHeaderProps> = ({ user }) => {
-  console.log(user)
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [cboInfo, setCBOInfo] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    console.log(user)
     const fetchOwnerInfo = async () => {
       if (user?.sub) {
         try {
           const fetchedCBOInfo = await fetchCBOById(user.sub);
-          //console.log(fetchedOwnerInfo)
           setCBOInfo(fetchedCBOInfo);
           
         } catch (err) {

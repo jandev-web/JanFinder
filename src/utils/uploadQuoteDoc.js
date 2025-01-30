@@ -14,7 +14,7 @@ export const uploadQuoteDoc = async (quoteID, file) => {
     });
    
 
-    console.log('Upload successful:', result);
+
     alert('File uploaded successfully!');
 
   } catch (error) {

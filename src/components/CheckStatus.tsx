@@ -20,7 +20,6 @@ const CheckStatus: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Checking status for:', { email, confirmationNumber });
     const queryParams = new URLSearchParams({
         con: confirmationNumber,
         email: email

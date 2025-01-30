@@ -17,7 +17,6 @@ export default async function CBOPage() {
   try {
     
     const user = await AuthGetCurrentUserServer();
-    console.log(user)
     // Determine user role and render appropriate component
     if (!user) {
       redirect('/members/sign-in');
