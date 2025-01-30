@@ -1,5 +1,6 @@
 const updateQuoteCost = async (quoteID, costInfo) => {
     const apiKey = process.env.NEXT_PUBLIC_UPDATE_COST_KEY;
+    console.log(apiKey)
     const url = process.env.NEXT_PUBLIC_UPDATE_COST_URL;
     
     try {

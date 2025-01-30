@@ -1,7 +1,8 @@
 export const getFacilityOptions = async () => {
     const apiKey = process.env.NEXT_PUBLIC_GET_FACILITY_OPTIONS_KEY;
     const url = process.env.NEXT_PUBLIC_GET_FACILITY_OPTIONS_URL;
-    
+    console.log(apiKey)
+
     try {
       const response = await fetch(url, {
         method: 'POST',
