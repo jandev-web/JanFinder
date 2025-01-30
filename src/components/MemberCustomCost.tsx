@@ -24,7 +24,7 @@ const MemberCustomCost: React.FC<MemberCustomCostProps> = ({ onConfirmCustom, on
             onConfirmCustom(parsedCost);
             setOriginalCustomCost(customCost);
             setEditState(false);
-            alert('Custom cost updated successfully!');
+            onExit()
         } else {
             alert('Please enter a valid cost.');
         }

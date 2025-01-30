@@ -6,6 +6,7 @@ import getQuoteDetails from '@/utils/getQuoteDetails';
 import getPackageRecs from '@/utils/getPackageRecs';
 import MemberChosenPackageCard from './MemberChosenPackage';
 import UpdatePackageChoice from './MemberUpdatePackage';
+import updateQuoteCost from '@/utils/updateQuoteCost';
 
 interface Task {
     taskName: string;
@@ -37,12 +38,13 @@ const ChoosePackage: React.FC<ChoosePackageProps> = ({ quoteID }) => {
             try {
                 const details = await getQuoteDetails(quoteID);
                 const packageRecs = await getPackageRecs(quoteID);
-                const packageCost = details.Cost;
+                console.log(details)
+                const costInfo = details.costInfo;
                 const currentPackage = details.Package;
 
                 setChosenPackage(currentPackage); // Set the current package
 
-                setCost(packageCost);
+                setCost(costInfo.finalCost);
                 setPackageOptions(packageRecs);
             } catch (error) {
                 console.error('Error fetching quote details:', error);
@@ -54,6 +56,16 @@ const ChoosePackage: React.FC<ChoosePackageProps> = ({ quoteID }) => {
     const selectPackage = async (selectedPackage: PackageOption) => {
         try {
             await updatePackage(quoteID, selectedPackage); // Update the package in the backend
+            if (selectedPackage.name === 'Radiant Results') {
+                const newCost = cost/1.2
+                await updateQuoteCost(quoteID, { costInfo: { finalCost: newCost } });
+                setCost(newCost)
+            }
+            if (selectedPackage.name === 'Pure Essentials') {
+                const newCost = cost * 0.64;
+                await updateQuoteCost(quoteID, { finalCost: newCost });
+                setCost(newCost);
+            }            
             setChosenPackage(selectedPackage); // Update the chosen package locally
             setIsEditing(false); // Exit editing mode
         } catch (error) {
@@ -66,6 +78,7 @@ const ChoosePackage: React.FC<ChoosePackageProps> = ({ quoteID }) => {
         return (
             <UpdatePackageChoice
                 quoteID={quoteID}
+                cost={cost}
                 packageOptions={packageOptions}
                 chosenPackage={chosenPackage}
                 onExit={() => setIsEditing(false)} // Exit edit mode
@@ -82,7 +95,7 @@ const ChoosePackage: React.FC<ChoosePackageProps> = ({ quoteID }) => {
             </h2>
             {chosenPackage != null ? (
                 <div>
-                    <MemberChosenPackageCard chosenPackage={chosenPackage} />
+                    <MemberChosenPackageCard chosenPackage={chosenPackage} cost={cost}/>
                     <div className="mt-6 text-center">
                         <button
                             onClick={() => setIsEditing(true)}
@@ -95,6 +108,7 @@ const ChoosePackage: React.FC<ChoosePackageProps> = ({ quoteID }) => {
             ) : (
                 <UpdatePackageChoice
                     quoteID={quoteID}
+                    cost={cost}
                     packageOptions={packageOptions}
                     chosenPackage={chosenPackage}
                     onExit={() => setIsEditing(false)}

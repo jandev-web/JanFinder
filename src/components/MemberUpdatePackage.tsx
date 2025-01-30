@@ -24,6 +24,7 @@ interface UpdatePackageChoiceProps {
     chosenPackage: PackageOption | null;
     onExit: () => void; // Function to exit update mode
     onPackageSelect: (pkg: PackageOption) => void; // Function to select a package
+    cost: any;
 }
 
 const UpdatePackageChoice: React.FC<UpdatePackageChoiceProps> = ({
@@ -32,6 +33,7 @@ const UpdatePackageChoice: React.FC<UpdatePackageChoiceProps> = ({
     chosenPackage,
     onExit,
     onPackageSelect,
+    cost,
 }) => {
     return (
         <div className="bg-[#001F54] text-white p-10 rounded-lg shadow-xl max-w-7xl mx-auto border-2 border-yellow-500">
@@ -42,6 +44,7 @@ const UpdatePackageChoice: React.FC<UpdatePackageChoiceProps> = ({
                         key={index}
                         singlePackage={pkg}
                         quoteID={quoteID}
+                        cost={cost}
                         onSelect={(selectedPackage) => onPackageSelect(selectedPackage)} // Handle package selection
                         isSelected={chosenPackage?.name === pkg.name} // Highlight if selected
                     />
