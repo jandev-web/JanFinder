@@ -1,6 +1,7 @@
 export const updateCostComponents = async (quoteID, componentInfo) => {
     const apiKey = process.env.NEXT_PUBLIC_UPDATE_COST_COMPONENTS_KEY;
     const url = process.env.NEXT_PUBLIC_UPDATE_COST_COMPONENTS_URL;
+    console.log(componentInfo)
     const response = await fetch(url, {
         method: 'POST',
         headers: {

@@ -60,7 +60,7 @@ const MemberBuildingDataForm: React.FC<MemberBuildingDataFormProps> = ({ buildin
         const checkAuthorization = async () => {
             if (quoteID) {
                 try {
-                    const quoteDetails = await getQuoteDetails(quoteID);
+                    const quoteDetails: any = await getQuoteDetails(quoteID);
                     if ((userStatus === 'Owner' && quoteDetails.Owner !== user.OwnerID) ||
                         (userStatus === 'CBO' && quoteDetails.Owner !== user.CBOID)) {
                         setIsAuthorized(false);
