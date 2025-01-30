@@ -63,6 +63,7 @@ const MemberGetCost: React.FC<MemberGetCostProps> = ({ quoteID }) => {
 
     useEffect(() => {
         const setTimes = async () => {
+            console.log(quoteID)
             const timeDetails = await calculateTime(quoteID);
             const totalTime = timeDetails.totalTime;
             const quoteDetails: any = await getQuoteDetails(quoteID);
