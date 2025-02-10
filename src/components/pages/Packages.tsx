@@ -8,7 +8,7 @@ import getQuoteDetails from '@/utils/getQuoteDetails';
 import getPackageRecs from '@/utils/getPackageRecs';
 import QuoteProgressBar from '../QuoteProgressBar';
 import { useRouter } from 'next/navigation';
-
+import recPackageUtil from '@/utils/recPackageUtil'
 interface Task {
   taskName: string;
   taskFrequency: string;
@@ -19,20 +19,18 @@ interface Room {
   tasks: Task[];
 }
 
-interface Package {
-  id: string;
+interface PackageOption {
   name: string;
-  cost: number;
+  rooms: Room[];
   description: string;
-  tasks: Room[];
-  blurb: string;
 }
+
 
 const Packages: React.FC = () => {
   const [quoteID, setQuoteID] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [packages, setPackages] = useState<Package[] | null>(null);
-  const [recPackage, setRecPackage] = useState<Package | null>(null);
+  const [packages, setPackages] = useState<PackageOption[] | null>(null);
+  const [recPackage, setRecPackage] = useState<PackageOption | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
   const router = useRouter();
@@ -53,11 +51,18 @@ const Packages: React.FC = () => {
           setQuoteID(storedQuoteID);
 
           console.log(`Fetching quote details for quoteID: ${storedQuoteID}`);
-          const data = await getQuoteDetails(storedQuoteID);
-          //console.log('Quote details:', data);
+          const details = await getQuoteDetails(storedQuoteID);
+          console.log('Quote details:', details);
 
           const packageInfo = await getPackageRecs(storedQuoteID);
           console.log('Package recommendations:', packageInfo);
+          const costInfo = details.costInfo;
+          const baseCost = costInfo.baseCost
+          const budget = details.budget
+
+          const recPackageName = recPackageUtil(baseCost, budget)
+
+          const newRecPackage = packageInfo.find((pkg: PackageOption) => pkg.name === recPackageName);
 
           const allPackageInfo = packageInfo?.packageInfo;
           const allPackages = allPackageInfo?.allPackages ?? [];

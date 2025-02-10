@@ -1,13 +1,11 @@
-export const updateQuote = async (quoteID, quoteInfo) => {
+export const updateQuoteBudget = async (quoteID, budget) => {
     const apiKey = process.env.NEXT_PUBLIC_UPDATE_QUOTE_KEY;
     const url = process.env.NEXT_PUBLIC_UPDATE_QUOTE_URL;
   
     const payload = {
       quoteID,
-      quoteInfo
+      budget
     };
-
-    console.log(payload)
   
     try {
       const response = await fetch(url, {

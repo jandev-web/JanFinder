@@ -9,7 +9,7 @@ const HeroSection = () => (
     <p className="text-lg font-medium mb-8">
       Many cleaning companies are waiting to bid on your request and provide the best, most competitive prices. Let us simplify the process for you.
     </p>
-    <Link href="/customer-info"
+    <Link href="/get-a-quote/customer-info"
       className="bg-yellow-400 hover:bg-yellow-500 text-[#001F54] font-bold py-3 px-6 rounded-lg transition duration-300">
         Get Started Now
 

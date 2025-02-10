@@ -1,7 +1,7 @@
 'use client'
 
-import { Header } from "../../components";
-import { Quote } from "../../components";
+import { Header } from "../../../components";
+import { Quote } from "../../../components";
 import Footer from '@/components/Footer';
 import QuoteProgressBar from "@/components/QuoteProgressBar";
 

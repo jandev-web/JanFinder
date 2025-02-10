@@ -111,7 +111,7 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
       const result = await startQuote(firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, cbo, memberMade);
       console.log(result.quoteID)
       sessionStorage.setItem('customerData', result.quoteID);
-      router.push(`/quote`);
+      router.push(`/get-a-quote/choose-facility`);
     } catch (error) {
       console.error('Error creating quote:', error);
     }

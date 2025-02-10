@@ -11,7 +11,7 @@ const Quote: React.FC = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedQuoteID = sessionStorage.getItem('customerData');
-      console.log(storedQuoteID )
+      
       setQuoteID(storedQuoteID);
     }
     setLoading(false);
@@ -40,7 +40,7 @@ const Quote: React.FC = () => {
       <div className="mb-6 text-center">
         <h2 className="text-4xl font-extrabold text-yellow-400 mb-4">Step 2: Facility Details</h2>
         <p className="text-lg leading-relaxed">
-          Let us know about your facility. Enter the square footage, select the facility type, and tell us about the rooms within it. We&apos;ll use this
+          Let us know about your facility. Select the facility type. We&apos;ll use this
           information to create the most accurate quote and recommend the best cleaning package for your needs.
         </p>
       </div>

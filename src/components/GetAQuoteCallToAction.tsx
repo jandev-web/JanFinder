@@ -11,7 +11,7 @@ const CallToAction = () => (
         <p className="text-lg font-medium text-[#001F54] mb-6">
             Join hundreds of satisfied customers who have found their perfect cleaning service through JanFinder.
         </p>
-        <Link href="/customer-info"
+        <Link href="/get-a-quote/customer-info"
             className="bg-[#001F54] hover:bg-blue-900 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
             Start Your Quote Now
 

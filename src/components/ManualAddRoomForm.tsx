@@ -24,7 +24,7 @@ const ManualAddRoomForm: React.FC<ManualAddRoomFormProps> = ({ quoteID, facility
 
     const handleAddRoom = () => {
         if (roomType && sqft > 0) {
-            const newRoom = { type: roomType, sqft };
+            const newRoom = { roomType, sqft };
         
 
             manualAddRoom(quoteID, newRoom)
