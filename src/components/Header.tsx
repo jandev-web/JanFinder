@@ -13,7 +13,7 @@ const Header = () => {
         {/* Logo on the Left */}
         <div className="flex-shrink-0 pr-6 pl-6 pt-4 pb-4  z-20">
           <div className="text-blue-900 font-bold">
-            <h1 className="text-5xl">Jan<span className="text-yellow-400">Finder</span></h1>
+            <h1 className="text-5xl">Bid<span className="text-yellow-400">2</span>Clean</h1>
           </div>
         </div>
 
