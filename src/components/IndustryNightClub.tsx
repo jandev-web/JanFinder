@@ -8,7 +8,7 @@ const NightClubPage: React.FC = () => {
         <IndustryPage
             name="Night Club"
             image="/images/night-club.jpeg"
-            blurb="Keep the party going with a clean and vibrant atmosphere. JanFinder helps you find professional cleaning services to maintain your nightclub's dance floors, bars, and lounges spotless, creating a welcoming space for your patrons."
+            blurb="Keep the party going with a clean and vibrant atmosphere. Bid2Clean helps you find professional cleaning services to maintain your nightclub's dance floors, bars, and lounges spotless, creating a welcoming space for your patrons."
         />
     );
 };

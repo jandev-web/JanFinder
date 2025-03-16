@@ -28,10 +28,10 @@ const BusinessOwnerWhy: React.FC = () => {
                     <div className="w-full lg:w-[35%] bg-black/50 p-8 lg:p-12 flex items-center">
                         <div className="text-left space-y-6">
                             <h2 className="text-3xl lg:text-4xl font-bold text-white">
-                                Why Join <span className="text-yellow-400">JanFinder</span>?
+                                Why Join <span className="text-yellow-400">Bid2Clean</span>?
                             </h2>
                             <p className="text-base lg:text-lg leading-relaxed text-white">
-                                JanFinder is the ultimate platform for cleaning business owners. With an abundance of opportunities, streamlined tools, and an easy-to-use interface, it&apos;s the ideal place to grow your business.
+                                Bid2Clean is the ultimate platform for cleaning business owners. With an abundance of opportunities, streamlined tools, and an easy-to-use interface, it&apos;s the ideal place to grow your business.
                             </p>
                         </div>
                     </div>
@@ -42,7 +42,7 @@ const BusinessOwnerWhy: React.FC = () => {
                         <div className="w-[300px] h-[300px] lg:w-[350px] lg:h-[350px] rounded-full bg-[#001F54] border-4 border-yellow-400 shadow-lg flex flex-col items-center justify-center text-center px-6">
                             <FaBriefcase size={50} className="text-yellow-400 mb-4" />
                             <p className="text-base lg:text-lg font-medium text-white mb-4">
-                                Ready to join thousands of other business owners today? Make the upgrade with JanFinder.
+                                Ready to join thousands of other business owners today? Make the upgrade with Bid2Clean.
                             </p>
                             <Link
                                 href="/members/sign-up"

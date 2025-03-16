@@ -65,7 +65,7 @@ const components = {
     return (
       <View textAlign="center" padding={tokens.space.large}>
         <Text color={tokens.colors.neutral[80]}>
-          &copy; JanFinder All Rights Reserved
+          &copy; Bid2Clean All Rights Reserved
         </Text>
       </View>
     );

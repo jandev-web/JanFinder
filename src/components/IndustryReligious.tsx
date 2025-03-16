@@ -8,7 +8,7 @@ const ReligiousBuildingPage: React.FC = () => {
         <IndustryPage
             name="Religious Buildings"
             image="/images/religious-building.jpeg"
-            blurb="Maintain the sanctity and serenity of your religious building with expert cleaning services from JanFinder. Whether it’s a sanctuary, meeting hall, or community space, we connect you with trusted professionals who ensure your spaces are pristine and welcoming for every gathering."
+            blurb="Maintain the sanctity and serenity of your religious building with expert cleaning services from Bid2Clean. Whether it’s a sanctuary, meeting hall, or community space, we connect you with trusted professionals who ensure your spaces are pristine and welcoming for every gathering."
         />
     );
 };

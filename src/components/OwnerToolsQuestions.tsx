@@ -7,7 +7,7 @@ const OwnerToolsQuestions: React.FC = () => {
     {
       question: 'What tools are available to manage my leads?',
       answer:
-        'JanFinder provides a comprehensive dashboard where you can manage leads, track progress, and communicate with potential clients seamlessly.',
+        'Bid2Clean provides a comprehensive dashboard where you can manage leads, track progress, and communicate with potential clients seamlessly.',
     },
     {
       question: 'Can I generate custom quotes for my customers?',
@@ -22,12 +22,12 @@ const OwnerToolsQuestions: React.FC = () => {
     {
       question: 'Are these tools easy to use?',
       answer:
-        'Absolutely! JanFinder’s tools are designed with simplicity and efficiency in mind, even for users with minimal technical experience.',
+        'Absolutely! Bid2Clean’s tools are designed with simplicity and efficiency in mind, even for users with minimal technical experience.',
     },
     {
       question: 'Can I access these tools on the go?',
       answer:
-        'Yes, JanFinder’s platform is mobile-friendly, so you can manage your business anytime, anywhere.',
+        'Yes, Bid2Clean’s platform is mobile-friendly, so you can manage your business anytime, anywhere.',
     },
   ];
 

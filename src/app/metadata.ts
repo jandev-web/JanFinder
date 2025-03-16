@@ -1,5 +1,5 @@
 export const metadata = {
-    title: 'JanFinder',
+    title: 'Bid2Clean',
     icons: {
       icon: '/favicon.ico',
       shortcut: '/favicon.png',

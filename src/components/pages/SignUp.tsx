@@ -146,7 +146,7 @@ const CreateOwnerForm: React.FC = () => {
       {/* Form Container */}
       <div className="relative z-10 bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-md w-full">
         <h1 className="text-3xl font-bold text-center mb-6">
-          Join <span className="text-yellow-500">JanFinder</span>
+          Join <span className="text-yellow-500">Bid2Clean</span>
         </h1>
 
         {/* Yellow Circle with Image */}

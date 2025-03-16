@@ -8,7 +8,7 @@ const AutoDealerPage: React.FC = () => {
         <IndustryPage
             name="Auto Dealers"
             image="/images/auto-dealer.jpeg"
-            blurb="First impressions matter, especially when showcasing your vehicles. JanFinder connects auto dealerships with expert cleaning companies that specialize in keeping showrooms spotless and inviting. Let your customers focus on the cars, while we ensure your dealership shines."
+            blurb="First impressions matter, especially when showcasing your vehicles. Bid2Clean connects auto dealerships with expert cleaning companies that specialize in keeping showrooms spotless and inviting. Let your customers focus on the cars, while we ensure your dealership shines."
         />
     );
 };

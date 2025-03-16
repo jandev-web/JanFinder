@@ -11,7 +11,7 @@ const BusinessOwnerStart: React.FC = () => {
                     Ready to Get Started?
                 </h2>
                 <p className="text-lg text-blue-800 mb-8 leading-relaxed">
-                    JanFinder offers everything you need to grow your business, secure more jobs, and simplify your operations. Sign up today and join a thriving network of cleaning professionals!
+                    Bid2Clean offers everything you need to grow your business, secure more jobs, and simplify your operations. Sign up today and join a thriving network of cleaning professionals!
                 </p>
                 <Link
                     href="/sign-up"

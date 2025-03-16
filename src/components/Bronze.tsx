@@ -2,29 +2,36 @@ import React from 'react';
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
+
+interface Task {
+    taskName: string;
+    taskFrequency: string;
+}
+
+interface Room {
+    roomName: string;
+    tasks: Task[];
+}
+interface PackageOption {
+    name: string;
+    rooms: Room[];
+    description: string;
+}
+
 interface PackageProps {
-    pkg: {
-        name: string;
-        description: string;
-        cost: number;
-        tasks: {
-            roomName: string;
-            tasks: { taskName: string; taskFrequency: string }[];
-        }[];
-        blurb: string;
-    };
+    pkg: PackageOption | null;
+    cost: any;
     rec: boolean;
     handleSelect: () => void;
 }
 
-const Bronze: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
+const Bronze: React.FC<PackageProps> = ({ pkg, rec, handleSelect, cost }) => {
     return (
         <div className="overflow-hidden w-full max-w-3xl mx-auto">
             {/* Top Section */}
             <div
-                className={`relative text-center p-6 rounded-lg ${
-                    rec ? 'border-4 border-green-500' : ''
-                }`}
+                className={`relative text-center p-6 rounded-lg ${rec ? 'border-4 border-green-500' : ''
+                    }`}
                 style={{
                     backgroundImage: `url('/backgrounds/bronze.jpeg')`, // Adjust to your bronze background
                     backgroundSize: 'cover',
@@ -46,7 +53,7 @@ const Bronze: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                         textShadow: '0 0 10px #CD7F32, 0 0 20px #CD7F32, 0 0 30px #CD7F32, 0 0 40px #CD7F32', // Glowing bronze outline
                     }}
                 >
-                    {pkg.name}
+                    {pkg?.name}
                 </h3>
 
                 {/* Package Blurb */}
@@ -57,7 +64,7 @@ const Bronze: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                             textShadow: '0 0 10px #CD7F32, 0 0 20px #CD7F32, 0 0 30px #CD7F32, 0 0 40px #CD7F32',
                         }}
                     >
-                        {pkg.blurb}
+                        {pkg?.description}
                     </Typography>
                 </div>
 
@@ -69,7 +76,7 @@ const Bronze: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                             textShadow: '0 0 10px #CD7F32, 0 0 20px #CD7F32, 0 0 30px #CD7F32, 0 0 40px #CD7F32',
                         }}
                     >
-                        ${pkg.cost.toFixed(2)}
+                        ${cost.toFixed(2)}
                     </Typography>
                 </div>
             </div>
@@ -81,13 +88,14 @@ const Bronze: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                         <Typography className="text-orange-700 font-bold">See All Services</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        {pkg.tasks.map((room) => (
-                            <div key={room.roomName} className="mb-4">
-                                <Typography className="font-semibold text-orange-700 mb-2">{room.roomName}</Typography>
-                                <ul className="list-disc ml-6">
-                                    {room.tasks.map((task) => (
-                                        <li key={task.taskName} className="text-orange-700">
-                                            {task.taskName}: {task.taskFrequency}
+                        {pkg?.rooms.map((room, index) => (
+                            <div key={index} className="border-b border-gray-300 pb-4">
+                                <h4 className="text-xl font-semibold text-[#001F54] mb-2">{room.roomName}</h4>
+                                <ul className="pl-4 space-y-2">
+                                    {room.tasks.map((task, idx) => (
+                                        <li key={idx} className="text-sm text-gray-700 flex justify-between items-center">
+                                            <span className="font-medium">{task.taskName}</span>
+                                            <span className="italic text-gray-500">{task.taskFrequency}</span>
                                         </li>
                                     ))}
                                 </ul>
@@ -103,7 +111,7 @@ const Bronze: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                     onClick={handleSelect}
                     className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition"
                 >
-                    Select {pkg.name}
+                    Select {pkg?.name}
                 </button>
             </div>
         </div>

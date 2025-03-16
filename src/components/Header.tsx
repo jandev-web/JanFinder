@@ -52,7 +52,7 @@ const dropdownData = {
       { name: 'Our Bidding Process', href: '/bidding-process' },
       { name: 'Reviews', href: '/reviews' },
       { name: 'FAQs', href: '/frequently-asked' },
-      { name: 'Why use JanFinder', href: '/why-janfinder' },
+      { name: 'Why use Bid2Clean', href: '/why-bid2clean' },
       { name: 'About Us', href: '/about' },
     ],
   },
@@ -78,7 +78,7 @@ const Header = () => {
         {/* Logo on the Left */}
         <div className="flex-shrink-0 pr-6 pl-6 pt-8 z-20">
           <Link href="/" className="text-[#001F54] font-bold">
-            <h1 className="text-5xl">Jan<span className="text-yellow-500">Finder</span></h1>
+            <h1 className="text-5xl">Bid<span className="text-yellow-500">2</span>Clean</h1>
           </Link>
         </div>
 
@@ -149,7 +149,7 @@ const Header = () => {
                 onMouseEnter={() => handleMouseEnter('why')}
                 onMouseLeave={handleMouseLeave}
               >
-                Why JanFinder
+                Why Bid2Clean
                 <div className="h-[2px] bg-yellow-500 w-full mt-1 transition duration-300 group-hover:bg-[#001F54]"></div>
                 {activeDropdown === 'why' && (
                   <HomeHeaderDropdown title={dropdownData.why.title} image={dropdownData.why.image} links={dropdownData.why.links} />

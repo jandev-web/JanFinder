@@ -17,7 +17,7 @@ const HomeMainImage: React.FC = () => {
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         {/* Main Title */}
         <h1 className="text-5xl lg:text-6xl font-bold pt-24 pb-4 text-yellow-400 drop-shadow-md">
-          JanFinder
+          Bid2Clean
         </h1>
         <h2 className="text-3xl pb-4 text-yellow-200 drop-shadow-md">
           &quot;The cleaning quote marketplace where companies compete, and you win!&quot;
@@ -27,7 +27,7 @@ const HomeMainImage: React.FC = () => {
         {/* Catchy Description */}
         <p className="text-lg lg:text-2xl text-white pt-10 font-medium max-w-4xl pb-10 drop-shadow-lg">
           Your all-in-one platform for finding top-notch cleaning services and
-          managing your cleaning business with ease. JanFinder connects customers
+          managing your cleaning business with ease. Bid2Clean connects customers
           with trusted cleaning companies, offering lightning-fast quotes and
           competitive prices. Business owners, elevate your operations and secure
           more jobs effortlessly. Getting a quote is easy, fast, and ensures the
@@ -42,7 +42,7 @@ const HomeMainImage: React.FC = () => {
           className="text-5xl lg:text-6xl font-bold mt-38 text-yellow-400 opacity-20 drop-shadow-md transform scale-y-[-1] z-0"
           style={{ transform: 'scaleY(-1)' }}
         >
-          JanFinder
+          Bid2Clean
         </h1>
       </div>
     </section>

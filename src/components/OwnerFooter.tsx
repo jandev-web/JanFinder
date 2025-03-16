@@ -9,7 +9,7 @@ function OwnerFooter() {
                 <div className="flex flex-wrap justify-between">
                     {/* Company Information */}
                     <div className="w-full md:w-1/3 mb-6 md:mb-0">
-                        <h3 className="text-lg text-yellow-400 font-bold mb-2">JanFinder</h3>
+                        <h3 className="text-lg text-yellow-400 font-bold mb-2">Bid2Clean</h3>
                         <p className="text-sm">
                             The Number One Quote Bidding Platform. Try it Today!
                         </p>
@@ -52,7 +52,7 @@ function OwnerFooter() {
 
                 {/* Footer Bottom */}
                 <div className="mt-8 text-center border-t border-yellow-400 pt-4">
-                    <p className="text-sm">&copy; 2024 JanFinder. All rights reserved.</p>
+                    <p className="text-sm">&copy; 2024 Bid2Clean. All rights reserved.</p>
                     <p className="text-sm">&copy; Created by Synergy Technology Developers.</p>
                 </div>
             </div>

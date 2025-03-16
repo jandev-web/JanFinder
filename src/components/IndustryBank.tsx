@@ -8,7 +8,7 @@ const BankPage: React.FC = () => {
         <IndustryPage
             name="Banks"
             image="/images/bank.jpeg"
-            blurb="In the financial world, trust and professionalism start with a clean and polished environment. JanFinder helps you connect with expert cleaning companies that ensure your bank branches maintain a pristine appearance, creating a welcoming space for clients and employees alike."
+            blurb="In the financial world, trust and professionalism start with a clean and polished environment. Bid2Clean helps you connect with expert cleaning companies that ensure your bank branches maintain a pristine appearance, creating a welcoming space for clients and employees alike."
         />
     );
 };

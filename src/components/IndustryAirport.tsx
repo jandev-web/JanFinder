@@ -8,7 +8,7 @@ const AirportPage: React.FC = () => {
         <IndustryPage
             name="Airports"
             image="/images/airport.jpeg"
-            blurb="JanFinder specializes in connecting airports with top-tier cleaning companies. Whether it's maintaining cleanliness in terminals or ensuring a spotless experience for travelers, we make finding the right cleaning partner fast, easy, and reliable."
+            blurb="Bid2Clean specializes in connecting airports with top-tier cleaning companies. Whether it's maintaining cleanliness in terminals or ensuring a spotless experience for travelers, we make finding the right cleaning partner fast, easy, and reliable."
         />
     );
 };

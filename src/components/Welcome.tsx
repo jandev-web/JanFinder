@@ -9,7 +9,7 @@ const Welcome: React.FC = () => {
             <div className="container mx-auto px-6 text-center">
                 {/* Main Heading */}
                 <h1 className="text-4xl lg:text-5xl font-extrabold mb-2">
-                    Welcome to <span className="text-yellow-400">JanFinder</span>
+                    Welcome to <span className="text-yellow-400">Bid2Clean</span>
                 </h1>
 
                 {/* Tagline */}

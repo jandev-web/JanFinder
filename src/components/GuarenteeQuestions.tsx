@@ -5,14 +5,14 @@ import React from 'react';
 const GuarenteeQuestions: React.FC = () => {
   const questions = [
     {
-      question: 'What is the JanFinder guarantee?',
+      question: 'What is the Bid2Clean guarantee?',
       answer:
-        'The JanFinder guarantee ensures you receive top-quality service from trusted cleaning companies. If expectations are not met, we’ll assist in finding a resolution.',
+        'The Bid2Clean guarantee ensures you receive top-quality service from trusted cleaning companies. If expectations are not met, we’ll assist in finding a resolution.',
     },
     {
       question: 'Do you guarantee satisfaction?',
       answer:
-        'Yes! Your satisfaction is our top priority. JanFinder ensures you work with reliable companies who stand behind their services.',
+        'Yes! Your satisfaction is our top priority. Bid2Clean ensures you work with reliable companies who stand behind their services.',
     },
     {
       question: 'How are disputes handled?',
@@ -27,14 +27,14 @@ const GuarenteeQuestions: React.FC = () => {
     {
       question: 'How do you ensure company reliability?',
       answer:
-        'We vet all cleaning companies for quality and reliability before allowing them to bid on jobs through JanFinder.',
+        'We vet all cleaning companies for quality and reliability before allowing them to bid on jobs through Bid2Clean.',
     },
   ];
 
   return (
     <section className="relative bg-gradient-to-r from-yellow-400 to-yellow-300 text-[#001F54] shadow-2xl rounded-xl p-10 overflow-hidden">
       <h2 className="text-4xl font-extrabold text-center mb-8 uppercase tracking-widest drop-shadow-md">
-        The JanFinder Guarantee
+        The Bid2Clean Guarantee
       </h2>
 
       <div className="space-y-6">

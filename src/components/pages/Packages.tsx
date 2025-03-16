@@ -33,6 +33,8 @@ const Packages: React.FC = () => {
   const [recPackage, setRecPackage] = useState<PackageOption | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
+  const [cost, setCost] = useState(0);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -58,27 +60,16 @@ const Packages: React.FC = () => {
           console.log('Package recommendations:', packageInfo);
           const costInfo = details.costInfo;
           const baseCost = costInfo.baseCost
-          const budget = details.budget
-
+          const budget = details.quoteInfo.budget
+          setCost(baseCost)
           const recPackageName = recPackageUtil(baseCost, budget)
 
           const newRecPackage = packageInfo.find((pkg: PackageOption) => pkg.name === recPackageName);
 
-          const allPackageInfo = packageInfo?.packageInfo;
-          const allPackages = allPackageInfo?.allPackages ?? [];
-          const packageRec = allPackageInfo?.recPackage;
+          setPackages(packageInfo);
 
-          setPackages(allPackages);
-
-          if (packageRec) {
-            setRecPackage({
-              id: packageRec.id,
-              name: packageRec.name,
-              cost: packageRec.cost,
-              description: packageRec.description,
-              tasks: packageRec.tasks,
-              blurb: packageRec.blurb,
-            });
+          if (newRecPackage) {
+            setRecPackage(newRecPackage);
           }
         }
       } catch (error) {
@@ -127,7 +118,7 @@ const Packages: React.FC = () => {
       {/* Blurb Below Progress Bar */}
       <div className="w-full max-w-4xl mt-4 text-center text-gray-700 bg-white/90 p-4 rounded-lg shadow-md">
         <p className="text-lg">
-          You&apos;re almost finished! Simply select one of the JanFinder curated cleaning packages tailored specifically to meet the needs of your
+          You&apos;re almost finished! Simply select one of the Bid2Clean curated cleaning packages tailored specifically to meet the needs of your
           facility.
         </p>
       </div>
@@ -143,14 +134,14 @@ const Packages: React.FC = () => {
       )}
 
       {showComparison && packages ? (
-        <PackageComparison packages={packages} recPackage={recPackage} />
+        <PackageComparison cost={cost} packages={packages} recPackage={recPackage} quoteID={quoteID} />
       ) : (
         <div className="p-6 rounded-xl shadow-lg max-w-4xl w-full bg-white/90 text-gray-800 mt-6">
           <h2 className="text-2xl font-bold text-blue-700 mb-4 text-center">
             Our Recommended Package
           </h2>
           {recPackage ? (
-            <PackageCard cleanPackage={recPackage} />
+            <PackageCard cleanPackage={recPackage} cost={cost} quoteID={quoteID}/>
           ) : (
             <p className="text-center">No recommended package available.</p>
           )}

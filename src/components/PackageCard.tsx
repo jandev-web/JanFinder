@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { updatePackage } from '@/utils/updatePackageChoice';
 import { useRouter } from 'next/navigation';
+import updateQuoteCost from '@/utils/updateQuoteCost';
+import roundingUtil from '@/utils/roundingUtil';
 
 interface Task {
   taskName: string;
@@ -13,31 +15,45 @@ interface Room {
 }
 
 interface CleanPackage {
-  id: string;
   name: string;
-  cost: number;
+  rooms: Room[];
   description: string;
-  tasks: Room[];
-  blurb: string;
 }
 
 interface PackageCardProps {
   cleanPackage: CleanPackage;
+  cost: any;
+  quoteID: any;
 }
 
-const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage }) => {
+const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, cost, quoteID }) => {
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
+  const [finalCost, setFinalCost] = useState(cost);
+
   const router = useRouter();
+
+  useEffect(() => {
+    let calculatedCost = roundingUtil(cost);
+    if (cleanPackage.name === 'Radiant Results') {
+      calculatedCost = roundingUtil(cost / 1.2);
+    } else if (cleanPackage.name === 'Pure Essentials') {
+      calculatedCost = roundingUtil(cost * 0.64);
+    }
+    setFinalCost(calculatedCost);
+  }, [cleanPackage.name, cost]);
 
   const handleSelectPackage = async (pkg: CleanPackage) => {
     try {
-      const response = await updatePackage(pkg);
-      const id = pkg?.id;
-      if (response.success === true) {
+      const response = await updatePackage(quoteID, pkg);
+      const roundCost = roundingUtil(finalCost)
+      await updateQuoteCost(quoteID, { finalCost: roundCost });
+      
+      console.log(response)
+      if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
         setTimeout(() => {
-          const queryString = new URLSearchParams({ id }).toString();
-          router.push(`/confirmation?${queryString}`);
+          
+          router.push(`/get-a-quote/confirm`);
         }, 1000);
       } else {
         setConfirmationMessage('Failed to update package. Please try again.');
@@ -53,23 +69,24 @@ const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage }) => {
       <h2 className="text-3xl font-extrabold text-yellow-400 mb-4">{cleanPackage.name} Package</h2>
       <p className="font-semibold text-yellow-300 mb-2">Description:</p>
       <p className="text-yellow-200 mb-4">{cleanPackage.description}</p>
-      <p className="text-lg font-bold text-yellow-400">Cost: ${cleanPackage.cost.toFixed(2)}</p>
+      <p className="text-lg font-bold text-yellow-400">Cost: ${finalCost.toFixed(2)}</p>
 
       <h3 className="text-xl font-bold text-yellow-300 mt-6">Included Services:</h3>
-      <ul className="list-disc list-inside text-yellow-200 space-y-2 mt-2">
-        {cleanPackage.tasks.map((room, index) => (
-          <li key={index} className="mt-2">
-            <span className="font-bold text-yellow-400">{room.roomName}</span>
-            <ul className="ml-4 list-disc list-inside">
-              {room.tasks.map((task, taskIndex) => (
-                <li key={taskIndex}>
-                  {task.taskName} - <span className="italic">{task.taskFrequency}</span>
+      <div className="space-y-6">
+        {cleanPackage.rooms.map((room, index) => (
+          <div key={index} className="border-b border-gray-300 pb-4">
+            <h4 className="text-xl font-semibold text-[#001F54] mb-2">{room.roomName}</h4>
+            <ul className="pl-4 space-y-2">
+              {room.tasks.map((task, idx) => (
+                <li key={idx} className="text-sm text-gray-700 flex justify-between items-center">
+                  <span className="font-medium">{task.taskName}</span>
+                  <span className="italic text-gray-500">{task.taskFrequency}</span>
                 </li>
               ))}
             </ul>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
       {/* Centered button with confirmation message */}
       <div className="flex justify-center mt-6">

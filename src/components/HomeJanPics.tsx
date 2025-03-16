@@ -10,13 +10,13 @@ const HomeJanPics: React.FC = () => {
                 {/* Blurb Section */}
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-[#001F54] mb-4">
-                        The JanFinder Guarantee
+                        The Bid2Clean Guarantee
                     </h2>
                     <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-                        At JanFinder, we go the extra mile to ensure every cleaning company on our platform meets 
+                        At Bid2Clean, we go the extra mile to ensure every cleaning company on our platform meets 
                         our rigorous standards of quality and professionalism. Our vetting process guarantees 
                         that you’ll always receive the best cleaning experience possible. If for any reason 
-                        you’re not satisfied, we’ve got you covered with the JanFinder Guarantee: 
+                        you’re not satisfied, we’ve got you covered with the Bid2Clean Guarantee: 
                         request a new cleaning service, completely free of charge, no questions asked, within one week.
                     </p>
                 </div>

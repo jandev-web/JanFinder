@@ -9,51 +9,45 @@ import fetchCBOById from '@/utils/getCBOByID';
 import getFranchiseInfo from '@/utils/getFranchiseInfo';
 
 interface Task {
-  taskFrequency: string;
   taskName: string;
+  taskFrequency: string;
 }
 
-interface Tasks {
-  roomName: string; // Add roomName here
+interface Room {
+  roomName: string;
   tasks: Task[];
 }
 
-interface PackageDetails {
+interface Address {
+  city: string;
+  country: string;
+  postalCode: string;
+  state: string;
+  street: string;
+}
+
+interface Package {
+  id: string;
   name: string;
-  description: string;
   cost: number;
-  tasks: Tasks[];
+  description: string;
+  tasks: Room[];
+  blurb: string;
 }
 
-interface QuoteInfo {
-  sqft: number;
-  facilityType: string;
-}
-
-interface CustomerData {
+interface CustomerInfo {
   firstName: string;
   lastName: string;
-  email: string;
   company: string;
+  address: Address;
+  email: string;
   phone: string;
 }
 
-interface ConfirmedQuote {
-  quotePDF: string;
+interface QuoteInfo {
+  facilityType: string;
+  sqft: string;
 }
-
-interface Quote {
-  Timestamp: string;
-  Confirmed?: ConfirmedQuote;
-  QuoteID: string;
-  quoteInfo: QuoteInfo;
-  Franchise: string;
-  CBO: string;
-  Package: PackageDetails;
-  customerData: CustomerData;
-  AcceptedTimestamp: string;
-}
-
 interface OwnerQuoteProps {
   user: any;
   quoteID: any;
@@ -62,7 +56,7 @@ interface OwnerQuoteProps {
 
 const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
   const router = useRouter();
-  const [quote, setQuote] = useState<Quote | null>(null);
+  const [quoteInfo, setQuoteInfo] = useState<any>(null);
   const [pdfUrl, setPdfUrl] = useState<any>(null);
   const [cost, setCost] = useState<string>('Not Set');
   const [sqft, setSqft] = useState<string>('Not Set');
@@ -104,7 +98,7 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
     try {
       const quoteData = await getQuoteDetails(quoteID);
       console.log(quoteData);
-      setQuote(quoteData);
+      setQuoteInfo(quoteData);
       const cboID = quoteData.CBO
       if (quoteData.Package?.cost) {
         const costString = `$${quoteData.Package?.cost.toFixed(2)}`

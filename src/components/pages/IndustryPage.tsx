@@ -31,7 +31,7 @@ const Industry: React.FC = () => {
 
         {/* Blurb */}
         <p className="text-lg text-gray-700 mb-12 text-center">
-          JanFinder specializes in connecting customers with professional cleaning companies across a variety of industries. From airports to offices, we ensure every facility gets the highest standard of cleaning services. Explore the industries we serve and see how we can help you!
+        Bid2Clean specializes in connecting customers with professional cleaning companies across a variety of industries. From airports to offices, we ensure every facility gets the highest standard of cleaning services. Explore the industries we serve and see how we can help you!
         </p>
 
         {/* Industry List */}

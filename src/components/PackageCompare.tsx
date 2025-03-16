@@ -5,29 +5,42 @@ import Gold from '@/components/Gold';
 import { updatePackage } from '@/utils/updatePackageChoice';
 import { useRouter } from 'next/navigation';
 import GoldBox from '@/components/MetallicBox'
-interface Package {
-  name: string;
-  description: string;
-  cost: number;
-  tasks: {
-    roomName: string;
-    tasks: { taskName: string; taskFrequency: string }[];
-  }[];
-  blurb: string;
-  id: string;
-}
-interface PackageComparisonProps {
-  packages: Package[];
-  recPackage: Package | null;
+import updateQuoteCost from '@/utils/updateQuoteCost';
+import roundingUtil from '@/utils/roundingUtil';
+interface Task {
+  taskName: string;
+  taskFrequency: string;
 }
 
-const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPackage }) => {
+interface Room {
+  roomName: string;
+  tasks: Task[];
+}
+interface PackageOption {
+  name: string;
+  rooms: Room[];
+  description: string;
+}
+interface PackageComparisonProps {
+  packages: PackageOption[];
+  recPackage: PackageOption | null;
+  cost: any;
+  quoteID: any;
+}
+
+const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPackage, cost, quoteID }) => {
   const bronzePackage = packages.find((pkg) => pkg.name === 'Pure Essentials');
   const silverPackage = packages.find((pkg) => pkg.name === 'Radiant Results');
   const goldPackage = packages.find((pkg) => pkg.name === 'Elite Pristine');
   const [bronzeRec, setBronzeRec] = useState(false);
   const [silverRec, setSilverRec] = useState(false);
   const [goldRec, setGoldRec] = useState(false);
+
+
+
+  const bronzeCost= roundingUtil(cost * 0.64);
+  const silverCost = roundingUtil(cost / 1.2);
+  const goldCost = roundingUtil(cost);
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
   const router = useRouter();
 
@@ -35,17 +48,27 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPack
     setBronzeRec(recPackage?.name === bronzePackage?.name);
     setSilverRec(recPackage?.name === silverPackage?.name);
     setGoldRec(recPackage?.name === goldPackage?.name);
+
   }, [recPackage, bronzePackage, silverPackage, goldPackage]);
 
-  const handleSelectPackage = async (pkg: Package) => {
+  const handleSelectPackage = async (pkg: PackageOption) => {
     try {
-      const response = await updatePackage(pkg);
-      const id = pkg?.id
-      if (response.success === true) {
+      const response = await updatePackage(quoteID, pkg);
+      if (pkg.name === 'Radiant Results') {
+        await updateQuoteCost(quoteID, { finalCost: silverCost });
+      }
+      if (pkg.name === 'Elite Pristine') {
+        await updateQuoteCost(quoteID, { finalCost: goldCost });
+      }
+      if (pkg.name === 'Pure Essentials') {
+        await updateQuoteCost(quoteID, { finalCost: bronzeCost });
+      }
+      
+      if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
         setTimeout(() => {
-          const queryString = new URLSearchParams({ id }).toString();
-          router.push(`/confirmation?${queryString}`);
+          
+          router.push(`/get-a-quote/confirm`);
         }, 1000);
       } else {
         setConfirmationMessage('Failed to update package. Please try again.');
@@ -65,6 +88,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPack
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {bronzePackage && (
           <Bronze
+            cost={bronzeCost}
             pkg={bronzePackage}
             rec={bronzeRec}
             handleSelect={() => handleSelectPackage(bronzePackage)}
@@ -72,6 +96,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPack
         )}
         {silverPackage && (
           <Silver
+            cost={silverCost}
             pkg={silverPackage}
             rec={silverRec}
             handleSelect={() => handleSelectPackage(silverPackage)}
@@ -79,6 +104,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPack
         )}
         {goldPackage && (
           <Gold
+            cost={goldCost}
             pkg={goldPackage}
             rec={goldRec}
             handleSelect={() => handleSelectPackage(goldPackage)}

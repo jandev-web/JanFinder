@@ -4,15 +4,15 @@ import React from 'react';
 
 const ownerReviews = [
     {
-        text: "JanFinder has brought in more quote opportunities than any other platform. It's been a game-changer for our business!",
+        text: "Bid2Clean has brought in more quote opportunities than any other platform. It's been a game-changer for our business!",
         author: "-Robbie, Crystal Cleaners",
     },
     {
-        text: "I love how I can see real-time bids and compete for jobs that fit our expertise. JanFinder is a fantastic tool!",
+        text: "I love how I can see real-time bids and compete for jobs that fit our expertise. Bid2Clean is a fantastic tool!",
         author: "-Sandra, Elite Shine Services",
     },
     {
-        text: "Since joining JanFinder, our bookings have skyrocketed. The platform is intuitive and packed with opportunities!",
+        text: "Since joining Bid2Clean, our bookings have skyrocketed. The platform is intuitive and packed with opportunities!",
         author: "-James, SparklePro Cleaning",
     },
 ];

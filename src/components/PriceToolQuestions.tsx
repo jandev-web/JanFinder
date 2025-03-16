@@ -17,7 +17,7 @@ const PriceToolQuestions: React.FC = () => {
     {
       question: 'Are there any hidden costs?',
       answer:
-        'No, JanFinder ensures complete transparency. All costs are clearly outlined in your quote.',
+        'No, Bid2Clean ensures complete transparency. All costs are clearly outlined in your quote.',
     },
     {
       question: 'Can I customize the pricing for specific needs?',

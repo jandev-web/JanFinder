@@ -2,22 +2,28 @@ import React from 'react';
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
+interface Task {
+    taskName: string;
+    taskFrequency: string;
+}
+
+interface Room {
+    roomName: string;
+    tasks: Task[];
+}
+interface PackageOption {
+    name: string;
+    rooms: Room[];
+    description: string;
+}
+
 interface PackageProps {
-    pkg: {
-        name: string;
-        description: string;
-        cost: number;
-        tasks: {
-            roomName: string;
-            tasks: { taskName: string; taskFrequency: string }[];
-        }[];
-        blurb: string;
-    };
+    pkg: PackageOption | null;
+    cost: any;
     rec: boolean;
     handleSelect: () => void;
 }
-
-const Silver: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
+const Silver: React.FC<PackageProps> = ({ pkg, rec, handleSelect, cost }) => {
     return (
         <div className="overflow-hidden w-full max-w-3xl mx-auto">
             {/* Top Section */}
@@ -46,7 +52,7 @@ const Silver: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                         textShadow: '0 0 10px #C0C0C0, 0 0 20px #C0C0C0, 0 0 30px #C0C0C0, 0 0 40px #C0C0C0', // Glowing silver outline
                     }}
                 >
-                    {pkg.name}
+                    {pkg?.name}
                 </h3>
 
                 {/* Package Blurb */}
@@ -57,7 +63,7 @@ const Silver: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                             textShadow: '0 0 10px #C0C0C0, 0 0 20px #C0C0C0, 0 0 30px #C0C0C0, 0 0 40px #C0C0C0',
                         }}
                     >
-                        {pkg.blurb}
+                        {pkg?.description}
                     </Typography>
                 </div>
 
@@ -69,7 +75,7 @@ const Silver: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                             textShadow: '0 0 10px #C0C0C0, 0 0 20px #C0C0C0, 0 0 30px #C0C0C0, 0 0 40px #C0C0C0',
                         }}
                     >
-                        ${pkg.cost.toFixed(2)}
+                        ${cost.toFixed(2)}
                     </Typography>
                 </div>
             </div>
@@ -81,13 +87,14 @@ const Silver: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                         <Typography className="text-blue-600 font-bold">See All Services</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        {pkg.tasks.map((room) => (
-                            <div key={room.roomName} className="mb-4">
-                                <Typography className="font-semibold text-blue-700 mb-2">{room.roomName}</Typography>
-                                <ul className="list-disc ml-6">
-                                    {room.tasks.map((task) => (
-                                        <li key={task.taskName} className="text-blue-700">
-                                            {task.taskName}: {task.taskFrequency}
+                        {pkg?.rooms.map((room, index) => (
+                            <div key={index} className="border-b border-gray-300 pb-4">
+                                <h4 className="text-xl font-semibold text-[#001F54] mb-2">{room.roomName}</h4>
+                                <ul className="pl-4 space-y-2">
+                                    {room.tasks.map((task, idx) => (
+                                        <li key={idx} className="text-sm text-gray-700 flex justify-between items-center">
+                                            <span className="font-medium">{task.taskName}</span>
+                                            <span className="italic text-gray-500">{task.taskFrequency}</span>
                                         </li>
                                     ))}
                                 </ul>
@@ -103,7 +110,7 @@ const Silver: React.FC<PackageProps> = ({ pkg, rec, handleSelect }) => {
                     onClick={handleSelect}
                     className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
                 >
-                    Select {pkg.name}
+                    Select {pkg?.name}
                 </button>
             </div>
         </div>

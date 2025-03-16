@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import fetchOwnerById from '@/utils/getOwnerById';
 import LoadingSpinner from '@/components/loadingScreen'
 
-import OwnerQuote from './SingleOwnerQuote';
+import OwnerQuote from './SingleOwnerQuoteAvailable';
 import OwnerHeader from '../OwnerHeader';
 
 import { useRouter } from 'next/navigation';

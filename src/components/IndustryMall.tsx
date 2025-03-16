@@ -8,7 +8,7 @@ const MallPage: React.FC = () => {
         <IndustryPage
             name="Mall"
             image="/images/mall.jpeg"
-            blurb="Ensure your shopping mall remains a pristine destination for shoppers. From food courts to corridors, JanFinder connects you with top cleaning professionals who deliver immaculate results, keeping every corner spotless and inviting for customers."
+            blurb="Ensure your shopping mall remains a pristine destination for shoppers. From food courts to corridors, Bid2Clean connects you with top cleaning professionals who deliver immaculate results, keeping every corner spotless and inviting for customers."
         />
     );
 };

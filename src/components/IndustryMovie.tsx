@@ -8,7 +8,7 @@ const MovieTheaterPage: React.FC = () => {
         <IndustryPage
             name="Movie Theater"
             image="/images/movie-theater.jpeg"
-            blurb="Create a cinematic experience that keeps audiences coming back. JanFinder connects you with expert cleaning services to ensure spotless seats, clean floors, and a fresh atmosphere in every theater and concession area."
+            blurb="Create a cinematic experience that keeps audiences coming back. Bid2Clean connects you with expert cleaning services to ensure spotless seats, clean floors, and a fresh atmosphere in every theater and concession area."
         />
     );
 };

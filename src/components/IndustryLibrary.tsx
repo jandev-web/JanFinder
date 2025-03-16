@@ -8,7 +8,7 @@ const LibraryPage: React.FC = () => {
         <IndustryPage
             name="Library"
             image="/images/library.jpeg"
-            blurb="Create a clean, quiet, and welcoming atmosphere for knowledge seekers and book lovers alike. JanFinder connects you with cleaning professionals who ensure your library stays immaculate, from reading rooms to research areas, for an exceptional visitor experience."
+            blurb="Create a clean, quiet, and welcoming atmosphere for knowledge seekers and book lovers alike. Bid2Clean connects you with cleaning professionals who ensure your library stays immaculate, from reading rooms to research areas, for an exceptional visitor experience."
         />
     );
 };

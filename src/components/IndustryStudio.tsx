@@ -8,7 +8,7 @@ const StudioPage: React.FC = () => {
         <IndustryPage
             name="TV/Radio Studio"
             image="/images/studio.jpeg"
-            blurb="Maintain a pristine and professional environment for your creative productions with JanFinder. Whether it's a TV set or a radio booth, connect with top cleaning services to keep your studio spotless and production-ready."
+            blurb="Maintain a pristine and professional environment for your creative productions with Bid2Clean. Whether it's a TV set or a radio booth, connect with top cleaning services to keep your studio spotless and production-ready."
         />
     );
 };

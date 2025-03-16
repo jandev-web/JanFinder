@@ -10,7 +10,7 @@ function GetQuoteHome() {
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/homePic.jpeg"
-          alt="JanFinder"
+          alt="Bid2Clean"
           className="object-cover w-full h-full"
           fill={true}
           priority={true} /* Ensures the image is preloaded */
@@ -23,7 +23,7 @@ function GetQuoteHome() {
         <div className="w-40 h-40 mx-auto mb-8 border-4 border-yellow-500 rounded-full overflow-hidden">
           <Image
             src="/images/janFighter.jpeg" /* Replace with your actual image path */
-            alt="JanFinder Logo"
+            alt="Bid2Clean Logo"
             className="object-cover w-full h-full"
             width={160}
             height={160}
@@ -32,17 +32,17 @@ function GetQuoteHome() {
 
         {/* Main Heading */}
         <h1 className="text-4xl font-extrabold mb-4 text-yellow-300 tracking-wide drop-shadow-lg">
-          Welcome to JanFinder
+          Welcome to Bid2Clean
         </h1>
 
         {/* Description */}
         <p className="text-lg mb-6">
-          At JanFinder, we specialize in connecting you with the best cleaning services
+          At Bid2Clean, we specialize in connecting you with the best cleaning services
           for your home and office. Our platform is designed to ensure that you find
           trustworthy, professional, and affordable cleaning solutions with ease.
         </p>
         <p className="text-lg mb-8">
-          Whether you need a one-time deep clean or regular maintenance, JanFinder is
+          Whether you need a one-time deep clean or regular maintenance, Bid2Clean is
           here to help. Our network of cleaning experts is vetted, insured, and ready to
           provide top-notch services tailored to your needs.
         </p>

@@ -11,7 +11,7 @@ const QuoteStatusIntro: React.FC = () => {
         </h1>
         <p className="text-lg lg:text-xl italic text-yellow-200 mt-4 max-w-3xl mx-auto">
           Keeping track of your cleaning quote has never been easier! With
-          JanFinder, you can conveniently check the status of your quotes right
+          Bid2Clean, you can conveniently check the status of your quotes right
           here. Whether you&apos;re planning ahead or making last-minute
           arrangements, our easy-to-use tool provides you with the information
           you need in just seconds. Simply enter your email and confirmation

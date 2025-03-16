@@ -22,11 +22,11 @@ const CustomerQuestions: React.FC = () => {
     {
       question: 'Can I compare multiple quotes?',
       answer:
-        'Absolutely! JanFinder allows you to compare quotes from different cleaning companies side by side.',
+        'Absolutely! Bid2Clean allows you to compare quotes from different cleaning companies side by side.',
     },
     {
-      question: 'Is JanFinder free to use?',
-      answer: 'Yes, JanFinder is completely free for customers to use!',
+      question: 'Is Bid2Clean free to use?',
+      answer: 'Yes, Bid2Clean is completely free for customers to use!',
     },
   ];
 

@@ -11,7 +11,7 @@ const FaqIntro: React.FC = () => {
         </h1>
         <p className="text-lg lg:text-xl italic text-yellow-200 mt-4 max-w-3xl mx-auto">
           Welcome to our FAQ section! Here, you&apos;ll find answers to common
-          questions about JanFinder, whether you&apos;re a customer looking for
+          questions about Bid2Clean, whether you&apos;re a customer looking for
           cleaning quotes or a business owner exploring tools to manage your
           cleaning company more effectively.
         </p>

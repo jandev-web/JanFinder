@@ -8,7 +8,7 @@ const whyLinks = [
     { name: 'Our Bidding Process', href: '/bidding-process' },
     { name: 'Reviews', href: '/reviews' },
     { name: 'Frequently Asked Questions', href: '/faq' },
-    { name: 'Why use JanFinder', href: '/why-janfinder' },
+    { name: 'Why use Bid2Clean', href: '/why-bid2clean' },
     { name: 'About Us', href: '/about' }
 ];
 
@@ -33,7 +33,7 @@ const HeaderDropdownWhy: React.FC = () => {
         >
             {/* Dropdown Trigger */}
             <div className="flex flex-col items-center px-4 py-2 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300">
-                Why JanFinder
+                Why Bid2Clean
                 {/* Line Under Trigger */}
                 <div className="h-[2px] bg-yellow-500 w-full mt-1 transition duration-300 group-hover:bg-[#001F54]"></div>
             </div>
@@ -45,7 +45,7 @@ const HeaderDropdownWhy: React.FC = () => {
                     {/* Blue Header */}
                     <div className="bg-white w-full p-4 rounded-t">
                         <h1 className="text-2xl font-bold text-[#001F54] text-left">
-                            Why Use JanFinder?              </h1>
+                            Why Use Bid2Clean?              </h1>
                         <div className="h-[2px] bg-yellow-500 w-[200px] mt-2"></div>
                     </div>
 

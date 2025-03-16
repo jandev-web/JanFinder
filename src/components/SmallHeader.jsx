@@ -55,8 +55,8 @@ const SmallHeader = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/why-janfinder" className="text-[#001F54] text-lg font-medium hover:text-yellow-500 transition duration-300">
-                            Why JanFinder
+                        <Link href="/why-bid2clean" className="text-[#001F54] text-lg font-medium hover:text-yellow-500 transition duration-300">
+                            Why Bid2Clean
                         </Link>
                     </li>
                     <li>

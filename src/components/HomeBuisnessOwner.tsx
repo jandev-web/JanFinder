@@ -11,16 +11,16 @@ const HomeBusinessOwner: React.FC = () => {
                 {/* Left Content */}
                 <div className="lg:w-1/2 mb-12 lg:mb-0">
                     <h2 className="text-4xl font-bold text-white mb-8">
-                        Empower Your Business with <span className="text-yellow-400">JanFinder</span>
+                        Empower Your Business with <span className="text-yellow-400">Bid2Clean</span>
                     </h2>
                     <p className="text-lg text-gray-200 mb-6 leading-relaxed">
-                        Grow your cleaning business with a constant stream of competitive quotes from JanFinder. Manage quotes, schedules, and customer communication—all in one place.
+                        Grow your cleaning business with a constant stream of competitive quotes from Bid2Clean. Manage quotes, schedules, and customer communication—all in one place.
                     </p>
                     <p className="text-lg text-gray-200 mb-6 leading-relaxed">
-                        Signing up as a business owner on JanFinder is the best move you’ll make to grow your cleaning business. With our streamlined platform, you’ll gain access to a constant stream of competitive quotes, helping you secure more contracts than ever before.
+                        Signing up as a business owner on Bid2Clean is the best move you’ll make to grow your cleaning business. With our streamlined platform, you’ll gain access to a constant stream of competitive quotes, helping you secure more contracts than ever before.
                     </p>
                     <p className="text-lg text-gray-200 mb-8 leading-relaxed">
-                        Not only will you see an increase in business, but JanFinder also offers a suite of powerful tools to help you run your business more efficiently. From quote management to scheduling and customer communication, we’re here to simplify your operations so you can focus on what you do best—delivering top-notch cleaning services!
+                        Not only will you see an increase in business, but Bid2Clean also offers a suite of powerful tools to help you run your business more efficiently. From quote management to scheduling and customer communication, we’re here to simplify your operations so you can focus on what you do best—delivering top-notch cleaning services!
                     </p>
 
                     {/* Call to Action Section */}
@@ -29,7 +29,7 @@ const HomeBusinessOwner: React.FC = () => {
                             href="/sign-up"
                             className="bg-yellow-500 text-white text-lg font-medium px-8 py-4 rounded-lg shadow-md hover:bg-yellow-600 transition duration-300 mb-4"
                         >
-                            Join JanFinder Today!
+                            Join Bid2Clean Today!
                         </Link>
                         <Link
                             href="/login"

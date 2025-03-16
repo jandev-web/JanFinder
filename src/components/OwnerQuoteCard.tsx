@@ -9,7 +9,9 @@ type Address = {
 };
 interface Quote {
   QuoteID: string;
-  Franchise: string;
+  costInfo: {
+    finalCost: number;
+  };
   CBO: string;
   Timestamp: string;
   Package: {
@@ -33,8 +35,11 @@ interface QuoteCardProps {
 }
 
 const OwnerQuoteCard: React.FC<QuoteCardProps> = ({ quote, onClick }) => {
-  const { Franchise, CBO, Package, customerData } = quote;
+  const { costInfo, Package, customerData } = quote;
   const [error, setError] = useState<string | null>(null);
+  console.log(quote)
+  console.log(costInfo)
+
   
   return (
     <button
@@ -50,7 +55,7 @@ const OwnerQuoteCard: React.FC<QuoteCardProps> = ({ quote, onClick }) => {
         {Package && (
           <div className="package-info">
             <p>
-              <strong>Cost:</strong> ${Package.cost.toFixed(2)}
+              <strong>Cost:</strong> ${costInfo?.finalCost}
             </p>
           </div>
         )}

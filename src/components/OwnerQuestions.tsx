@@ -10,9 +10,9 @@ const OwnerQuestions: React.FC = () => {
         'You can sign up as a franchise owner by visiting the "For Business Owners" page and following the registration process.',
     },
     {
-      question: 'What are the benefits of using JanFinder?',
+      question: 'What are the benefits of using Bid2Clean?',
       answer:
-        'JanFinder helps you generate more leads, simplify your quoting process, and connect with customers actively seeking cleaning services.',
+        'Bid2Clean helps you generate more leads, simplify your quoting process, and connect with customers actively seeking cleaning services.',
     },
     {
       question: 'Are there tools to help me manage my cleaning business?',
@@ -27,7 +27,7 @@ const OwnerQuestions: React.FC = () => {
     {
       question: 'What kind of support is available for franchise owners?',
       answer:
-        'We offer dedicated support, tutorials, and resources to help you make the most of JanFinder’s platform.',
+        'We offer dedicated support, tutorials, and resources to help you make the most of Bid2Clean’s platform.',
     },
   ];
 

@@ -14,7 +14,7 @@ const HomeIndustry: React.FC = () => {
 
         {/* Blurb */}
         <p className="text-lg text-gray-700 mb-8">
-          At JanFinder, we connect customers with top-tier cleaning companies tailored to their specific industry needs. From bustling airports to cozy libraries, we ensure that every facility gets the best service possible.
+          At Bid2Clean, we connect customers with top-tier cleaning companies tailored to their specific industry needs. From bustling airports to cozy libraries, we ensure that every facility gets the best service possible.
         </p>
 
         {/* Link to Industries */}

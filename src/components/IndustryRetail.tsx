@@ -8,7 +8,7 @@ const RetailPage: React.FC = () => {
         <IndustryPage
             name="Retail"
             image="/images/retail.jpeg"
-            blurb="A clean and well-maintained retail space enhances your customers' shopping experience and keeps them coming back for more. With JanFinder, you can easily connect with professional cleaning companies that specialize in retail spaces, ensuring your store always looks its best."
+            blurb="A clean and well-maintained retail space enhances your customers' shopping experience and keeps them coming back for more. With Bid2Clean, you can easily connect with professional cleaning companies that specialize in retail spaces, ensuring your store always looks its best."
         />
     );
 };

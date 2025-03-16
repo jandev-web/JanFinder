@@ -4,7 +4,7 @@ import React from 'react';
 
 const customerReviews = [
     {
-        text: "JanFinder made getting a cleaning quote so fast and simple! I had bids from top companies within hours. Couldn't be happier!",
+        text: "Bid2Clean made getting a cleaning quote so fast and simple! I had bids from top companies within hours. Couldn't be happier!",
         author: "-Patti, Westchester, NY",
     },
     {
@@ -12,7 +12,7 @@ const customerReviews = [
         author: "-John, Austin, TX",
     },
     {
-        text: "The process was smooth, quick, and incredibly user-friendly. Highly recommend JanFinder to anyone!",
+        text: "The process was smooth, quick, and incredibly user-friendly. Highly recommend Bid2Clean to anyone!",
         author: "-Maria, Miami, FL",
     },
 ];

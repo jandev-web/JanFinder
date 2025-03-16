@@ -8,7 +8,7 @@ const BowlingAlleyPage: React.FC = () => {
         <IndustryPage
             name="Bowling Alleys"
             image="/images/bowling-alley.jpeg"
-            blurb="A clean and polished bowling alley creates a striking first impression and keeps your guests coming back for more. JanFinder helps you connect with professional cleaning services that ensure your alleys, lanes, and facilities are spotless and ready for fun every day."
+            blurb="A clean and polished bowling alley creates a striking first impression and keeps your guests coming back for more. Bid2Clean helps you connect with professional cleaning services that ensure your alleys, lanes, and facilities are spotless and ready for fun every day."
         />
     );
 };

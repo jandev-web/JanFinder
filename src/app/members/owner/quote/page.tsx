@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import OwnerQuote from '@/components/pages/SingleOwnerQuote';
+import OwnerQuote from '@/components/pages/SingleOwnerQuoteAvailable';
 import OwnerHeader from '@/components/OwnerHeader';
 import OwnerSingleQuote from '@/components/pages/OwnerSingleQuotePage';
 export const dynamic = "force-dynamic";
