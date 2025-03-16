@@ -55,7 +55,7 @@ const UnderConstruction: React.FC = () => {
           Our site is under development and will be launching soon. Stay tuned for the next big thing in the cleaning industry!
         </p>
         <p className="text-base sm:text-lg lg:text-xl text-blue-800 italic mb-6">
-          Any Questions? Send them to info@janfinder.com
+          Any Questions? Send them to info@bid2clean.com
         </p>
         <p className="text-sm text-gray-500 italic">
           Thank you for your patience while we create something amazing for you.

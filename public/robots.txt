@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://janfinder.com
+Host: https://bid2clean.com
 
 # Sitemaps
-Sitemap: https://janfinder.com/sitemap.xml
+Sitemap: https://bid2clean.com/sitemap.xml

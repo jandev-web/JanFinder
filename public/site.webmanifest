@@ -1,7 +1,7 @@
 {
-    "name": "JanFinder",
-    "short_name": "JanFinder",
-    "description": "JanFinder: The best platform for commercial cleaning quotes and tools.",
+    "name": "Bid2Clean",
+    "short_name": "Bid2Clean",
+    "description": "Bid2Clean: The best platform for commercial cleaning quotes and tools.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#001F54",
