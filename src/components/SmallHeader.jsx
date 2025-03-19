@@ -17,7 +17,7 @@ const SmallHeader = () => {
             <div className="flex items-center justify-between px-4 py-3">
                 {/* Logo */}
                 <Link href="/" className="text-[#001F54] font-bold text-3xl">
-                    Jan<span className="text-yellow-500">Finder</span>
+                    Bid<span className="text-yellow-500">2</span>Clean
                 </Link>
 
                 {/* Hamburger Menu Icon */}

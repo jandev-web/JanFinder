@@ -15,7 +15,7 @@ interface FranchisePageProps {
 }
 
 const FranchisePage: React.FC<FranchisePageProps> = ({ user }) => {
-  //console.log(user)
+  console.log(user)
   const router = useRouter()
   const [franchise, setFranchise] = useState(null);
   const [userInfo, setUserInfo] = useState(null);

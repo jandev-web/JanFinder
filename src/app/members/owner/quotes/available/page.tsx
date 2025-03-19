@@ -17,7 +17,7 @@ export default async function AvaQuotesPage() {
     }
 
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex w-full flex-col min-h-screen">
         
           <OwnerAvaQuotesPage user={user} />
 

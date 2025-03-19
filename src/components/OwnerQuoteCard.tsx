@@ -37,8 +37,8 @@ interface QuoteCardProps {
 const OwnerQuoteCard: React.FC<QuoteCardProps> = ({ quote, onClick }) => {
   const { costInfo, Package, customerData } = quote;
   const [error, setError] = useState<string | null>(null);
-  console.log(quote)
-  console.log(costInfo)
+  //console.log(quote)
+  //console.log(costInfo)
 
   
   return (

@@ -4,19 +4,20 @@ import React, { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
 import fetchOwnerById from '@/utils/getOwnerById';
 import LoadingSpinner from '@/components/loadingScreen'
-import OwnerAvaQuotes from '@/components/OwnerAvailableQuotes';
-import OwnerFooter from '../OwnerFooter';
-import OwnerHeader from '../OwnerHeader';
+
+import OwnerQuote from './SingleOwnerQuoteAvailable';
+import OwnerFooter from '@/components/OwnerFooter'; 
 
 import { useRouter } from 'next/navigation';
 
 
 
-interface OwnerAvaQuotesPageProps {
+interface OwnerSingleQuoteProps {
     user: any;
-}
+    quoteID: any;
+  }
 
-const OwnerAvaQuotesPage: React.FC<OwnerAvaQuotesPageProps> = ({ user }) => {
+const OwnerSingleAvailableQuote: React.FC<OwnerSingleQuoteProps> = ({ user, quoteID }) => {
     const router = useRouter()
     const [ownerData, setOwnerData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -61,21 +62,14 @@ const OwnerAvaQuotesPage: React.FC<OwnerAvaQuotesPageProps> = ({ user }) => {
     //console.log("pages/MemberPage.tsx:", user);
     //console.log(isOwner)
     return (
-        <div className="flex flex-col min-h-screen">
-            {/* Header with padding-bottom */}
-            <div className="pb-10">
-                <OwnerHeader user={ownerData} />
-            </div>
+        <div className="flex flex-col w-full min-h-screen">
 
-            <div className='pt-24'>
-                <OwnerAvaQuotes user={ownerData} />
-            </div>
+            <OwnerQuote user={ownerData} quoteID={quoteID}/>
             <OwnerFooter />
-
         </div>
     );
 
 
 };
 
-export default OwnerAvaQuotesPage;
+export default OwnerSingleAvailableQuote;

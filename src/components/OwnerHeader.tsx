@@ -22,7 +22,7 @@ const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
           {/* Logo on the Left */}
           <div className="flex-shrink-0 pr-6 pl-6 pt-8 z-20">
             <Link href="/members/sign-in" className="text-[#001F54] font-bold">
-              <h1 className="text-5xl">Jan<span className="text-yellow-500">Member</span></h1>
+              <h1 className="text-5xl">Bid<span className="text-yellow-500">2</span>Clean</h1>
             </Link>
             <p className='pl-10 italic'>Franchise Owner Area</p>
           </div>

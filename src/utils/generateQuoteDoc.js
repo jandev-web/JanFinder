@@ -23,6 +23,7 @@ const makeQuotePDF = async (quoteID, franchiseID) => {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            return true;
         }
 
 

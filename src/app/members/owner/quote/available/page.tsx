@@ -1,13 +1,12 @@
-
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import OwnerAcceptedQuotesPage from '@/components/pages/OwnerAccQuotesPage';
+import OwnerSingleAvailableQuote from '@/components/pages/OwnerAvailableQuote';
 import LoginError from '@/components/LoginErrorComponent';
 
 export const dynamic = "force-dynamic";
 
-export default async function AllQuotesPage() {
+export default async function AvailableQuotePage({ searchParams }: { searchParams: { quoteID?: string } }) {
   try {
     // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();
@@ -17,15 +16,17 @@ export default async function AllQuotesPage() {
       redirect('/login');
     }
 
+    const quoteParam = searchParams?.quoteID || null;
+
     return (
       <div className="flex w-full flex-col min-h-screen">
-        <OwnerAcceptedQuotesPage user={user} />
+        <OwnerSingleAvailableQuote user={user} quoteID={quoteParam} />
       </div>
     );
   } catch (error) {
     console.error('Error fetching user:', error);
 
-    // Redirect to the login page if an error occurs
+    // Redirect to login if an error occurs
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <LoginError />

@@ -16,7 +16,9 @@ type Address = {
 
 interface Quote {
   QuoteID: string;
-  Franchise: string;
+  costInfo: {
+    finalCost: number;
+  };
   CBO: string;
   Timestamp: string;
   Package: {
@@ -52,7 +54,7 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
   // Set loading to false after the quotes are available
   console.log(user)
   const handleQuoteClick = (quote: Quote) => {
-    router.push(`/members/owner/quote?quoteID=${quote.QuoteID}&page=ava`);
+    router.push(`/members/owner/quote/available?quoteID=${quote.QuoteID}`);
   };
 
   useEffect(() => {
@@ -81,15 +83,15 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
   }
 
   return (
-    <div>
+    <div className="relative">
       <button
-        className="absolute top-4 left-4 pt-16 text-green-700 hover:text-yellow-500 transition duration-300"
+        className="absolute top-4 left-4 pt-2 pb-10 pl-4 pr-4 text-lg font-semibold text-[#001F54] hover:text-yellow-500 transition duration-300"
         onClick={() => router.push('/members/owner/quotes')}
       >
-        Back
+        &lt; Back to All Quotes
       </button>
-      <div className="p-8">
-        <h1 className="text-4xl font-bold text-green-500">Available Quotes</h1> {/* Big, Green Title */}
+      <div className="p-8 pt-16 text-center">
+        <h1 className="text-4xl font-bold text-[#001F54]">Available Quotes</h1>
         {quotes.length === 0 ? (
           <div>No Available Quotes found.</div>
         ) : (
@@ -103,6 +105,7 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
         )}
       </div>
     </div>
+
   );
 };
 

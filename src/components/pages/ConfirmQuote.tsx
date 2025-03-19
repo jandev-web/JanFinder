@@ -30,7 +30,6 @@ interface Package {
     cost: number;
     description: string;
     tasks: Room[];
-    blurb: string;
 }
 
 interface CustomerInfo {

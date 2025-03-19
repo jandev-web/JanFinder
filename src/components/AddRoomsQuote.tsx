@@ -82,7 +82,7 @@ const AddRoomsQuote: React.FC = () => {
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-4xl font-bold text-[#001F54] mb-8">Add Rooms to Your Quote</h2>
         <p className="text-lg text-gray-700 mb-8">
-          Please review your current rooms and add more as needed. When you're ready, continue to the next step.
+          Please review your current rooms and add more as needed. When you&apos;re ready, continue to the next step.
         </p>
 
         {/* Display the list of rooms if any exist */}

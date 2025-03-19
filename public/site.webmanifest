@@ -1,0 +1,16 @@
+{
+    "name": "Bid2Clean",
+    "short_name": "Bid2Clean",
+    "description": "Bid2Clean: The best platform for commercial cleaning quotes and tools.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#001F54",
+    "theme_color": "#001F54",
+    "icons": [
+      {
+        "src": "/favicon.png",
+        "sizes": "32x32",
+        "type": "image/png"
+      }
+    ]
+  }
