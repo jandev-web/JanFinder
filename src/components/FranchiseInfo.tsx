@@ -19,7 +19,7 @@ const FranchiseInfo: React.FC<FranchiseInfoProps> = ({ franchise, ownerID }) => 
             const blob = await response.blob();
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `contract.docx`;
+            link.download = `${franchise?.contractPDF}`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

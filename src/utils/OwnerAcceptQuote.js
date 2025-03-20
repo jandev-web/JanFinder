@@ -16,13 +16,7 @@ export const acceptQuoteOwner = async (quoteID, franchiseID, ownerID) => {
     if (!response.ok) {
         throw new Error('Failed to accept Quote');
     }
-    else {
-        await makeQuotePDF(quoteID, ownerID);
-
-        await acceptQuoteOwnerEmail(quoteID);
-
-
-    }
+    
 
 
 

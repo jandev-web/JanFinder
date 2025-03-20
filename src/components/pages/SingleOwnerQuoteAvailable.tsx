@@ -107,7 +107,6 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID }) => {
   const acceptAvailableQuote = async () => {
     try {
       await acceptQuoteOwner(quoteID, user.franchiseID, user.OwnerID);
-      await makeQuotePDF(quoteID, user.franchiseID);
       
       alert('Success')
     } catch (error) {
