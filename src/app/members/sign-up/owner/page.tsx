@@ -3,10 +3,10 @@
 import React from 'react';
 import MemberLandingHeader from '@/components/MemberLandingHeader';
 import MemberLandingFooter from '@/components/MemberLandingFooter';
-import SignUpPage from '@/components/pages/SignUpPage';
+import OwnerSignUpPage from '@/components/pages/OwnerSignUp';
 
 
-const FranchiseListPage: React.FC = () => {
+const OwnerSignUp: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full min-h-screen">
@@ -14,7 +14,7 @@ const FranchiseListPage: React.FC = () => {
 
       {/* Ensures Home takes up all available space between Header and Footer */}
       <div className="flex-grow pb-0 mb-0">
-        <SignUpPage />
+        <OwnerSignUpPage />
       </div>
       <div className="pt-0 mt-0">
         <MemberLandingFooter />
@@ -26,4 +26,4 @@ const FranchiseListPage: React.FC = () => {
 };
 
 
-export default FranchiseListPage;
+export default OwnerSignUp;

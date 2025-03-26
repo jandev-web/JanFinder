@@ -16,7 +16,7 @@ const GetStarted: React.FC = () => {
       </p>
       <button
         className="hover:bg-[#001F54] bg-yellow-500 hover:text-white text-[#001F54] font-semibold py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
-        onClick={() => router.push('/members/sign-up')}
+        onClick={() => router.push('/members/sign-up/owner')}
       >
         Get Started Here!
       </button>

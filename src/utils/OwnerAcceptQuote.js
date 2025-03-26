@@ -1,5 +1,3 @@
-import makeQuotePDF from '@/utils/generateQuoteDoc'
-import acceptQuoteOwnerEmail from '@/utils/OwnerAcceptEmail'
 export const acceptQuoteOwner = async (quoteID, franchiseID, ownerID) => {
     const url = process.env.NEXT_PUBLIC_OWNER_ACCEPT_QUOTE_URL;
     const apiKey = process.env.NEXT_PUBLIC_OWNER_ACCEPT_QUOTE_KEY;

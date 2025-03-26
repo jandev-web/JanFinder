@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import OwnerQuoteCard from '@/components/OwnerQuoteCard';
 import LoadingSpinner from '@/components/loadingScreen';
 import fetchOwnerById from '@/utils/getOwnerById'
-import fetchFilteredQuotes from '@/utils/getFilteredQuotesOwner';
+import fetchAvailableQuotes from '@/utils/getAvailableQuotesOwner';
 
 
 type Address = {
@@ -49,10 +49,9 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
   const ownerID = user?.OwnerID;
   const [error, setError] = useState<string | null>(null);
 
-  const type = 'available';
-
+  
   // Set loading to false after the quotes are available
-  console.log(user)
+  //console.log(user)
   const handleQuoteClick = (quote: Quote) => {
     router.push(`/members/owner/quote/available?quoteID=${quote.QuoteID}`);
   };
@@ -61,9 +60,9 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
     if (ownerID) {
       const fetchQuotes = async () => {
         try {
-          const data = await fetchFilteredQuotes(ownerID);
+          const data = await fetchAvailableQuotes(ownerID);
           console.log(data)
-          setAvaQuotes(data.availableQuotes)
+          setAvaQuotes(data)
           setLoading(false);
         } catch (error) {
           console.error('Error fetching quotes:', error);

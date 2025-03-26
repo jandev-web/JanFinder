@@ -1,12 +1,12 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import OwnerSingleAcceptedQuote from '@/components/pages/OwnerAcceptedQuote';
+import OwnerSellQuotePage from '@/components/pages/OwnerSellQuotePage';
 import LoginError from '@/components/LoginErrorComponent';
 
 export const dynamic = "force-dynamic";
 
-export default async function AcceptedQuotePage({ searchParams }: { searchParams: { quoteID?: string } }) {
+export default async function SellQuote({ searchParams }: { searchParams: { quoteID?: string } }) {
   try {
     // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();
@@ -20,7 +20,7 @@ export default async function AcceptedQuotePage({ searchParams }: { searchParams
 
     return (
       <div className="flex w-full flex-col min-h-screen">
-        <OwnerSingleAcceptedQuote user={user} quoteID={quoteParam} />
+        <OwnerSellQuotePage user={user} quoteID={quoteParam} />
       </div>
     );
   } catch (error) {

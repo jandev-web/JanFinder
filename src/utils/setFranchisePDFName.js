@@ -1,4 +1,4 @@
-export default async function updateFranchisePDFName(franchiseID, pdfName) {
+export default async function updateFranchisePDFName(franchiseID, pdfName, template_type) {
     const apiKey = process.env.NEXT_PUBLIC_UPDATE_FRANCHISE_PDF_NAME_KEY;
     const url = process.env.NEXT_PUBLIC_UPDATE_FRANCHISE_PDF_NAME_URL;
     
@@ -10,7 +10,7 @@ export default async function updateFranchisePDFName(franchiseID, pdfName) {
           'x-api-key': apiKey,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ franchiseID, pdfName })
+        body: JSON.stringify({ franchiseID, pdfName, template_type })
       });
   
       if (!response.ok) {

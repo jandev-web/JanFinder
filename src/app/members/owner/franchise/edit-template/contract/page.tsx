@@ -1,26 +1,27 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import OwnerSingleAcceptedQuote from '@/components/pages/OwnerAcceptedQuote';
+import EditFranchiseContract from '@/components/pages/EditFranchiseContractTemp';
 import LoginError from '@/components/LoginErrorComponent';
 
 export const dynamic = "force-dynamic";
 
-export default async function AcceptedQuotePage({ searchParams }: { searchParams: { quoteID?: string } }) {
+export default async function OwnerFranchisePage() {
   try {
     // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();
-
+    
     // Redirect to the login page if the user is not authenticated
     if (!user) {
       redirect('/login');
     }
 
-    const quoteParam = searchParams?.quoteID || null;
-
+    // Render the page content with the authenticated user
     return (
-      <div className="flex w-full flex-col min-h-screen">
-        <OwnerSingleAcceptedQuote user={user} quoteID={quoteParam} />
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        
+        <EditFranchiseContract user={user} />
+        
       </div>
     );
   } catch (error) {

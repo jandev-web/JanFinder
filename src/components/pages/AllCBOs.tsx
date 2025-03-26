@@ -27,7 +27,7 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
     //const email = user.signInDetails.loginId
     const router = useRouter();
     //const ownerID = user.signInDetails.loginId
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -41,10 +41,10 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
                 setLoading(false);
             }
         };
-    
+
         fetchData();
     }, [id]);
-    
+
 
     const handleClick = (cbo: CBO) => {
         //console.log('CBO:')
@@ -60,32 +60,33 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
     //console.log(cbos)
     if (loading) {
         return (
-        <div className="flex items-center justify-center min-h-screen">
-          <LoadingSpinner />
-        </div>
+            <div className="flex items-center justify-center min-h-screen">
+                <LoadingSpinner />
+            </div>
         );
     }
     return (
-        <div className="p-8">
-            <h1 className="text-4xl font-bold text-green-500">List of CBOs</h1> {/* Big, Green Title */}
+        <div className="flex flex-col items-center justify-center p-8">
+            <h1 className="text-4xl font-bold text-[#001F54]">List of Franchise Members</h1>
             {cbos.length === 0 ? (
-                <div>No CBOs found.</div>
+                <div className="mt-4 text-gray-700">No Franchise Members found.</div>
             ) : (
                 <ul className="space-y-4 mt-6">
                     {cbos.map((cbo) => (
                         <li key={cbo.CBOID}>
-                            <CBOCard cbo={cbo} onClick={() => handleClick(cbo)} /> {/* Use CBOCard */}
+                            <CBOCard cbo={cbo} onClick={() => handleClick(cbo)} />
                         </li>
                     ))}
                 </ul>
             )}
             <button
                 onClick={handleAddCBO}
-                className="mt-6 bg-green-500 hover:bg-yellow-300 text-white hover:text-green-700 font-bold py-2 px-4 rounded"
+                className="mt-6 bg-yellow-500 text-[#001F54] font-bold py-2 px-4 rounded hover:bg-yellow-400 transition"
             >
                 Add New CBO
             </button>
         </div>
+
     );
 };
 

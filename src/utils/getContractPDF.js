@@ -1,14 +1,14 @@
 import { getUrl } from 'aws-amplify/storage';
 
-const getPDFTemplate = async (franchiseID) => {
+const getPDFTemplate = async (quoteID) => {
     try {
         const linkToStorageFile = await getUrl({
-            path: `public/contract-templates/${franchiseID}/template.docx`,
+            path: `protected/contracts/${quoteID}/contract.docx`,
         });
         //console.log(linkToStorageFile)
         return linkToStorageFile;
     } catch (error) {
-        console.error('Error fetching quote PDF:', error);
+        console.error('Error fetching Contract PDF:', error);
         throw error;
     }
 };

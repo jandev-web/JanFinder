@@ -4,19 +4,20 @@ import React, { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
 import fetchOwnerById from '@/utils/getOwnerById';
 import LoadingSpinner from '@/components/loadingScreen'
-import OwnerFooter from '../OwnerFooter';
-import AddCBOPage from '@/components/pages/AddCBOPage';
-import OwnerHeader from '../OwnerHeader';
+
+import OwnerQuote from './SingleOwnerQuoteAccepted';
+import OwnerFooter from '@/components/OwnerFooter'; 
 
 import { useRouter } from 'next/navigation';
 
 
 
-interface OwnerPageProps {
+interface OwnerSingleQuoteProps {
     user: any;
-}
+    quoteID: any;
+  }
 
-const AddCBO: React.FC<OwnerPageProps> = ({ user }) => {
+const OwnerSingleAcceptedQuote: React.FC<OwnerSingleQuoteProps> = ({ user, quoteID }) => {
     const router = useRouter()
     const [ownerData, setOwnerData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +27,7 @@ const AddCBO: React.FC<OwnerPageProps> = ({ user }) => {
           try {
             if (!user) {
               redirect('/members/sign-in');
+              return;
             }
     
             // Fetch owner data by user ID
@@ -60,22 +62,14 @@ const AddCBO: React.FC<OwnerPageProps> = ({ user }) => {
     //console.log("pages/MemberPage.tsx:", user);
     //console.log(isOwner)
     return (
-        <div className="flex flex-col min-h-screen">
-            {/* Header with padding-bottom */}
-            
-            <div className='pb-16'>
-              <AddCBOPage user={ownerData} />
-            </div>
-            
-            
-              <OwnerFooter />
-            
-            
+        <div className="flex flex-col w-full min-h-screen">
 
+            <OwnerQuote user={ownerData} quoteID={quoteID}/>
+            <OwnerFooter />
         </div>
     );
 
 
 };
 
-export default AddCBO;
+export default OwnerSingleAcceptedQuote;

@@ -6,12 +6,13 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AddressForm from '@/components/AddressForm';
 
-interface AddCBOPageProps {
-  user: any;
+interface SelfCBOSignUpProps {
+    ownerID: any;
+    cboEmail: any;
 }
 
-const CreateCBOForm: React.FC<AddCBOPageProps> = ({ user }) => {
-  const [email, setEmail] = useState('');
+const SelfCBOSignUp: React.FC<SelfCBOSignUpProps> = ({ ownerID, cboEmail }) => {
+  const [email, setEmail] = useState(cboEmail);
   const [phone, setPhone] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -25,7 +26,7 @@ const CreateCBOForm: React.FC<AddCBOPageProps> = ({ user }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const router = useRouter();
-  console.log(user?.sub)
+  
 
   const formatPhoneNumber = (value: string) => {
     const cleaned = value.replace(/\D/g, '');
@@ -75,13 +76,13 @@ const CreateCBOForm: React.FC<AddCBOPageProps> = ({ user }) => {
       }
 
     try {
-      if (user) {
-        const ownerID = user.OwnerID
+      if (ownerID) {
+        
 
         const cboData = { email, firstName, lastName, ownerID, address, phone };
         const result = await createCBO(cboData);
         setSuccess('CBO created successfully!');
-        router.push('/members/owner/cbos')
+        router.push('/members/sign-in')
       }
       else {
         console.error('No User ID')
@@ -101,40 +102,24 @@ const CreateCBOForm: React.FC<AddCBOPageProps> = ({ user }) => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen w-full top-0 left-0 bg-gray-100 w-full overflow-x-hidden">
-      {/* Banner with "Back" button */}
-      <div className="bg-gray-800 text-white py-2 px-4 flex items-center w-full">
-        <Link href="/members/owner/CBOs" className="flex items-center text-white hover:text-green-300">
-          {/* Arrow Icon and Back Text */}
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Back
-        </Link>
-      </div>
-
+    <div className="flex flex-col min-h-screen w-full overflow-x-hidden">
       {/* Form Container */}
       <div className="flex items-center justify-center min-h-full w-full">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md mt-8">
-          <h1 className="text-2xl font-bold text-green-500 mb-6">Create CBO Account</h1>
+        <div className="bg-white p-8 w-full max-w-md">
+          <h1 className="text-2xl font-semibold text-[#001F54] border-b-2 border-yellow-500 inline-block pb-1 mb-6">
+            Franchise Member Information
+          </h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <input
                 type="email"
                 id="email"
-                placeholder='Email'
+                placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full p-4 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500"
               />
             </div>
 
@@ -142,24 +127,23 @@ const CreateCBOForm: React.FC<AddCBOPageProps> = ({ user }) => {
               <input
                 type="tel"
                 id="phone"
-                placeholder='Phone (###)-###-####'
+                placeholder="Phone (###)-###-####"
                 value={phone}
                 onChange={handlePhoneChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full p-4 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500"
               />
             </div>
 
             <div>
-              
               <input
                 type="text"
                 id="firstName"
-                placeholder='First Name'
+                placeholder="First Name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full p-4 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500"
               />
             </div>
 
@@ -167,11 +151,11 @@ const CreateCBOForm: React.FC<AddCBOPageProps> = ({ user }) => {
               <input
                 type="text"
                 id="lastName"
-                placeholder='Last Name'
+                placeholder="Last Name"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full p-4 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500"
               />
             </div>
 
@@ -187,10 +171,11 @@ const CreateCBOForm: React.FC<AddCBOPageProps> = ({ user }) => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-2 px-4 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-colors ${loading ? 'cursor-not-allowed opacity-50' : ''
-                }`}
+              className={`w-full py-2 px-4 bg-yellow-500 text-[#001F54] font-bold rounded-lg hover:bg-yellow-400 transition-colors ${
+                loading ? 'cursor-not-allowed opacity-50' : ''
+              }`}
             >
-              {loading ? 'Creating...' : 'Create CBO'}
+              {loading ? 'Adding...' : 'Add Member'}
             </button>
           </form>
 
@@ -203,4 +188,4 @@ const CreateCBOForm: React.FC<AddCBOPageProps> = ({ user }) => {
 };
 
 
-export default CreateCBOForm;
+export default SelfCBOSignUp;

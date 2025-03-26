@@ -1,14 +1,16 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import LoadingSpinner from './loadingScreen';
-import UploadFranchisePDFTemplate from './UploadFranchisePDFTemplate';
+import UploadFranchisePDFTemplate from './UploadFranchiseQuoteTemplate';
 
-interface EditFranchisePDFComponentProps {
+interface EditFranchiseQuoteComponentProps {
   franchise: any;
   user: any;
 }
 
-const EditFranchisePDFComponent: React.FC<EditFranchisePDFComponentProps> = ({ franchise, user }) => {
+const EditFranchiseQuoteComponent: React.FC<EditFranchiseQuoteComponentProps> = ({ franchise, user }) => {
   const franchiseID = franchise?.FranchiseID;
   const [franchisePDF, setFranchisePDF] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -18,7 +20,7 @@ const EditFranchisePDFComponent: React.FC<EditFranchisePDFComponentProps> = ({ f
   // When the franchise prop updates, set the franchiseName and update loading.
   useEffect(() => {
     if (franchise?.franchiseName) {
-      setFranchisePDF(franchise.contractPDF);
+      setFranchisePDF(franchise.contractTemplate);
       setLoading(false);
     }
     
@@ -30,10 +32,10 @@ const EditFranchisePDFComponent: React.FC<EditFranchisePDFComponentProps> = ({ f
 
   return (
     <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
-        <p>Current Contract Template: {franchisePDF}</p>
+        <p>Current Quote Template: {franchisePDF}</p>
       <UploadFranchisePDFTemplate franchiseID={franchiseID} user={user}/>
     </div>
   );
 };
 
-export default EditFranchisePDFComponent;
+export default EditFranchiseQuoteComponent;

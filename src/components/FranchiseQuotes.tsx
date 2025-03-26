@@ -37,11 +37,11 @@ interface Quote {
   };
 }
 
-interface AccQuotesProps {
+interface FranchiseQuotesProps {
   user: any;
 }
 
-const OwnerAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
+const FranchiseQuotes: React.FC<FranchiseQuotesProps> = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const ownerID = user?.OwnerID;
@@ -52,7 +52,7 @@ const OwnerAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
   
 
   const handleQuoteClick = (quote: Quote) => {
-    router.push(`/members/owner/quote/accepted?quoteID=${quote.QuoteID}`);
+    router.push(`/members/owner/quote?quoteID=${quote.QuoteID}&page=acc`);
   };
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const OwnerAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
           const data = await fetchFilteredQuotes(ownerID);
           //console.log(data.memberConfirmed)
           const confirmedQuotes = data.customerConfirmed
-          setQuotes(confirmedQuotes.bought)
+          setQuotes(confirmedQuotes.sold)
           const fetchedOwnerInfo = await fetchOwnerById(ownerID);
           //console.log(fetchedOwnerInfo)
           const franchiseInfo = await getFranchiseInfo(fetchedOwnerInfo.franchiseID)
@@ -109,14 +109,14 @@ const OwnerAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
         <div>
           <div>
             <h2 className="text-2xl font-bold text-center">
-              <span className="text-yellow-500">Purchased Quotes</span>
+              <span className="text-yellow-500">Franchise Quotes</span>
             </h2>
             {/* Grey line under the h2 */}
             <div className="border-b border-gray-300 mx-auto mt-2"></div>
 
             {(quotes?.length === 0) ? (
               <div>
-                <div className="mt-4 mb-4 text-[#001F54]">No Purchased Quotes Yet.</div>
+                <div className="mt-4 mb-4 text-[#001F54]">No Franchise Quotes Yet.</div>
                 <button
                   className="px-6 py-3 bg-yellow-500 text-[#001F54] text-lg font-semibold rounded-lg shadow-md hover:bg-yellow-400 hover:shadow-lg hover:scale-105 transform transition duration-300"
                   onClick={() => router.push('/members/owner/quotes/available')}
@@ -148,5 +148,5 @@ const OwnerAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
   );
 };
 
-export default OwnerAccQuotes;
+export default FranchiseQuotes;
 

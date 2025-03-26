@@ -1,6 +1,6 @@
-export default async function fetchAllCBOs(OwnerID) {
-    const url = process.env.NEXT_PUBLIC_GET_CBOS_URL;
-    const apiKey = process.env.NEXT_PUBLIC_GET_CBOS_KEY;
+export default async function sendCBOInvite(OwnerID, email) {
+    const url = process.env.NEXT_PUBLIC_INVITE_CBO_URL;
+    const apiKey = process.env.NEXT_PUBLIC_INVITE_CBO_KEY;
     try {
         //console.log("URL: ", url)
         //console.log("Key: ", apiKey)
@@ -11,7 +11,7 @@ export default async function fetchAllCBOs(OwnerID) {
                 'x-api-key': apiKey,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ OwnerID }),
+            body: JSON.stringify({ OwnerID, email }),
         });
 
         if (!response.ok) {

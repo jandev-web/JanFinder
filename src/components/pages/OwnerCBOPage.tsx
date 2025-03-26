@@ -7,6 +7,7 @@ import fetchOwnerById from '@/utils/getOwnerById';
 import LoadingSpinner from '@/components/loadingScreen';
 import { useRouter } from 'next/navigation';
 import { redirect } from 'next/navigation';
+import OwnerFooter from '../OwnerFooter';
 
 export const dynamic = "force-dynamic";
 
@@ -57,14 +58,18 @@ const OwnerCBOsPage: React.FC<OwnerCBOsPageProps> = ({ user }) => {
       }
 
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <div className="pt-10">
-          <OwnerHeader user={ownerData} />
+      <div className="flex flex-col w-full min-h-screen">
+            {/* Header with padding-bottom */}
+            <div className="pb-10">
+                <OwnerHeader user={ownerData} />
+            </div>
+
+            <div className='pt-24'>
+                <AllCBOs user={ownerData} />
+            </div>
+            <OwnerFooter />
+
         </div>
-        <div className="flex-1 flex pt-10">
-          <AllCBOs user={ownerData} />
-        </div>
-      </div>
     );
   
   }

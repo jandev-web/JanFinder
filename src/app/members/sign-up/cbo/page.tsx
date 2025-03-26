@@ -3,7 +3,7 @@
 import React from 'react';
 import MemberLandingHeader from '@/components/MemberLandingHeader';
 import MemberLandingFooter from '@/components/MemberLandingFooter';
-import SignUpPage from '@/components/pages/SignUpPage';
+import SignUpPage from '@/components/pages/OwnerSignUp';
 
 
 const FranchiseListPage: React.FC = () => {

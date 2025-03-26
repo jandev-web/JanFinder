@@ -9,5 +9,8 @@ export const storage = defineStorage({
     'contract-templates/*': [
       allow.authenticated.to(['read', 'write'])
     ],
+    'quote-templates/*': [
+      allow.authenticated.to(['read', 'write'])
+    ],
   })
 });

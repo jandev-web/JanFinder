@@ -3,14 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import getFranchiseInfo from '@/utils/getFranchiseInfo';
-import EditFranchisePDFComponent from '@/components/EditFranchisePDFComponent';
+import EditFranchiseQuoteComponent from '@/components/EditFranchiseQuoteComponent';
 import fetchOwnerById from '@/utils/getOwnerById';
 
-interface EditFranchisePDFProps {
+interface EditFranchiseQuoteProps {
   user: any;
 }
 
-const EditFranchisePDF: React.FC<EditFranchisePDFProps> = ({ user }) => {
+const EditFranchiseQuote: React.FC<EditFranchiseQuoteProps> = ({ user }) => {
   const [franchise, setFranchise] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -47,11 +47,11 @@ const EditFranchisePDF: React.FC<EditFranchisePDFProps> = ({ user }) => {
       >
         &lt; Back to Franchise Info
       </button>
-      <EditFranchisePDFComponent franchise={franchise} user={user} />
+      <EditFranchiseQuoteComponent franchise={franchise} user={user} />
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
     </div>
   );
 };
 
-export default EditFranchisePDF;
+export default EditFranchiseQuote;

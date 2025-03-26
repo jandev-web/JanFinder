@@ -14,19 +14,19 @@ interface UploadPDFProps {
 
 const UploadFranchisePDFTemplate: React.FC<UploadPDFProps> = ({ franchiseID, user }) => {
   const router = useRouter();
-
-  const fileName = `public/contract-templates/${franchiseID}/`;
+  const template_type = 'contract'
+  const fileName = `protected/contract-templates/${franchiseID}/`;
   console.log(user)
   const processFile = async ({ file }: { file: File }) => {
-    updateFranchisePDFName(franchiseID, file.name)
-    return { file, key: `template.docx` };
+    updateFranchisePDFName(franchiseID, file.name, template_type)
+    return { file, key: `contract-template.docx` };
   };
 
 
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-xl font-semibold mb-4">Upload Franchise PDF Template</h2>
+      <h2 className="text-xl font-semibold mb-4">Upload Franchise Contract Template</h2>
 
       <FileUploader
         acceptedFileTypes={['.docx']}

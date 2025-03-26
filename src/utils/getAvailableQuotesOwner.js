@@ -1,10 +1,10 @@
-export default async function fetchAllCBOs(OwnerID) {
-    const url = process.env.NEXT_PUBLIC_GET_CBOS_URL;
-    const apiKey = process.env.NEXT_PUBLIC_GET_CBOS_KEY;
+export default async function fetchAvailableQuotes(id) {
+    const url = process.env.NEXT_PUBLIC_GET_AVAILABLE_OWNER_QUOTES_URL;
+    const apiKey = process.env.NEXT_PUBLIC_GET_AVAILABLE_OWNER_QUOTES_KEY;
     try {
-        //console.log("URL: ", url)
-        //console.log("Key: ", apiKey)
-        //console.log("Email: ", email)
+        const OwnerID = id
+        
+        
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -19,11 +19,11 @@ export default async function fetchAllCBOs(OwnerID) {
         }
 
         const data = await response.json(); 
-        //console.log('A:')
+        
         //console.log(data)
-        return data; // This should be the list of CBOs
+        return data; 
     } catch (error) {
-        console.error('Error fetching CBOs:', error);
+        console.error('Error fetching Available Quotes:', error);
         return []; // Return an empty array or handle the error as needed
     }
 }

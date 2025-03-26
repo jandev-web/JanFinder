@@ -1,9 +1,9 @@
 import { getUrl } from 'aws-amplify/storage';
 
-const getQuoteTemplate = async (franchiseID) => {
+const getContractTemplate = async (franchiseID) => {
     try {
         const linkToStorageFile = await getUrl({
-            path: `protected/quote-templates/${franchiseID}/quote-template.docx`,
+            path: `protected/contract-templates/${franchiseID}/contract-template.docx`,
         });
         return linkToStorageFile;
     } catch (error) {
@@ -12,4 +12,4 @@ const getQuoteTemplate = async (franchiseID) => {
     }
 };
 
-export default getQuoteTemplate;
+export default getContractTemplate;

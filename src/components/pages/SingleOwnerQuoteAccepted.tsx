@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import getQuoteDetails from '@/utils/getQuoteDetails';
 import getQuotePDF from '@/utils/getQuotePDF';
 import { checkIsOwner } from '@/utils/checkIsOwner';
-import fetchCBOById from '@/utils/getCBOByID';
-import getFranchiseInfo from '@/utils/getFranchiseInfo';
+import { acceptQuoteOwner } from '@/utils/OwnerAcceptQuote';
+import makeQuotePDF from '@/utils/generateQuoteDoc'
 
 interface Task {
   taskName: string;
@@ -32,7 +32,6 @@ interface Package {
   cost: number;
   description: string;
   tasks: Room[];
-  blurb: string;
 }
 
 interface CustomerInfo {
@@ -47,29 +46,27 @@ interface CustomerInfo {
 interface QuoteInfo {
   facilityType: string;
   sqft: string;
+  Timestamp: string;
 }
+
 interface OwnerQuoteProps {
   user: any;
   quoteID: any;
-  prevPage: any;
 }
 
-const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
+const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID }) => {
   const router = useRouter();
   const [quoteInfo, setQuoteInfo] = useState<any>(null);
-  const [pdfUrl, setPdfUrl] = useState<any>(null);
-  const [cost, setCost] = useState<string>('Not Set');
-  const [sqft, setSqft] = useState<string>('Not Set');
-  const [phone, setPhone] = useState<string>('Not Set');
-  const [email, setEmail] = useState<string>('Not Set');
-  const [franchiseID, setFranchiseID] = useState('None');
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [costInfo, setCostInfo] = useState<any>(null);
+  const [roomInfo, setRoomInfo] = useState<any>(null);
+  const [customerData, setCustomerData] = useState<any>(null);
+  const [quotePackage, setQuotePackage] = useState<any>(null);
+  const [timestamp, setTimestamp] = useState<any>(null);
+  const [address, setAddress] = useState<any>(null);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [isOwner, setIsOwner] = useState<boolean>(false);
 
-  const [customer, setCustomer] = useState<string>('Not Set');
-  const [cboName, setCBOName] = useState('None');
-  const [franchiseName, setFranchiseName] = useState('None');
-
+  console.log(user)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -81,11 +78,7 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
         } else {
           console.error('Quote ID not provided');
         }
-        if (user.franchiseID) {
-          const franInfo = await getFranchiseInfo(user.franchiseID);
-          setFranchiseName(franInfo?.franchiseName ?? 'None');
-          setFranchiseID(franInfo?.FranchiseID)
-        }
+
       } catch (error) {
         console.error('Error fetching user role or quote details:', error);
       }
@@ -98,82 +91,42 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
     try {
       const quoteData = await getQuoteDetails(quoteID);
       console.log(quoteData);
-      setQuoteInfo(quoteData);
-      const cboID = quoteData.CBO
-      if (quoteData.Package?.cost) {
-        const costString = `$${quoteData.Package?.cost.toFixed(2)}`
-        setCost(costString)
-      }
-      if (quoteData.quoteInfo?.sqft) {
-        const sqftString = quoteData.quoteInfo?.sqft
-        setSqft(sqftString)
-      }
-      if ((quoteData.customerData?.firstName && quoteData.customerData?.firstName != '')|| (quoteData.customerData?.lastName && quoteData.customerData?.firstName != '')) {
-        let firstName = ''
-        let lastName = ''
-        if(quoteData.customerData?.firstName) {
-          firstName = quoteData.customerData?.firstName
-        }
-        if (quoteData.customerData?.lastName) {
-          lastName = quoteData.customerData?.lastName
-        }
-        const customerString = `${firstName} ${lastName}`
-        setCustomer(customerString)
-      }
-      if (quoteData.customerData?.email && quoteData.customerData?.email != '') {
-        const emailString = quoteData.customerData?.email
-        setEmail(emailString)
-      }
-      if (quoteData.customerData?.phone && quoteData.customerData?.phone != '') {
-        const phoneString = quoteData.customerData?.phone
-        setPhone(phoneString)
-      }
-      const cboData = await fetchCBOById(cboID)
-      console.log(cboData)
-      const cboFullName = `${cboData.firstName} ${cboData.lastName}`
-      setCBOName(cboFullName)
-      const franchiseData = await getFranchiseInfo(cboData.franchiseID)
-      setFranchiseName(franchiseData.franchiseName)
-      console.log(franchiseData)
-      if (quoteData.Confirmed?.quotePDF) {
-        await handleRetrievePDF(quoteData.Confirmed.quotePDF);
-      }
-
+      setQuoteInfo(quoteData.quoteInfo);
+      setCostInfo(quoteData.costInfo);
+      setQuotePackage(quoteData.Package);
+      setCustomerData(quoteData.customerData);
+      setTimestamp(quoteData.Timestamp);
+      setRoomInfo(quoteData.quoteInfo.roomTypes);
+      setAddress(quoteData.customerData.address);
 
     } catch (error) {
       console.error('Error fetching quote details:', error);
     }
   };
 
-  const acceptAvailableQuote = async (quoteID: string, franchiseID: string, cboID: string) => {
+  const downloadPDF = async () => {
     try {
-      //await acceptQuote(quoteID, franchiseID, cboID);
-      router.push(`/members/payment?quoteId=${quoteID}`);
-    } catch (error) {
-      console.error('Error accepting quote:', error);
-    }
-  };
+        const quotePDF = await getQuotePDF(quoteID);
 
-  const handleRetrievePDF = async (quotePDF: string) => {
-    try {
-      const url = await getQuotePDF(quotePDF);
-      setPdfUrl(url);
+        const response = await fetch(quotePDF.url);
+        const blob = await response.blob();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${customerData.company}_Quote.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     } catch (error) {
-      console.error('Error retrieving PDF:', error);
+        alert('Failed to download PDF. Please try again later.');
     }
-  };
+};
+
+
 
   const goBack = async () => {
-    try {
-      if (prevPage === 'ava') {
-        router.push('/members/owner/quotes/available')
-      }
-      else if (prevPage === 'acc') {
-        router.push('/members/owner/quotes/accepted')
-      }
-    } catch (error) {
-      console.error('Error retrieving PDF:', error);
-    }
+
+    router.push('/members/owner/quotes/available');
+
   };
 
   const formatDate = (timestamp: string) => {
@@ -181,119 +134,170 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID, prevPage }) => {
     return `${date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} at ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}`;
   };
 
-  if (!quote) {
-    return <div className="flex items-center justify-center h-full">Loading...</div>;
-  }
+  console.log(quoteInfo);
+  // Destructure properties only if quoteInfo exists.
+
 
   return (
-    <div>
-      <button
-        className="top-4 left-4 pt-18 text-green-700 hover:text-yellow-500 transition duration-300"
-        onClick={() => goBack()}
-      >
-        Back
-      </button>
-      <div className="relative max-w-4xl mx-auto bg-gradient-to-b from-green-700 to-white shadow-xl rounded-lg p-10 my-10 transition-all duration-300 ease-in-out">
-        <div className="flex flex-col">
-          <h2 className="text-2xl font-bold text-white mb-4">Price: {cost}</h2>
-          {prevPage === 'acc' && (
-            <div className="mb-4">
-              <p className="text-lg font-semibold text-yellow-100">CBO: {cboName}</p>
-              <p className="text-md text-yellow-200">Franchise: {franchiseName}</p>
-              <p className="text-md text-yellow-300">Accepted on: {formatDate(quote.AcceptedTimestamp)}</p>
-            </div>
-          )}
-          {quote.customerData && (
-            <div className="mb-4">
-              <p className="text-lg font-semibold text-yellow-100">Company: {quote.customerData.company}</p>
-              <p className="text-md text-yellow-200">Customer: {customer}</p>
-              <p className="text-md text-yellow-300">Email: {email}</p>
-              <p className="text-md text-yellow-300">Phone: {phone}</p>
-            </div>
-          )}
+    <div className="min-h-screen bg-gray-100 py-8">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <div className="flex items-center mb-8">
+          <button
+            onClick={() => goBack()}
+            className="inline-flex items-center text-[#001F54] hover:text-yellow-500 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="ml-2 font-semibold text-lg">Back</span>
+          </button>
+          <h1 className="flex-grow text-center text-3xl font-bold text-[#001F54]">
+            Quote Details
+          </h1>
+        </div>
 
-          <p className="text-md text-yellow-400 mt-4">Created on: {formatDate(quote.Timestamp)}</p>
+        {/* Main Card */}
+        <div className="bg-white shadow-lg rounded-lg p-8 md:p-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Left Column: All info except Tasks */}
+            <div className="space-y-6">
+              {/* Price */}
+              <div>
+                <h2 className="text-2xl font-bold text-[#001F54]">Price</h2>
+                <p className="mt-2 text-lg text-gray-800">${costInfo?.finalCost}</p>
+              </div>
 
-          {quote.quoteInfo && (
-            <div className="mt-6 bg-white p-6 rounded-lg shadow-sm border">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Quote Information:</h3>
-              <ul className="list-disc list-inside text-gray-600 space-y-2">
-                <li>Facility Type: {quote.quoteInfo.facilityType}</li>
+              {address && (
+                <div>
+                  <h3 className="text-xl font-semibold text-[#001F54]">Facility Address</h3>
+                  <p>{address.street}, {address.city}, {address.state} {address.postalCode}, {address.country}</p>
+                </div>
+              )}
+              {customerData && (
+                <div>
+                  <h3 className="text-xl font-semibold text-[#001F54]">Customer Information</h3>
+                  <ul className="mt-2 space-y-1 text-gray-700">
+                    <li>
+                      <strong>Company:</strong> {customerData.company}
+                    </li>
+                    <li>
+                      <strong>Customer:</strong> {customerData.firstName} {customerData.lastName}
+                    </li>
+                    <li>
+                      <strong>Email:</strong> {customerData.email}
+                    </li>
+                    <li>
+                      <strong>Phone:</strong> {customerData.phone}
+                    </li>
+                  </ul>
+                </div>
+              )}
 
-                <li>Square Feet: {sqft}</li>
-              </ul>
-            </div>
-          )}
+              {/* Created Timestamp */}
+              <div>
+                <h3 className="text-xl font-semibold text-[#001F54]">Created On</h3>
+                <p className="mt-2 text-gray-600">{timestamp ? formatDate(timestamp) : 'N/A'}</p>
+              </div>
 
-          {quote.Package && (
-            <div className="mt-6 bg-white p-6 rounded-lg shadow-sm border">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Package: {quote.Package.name}</h3>
-              <p className="text-md text-gray-600 mb-4">Cost: ${quote.Package.cost.toFixed(2)}</p>
-              <h4 className="text-lg font-semibold text-gray-800">Tasks by Room:</h4>
-              <ul className="list-disc list-inside text-gray-600 space-y-4">
-                {quote.Package.tasks.map((taskGroup, index) => (
-                  <li key={index}>
-                    <p className="font-bold text-gray-800">{taskGroup.roomName}</p>
-                    <ul className="list-disc list-inside ml-4 space-y-1">
-                      {taskGroup.tasks.map((task, idx) => (
-                        <li key={idx}>{task.taskName} - {task.taskFrequency}</li>
-                      ))}
-                    </ul>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+              {/* Quote Information */}
+              {quoteInfo && (
+                <div className="bg-gray-50 p-4 rounded border border-gray-200">
+                  <h3 className="text-xl font-semibold text-[#001F54] mb-2">
+                    Quote Information
+                  </h3>
+                  <ul className="list-disc list-inside text-gray-700">
+                    <li>
+                      <strong>Facility Type:</strong> {quoteInfo.facilityType}
+                    </li>
+                    <li>
+                      <strong>Square Feet:</strong> {quoteInfo.sqft}
+                    </li>
+                  </ul>
+                </div>
+              )}
 
-          {quote.Confirmed?.quotePDF && (
-            <div className="mt-6">
-              <h4 className="text-xl font-semibold text-gray-800">Confirmed PDF:</h4>
-              {pdfUrl ? (
-                <a
-                  href={pdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View PDF
-                </a>
-              ) : (
-                <p className="text-gray-600">Loading PDF...</p>
+              {/* Package Details */}
+              {quotePackage && (
+                <div>
+                  <h3 className="text-xl font-semibold text-[#001F54]">Package Details</h3>
+                  <p className="mt-2 text-gray-800">
+                    <strong>Package:</strong> {quotePackage.name}
+                  </p>
+                  <p className="mt-1 text-gray-800">
+                    <strong>Cost:</strong> ${costInfo.finalCost}
+                  </p>
+                </div>
               )}
             </div>
-          )}
 
-          {/* Accept Quote Button with Confirmation */}
-          {prevPage === 'ava' && (
-            <div className="mt-8 text-center">
-            {!showConfirmation ? (
-              <button
-                onClick={() => setShowConfirmation(true)}
-                className="px-6 py-3 bg-green-700 text-white font-semibold rounded-lg hover:bg-green-600 transition"
-              >
-                Accept Quote
-              </button>
-            ) : (
-              <>
-                <button
-                  onClick={() => acceptAvailableQuote(quoteID, franchiseID, user.sub)}
-                  className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition mr-4"
-                >
-                  Confirm Acceptance
-                </button>
-                <button
-                  onClick={() => setShowConfirmation(false)}
-                  className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-400 transition"
-                >
-                  Cancel
-                </button>
-              </>
+            {/* Right Column: Tasks in a Scrollable Box */}
+            {quotePackage && (
+              <div>
+                <h4 className="text-lg font-semibold text-[#001F54] mb-4">
+                  Tasks by Room
+                </h4>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 h-96 overflow-y-auto">
+
+                  <div className="space-y-4">
+                    {quotePackage.rooms.map((room: any, index: any) => (
+                      <div key={index} className="border-b border-gray-300 pb-4">
+                        <h4 className="text-xl font-semibold text-[#001F54] mb-2">
+                          {room.roomName}: {roomInfo[room.roomName]} sqft
+                        </h4>
+                        <ul className="pl-4 space-y-2">
+                          {room.tasks.map((task: any, idx: any) => (
+                            <li
+                              key={idx}
+                              className="flex justify-between items-center text-sm"
+                            >
+                              <span className="font-medium">{task.taskName}</span>
+                              <span className="italic text-gray-500">
+                                {task.taskFrequency}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
-          )}
+
+          {/* Accept Quote Actions */}
+          <div className="mt-10 text-center">
+            
+              
+            
+              <div className="flex justify-center space-x-4">
+              <button
+                onClick={() => router.push(`/members/owner/quote/sell?quoteID=${quoteID}`)}
+                className="px-6 py-3 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
+              >
+                Sell Quote
+              </button>
+              <button
+                onClick={() => downloadPDF()}
+                className="px-6 py-3 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
+              >
+                Download Quote PDF
+              </button>
+              </div>
+            
+          </div>
         </div>
       </div>
     </div>
+
+
   );
 };
 
