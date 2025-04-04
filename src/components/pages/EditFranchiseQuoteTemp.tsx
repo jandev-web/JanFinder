@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import getFranchiseInfo from '@/utils/getFranchiseInfo';
 import EditFranchiseQuoteComponent from '@/components/EditFranchiseQuoteComponent';
 import fetchOwnerById from '@/utils/getOwnerById';
+import getQuoteTemplate from '@/utils/getQuoteTemplate';
 
 interface EditFranchiseQuoteProps {
   user: any;

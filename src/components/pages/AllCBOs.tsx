@@ -56,6 +56,10 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
         router.push('/members/owner/cbos/add-cbo'); // Adjust the path to match your routing structure
     };
 
+    const handleRequests = () => {
+        router.push('/members/owner/cbos/requests'); // Adjust the path to match your routing structure
+    };
+
     //console.log('CBOs:')
     //console.log(cbos)
     if (loading) {
@@ -84,6 +88,12 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
                 className="mt-6 bg-yellow-500 text-[#001F54] font-bold py-2 px-4 rounded hover:bg-yellow-400 transition"
             >
                 Add New CBO
+            </button>
+            <button
+                onClick={handleRequests}
+                className="mt-6 bg-yellow-500 text-[#001F54] font-bold py-2 px-4 rounded hover:bg-yellow-400 transition"
+            >
+                Pending Requests
             </button>
         </div>
 

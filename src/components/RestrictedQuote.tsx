@@ -9,9 +9,10 @@ interface RestrictedQuoteProps {
 
 const RestrictedQuote: React.FC<RestrictedQuoteProps> = ({ memberStatus }) => {
     const router = useRouter();
+    const handleReturnToQuotes = () => {
+        console.log(memberStatus)
 
-    const handleReturnToQuotes = (memberStatus: any) => {
-        if (memberStatus === 'owner') {
+        if (memberStatus === 'Owner') {
             router.push('/members/owner/quotes');
         }
         if (memberStatus === 'cbo') {
@@ -28,7 +29,7 @@ const RestrictedQuote: React.FC<RestrictedQuoteProps> = ({ memberStatus }) => {
                 onClick={handleReturnToQuotes}
                 className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-all"
             >
-                Return to Quotes
+                Return to Custom Quotes
             </button>
         </div>
     );

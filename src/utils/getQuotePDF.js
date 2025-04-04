@@ -3,7 +3,7 @@ import { getUrl } from 'aws-amplify/storage';
 const getQuotePDF = async (quoteID) => {
     try {
         const linkToStorageFile = await getUrl({
-            path: `protected/quotes/${quoteID}/quote.docx`,
+            path: `protected/quotes/${quoteID}/quote.pdf`,
         });
         console.log(linkToStorageFile)
         return linkToStorageFile;

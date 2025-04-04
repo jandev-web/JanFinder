@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import OwnerQuoteCard from '@/components/OwnerQuoteCard';
+import FranchiseQuoteCard from '@/components/FranchiseQuoteCard';
 import LoadingSpinner from '@/components/loadingScreen';
 import fetchOwnerById from '@/utils/getOwnerById'
 import getFranchiseInfo from '@/utils/getFranchiseInfo'
@@ -17,6 +17,7 @@ type Address = {
 
 interface Quote {
   QuoteID: string;
+  OwnerID: string;
   costInfo: {
     finalCost: number;
   };
@@ -52,7 +53,7 @@ const FranchiseQuotes: React.FC<FranchiseQuotesProps> = ({ user }) => {
   
 
   const handleQuoteClick = (quote: Quote) => {
-    router.push(`/members/owner/quote?quoteID=${quote.QuoteID}&page=acc`);
+    router.push(`/members/owner/quote/franchise?quoteID=${quote.QuoteID}`);
   };
 
   useEffect(() => {
@@ -130,7 +131,7 @@ const FranchiseQuotes: React.FC<FranchiseQuotesProps> = ({ user }) => {
               <ul className="space-y-4 mt-6">
                 {quotes?.map((quote) => (
                   <li key={quote.QuoteID}>
-                    <OwnerQuoteCard quote={quote} onClick={() => handleQuoteClick(quote)} />
+                    <FranchiseQuoteCard quote={quote} onClick={() => handleQuoteClick(quote)} />
                   </li>
                 ))}
               </ul>)}

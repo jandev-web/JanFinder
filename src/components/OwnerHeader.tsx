@@ -10,7 +10,7 @@ interface OwnerHeaderProps {
 
 const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
   const [loading, setLoading] = useState(false);
-  console.log(user)
+  //console.log(user)
   if (loading) {
     return <div className="text-center text-gray-500 py-4">Loading...</div>;
   } else {

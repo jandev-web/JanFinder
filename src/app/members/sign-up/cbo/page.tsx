@@ -3,8 +3,7 @@
 import React from 'react';
 import MemberLandingHeader from '@/components/MemberLandingHeader';
 import MemberLandingFooter from '@/components/MemberLandingFooter';
-import SignUpPage from '@/components/pages/OwnerSignUp';
-
+import RequestJoinFranchise from '@/components/pages/RequestJoinFranchisePage';
 
 const FranchiseListPage: React.FC = () => {
 
@@ -14,7 +13,7 @@ const FranchiseListPage: React.FC = () => {
 
       {/* Ensures Home takes up all available space between Header and Footer */}
       <div className="flex-grow pb-0 mb-0">
-        <SignUpPage />
+        <RequestJoinFranchise />
       </div>
       <div className="pt-0 mt-0">
         <MemberLandingFooter />

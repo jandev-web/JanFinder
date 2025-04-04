@@ -4,9 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import OwnerQuoteCard from '@/components/OwnerQuoteCard';
 import LoadingSpinner from '@/components/loadingScreen';
-import fetchOwnerById from '@/utils/getOwnerById'
 import fetchAvailableQuotes from '@/utils/getAvailableQuotesOwner';
-
+import checkFranchiseTemplates from '@/utils/checkForFranTemplates';
 
 type Address = {
   city: string;
@@ -41,19 +40,21 @@ interface AvaQuotesProps {
 }
 
 const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
-  const [range, setRange] = useState(25); // Initial range in miles
-  const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(true);
   const [quotes, setAvaQuotes] = useState<Quote[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [hasTemplates, setHasTemplates] = useState(true);
+  const [missingMessage, setMissingMessage] = useState('');
+  const [showTemplatesModal, setShowTemplatesModal] = useState(false);
   const router = useRouter();
   const ownerID = user?.OwnerID;
-  const [error, setError] = useState<string | null>(null);
 
-  
-  // Set loading to false after the quotes are available
-  //console.log(user)
   const handleQuoteClick = (quote: Quote) => {
-    router.push(`/members/owner/quote/available?quoteID=${quote.QuoteID}`);
+    if (!hasTemplates) {
+      setShowTemplatesModal(true);
+    } else {
+      router.push(`/members/owner/quote/available?quoteID=${quote.QuoteID}`);
+    }
   };
 
   useEffect(() => {
@@ -61,8 +62,23 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
       const fetchQuotes = async () => {
         try {
           const data = await fetchAvailableQuotes(ownerID);
-          console.log(data)
-          setAvaQuotes(data)
+          console.log("Available quotes:", data);
+          setAvaQuotes(data);
+
+          // Check if the franchise has the required templates
+          const franchiseTemplates = await checkFranchiseTemplates(user?.franchiseID);
+          console.log("Franchise templates:", franchiseTemplates);
+          if (franchiseTemplates.length === 0) {
+            setHasTemplates(true);
+            setMissingMessage('');
+          } else {
+            setHasTemplates(false);
+            if (franchiseTemplates.length === 1) {
+              setMissingMessage(`Your Franchise is missing the ${franchiseTemplates[0]} template`);
+            } else if (franchiseTemplates.length === 2) {
+              setMissingMessage('Your Franchise is missing both the Quote template and the Contract template');
+            }
+          }
           setLoading(false);
         } catch (error) {
           console.error('Error fetching quotes:', error);
@@ -72,7 +88,8 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
 
       fetchQuotes();
     }
-  }, [ownerID]);
+  }, [ownerID, user?.franchiseID]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -84,27 +101,61 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
   return (
     <div className="relative">
       <button
-        className="absolute top-4 left-4 pt-2 pb-10 pl-4 pr-4 text-lg font-semibold text-[#001F54] hover:text-yellow-500 transition duration-300"
+        className="absolute top-4 left-4 pt-2 pb-10 pl-4 pr-4 text-lg font-semibold text-blue-700 hover:text-yellow-500 transition duration-300"
         onClick={() => router.push('/members/owner/quotes')}
       >
         &lt; Back to All Quotes
       </button>
-      <div className="p-8 pt-16 text-center">
-        <h1 className="text-4xl font-bold text-[#001F54]">Available Quotes</h1>
+      <div className={`p-8 pt-16 text-center transition-all ${showTemplatesModal ? "filter blur-sm" : ""}`}>
+        <h1 className="text-4xl font-bold text-blue-800">Available Quotes</h1>
+        {(!hasTemplates && missingMessage !== '') && (
+          <p className="mt-4 text-red-600 font-semibold">{missingMessage}</p>
+        )}
         {quotes.length === 0 ? (
-          <div>No Available Quotes found.</div>
+          <div className="mt-4 text-gray-600">No Available Quotes found.</div>
         ) : (
           <ul className="space-y-4 mt-6">
             {quotes.map((quote) => (
               <li key={quote.QuoteID}>
-                <OwnerQuoteCard quote={quote} onClick={() => handleQuoteClick(quote)} />
+                <OwnerQuoteCard
+                  quote={quote}
+                  onClick={() => handleQuoteClick(quote)}
+                />
               </li>
             ))}
           </ul>
         )}
       </div>
-    </div>
 
+      {/* Modal Overlay */}
+      {showTemplatesModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="relative bg-white p-8 rounded-lg shadow-xl text-center max-w-sm mx-auto">
+            <button 
+              onClick={() => setShowTemplatesModal(false)} 
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <p className="text-xl font-bold text-red-600 mb-6">{missingMessage}</p>
+            <button
+              onClick={() => router.push('/members/owner/franchise')}
+              className="w-full py-3 bg-yellow-500 text-blue-900 font-semibold rounded-lg hover:bg-yellow-600 transition-colors"
+            >
+              Add Templates
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

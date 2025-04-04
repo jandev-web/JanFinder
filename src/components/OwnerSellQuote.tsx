@@ -1,48 +1,54 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
+import transferQuoteInFranchise from '@/utils/transferQuoteInFranchise';
 import fetchAllCBOs from '@/utils/getAllCBOs';
+import { set } from 'react-hook-form';
+
 interface OwnerSellQuoteProps {
-    user: any;
-    quoteID: any;
-  }
+  user: any;
+  quoteID: any;
+}
 
 const OwnerSellQuote: React.FC<OwnerSellQuoteProps> = ({ user, quoteID }) => {
   const router = useRouter();
     
-  const [franchiseMembers, setFranchiseMembers] = useState<any>([]);
+  const [franchiseMembers, setFranchiseMembers] = useState<any[]>([]);
   const [selectedMember, setSelectedMember] = useState<string>('');
   const [cleanId, setCleanId] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
-  //console.log(user)
-  // Example: Load franchise members from an API when component mounts
+  const ownerID = user.OwnerID;
+  
+  // Load franchise members when component mounts
   useEffect(() => {
     async function loadFranchiseMembers() {
       try {
-        // Replace this with your actual API call
+        setLoading(true)
         const data = await fetchAllCBOs(user.OwnerID);
-        console.log(data)
+        console.log("Fetched franchise members:", data);
         setFranchiseMembers(data);
+        setLoading(false)
       } catch (err) {
         console.error('Error loading franchise members:', err);
         setError('Failed to load franchise members.');
       }
     }
     loadFranchiseMembers();
-  }, []);
-
-  
+  }, [user.OwnerID]);
 
   const handleSellQuote = async () => {
     setError('');
     setLoading(true);
     try {
-      // Determine target based on selection or search inputs
       let targetUser = '';
       if (selectedMember) {
         targetUser = selectedMember;
+        console.log("Selected member CBOID:", targetUser);
+        await transferQuoteInFranchise(ownerID, quoteID, targetUser);
+
       } else if (cleanId.trim() !== '') {
         targetUser = cleanId.trim();
       } else if (email.trim() !== '') {
@@ -51,17 +57,10 @@ const OwnerSellQuote: React.FC<OwnerSellQuoteProps> = ({ user, quoteID }) => {
         throw new Error('Please select a member or provide a CleanID or email.');
       }
 
-      // Replace with your API call to sell the quote. For example:
-      const response = await fetch('/api/sell-quote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetUser })
-      });
-      if (!response.ok) {
-        throw new Error('Failed to sell quote.');
-      }
-      // Handle success (e.g., show a success message or redirect)
+      // Transfer the quote using the determined targetUser (CBOID)
+      
       alert('Quote sold successfully!');
+      router.push(`/members/owner/quotes/accepted`);
     } catch (err: any) {
       console.error('Error selling quote:', err);
       setError(err.message);
@@ -109,9 +108,9 @@ const OwnerSellQuote: React.FC<OwnerSellQuoteProps> = ({ user, quoteID }) => {
                 className="w-full border border-gray-300 rounded p-2"
               >
                 <option value="">-- Select a member --</option>
-                {franchiseMembers.map((member) => (
-                  <option key={member.id} value={member.id}>
-                    {member.name}
+                {franchiseMembers.map((member: any, index: number) => (
+                  <option key={member.CBOID ? member.CBOID : index} value={member.CBOID ? member.CBOID : ''}>
+                    {member.firstName} {member.lastName}
                   </option>
                 ))}
               </select>
