@@ -106,6 +106,7 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID }) => {
 
   const acceptAvailableQuote = async () => {
     try {
+      console.log('Accepting quote')
       await acceptQuoteOwner(quoteID, user.franchiseID, user.OwnerID);
       router.push('/members/owner/quotes/available')
       

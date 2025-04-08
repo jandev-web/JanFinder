@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import transferQuoteInFranchise from '@/utils/transferQuoteInFranchise';
 import fetchAllCBOs from '@/utils/getAllCBOs';
-import { set } from 'react-hook-form';
+import sendTransferRequest from '@/utils/sendTransferRequest';
 
 interface OwnerSellQuoteProps {
   user: any;
@@ -47,7 +47,7 @@ const OwnerSellQuote: React.FC<OwnerSellQuoteProps> = ({ user, quoteID }) => {
       if (selectedMember) {
         targetUser = selectedMember;
         console.log("Selected member CBOID:", targetUser);
-        await transferQuoteInFranchise(ownerID, quoteID, targetUser);
+        await sendTransferRequest(quoteID, targetUser, ownerID);
 
       } else if (cleanId.trim() !== '') {
         targetUser = cleanId.trim();
@@ -59,7 +59,7 @@ const OwnerSellQuote: React.FC<OwnerSellQuoteProps> = ({ user, quoteID }) => {
 
       // Transfer the quote using the determined targetUser (CBOID)
       
-      alert('Quote sold successfully!');
+      alert('Quote sent out to sell successfully!');
       router.push(`/members/owner/quotes/accepted`);
     } catch (err: any) {
       console.error('Error selling quote:', err);
