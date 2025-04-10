@@ -1,13 +1,12 @@
-import React from "react";
+import React from 'react';
+import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
+import CBOSingleAvailableQuote from '@/components/pages/CBOAvailableQuote';
 import LoginError from '@/components/LoginErrorComponent';
-import AllQuotesCBO from "@/components/pages/AllQuotesCBO";
-import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
-import CBOAllQuotesPage from "@/components/pages/CBOAllQuotesPage";
+
 export const dynamic = "force-dynamic";
 
-
-export default async function AllQuotesPage() {
+export default async function AvailableQuotePage({ searchParams }: { searchParams: { id?: string } }) {
   try {
     // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();
@@ -17,16 +16,17 @@ export default async function AllQuotesPage() {
       redirect('/login');
     }
 
-    // Render the page content with the authenticated user
+    const quoteParam = searchParams?.id || null;
+
     return (
       <div className="flex w-full flex-col min-h-screen">
-        <CBOAllQuotesPage user={user} />
+        <CBOSingleAvailableQuote user={user} requestID={quoteParam} />
       </div>
     );
   } catch (error) {
     console.error('Error fetching user:', error);
 
-    // Redirect to the login page if an error occurs
+    // Redirect to login if an error occurs
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <LoginError />

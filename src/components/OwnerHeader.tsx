@@ -9,13 +9,7 @@ interface OwnerHeaderProps {
 }
 
 const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
-  const [loading, setLoading] = useState(false);
-  //console.log(user)
-  if (loading) {
-    return <div className="text-center text-gray-500 py-4">Loading...</div>;
-  } else {
-
-
+  
     return (
       <header className="fixed top-0 w-full z-50 bg-white shadow-lg">
         <div className="mx-auto flex w-full relative z-20">
@@ -112,7 +106,7 @@ const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
       </header>
 
     );
-  }
+  
 };
 
 export default OwnerHeader;

@@ -96,7 +96,7 @@ const SingleCBOPage: React.FC<SingleCBOPageProps> = ({ user }) => {
           setLoading(true);
           await deleteCBO(cbo.CBOID);
           await deleteCBOQuoteID(cbo.franchiseID)
-          router.push('/members/owner/CBOs'); // Redirect to the list of CBOs after deletion
+          router.push('/members/owner/cbos'); // Redirect to the list of CBOs after deletion
         } catch (error) {
           console.error('Error deleting CBO:', error);
           setError('Failed to delete CBO.');

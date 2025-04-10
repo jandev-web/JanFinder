@@ -4,6 +4,17 @@ import React, { useState } from 'react';
 import RequestJoinFranchiseConfirm from './RequestJoinFranchiseConfirm';
 import requestJoinFranchise from '@/utils/requestToJoinFranchise';
 import AddressForm from '@/components/AddressForm';
+import checkUserPoolEmail from '@/utils/checkUserPoolEmail';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
+interface Address {
+  street?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+}
 
 interface SelfCBOSignUpProps {
   franchise: any;
@@ -12,6 +23,8 @@ interface SelfCBOSignUpProps {
 const RequestFranchiseFound: React.FC<SelfCBOSignUpProps> = ({ franchise }) => {
   const franchiseID = franchise?.FranchiseID;
   const franchiseName = franchise?.franchiseName;
+
+  // Form state
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -23,8 +36,12 @@ const RequestFranchiseFound: React.FC<SelfCBOSignUpProps> = ({ franchise }) => {
   const [country, setCountry] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  // New state flag to show the confirmation once form submission is successful
   const [submitted, setSubmitted] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [emailExists, setEmailExists] = useState(false);
+  const [hasChecked,setHasChecked] = useState(false)
+
+  const router = useRouter();
 
   const formatPhoneNumber = (value: string) => {
     const cleaned = value.replace(/\D/g, '');
@@ -55,29 +72,58 @@ const RequestFranchiseFound: React.FC<SelfCBOSignUpProps> = ({ franchise }) => {
       case 'country':
         setCountry(value);
         break;
+      default:
+        break;
     }
   };
 
+  // When the email input loses focus, check whether the email exists
+  const handleEmailBlur = async () => {
+    if (!email) return;
+    try {
+      const response = await checkUserPoolEmail(email);
+      // Assume response exists as { exists: boolean }
+      setEmailExists(response.exists);
+      setHasChecked(true)
+    } catch (err) {
+      console.error("Error checking email:", err);
+    }
+  };
+
+  // The form is valid only if all fields are non-empty and the email is not already in use.
+  const isFormValid =
+    email &&
+    phone &&
+    firstName &&
+    lastName &&
+    street &&
+    city &&
+    state &&
+    postalCode &&
+    country &&
+    !emailExists;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isFormValid) return;
     setLoading(true);
     setError('');
+    setSuccess('');
     try {
       if (franchiseID) {
-        const address = {
+        const addressObj: Address = {
           street,
           city,
           state,
           postalCode,
           country,
         };
-        const cboData = { email, firstName, lastName, franchiseID, address, phone };
+        const cboData = { email, firstName, lastName, franchiseID, address: addressObj, phone };
         const result = await requestJoinFranchise(cboData);
         if (result) {
-          // Set the flag to show the confirmation component
           setSubmitted(true);
         } else {
-          setError('Failed to create CBO. Please try again.');
+          setError('Failed to request to join the franchise. Please try again.');
         }
       } else {
         console.error('No Franchise ID');
@@ -89,7 +135,6 @@ const RequestFranchiseFound: React.FC<SelfCBOSignUpProps> = ({ franchise }) => {
     }
   };
 
-  // When the form is successfully submitted, render the confirmation component
   if (submitted) {
     return <RequestJoinFranchiseConfirm franchiseName={franchiseName} />;
   }
@@ -115,10 +160,22 @@ const RequestFranchiseFound: React.FC<SelfCBOSignUpProps> = ({ franchise }) => {
                 id="email"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailExists(false); // reset when email changes
+                }}
+                onBlur={handleEmailBlur}
                 required
-                className="w-full p-4 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500"
+                className="w-full p-4 border border-gray-300 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500"
               />
+              {emailExists && (
+                <p className="text-red-500 text-sm mt-1">
+                  This email is already in use. Have an account?{' '}
+                  <Link href="/members/sign-in" className="underline hover:text-yellow-500">
+                    Click here to sign in.
+                  </Link>
+                </p>
+              )}
             </div>
 
             <div>
@@ -166,18 +223,26 @@ const RequestFranchiseFound: React.FC<SelfCBOSignUpProps> = ({ franchise }) => {
               onAddressChange={handleAddressChange}
             />
 
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full py-2 px-4 bg-yellow-500 text-[#001F54] font-bold rounded-lg hover:bg-yellow-400 transition-colors ${
-                loading ? 'cursor-not-allowed opacity-50' : ''
-              }`}
-            >
-              {loading ? 'Adding...' : 'Add Member'}
-            </button>
+            {/* Only render the submit button if all required information is entered and the email is not used */}
+            {(isFormValid && !emailExists && hasChecked)? (
+              <button
+                type="submit"
+                disabled={loading}
+                className={`w-full py-2 px-4 bg-yellow-500 text-[#001F54] font-bold rounded-lg hover:bg-yellow-400 transition-colors ${
+                  loading ? 'cursor-not-allowed opacity-50' : ''
+                }`}
+              >
+                {loading ? 'Submitting...' : 'Request to Join Franchise'}
+              </button>
+            ) : (
+              <div className="w-full py-2 text-center text-gray-500">
+                Please complete all fields.
+              </div>
+            )}
           </form>
 
           {error && <div className="mt-4 text-red-500">{error}</div>}
+          {success && <div className="mt-4 text-green-500">{success}</div>}
         </div>
       </div>
     </div>

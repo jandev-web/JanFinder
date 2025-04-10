@@ -1,10 +1,13 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-
+import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import fetchCBOById from '@/utils/getCBOByID';
 import CBOComponent from '@/components/CBOComponent';
-
+import CBOFooter from '../CBOFooter';
 import CBOHeader from '../CBOHeader';
+import LoadingSpinner from '@/components/loadingScreen'
 
 
 interface CBOPageProps {
@@ -14,52 +17,65 @@ interface CBOPageProps {
 
 const CBOPage: React.FC<CBOPageProps> = ({ user }) => {
 
-    const [isOwner, setIsOwner] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [currentUser, setCurrentUser] = useState<any>(null);
-    
+    const router = useRouter()
+    const [cboData, setCBOData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchUser = async () => {
-            try {
-                //const user = await getCurrentUser();
-                setCurrentUser(user);
-                console.log("User:", user);
-                //const attributes = await fetchUserAttributes();
-                //console.log("Attributes: ", attributes)
-            } catch (error) {
-                console.error('Error fetching current user:', error);
+          try {
+            if (!user) {
+              redirect('/members/sign-in');
+              return;
             }
+    
+            // Fetch owner data by user ID
+            const fetchedOwnerData = await fetchCBOById(user.userId);
+            setCBOData(fetchedOwnerData);
+          } catch (error) {
+            console.error('Error fetching current user:', error);
+            router.push('/error'); // Redirect to an error page if needed
+          } finally {
+            setIsLoading(false);
+          }
         };
-
+    
         fetchUser();
-    }, []);
+      }, [user, router]);
 
 
 
 
-    /*
-    if (loading) {
-        return <div>Loading...</div>; // Show a loading state while checking
-    }
-    */
+      if (isLoading) {
+        return <LoadingSpinner />
+      }
+      if (!cboData) {
+        return (
+          <div className="flex items-center justify-center min-h-screen">
+            <p>CBO data not found.</p>
+          </div>
+        );
+      }
 
-    //console.log("pages/CBO.tsx:", user);
+
+    //console.log("pages/MemberPage.tsx:", user);
     //console.log(isOwner)
     return (
-        <div className="flex flex-col min-h-screen">
-
-
-<div className="pt-10">
-                <CBOHeader user={user} />
+        <div className="flex flex-col w-full min-h-screen">
+            {/* Header with padding-bottom */}
+            <div className="pb-14">
+                <CBOHeader user={cboData} />
             </div>
 
             {/* Main content area */}
-            <div className="flex-1 flex pt-10">
-                <CBOComponent user={user} />
-            </div>
+
+            <CBOComponent user={cboData} />
+            <CBOFooter />
+
         </div>
     );
+
+
 };
 
 export default CBOPage;

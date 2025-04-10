@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import deleteFranchise from '@/utils/deleteFranchise';
+import React from 'react';
 import getContractTemplate from '@/utils/getContractTemplate';
 import getQuoteTemplate from '@/utils/getQuoteTemplate';
 
-interface FranchiseInfoProps {
+interface CBOFranchiseInfoProps {
     franchise: any;
-    ownerID: any;
+    owner: any;
 }
 
-const FranchiseInfo: React.FC<FranchiseInfoProps> = ({ franchise, ownerID }) => {
-    const [copied, setCopied] = useState(false);
-    const router = useRouter();
-
+const CBOFranchiseInfo: React.FC<CBOFranchiseInfoProps> = ({ franchise, owner }) => {
+    
+    console.log(owner)
     const downloadQuoteTemplate = async () => {
         try {
             const quoteTemplate = await getQuoteTemplate(franchise?.FranchiseID);
@@ -48,27 +45,7 @@ const FranchiseInfo: React.FC<FranchiseInfoProps> = ({ franchise, ownerID }) => 
         }
     };
 
-    const handleDelete = async () => {
-        try {
-            await deleteFranchise(ownerID);
-            router.push('/members/logging-out');
-        } catch (error) {
-            alert('Failed to delete franchise. Please try again later.');
-        }
-    };
-
-    const handleCopy = async () => {
-        try {
-            await navigator.clipboard.writeText(franchise.FranchiseAccountNumber);
-            setCopied(true);
-            // After 2 seconds, revert back to "Copy"
-            setTimeout(() => {
-                setCopied(false);
-            }, 2000);
-        } catch (error) {
-            console.error('Failed to copy text:', error);
-        }
-    };
+    
 
     return (
         <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg border border-gray-300 p-6">
@@ -81,12 +58,20 @@ const FranchiseInfo: React.FC<FranchiseInfoProps> = ({ franchise, ownerID }) => 
                         {franchise?.franchiseName}
                     </span>
                 </div>
-                <button
-                    onClick={() => router.push('/members/owner/franchise/edit-name')}
-                    className="ml-auto px-4 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded hover:bg-yellow-400 transition"
-                >
-                    Edit
-                </button>
+                
+            </div>
+
+            {/* Horizontal Separator */}
+            <hr className="border-gray-300 mb-6" />
+            <div className="flex items-center mb-6">
+                <div className="flex items-center">
+                    <span className="text-sm font-medium text-gray-700">Owner</span>
+                    <div className="h-6 border-l border-gray-300 mx-4"></div>
+                    <span className="text-lg text-gray-700">
+                        {owner?.firstName} {owner?.lastName}
+                    </span>
+                </div>
+                
             </div>
 
             {/* Horizontal Separator */}
@@ -94,30 +79,26 @@ const FranchiseInfo: React.FC<FranchiseInfoProps> = ({ franchise, ownerID }) => 
 
             <div className="flex items-center mb-6">
                 <div className="flex items-center">
-                    <span className="text-sm font-medium text-gray-700">Franchise ID#</span>
+                    <span className="text-sm font-medium text-gray-700">Email</span>
                     <div className="h-6 border-l border-gray-300 mx-4"></div>
-                    <span className="text-lg text-[#001F54]">
-                        {franchise?.FranchiseAccountNumber}
+                    <span className="text-lg text-gray-700">
+                        {owner?.email}
                     </span>
                 </div>
-                <button
-                    onClick={handleCopy}
-                    className="ml-auto px-4 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded hover:bg-yellow-400 transition"
-                >
-                    {copied ? '✓' : 'Copy'}
-                </button>
-
+                
             </div>
 
+            {/* Horizontal Separator */}
             <hr className="border-gray-300 mb-6" />
 
+            
             <div className="flex items-center">
                 <div className="flex items-center">
                     <span className="text-sm font-medium text-gray-700">Quote Template</span>
                     <div className="h-6 border-l border-gray-300 mx-4"></div>
                     <span
                         onClick={downloadQuoteTemplate}
-                        className="text-lg text-[#001F54] cursor-pointer hover:underline"
+                        className="text-lg text-gray-700 cursor-pointer hover:underline"
                     >
                         {franchise?.quoteTemplate}
                     </span>
@@ -143,12 +124,7 @@ const FranchiseInfo: React.FC<FranchiseInfoProps> = ({ franchise, ownerID }) => 
 
 
                 </div>
-                <button
-                    onClick={() => router.push('/members/owner/franchise/edit-template/quote')}
-                    className="ml-auto px-4 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded hover:bg-yellow-400 transition"
-                >
-                    Edit
-                </button>
+                
             </div>
 
             <hr className="border-gray-300 my-6" />
@@ -159,7 +135,7 @@ const FranchiseInfo: React.FC<FranchiseInfoProps> = ({ franchise, ownerID }) => 
                     <div className="h-6 border-l border-gray-300 mx-4"></div>
                     <span
                         onClick={downloadContractTemplate}
-                        className="text-lg text-[#001F54] cursor-pointer hover:underline"
+                        className="text-lg text-gray-700 cursor-pointer hover:underline"
                     >
                         {franchise?.contractTemplate}
                     </span>
@@ -185,34 +161,14 @@ const FranchiseInfo: React.FC<FranchiseInfoProps> = ({ franchise, ownerID }) => 
 
 
                 </div>
-                <button
-                    onClick={() => router.push('/members/owner/franchise/edit-template/contract')}
-                    className="ml-auto px-4 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded hover:bg-yellow-400 transition"
-                >
-                    Edit
-                </button>
+                
             </div>
 
-            {/* Separator between PDF Template and Delete Section */}
-            <hr className="border-gray-300 my-6" />
-
-            <div className="flex items-center">
-                <div className="flex items-center">
-                    <span className="text-sm font-medium text-gray-700">Delete Franchise</span>
-                    <div className="h-6 border-l border-gray-300 mx-4"></div>
-                    <span className="text-lg text-gray-700">{franchise?.contractPdf}</span>
-                </div>
-                <button
-                    onClick={handleDelete}
-                    className="ml-auto px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-300"
-                >
-                    Delete Franchise
-                </button>
-            </div>
+            
 
 
         </div>
     );
 };
 
-export default FranchiseInfo;
+export default CBOFranchiseInfo;

@@ -2,21 +2,23 @@
 
 import React, { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
-import fetchCBOById from '@/utils/getCBOByID';
+import fetchOwnerById from '@/utils/getOwnerById';
 import LoadingSpinner from '@/components/loadingScreen'
-import CBOAvaQuotes from '@/components/CBOAvailableQuotes';
-import CBOFooter from '../CBOFooter';
-import CBOHeader from '../CBOHeader';
+
+import CBOQuote from '../SingleCBOQuoteAvailable';
+import CBOFooter from '@/components/CBOFooter'; 
 
 import { useRouter } from 'next/navigation';
+import fetchCBOById from '@/utils/getCBOByID';
 
 
 
-interface CBOAvaQuotesPageProps {
+interface CBOSingleQuoteProps {
     user: any;
-}
+    requestID: any;
+  }
 
-const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ user }) => {
+const CBOSingleAvailableQuote: React.FC<CBOSingleQuoteProps> = ({ user, requestID }) => {
     const router = useRouter()
     const [cboData, setCBOData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +54,7 @@ const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ user }) => {
       if (!cboData) {
         return (
           <div className="flex items-center justify-center min-h-screen">
-            <p>CBO data not found.</p>
+            <p>Member data not found.</p>
           </div>
         );
       }
@@ -61,21 +63,14 @@ const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ user }) => {
     //console.log("pages/MemberPage.tsx:", user);
     //console.log(isOwner)
     return (
-        <div className="flex flex-col min-h-screen">
-            {/* Header with padding-bottom */}
-            <div className="pb-10">
-                <CBOHeader user={cboData} />
-            </div>
+        <div className="flex flex-col w-full min-h-screen">
 
-            <div className='pt-24'>
-                <CBOAvaQuotes user={cboData} />
-            </div>
+            <CBOQuote user={cboData} requestID={requestID}/>
             <CBOFooter />
-
         </div>
     );
 
 
 };
 
-export default CBOAvaQuotesPage;
+export default CBOSingleAvailableQuote;

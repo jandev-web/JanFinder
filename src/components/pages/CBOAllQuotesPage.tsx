@@ -4,19 +4,19 @@ import React, { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
 import fetchCBOById from '@/utils/getCBOByID';
 import LoadingSpinner from '@/components/loadingScreen'
-import CBOAvaQuotes from '@/components/CBOAvailableQuotes';
 import CBOFooter from '../CBOFooter';
+import AllQuotes from '../CBOAllQuotes';
 import CBOHeader from '../CBOHeader';
 
 import { useRouter } from 'next/navigation';
 
 
 
-interface CBOAvaQuotesPageProps {
+interface CBOAllQuotesPageProps {
     user: any;
 }
 
-const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ user }) => {
+const CBOAllQuotesPage: React.FC<CBOAllQuotesPageProps> = ({ user }) => {
     const router = useRouter()
     const [cboData, setCBOData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -29,9 +29,9 @@ const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ user }) => {
               return;
             }
     
-            // Fetch owner data by user ID
-            const fetchedCBOData = await fetchCBOById(user.userId);
-            setCBOData(fetchedCBOData);
+            
+            const fetchedOwnerData = await fetchCBOById(user.userId);
+            setCBOData(fetchedOwnerData);
           } catch (error) {
             console.error('Error fetching current user:', error);
             router.push('/error'); // Redirect to an error page if needed
@@ -68,9 +68,10 @@ const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ user }) => {
             </div>
 
             <div className='pt-24'>
-                <CBOAvaQuotes user={cboData} />
+              <AllQuotes user={cboData} />
             </div>
             <CBOFooter />
+            
 
         </div>
     );
@@ -78,4 +79,4 @@ const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ user }) => {
 
 };
 
-export default CBOAvaQuotesPage;
+export default CBOAllQuotesPage;

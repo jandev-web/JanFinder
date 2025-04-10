@@ -13,6 +13,22 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      keyframes: {
+        drawCircle: {
+          'to': { strokeDashoffset: '0' },
+        },
+        drawCheck: {
+          'to': { strokeDashoffset: '0', opacity: '1' },
+        },
+        fadeIn: {
+          'to': { opacity: '1' },
+        },
+      },
+      animation: {
+        drawCircle: 'drawCircle 1s forwards',
+        drawCheck: 'drawCheck 0.5s forwards',
+        fadeIn: 'fadeIn 0.5s forwards',
+      },
     },
   },
   plugins: [],

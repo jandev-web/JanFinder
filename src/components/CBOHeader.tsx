@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import fetchCBOById from '@/utils/getCBOByID'
-import LoadingSpinner from '@/components/loadingScreen'
+
+import { FaUserCircle } from 'react-icons/fa';
 
 
 interface CBOHeaderProps {
@@ -12,79 +11,83 @@ interface CBOHeaderProps {
 }
 
 const CBOHeader: React.FC<CBOHeaderProps> = ({ user }) => {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const [cboInfo, setCBOInfo] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    const fetchOwnerInfo = async () => {
-      if (user?.sub) {
-        try {
-          const fetchedCBOInfo = await fetchCBOById(user.sub);
-          setCBOInfo(fetchedCBOInfo);
-          
-        } catch (err) {
-          setError('Failed to fetch owner information');
-          console.error('Error fetching owner info:', err);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchOwnerInfo();
-  }, [user]);
-
   
+    return (
+      <header className="fixed top-0 w-full z-50 bg-white shadow-lg">
+        <div className="mx-auto flex w-full relative z-20">
+          {/* Logo on the Left */}
+          <div className="flex-shrink-0 pr-6 pl-6 pt-8 z-20">
+            <Link href="/members/sign-in" className="text-[#001F54] font-bold">
+              <h1 className="text-5xl">Bid<span className="text-yellow-500">2</span>Clean</h1>
+            </Link>
+            <p className='pl-10 italic'>Franchise Member Area</p>
+          </div>
 
-  if (loading) {
-    return (
-      <LoadingSpinner />
-    );
-}
-  else {
-    return (
-      <header className="bg-green-600 text-white p-4 shadow-md w-full fixed top-0 left-0">
-        <nav className="flex justify-between items-center max-w-screen-xl mx-auto w-full">
-          
-          <ul className="flex items-center space-x-6">
-            <li>
-              <Link href="/members/cbo" className="hover:text-yellow-300">
-                {cboInfo?.firstName}&apos;s Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link href="/members/cbo/profile" className="hover:text-yellow-300">
-                Profile
-              </Link>
-            </li>
-            <li>
-              <Link href="/members/cbo/subscription" className="hover:text-yellow-300">
-                Manage Subscription
-              </Link>
-            </li>
-            {user && (
-              <li>
-                <Link href="/members/logging-out" className="hover:text-yellow-300">
+          {/* Navigation and Gradient Bar */}
+          <div className="flex flex-col w-full">
+            {/* Gradient Bar */}
+            <div className="h-10 bg-gradient-to-r from-white to-[#001F54] flex items-center justify-between px-4">
+              {/* Placeholder for additional content */}
+              <div></div>
+              {/* Right side */}
+              <div>
+                <Link
+                  href="/members/logging-out"
+                  className="text-white text-lg mr-6 font-medium hover:text-yellow-500 transition duration-300"
+                >
                   Log Out
                 </Link>
-              </li>
-            )}
-          </ul>
-    
-          <ul className="flex items-center space-x-6">
-            <li>
-              <Link href="/members/cbo/quotes" className="hover:text-yellow-300">
-                Manage Quotes
-              </Link>
-            </li>
-          </ul>
-          
-        </nav>
+              </div>
+            </div>
+
+            {/* Navigation Links */}
+            <nav className="flex items-center justify-center space-x-6  mt-4 pr-6">
+              <div className="flex items-center space-x-6">
+                <Link
+                  href="/members/cbo"
+                  className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
+
+                >
+                  Dashboard
+                  <div className="h-[2px] bg-yellow-500 w-full mt-1 transition duration-300 group-hover:bg-[#001F54]"></div>
+
+                </Link>
+                <div className="h-8 border-l border-gray-300"></div>
+                <Link
+                  href="/members/cbo/franchise"
+                  className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
+
+                >
+                  Franchise
+                  <div className="h-[2px] bg-yellow-500 w-full mt-1 transition duration-300 group-hover:bg-[#001F54]"></div>
+
+                </Link>
+                <div className="h-8 border-l border-gray-300"></div>
+                <Link
+                  href="/members/cbo/quotes"
+                  className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
+
+                >
+                  Quotes
+                  <div className="h-[2px] bg-yellow-500 w-full mt-1 transition duration-300 group-hover:bg-[#001F54]"></div>
+
+                </Link>
+                <div className="h-8 border-l border-gray-300"></div>
+                <Link
+                  href="/members/cbo/profile"
+                  className="flex items-center justify-center bg-yellow-400 text-[#001F54] text-lg font-medium px-4 py-2 rounded-full transition duration-300 hover:bg-[#001F54] hover:text-white"
+                >
+                  <FaUserCircle size={28} />
+                  <p className='pl-2'>{user.firstName}</p>
+                </Link>
+              </div>
+            </nav>
+
+          </div>
+        </div>
       </header>
+
     );
-    
-  };
 };
 
 export default CBOHeader;

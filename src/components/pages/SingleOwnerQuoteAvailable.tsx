@@ -182,7 +182,7 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID }) => {
                       <strong>Company:</strong> {customerData.company}
                     </li>
                     <li>
-                      <strong>Customer:</strong> {customerData.firstName}
+                      <strong>Customer:</strong> {customerData.firstName} {customerData.lastName}
                     </li>
                     <li>
                       <strong>Email:</strong> {customerData.email}
