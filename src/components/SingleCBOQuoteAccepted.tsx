@@ -6,11 +6,10 @@ import getQuoteDetails from '@/utils/getQuoteDetails';
 import getQuotePDF from '@/utils/getQuotePDF';
 import { checkIsOwner } from '@/utils/checkIsOwner';
 import makeQuotePDF from '@/utils/generateQuoteDoc'
-import fetchSellRequestByID from '@/utils/getSellRequestByID'
 import fetchOwnerById from '@/utils/getOwnerById';
 import getFranchiseInfo from '@/utils/getFranchiseInfo';
 import LoadingSpinner from '@/components/loadingScreen'
-import answerSellRequest from '@/utils/answerSellRequest'
+import fetchSellRequestByID from '@/utils/getSellRequestByID';
 interface Task {
     taskName: string;
     taskFrequency: string;
@@ -54,10 +53,10 @@ interface QuoteInfo {
 
 interface CBOQuoteProps {
     user: any;
-    requestID: any;
+    quoteID: any;
 }
 
-const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
+const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
     const router = useRouter();
     const [quoteInfo, setQuoteInfo] = useState<any>(null);
     const [costInfo, setCostInfo] = useState<any>(null);
@@ -69,24 +68,34 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
     const [showAcceptConfirmation, setShowAcceptConfirmation] = useState<boolean>(false);
     const [showRejectConfirmation, setShowRejectConfirmation] = useState<boolean>(false);
     const [isOwner, setIsOwner] = useState<boolean>(false);
-    const [quoteID, setQuoteID] = useState<any>(null)
+
     const [ownerInfo, setOwnerInfo] = useState<any>(null)
     const [franchiseInfo, setFranchiseInfo] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true);
     const [offerTime, setOfferTime] = useState<any>(null)
 
-    console.log(user)
+    console.log(quoteID)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const roleStatus = await checkIsOwner(user);
                 setIsOwner(roleStatus ?? false);
-                if (requestID) {
-                    const data = await fetchSellRequestByID(requestID)
-                    console.log(data)
-                    const sellRequest = data.sellRequest
-                    if (sellRequest) {
+                if (quoteID) {
+                    const quoteData = await getQuoteDetails(quoteID);
+                    console.log(quoteData);
+                    setQuoteInfo(quoteData.quoteInfo);
+                    setCostInfo(quoteData.costInfo);
+                    setQuotePackage(quoteData.Package);
+                    setCustomerData(quoteData.customerData);
+                    setTimestamp(quoteData.Timestamp);
+                    setRoomInfo(quoteData.quoteInfo.roomTypes);
+                    setAddress(quoteData.customerData.address);
+                    const sellRequestID = quoteData.latestRequest
+                    if (sellRequestID) {
+                        const sellRequestData = await fetchSellRequestByID(sellRequestID);
+                        const sellRequest = sellRequestData.sellRequest
+                        console.log(sellRequest)
                         const toID = sellRequest.ToID
                         if (toID) {
                             if (toID != user.CBOID) {
@@ -94,13 +103,6 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
                             }
                         } else {
                             console.error('ToID not provided')
-                        }
-                        const sellQuoteID = sellRequest.QuoteID
-                        setQuoteID(sellQuoteID)
-                        if (sellQuoteID) {
-                            await fetchQuoteDetails(sellQuoteID);
-                        } else {
-                            console.error('Quote ID not provided');
                         }
                         const offeredAt = sellRequest.Timestamp
                         setOfferTime(offeredAt)
@@ -139,37 +141,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
         };
 
         fetchData();
-    }, [requestID, user]);
-
-    const fetchQuoteDetails = async (quoteID: string) => {
-        try {
-            const quoteData = await getQuoteDetails(quoteID);
-            console.log(quoteData);
-            setQuoteInfo(quoteData.quoteInfo);
-            setCostInfo(quoteData.costInfo);
-            setQuotePackage(quoteData.Package);
-            setCustomerData(quoteData.customerData);
-            setTimestamp(quoteData.Timestamp);
-            setRoomInfo(quoteData.quoteInfo.roomTypes);
-            setAddress(quoteData.customerData.address);
-
-        } catch (error) {
-            console.error('Error fetching quote details:', error);
-        }
-    };
-
-    const acceptAvailableQuote = async () => {
-        try {
-            const inFranchise = true
-            const decision = 'accept'
-            console.log('Accepting quote')
-            await answerSellRequest(user.CBOID, requestID, inFranchise, decision);
-            //router.push('/members/cbo/quotes/available')
-
-        } catch (error) {
-            console.error('Error accepting quote:', error);
-        }
-    };
+    }, [quoteID, user]);
 
 
 
@@ -177,6 +149,23 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
 
         router.push('/members/cbo/quotes/available');
 
+    };
+
+    const downloadPDF = async () => {
+        try {
+            const quotePDF = await getQuotePDF(quoteID);
+
+            const response = await fetch(quotePDF.url);
+            const blob = await response.blob();
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${customerData.company}_Contract.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            alert('Failed to download PDF. Please try again later.');
+        }
     };
 
     const formatDate = (timestamp: string) => {
@@ -229,10 +218,10 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
                                 <p className="mt-2 text-lg text-gray-800">${costInfo?.finalCost}</p>
                             </div>
                             <div>
-                                <h2 className="text-2xl font-bold text-[#001F54]">Offered By:</h2>
+                                <h2 className="text-2xl font-bold text-[#001F54]">Sold By:</h2>
                                 <p className="mt-2 text-lg text-gray-800">Franchise: {franchiseInfo}</p>
                                 <p className="mt-2 text-lg text-gray-800">Owner: {ownerInfo?.firstName} {ownerInfo?.lastName}</p>
-                                <p className="mt-2 text-lg text-gray-800">Sent At: {offerTime ? formatDate(offerTime) : 'N/A'}</p>
+                                <p className="mt-2 text-lg text-gray-800">Sold At: {offerTime ? formatDate(offerTime) : 'N/A'}</p>
                             </div>
 
                             {address && (
@@ -338,40 +327,16 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
 
                     {/* Accept Quote Actions */}
                     <div className="mt-10 text-center">
-                        {(!showAcceptConfirmation && !showRejectConfirmation)? (
-                            <div>
-                                <button
-                                    onClick={() => setShowAcceptConfirmation(true)}
-                                    className="px-6 py-3 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
-                                >
-                                    Accept Offer
-                                </button>
-                                <button
-                                    onClick={() => setShowRejectConfirmation(true)}
-                                    className="px-6 py-3 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
-                                >
-                                    Decline Offer
-                                </button>
-                            </div>
-                        ) : (
-                            
-                            <div className="flex justify-center space-x-4">
-                                <button
-                                    onClick={() =>
-                                        acceptAvailableQuote()
-                                    }
-                                    className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition"
-                                >
-                                    Confirm Acceptance
-                                </button>
-                                <button
-                                    onClick={() => setShowAcceptConfirmation(false)}
-                                    className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-400 transition"
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        )}
+
+                        <div className="flex justify-center space-x-4">
+                            <button
+                                onClick={() => downloadPDF()}
+                                className="px-6 py-3 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
+                            >
+                                Download Contract PDF
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>

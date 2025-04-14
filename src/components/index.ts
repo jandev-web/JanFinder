@@ -8,8 +8,8 @@ import CBOQuote from "./CBOQuoteCard";
 import PackageRecommendations from "./PackageRecs";
 import QuoteForm from "./QuoteForm";
 import UploadPDFForm from "./UploadPDF";
-import AcceptedQuotes from "./pages/AcceptedQuotes";
-import AvailableQuotes from "./pages/AvailableQuotes";
+
+
 import CustomerInfo from "./pages/CustomerInfo";
 import FinalQuote from "./pages/FinalQuote";
 import SingleCBOQuotePage from "./pages/SingleCBOQuotePage";
@@ -32,8 +32,7 @@ export {
   PackageRecommendations,
   QuoteForm,
   UploadPDFForm,
-  AcceptedQuotes,
-  AvailableQuotes,
+
   CustomerInfo,
   FinalQuote,
   SingleCBOQuotePage,

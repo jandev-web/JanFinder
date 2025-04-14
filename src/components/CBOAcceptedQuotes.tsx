@@ -54,7 +54,7 @@ const CBOAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
   
 
   const handleQuoteClick = (quote: Quote) => {
-    router.push(`/members/owner/quote/accepted?quoteID=${quote.QuoteID}`);
+    router.push(`/members/cbo/quote/accepted?id=${quote.QuoteID}`);
   };
 
   useEffect(() => {
