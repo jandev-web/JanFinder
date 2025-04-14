@@ -7,7 +7,7 @@ import LoginError from '@/components/LoginErrorComponent';
 
 export const dynamic = "force-dynamic";
 
-export default async function AllQuotesPage() {
+export default async function AcceptedQuotesPage() {
   try {
     // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();

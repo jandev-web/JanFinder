@@ -1,30 +1,36 @@
-import React from "react";
-import "@aws-amplify/ui-react/styles.css"; // Ensure the styles are imported
-import CBOHeader from "@/components/CBOHeader";
-import { AcceptedQuotes } from "@/components";
-import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
+import React from 'react';
+import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
+import { redirect } from 'next/navigation';
+import CBOAcceptedQuotesPage from '@/components/pages/CBOAccQuotesPage';
+import LoginError from '@/components/LoginErrorComponent';
+
 
 export const dynamic = "force-dynamic";
 
 
-export default async function AcceptedQuotesPage() {
-  // Fetch user data server-side
-  const user = await AuthGetCurrentUserServer();
+export default async function AllQuotesPage() {
+  try {
+    // Fetch the authenticated user on the server
+    const user = await AuthGetCurrentUserServer();
 
-  if (!user) {
-    return <div>User not authenticated</div>; // Handle unauthenticated state
+    // Redirect to the login page if the user is not authenticated
+    if (!user) {
+      redirect('/login');
+    }
+
+    return (
+      <div className="flex w-full flex-col min-h-screen">
+        <CBOAcceptedQuotesPage user={user} />
+      </div>
+    );
+  } catch (error) {
+    console.error('Error fetching user:', error);
+
+    // Redirect to the login page if an error occurs
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <LoginError />
+      </div>
+    );
   }
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      {/* Header Section */}
-      <div className="pt-10">
-        <CBOHeader user={user} />
-      </div>
-      {/* Accepted Quotes Section */}
-      <div className="flex-1 flex pt-10">
-        <AcceptedQuotes user={user} />
-      </div>
-    </div>
-  );
 }

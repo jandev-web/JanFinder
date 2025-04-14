@@ -11,7 +11,7 @@ import fetchSellRequestByID from '@/utils/getSellRequestByID'
 import fetchOwnerById from '@/utils/getOwnerById';
 import getFranchiseInfo from '@/utils/getFranchiseInfo';
 import LoadingSpinner from '@/components/loadingScreen'
-
+import answerSellRequest from '@/utils/answerSellRequest'
 interface Task {
     taskName: string;
     taskFrequency: string;
@@ -161,9 +161,11 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
 
     const acceptAvailableQuote = async () => {
         try {
+            const inFranchise = true
+            const decision = 'accept'
             console.log('Accepting quote')
-            await acceptQuoteOwner(quoteID, user.franchiseID, user.OwnerID);
-            router.push('/members/cbo/quotes/available')
+            await answerSellRequest(user.CBOID, requestID, inFranchise, decision);
+            //router.push('/members/cbo/quotes/available')
 
         } catch (error) {
             console.error('Error accepting quote:', error);

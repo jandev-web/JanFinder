@@ -1,5 +1,5 @@
 
-export default async function fetchSellRequestByID(userID, requestID, inFranchise, decision) {
+export default async function answerSellRequest(userID, requestID, inFranchise, decision) {
     const apiKey = process.env.NEXT_PUBLIC_ANSWER_SELL_REQUEST_KEY;
     const url = process.env.NEXT_PUBLIC_ANSWER_SELL_REQUEST_URL;
     //console.log(id)

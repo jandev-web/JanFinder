@@ -7,8 +7,12 @@ type Address = {
   state: string;
 }
 
-type Quote = {
+interface Quote {
   QuoteID: string;
+  costInfo: {
+    finalCost: number;
+  };
+  CBO: string;
   Timestamp: string;
   Package: {
     name: string;
@@ -18,12 +22,12 @@ type Quote = {
     firstName: string;
     lastName: string;
     company: string;
-    address: Address
+    address: Address;
   };
   quoteInfo: {
     sqft: string;
   };
-};
+}
 
 interface QuoteCardProps {
   quote: Quote;
@@ -31,7 +35,7 @@ interface QuoteCardProps {
 }
 
 const CBOQuote: React.FC<QuoteCardProps> = ({ quote, onClick }) => {
-  const { Package, customerData, quoteInfo } = quote;
+  const { Package, customerData, quoteInfo, costInfo } = quote;
   const [error, setError] = useState<string | null>(null);
   const address = customerData.address
   const stringAddress = `${address.city} ${address.state}, ${address.postalCode}`
@@ -57,7 +61,7 @@ const CBOQuote: React.FC<QuoteCardProps> = ({ quote, onClick }) => {
         {Package && (
           <div className="package-info">
             <p>
-              <strong>Cost:</strong> ${Package.cost.toFixed(2)}
+              <strong>Cost:</strong> ${costInfo.finalCost.toFixed(2)}
             </p>
             <p>
               <strong>Size:</strong> {quoteInfo.sqft} sqft
