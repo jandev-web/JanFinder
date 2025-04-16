@@ -44,7 +44,6 @@ interface AccQuotesProps {
 const CBOAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  console.log(user)
   const CBOID = user?.CBOID;
   const franchiseID = user?.franchiseID
   const [franInfo, setFranInfo] = useState<any>(null);
@@ -62,12 +61,10 @@ const CBOAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
       const fetchInfo = async () => {
         try {
           const data = await getCBOQuotes(CBOID);
-          console.log(data)
           
           setQuotes(data.quotes)
           
           const franchiseInfo = await getFranchiseInfo(franchiseID)
-          console.log(franchiseInfo)
           setFranInfo(franchiseInfo.franchiseName);
           setLoading(false);
 

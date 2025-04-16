@@ -1,46 +1,27 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { updateQuoteBudget } from '@/utils/updateQuoteBudget';
-import getQuoteDetails from '@/utils/getQuoteDetails';
-import { useRouter } from 'next/navigation';
-import QuoteProgressBar from '@/components/QuoteProgressBar';
 import LoadingSpinner from '@/components/loadingScreen';
 
-const SetQuoteBudget: React.FC = () => {
-  const [budget, setBudget] = useState('None');
-  const [loading, setLoading] = useState(true);
-  const [quoteID, setQuoteID] = useState<string | null>(null);
+interface QuoteFormProps {
+  quoteID: any;
+  quoteBudget: any;
+  onNextStep: (stepNumber: number) => void;
+  onMoveOn: (moveOn: boolean) => void;
+  onChangeBudget: (newBudget: any) => void;
+}
 
-
-  const router = useRouter();
-
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedQuoteID = sessionStorage.getItem('customerData');
-      setQuoteID(storedQuoteID);
-    }
-    setLoading(false);
-  }, []);
+const UpdateQuoteBudget: React.FC<QuoteFormProps> = ({ quoteID, quoteBudget, onNextStep, onMoveOn, onChangeBudget }) => {
+  const [budget, setBudget] = useState(quoteBudget);
+  const [loading, setLoading] = useState(false);
+  
 
   useEffect(() => {
-    if (!quoteID) return;
-    const fetchBudget = async () => {
-      try {
-        console.log(quoteID)
-        const details = await getQuoteDetails(quoteID);
-        const quoteInfo = details.quoteInfo;
-        setBudget(quoteInfo.budget || 'None');
-      } catch (error) {
-        console.error('Error fetching quote frequency:', error);
-        //setErrorMessage('Failed to load frequency data.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBudget();
-  }, [quoteID]);
+          if (!budget || (budget != quoteBudget)) {
+              onMoveOn(false);
+          }
+  
+      }, [budget]);
 
   const handleBudgetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBudget(event.target.value);
@@ -49,8 +30,9 @@ const SetQuoteBudget: React.FC = () => {
   const handleSaveBudget = async () => {
     setLoading(true)
     try {
+      onChangeBudget(budget)
       await updateQuoteBudget(quoteID, budget);
-      router.push('/get-a-quote/packages');
+      onNextStep(5)
     } catch (error) {
       console.error('Error updating budget:', error);
     }
@@ -67,8 +49,7 @@ const SetQuoteBudget: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
-      <QuoteProgressBar stepNumber={5} />
+    <div className="flex flex-col">
       <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">Step <span className='text-yellow-500'>5</span>: Your Budget</h1>
         <p className="text-xl">
@@ -86,7 +67,7 @@ const SetQuoteBudget: React.FC = () => {
           placeholder="Enter your budget"
           className="w-full p-3 border-2 border-yellow-500 rounded-lg text-[#001F54] focus:outline-none focus:ring-2 focus:ring-yellow-500 mb-4"
         />
-        {(budgetIsValid) &&
+        {(budgetIsValid && (budget != quoteBudget)) &&
           <button
           onClick={handleSaveBudget}
           className="bg-green-600 items-center hover:bg-green-500 text-center text-white py-3 px-6 rounded transition duration-300 mt-8">
@@ -100,4 +81,4 @@ const SetQuoteBudget: React.FC = () => {
   );
 };
 
-export default SetQuoteBudget;
+export default UpdateQuoteBudget;

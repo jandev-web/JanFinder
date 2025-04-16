@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { updatePackage } from '@/utils/updatePackageChoice';
-import { useRouter } from 'next/navigation';
+
 import updateQuoteCost from '@/utils/updateQuoteCost';
 import roundingUtil from '@/utils/roundingUtil';
 
@@ -30,7 +30,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, cost, quoteID }
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
   const [finalCost, setFinalCost] = useState(cost);
 
-  const router = useRouter();
+  
 
   useEffect(() => {
     let calculatedCost = roundingUtil(cost);
@@ -48,7 +48,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, cost, quoteID }
       const roundCost = roundingUtil(finalCost)
       await updateQuoteCost(quoteID, { finalCost: roundCost });
 
-      console.log(response)
+      
       if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
         setTimeout(() => {

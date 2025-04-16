@@ -30,7 +30,6 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
   const [loading, setLoading] = useState(true);
   const [originalInfo, setOriginalInfo] = useState<any>(customerDetails)
 
-  console.log(customerDetails)
 
   const validateEmail = (email: string) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
 
@@ -50,7 +49,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
     setLoading(true);
     if (quoteID) {
       if (customerDetails) {
-        
+
         setFirstName(customerDetails.firstName)
         setLastName(customerDetails.lastName)
         setEmail(customerDetails.email)
@@ -86,7 +85,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
     setIsFormValid(isValid);
   }, [firstName, lastName, email, phone, company, street, city, state, postalCode, country]);
 
-  
+
 
   const handleAddressChange = (field: string, value: string) => {
     switch (field) {
@@ -109,7 +108,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
   };
 
   const normalizeCustomerInfo = (info: any) => ({
-    
+
     firstName: info.firstName || "",
     lastName: info.lastName || "",
     email: info.email || "",
@@ -123,10 +122,9 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
       country: info.address?.country || ""
     }
   });
-  
+
   const hasChanged = () => {
-    console.log("Original Info:", originalInfo);
-    
+
     const normalizedOriginal = normalizeCustomerInfo(originalInfo);
     const normalizedNew = {
       firstName,
@@ -136,22 +134,20 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
       company,
       address: { street, city, state, postalCode, country }
     };
-    console.log("Normalized Original:", normalizedOriginal);
-    console.log("Normalized New:", normalizedNew);
-    const result =
-      JSON.stringify(normalizedOriginal) !== JSON.stringify(normalizedNew);
-    console.log("Has Changed:", result);
+
+    const result = JSON.stringify(normalizedOriginal) !== JSON.stringify(normalizedNew);
+
     return result;
   };
 
   useEffect(() => {
     const didChange = hasChanged()
-    
+
     if (isFormValid && !didChange) {
       onMoveOn(true)
     }
 
-    
+
 
   }, [isFormValid]);
 
@@ -179,7 +175,6 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
         address
       }
       onChangeInfo(newDetails);
-      console.log(result)
       onNextStep(1)
     } catch (error) {
       console.error('Error creating quote:', error);
@@ -192,7 +187,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
     return <LoadingSpinner />;
   }
 
- 
+
 
   return (
     <div>

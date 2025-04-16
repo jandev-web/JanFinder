@@ -4,10 +4,11 @@ import React, { useState, useEffect } from 'react';
 import LoadingSpinner from '@/components/loadingScreen';
 import PackageComparison from '@/components/PackageCompare';
 import PackageCard from '@/components/PackageCard';
-import getQuoteDetails from '@/utils/getQuoteDetails';
-import getPackageRecs from '@/utils/getPackageRecs';
-import QuoteProgressBar from '../QuoteProgressBar';
-import { useRouter } from 'next/navigation';
+import { updatePackage } from '@/utils/updatePackageChoice';
+
+import updateQuoteCost from '@/utils/updateQuoteCost';
+import roundingUtil from '@/utils/roundingUtil';
+
 import recPackageUtil from '@/utils/recPackageUtil'
 interface Task {
   taskName: string;
@@ -25,9 +26,19 @@ interface PackageOption {
   description: string;
 }
 
+interface QuoteFormProps {
+  quoteID: any;
+  quotePackage: any;
+  quotePackageOptions: any;
+  quoteCost: any;
+  onNextStep: (stepNumber: number) => void;
+  onMoveOn: (moveOn: boolean) => void;
+  onChangePackage: (newPackage: any) => void;
+}
 
-const Packages: React.FC = () => {
-  const [quoteID, setQuoteID] = useState<string | null>(null);
+
+const Packages: React.FC<QuoteFormProps> = ({ quoteID, quoteCost, quotePackage, quotePackageOptions, onNextStep, onMoveOn, onChangePackage }) => {
+
   const [loading, setLoading] = useState(true);
   const [packages, setPackages] = useState<PackageOption[] | null>(null);
   const [recPackage, setRecPackage] = useState<PackageOption | null>(null);
@@ -35,26 +46,19 @@ const Packages: React.FC = () => {
   const [showComparison, setShowComparison] = useState(false);
   const [cost, setCost] = useState(0);
   const [packageName, setPackageName] = useState<string | null>(null);
-  const router = useRouter();
+
 
   useEffect(() => {
     const fetchQuote = async () => {
       setLoading(true);
       try {
         if (typeof window !== "undefined") {
-          const storedQuoteID = sessionStorage.getItem('customerData');
 
-          if (!storedQuoteID) {
-            console.warn('No quoteID found in sessionStorage.');
-            router.push('/quote');
-            return;
-          }
 
-          setQuoteID(storedQuoteID);
 
-          console.log(`Fetching quote details for quoteID: ${storedQuoteID}`);
+
           const details = await getQuoteDetails(storedQuoteID);
-          console.log('Quote details:', details);
+
 
           const packageInfo = await getPackageRecs(storedQuoteID);
           console.log('Package recommendations:', packageInfo);
@@ -87,6 +91,12 @@ const Packages: React.FC = () => {
     setShowComparison(false)
   }
 
+  const handleSubmit = () => {
+    const response = await updatePackage(quoteID, pkg);
+    const roundCost = roundingUtil(finalCost)
+    await updateQuoteCost(quoteID, { finalCost: roundCost });
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -103,25 +113,13 @@ const Packages: React.FC = () => {
     );
   }
 
-  if (!quoteID) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <LoadingSpinner />
-        <p className="text-white mt-4">No quote found, please start the process again.</p>
-      </div>
-    );
-  }
+
 
 
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
-      {/* Progress Bar */}
+    <div className="flex flex-col">
 
-      <QuoteProgressBar stepNumber={6} />
-
-
-      {/* Blurb Below Progress Bar */}
       <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">Step <span className='text-yellow-500'>6</span>: Choose your Package</h1>
         <p className="text-xl">

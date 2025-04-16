@@ -23,20 +23,14 @@ interface QuoteFormProps {
 
 const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo, onLoading }) => {
   
-  console.log(facilityType)
   const [newFacilityType, setNewFacilityType] = useState<any>(facilityType);
 
   useEffect(() => {
       if ((newFacilityType != facilityType) || (newFacilityType === '')) {
-        console.log(newFacilityType)
-        console.log(facilityType)
+        
         onMoveOn(false);
       } else {
-        console.log('Move On')
-        console.log(newFacilityType != facilityType)
-        console.log(newFacilityType === '')
-        console.log(newFacilityType)
-        console.log(facilityType)
+        
         onMoveOn(true);
       }
     }, [newFacilityType]);

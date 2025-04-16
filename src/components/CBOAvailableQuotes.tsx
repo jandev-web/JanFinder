@@ -51,7 +51,6 @@ const CBOAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
   const router = useRouter();
   const cboID = user?.CBOID;
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  console.log(userTimeZone); // e.g., "America/New_York"
 
 
   const handleQuoteClick = (quote: Quote) => {
@@ -67,12 +66,10 @@ const CBOAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log('User coordinates:', latitude, longitude);
           // Use OpenStreetMap's Nominatim reverse geocoding API
           fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
             .then((res) => res.json())
             .then((data) => {
-              console.log('Reverse geocoding data:', data);
               const addr = data.address;
               setUserAddress({
                 city: addr.city || addr.town || addr.village || '',
@@ -98,7 +95,6 @@ const CBOAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
       const fetchQuotes = async () => {
         try {
           const data = await fetchAvailableCBOQuotes(cboID);
-          console.log("Available quotes:", data);
           const sellRequests = data?.requests
           if (sellRequests.length > 0) {
             let filteredQuotes = []
@@ -106,7 +102,6 @@ const CBOAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
               const requestQuoteID = sellRequests[i].QuoteID
               const requestQuote = await getQuoteDetails(requestQuoteID)
 
-              console.log(requestQuote)
 
               const offerTime = sellRequests[i].Timestamp
               const requestID = sellRequests[i].RequestID
@@ -130,12 +125,10 @@ const CBOAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
                 customerAddress: customerAddress
               }
               
-              console.log(newQuote)
     
               filteredQuotes.push(newQuote)
               
             }
-            console.log(filteredQuotes)
             setAvaQuotes(filteredQuotes);
           }
 
