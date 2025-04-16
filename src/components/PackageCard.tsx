@@ -24,9 +24,11 @@ interface PackageCardProps {
   cleanPackage: CleanPackage;
   cost: any;
   quoteID: any;
+  onNext: (stepNumber: number) => void;
+  onChangePackage: (pkg: any) => void;
 }
 
-const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, cost, quoteID }) => {
+const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, onChangePackage, cost, quoteID, onNext }) => {
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
   const [finalCost, setFinalCost] = useState(cost);
 
@@ -47,16 +49,13 @@ const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, cost, quoteID }
       const response = await updatePackage(quoteID, pkg);
       const roundCost = roundingUtil(finalCost)
       await updateQuoteCost(quoteID, { finalCost: roundCost });
-
+      onChangePackage(pkg);
       
       if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
-        setTimeout(() => {
-
-          router.push(`/get-a-quote/confirm`);
-        }, 1000);
+        onNext(6)
       } else {
-        setConfirmationMessage('Failed to update package. Please try again.');
+        //setConfirmationMessage('Failed to update package. Please try again.');
       }
     } catch (error) {
       console.error('Error updating package:', error);

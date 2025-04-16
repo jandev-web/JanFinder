@@ -10,7 +10,7 @@ interface QuoteFormProps {
     quoteFrequency: any;
     onNextStep: (stepNumber: number) => void;
     onMoveOn: (moveOn: boolean) => void;
-    onChangeFrequency: (newFrequency: any) => void;
+    onChangeFrequency: (newFrequency: any, newCost: any) => void;
 }
 
 const UpdateQuoteFrequency: React.FC<QuoteFormProps> = ({ quoteID, quoteFrequency, onNextStep, onMoveOn, onChangeFrequency }) => {
@@ -42,9 +42,10 @@ const UpdateQuoteFrequency: React.FC<QuoteFormProps> = ({ quoteID, quoteFrequenc
     const handleSaveFrequency = async () => {
         try {
             setLoading(true)
-            onChangeFrequency(frequency);
+            
             await updateQuoteFrequency(quoteID, frequency);
-            await calculateUpdateCost(quoteID, frequency);
+            const newCost = await calculateUpdateCost(quoteID, frequency);
+            onChangeFrequency(frequency, newCost);
             onNextStep(4)
         } catch (error) {
             console.error('Error updating frequency:', error);

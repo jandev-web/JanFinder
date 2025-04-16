@@ -31,6 +31,8 @@ export const calculateUpdateCost = async (quoteID, frequency) => {
         await updateCostComponents(quoteID, componentInfo)
         await updateQuoteCost(quoteID, costInfo)
 
+        return finalCost
+
     } catch (error) {
         console.error('Error getting time:', error);
         throw new Error('An unexpected error occurred while getting time. Please try again later.');

@@ -12,10 +12,11 @@ interface Room {
 
 interface CustomerRoomListProps {
   rooms: Room[];
+  listLoading: boolean;
   onDeleteRoom: (room: Room) => Promise<void>;
 }
 
-const CustomerRoomList: React.FC<CustomerRoomListProps> = ({ rooms, onDeleteRoom }) => {
+const CustomerRoomList: React.FC<CustomerRoomListProps> = ({ rooms, onDeleteRoom, listLoading }) => {
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async (room: Room) => {

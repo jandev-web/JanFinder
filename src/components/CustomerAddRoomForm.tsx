@@ -24,7 +24,7 @@ const CustomerAddRoomForm: React.FC<CustomerAddRoomFormProps> = ({ onAddRoom, on
   const [loading, setLoading] = useState(false)
   // Options for the floor type dropdown.
   const floorTypeOptions = ['Carpet', 'Other'];
-
+  console.log('roomTypeOptions', roomTypeOptions)
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Convert sqft to a number before passing it up.

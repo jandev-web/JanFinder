@@ -30,71 +30,44 @@ interface QuoteFormProps {
   quoteID: any;
   quotePackage: any;
   quotePackageOptions: any;
-  quoteCost: any;
+  cost: any;
+  recPackage: any;
   onNextStep: (stepNumber: number) => void;
   onMoveOn: (moveOn: boolean) => void;
   onChangePackage: (newPackage: any) => void;
 }
 
 
-const Packages: React.FC<QuoteFormProps> = ({ quoteID, quoteCost, quotePackage, quotePackageOptions, onNextStep, onMoveOn, onChangePackage }) => {
+const Packages: React.FC<QuoteFormProps> = ({ quoteID, cost, quotePackage, quotePackageOptions, recPackage, onNextStep, onMoveOn, onChangePackage }) => {
 
-  const [loading, setLoading] = useState(true);
-  const [packages, setPackages] = useState<PackageOption[] | null>(null);
-  const [recPackage, setRecPackage] = useState<PackageOption | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [packages, setPackages] = useState<any>(quotePackageOptions);
+  const [newRecPackage, setNewRecPackage] = useState<any>(recPackage);
   const [error, setError] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
-  const [cost, setCost] = useState(0);
   const [packageName, setPackageName] = useState<string | null>(null);
+  const [chosenPackage, setChosenPackage] = useState<any>(quotePackage)
 
+  console.log("recPackage", recPackage)
+  console.log("quotePackage", quotePackage)
+  console.log("quotePackageOptions", quotePackageOptions)
+  console.log("cost", cost)
 
   useEffect(() => {
-    const fetchQuote = async () => {
-      setLoading(true);
-      try {
-        if (typeof window !== "undefined") {
+    if (!chosenPackage || (chosenPackage != quotePackage)) {
+      onMoveOn(false);
+    }
 
+  }, [chosenPackage]);
 
-
-
-          const details = await getQuoteDetails(storedQuoteID);
-
-
-          const packageInfo = await getPackageRecs(storedQuoteID);
-          console.log('Package recommendations:', packageInfo);
-          const costInfo = details.costInfo;
-          const baseCost = costInfo.baseCost
-          const budget = details.quoteInfo.budget
-          setCost(baseCost)
-          const recPackageName = recPackageUtil(baseCost, budget)
-          setPackageName(recPackageName)
-          const newRecPackage = packageInfo.find((pkg: PackageOption) => pkg.name === recPackageName);
-
-          setPackages(packageInfo);
-
-          if (newRecPackage) {
-            setRecPackage(newRecPackage);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching quote or package details:', error);
-        setError('Failed to load packages. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchQuote();
-  }, [router]);
+  const handlePackageChange = async (pkg: any) => {
+    setLoading(true)
+    setChosenPackage(pkg);
+    onChangePackage(pkg);
+  };
 
   const handleGoBack = () => {
-    setShowComparison(false)
-  }
-
-  const handleSubmit = () => {
-    const response = await updatePackage(quoteID, pkg);
-    const roundCost = roundingUtil(finalCost)
-    await updateQuoteCost(quoteID, { finalCost: roundCost });
+    setShowComparison(false);
   }
 
   if (loading) {
@@ -129,25 +102,48 @@ const Packages: React.FC<QuoteFormProps> = ({ quoteID, quoteCost, quotePackage, 
 
 
       {showComparison && packages ? (
-        <PackageComparison onBack={handleGoBack} cost={cost} packages={packages} recPackage={recPackage} quoteID={quoteID} />
+        <PackageComparison onNext={onNextStep} onBack={handleGoBack} onChangePackage={handlePackageChange} cost={cost} packages={packages} recPackage={newRecPackage} quoteID={quoteID} />
       ) : (
-        <div className="bg-gradient-to-br from-white to-gray-200 flex flex-col items-center p-8 mb-8 rounded-xl shadow-2xl max-w-2xl w-full border border-yellow-500">
-          <h2 className="text-3xl font-bold text-[#001F54] mb-6 text-center">
-            Our Recommended Package
-          </h2>
-          {recPackage ? (
-            <PackageCard cleanPackage={recPackage} cost={cost} quoteID={quoteID} />
-          ) : (
-            <p className="text-center">No recommended package available.</p>
-          )}
+        <div>
+          <div className="bg-gradient-to-br from-white to-gray-200 flex flex-col items-center p-8 mb-8 rounded-xl shadow-2xl max-w-2xl w-full border border-yellow-500">
+            <h2 className="text-3xl font-bold text-[#001F54] mb-6 text-center">
+              Our Recommended Package
+            </h2>
+            {recPackage ? (
+              <PackageCard cleanPackage={recPackage} onNext={onNextStep} cost={cost} quoteID={quoteID} onChangePackage={handlePackageChange} />
+            ) : (
+              <p className="text-center">No recommended package available.</p>
+            )}
 
-          <div className="flex justify-center mt-6">
-            <button
-              className="bg-[#001F54] text-white px-4 py-2 rounded-lg transition"
-              onClick={() => setShowComparison(true)}
-            >
-              See All Packages
-            </button>
+
+            <div className="flex justify-center mt-6">
+              <button
+                className="bg-[#001F54] text-white px-4 py-2 rounded-lg transition"
+                onClick={() => setShowComparison(true)}
+              >
+                See All Packages
+              </button>
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-white to-gray-200 flex flex-col items-center p-8 mb-8 rounded-xl shadow-2xl max-w-2xl w-full border border-yellow-500">
+            <h2 className="text-3xl font-bold text-[#001F54] mb-6 text-center">
+              Your Chosen Package
+            </h2>
+            {recPackage ? (
+              <PackageCard cleanPackage={quotePackage} onNext={onNextStep} cost={cost} quoteID={quoteID} onChangePackage={handlePackageChange} />
+            ) : (
+              <p className="text-center">No recommended package available.</p>
+            )}
+
+
+            <div className="flex justify-center mt-6">
+              <button
+                className="bg-[#001F54] text-white px-4 py-2 rounded-lg transition"
+                onClick={() => setShowComparison(true)}
+              >
+                See All Packages
+              </button>
+            </div>
           </div>
         </div>
       )}

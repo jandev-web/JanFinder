@@ -28,9 +28,11 @@ interface PackageComparisonProps {
   recPackage: PackageOption | null;
   cost: any;
   quoteID: any;
+  onNext: (stepNumber: number) => void;
+  onChangePackage: (pkg: any) => void;
 }
 
-const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, packages, recPackage, cost, quoteID }) => {
+const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, onNext, onChangePackage, packages, recPackage, cost, quoteID }) => {
   const bronzePackage = packages.find((pkg) => pkg.name === 'Pure Essentials');
   const silverPackage = packages.find((pkg) => pkg.name === 'Radiant Results');
   const goldPackage = packages.find((pkg) => pkg.name === 'Elite Pristine');
@@ -44,7 +46,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, packages,
   const silverCost = roundingUtil(cost / 1.2);
   const goldCost = roundingUtil(cost);
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
-  const router = useRouter();
+  
 
   useEffect(() => {
     setBronzeRec(recPackage?.name === bronzePackage?.name);
@@ -56,6 +58,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, packages,
   const handleSelectPackage = async (pkg: PackageOption) => {
     try {
       const response = await updatePackage(quoteID, pkg);
+      onChangePackage(pkg);
       if (pkg.name === 'Radiant Results') {
         await updateQuoteCost(quoteID, { finalCost: silverCost });
       }
@@ -68,10 +71,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, packages,
 
       if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
-        setTimeout(() => {
-
-          router.push(`/get-a-quote/confirm`);
-        }, 1000);
+        onNext(6)
       } else {
         setConfirmationMessage('Failed to update package. Please try again.');
       }
@@ -81,8 +81,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, packages,
     }
   };
 
-  console.log(packages)
-  console.log(recPackage)
+  
   return (
     <div className="p-8 flex flex-col items-center">
 

@@ -24,19 +24,25 @@ const CustomerAddRooms: React.FC<QuoteFormProps> = ({ quoteID, facilityType, quo
     
     const [loading, setLoading] = useState(false);
     const [hasChanged, setHasChanged] = useState(false)
+    const [listLoading, setListLoading] = useState(false);
+
+    console.log("quoteRooms", quoteRooms)
+
     useEffect(() => {
-            if (!rooms || rooms.length === 0) {
+            if (!rooms || rooms.length === 0 || hasChanged) {
                 setShowAddRoomForm(true);
                 onMoveOn(false);
             }
     }, [rooms]);
 
     const handleAddRoom = async (newRoom: Room) => {
+        setListLoading(true)
         await manualAddRoom(quoteID, newRoom);
         setRooms((prevRooms: any) => [...prevRooms, newRoom]);
         onChangeRooms((prevRooms: any) => [...prevRooms, newRoom])
         setHasChanged(true)
         onMoveOn(true)
+        setListLoading(false)
     };
 
     const handleDeleteRoom = async (oldRoom: Room) => {
@@ -97,7 +103,7 @@ const CustomerAddRooms: React.FC<QuoteFormProps> = ({ quoteID, facilityType, quo
                 </button>
             )}
 
-            <CustomerRoomsList rooms={rooms} onDeleteRoom={handleDeleteRoom} />
+            <CustomerRoomsList rooms={rooms} onDeleteRoom={handleDeleteRoom} listLoading={listLoading}/>
             {((rooms.length > 0) && hasChanged) &&
                 <button onClick={handleSubmit} className="self-center bg-green-600 hover:bg-[#001840] text-white py-3 px-6 rounded transition duration-300 mt-8">
                     Confirm Room Information
