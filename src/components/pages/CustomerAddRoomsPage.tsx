@@ -1,69 +1,62 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import CustomerAddRoomForm, { Room } from '@/components/CustomerAddRoomForm';
 import { manualDeleteRoom } from '@/utils/manualDeleteRoom';
-import getQuoteDetails from '@/utils/getQuoteDetails';
-import { getFacilityOptions } from '@/utils/getFacilityOptions';
 import LoadingSpinner from '@/components/loadingScreen';
 import { manualAddRoom } from '@/utils/manualAddRoom';
-import QuoteProgressBar from '../QuoteProgressBar';
 import CustomerRoomsList from '../CustomerRoomsList';
 
-const CustomerAddRooms: React.FC = () => {
-    const [facilityRooms, setFacilityRooms] = useState<string[]>([]);
-    const [rooms, setRooms] = useState<Room[]>([]);
+interface QuoteFormProps {
+    quoteID: any;
+    facilityType: any;
+    facilityRooms: any;
+    quoteRooms: any;
+    onNextStep: (stepNumber: number) => void;
+    onMoveOn: (moveOn: boolean) => void;
+    onChangeRooms: (facilityRoom: any) => void;
+}
+
+const CustomerAddRooms: React.FC<QuoteFormProps> = ({ quoteID, facilityType, quoteRooms, facilityRooms, onNextStep, onMoveOn, onChangeRooms }) => {
+
+    const [rooms, setRooms] = useState<any>(quoteRooms || []);
     const [showAddRoomForm, setShowAddRoomForm] = useState(false);
-    const [quoteID, setQuoteID] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
-    const router = useRouter();
+    console.log(facilityRooms)
+    console.log(quoteRooms)
+    const [loading, setLoading] = useState(false);
+
 
     // Retrieve the quote ID from session storage
     useEffect(() => {
-        setLoading(true);
-        if (typeof window !== "undefined") {
-            const storedQuoteID = sessionStorage.getItem('customerData');
-            setQuoteID(storedQuoteID);
-            const fetchQuoteDetails = async () => {
-                try {
-                    const facilityDetails = await getFacilityOptions();
-                    const quoteDetails = await getQuoteDetails(storedQuoteID);
-                    const facilityType = quoteDetails.quoteInfo?.facilityType || '';
-
-                    // Update the list of rooms from the quote details.
-                    setRooms(quoteDetails.quoteInfo?.selectedRooms || []);
-                    if (!quoteDetails.quoteInfo?.selectedRooms || quoteDetails.quoteInfo?.selectedRooms.length === 0) {
-                        setShowAddRoomForm(true);
-                    }
-                    // Update facilityRooms based on the facility type.
-                    setFacilityRooms(facilityDetails?.facility_options[facilityType] || []);
-                } catch (error) {
-                    console.error('Error fetching quote details:', error);
-                }
-            };
-            fetchQuoteDetails();
-
-
-        }
-        setLoading(false);
-    }, []);
+            if (!rooms || rooms.length === 0) {
+                setShowAddRoomForm(true);
+                onMoveOn(false);
+            }
+    }, [rooms]);
 
     const handleAddRoom = async (newRoom: Room) => {
-
-        setRooms((prevRooms) => [...prevRooms, newRoom]);
-        // Await the manualAddRoom function before hiding the form.
         await manualAddRoom(quoteID, newRoom);
-
+        setRooms((prevRooms: any) => [...prevRooms, newRoom]);
+        onChangeRooms((prevRooms: any) => [...prevRooms, newRoom])
+        onMoveOn(true)
     };
 
     const handleDeleteRoom = async (oldRoom: Room) => {
-        setRooms((prevRooms) => prevRooms.filter((room) => room !== oldRoom));
+        setLoading(true)
         await manualDeleteRoom(quoteID, oldRoom);
+        setRooms((prevRooms: any) => prevRooms.filter((room: any) => room !== oldRoom));
+        onChangeRooms((prevRooms: any) => prevRooms.filter((room: any) => room !== oldRoom));
         if (rooms.length === 0) {
             setShowAddRoomForm(true);
+            onMoveOn(false);
         }
+        setLoading(false)
     };
+
+    const handleSubmit = async () => {
+        setLoading(true)
+        onNextStep(3)
+      };
 
 
     const onExit = () => {
@@ -88,25 +81,24 @@ const CustomerAddRooms: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
-            <QuoteProgressBar stepNumber={3} />
+        <div className='flex flex-col'>
             <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
                 <h1 className="text-4xl font-bold mb-4">Step <span className='text-yellow-500'>3</span>: Room Information</h1>
                 <p className="text-xl">
-                    Please add the rooms in your facility, along with some important information for each room.
+                    Please add the rooms in your {facilityType} facility, along with some important information for each room.
                 </p>
             </div>
             {showAddRoomForm ? (
                 <CustomerAddRoomForm onAddRoom={handleAddRoom} onExit={onExit} roomTypeOptions={facilityRooms} rooms={rooms} />
             ) : (
-                <button onClick={() => setShowAddRoomForm(true)} className="bg-[#001F54] hover:bg-[#001840] text-white py-3 px-6 rounded transition duration-300 mb-8">
+                <button onClick={() => setShowAddRoomForm(true)} className="self-center bg-[#001F54] hover:bg-[#001840] text-white py-3 px-6 rounded transition duration-300 mb-8">
                     Add Room
                 </button>
             )}
 
             <CustomerRoomsList rooms={rooms} onDeleteRoom={handleDeleteRoom} />
             {(rooms.length > 0) &&
-                <button onClick={() => router.push('/get-a-quote/frequency')} className="bg-green-600 hover:bg-[#001840] text-white py-3 px-6 rounded transition duration-300 mt-8">
+                <button onClick={handleSubmit} className="self-center bg-green-600 hover:bg-[#001840] text-white py-3 px-6 rounded transition duration-300 mt-8">
                     Confirm Room Information
                 </button>
             }

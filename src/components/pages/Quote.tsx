@@ -18,6 +18,15 @@ interface QuoteFormProps {
 }
 
 const Quote: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleLoading = (isLoading: boolean) => {
+    setLoading(isLoading);
+}
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div>
@@ -32,7 +41,7 @@ const Quote: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOption
 
       {/* Form Section */}
       
-        <QuoteForm quoteID={quoteID} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={onNextStep} onMoveOn={onMoveOn} onChangeInfo={onChangeInfo}/>;
+        <QuoteForm quoteID={quoteID} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={onNextStep} onMoveOn={onMoveOn} onChangeInfo={onChangeInfo} onLoading={handleLoading}/>;
       
     </div>
 

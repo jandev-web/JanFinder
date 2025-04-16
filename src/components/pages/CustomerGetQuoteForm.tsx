@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { getFacilityOptions } from '@/utils/getFacilityOptions';
 
 import { getCBOBuildingTypes } from '@/utils/getCBOBuildingTypes';
 import CustomerInfo from "@/components/pages/CustomerInfo";
@@ -10,7 +11,7 @@ import ConfirmPage from '@/components/pages/ConfirmQuote';
 import QuoteProgressBar from '@/components/QuoteProgressBar';
 import LoadingSpinner from '@/components/loadingScreen';
 import getQuoteDetails from '@/utils/getQuoteDetails';
-
+import CustomerAddRooms from './CustomerAddRoomsPage';
 const steps = [
     "Customer Information",
     "Facility Type",
@@ -24,7 +25,7 @@ const steps = [
 
 interface BuildingType {
     name: string;
-  }
+}
 
 const CustomerGetQuoteForm: React.FC = () => {
     const [step, setStep] = useState<number>(1);
@@ -35,7 +36,34 @@ const CustomerGetQuoteForm: React.FC = () => {
     const [canMoveOn, setCanMoveOn] = useState(false);
     const [facilityOptions, setFacilityOptions] = useState<BuildingType[]>([]);
     const [facilityType, setFacilityType] = useState<any>(null);
-    const [customerInfo, setCustomerInfo] = useState<any>(null)
+    const [customerInfo, setCustomerInfo] = useState<any>(null);
+    const [roomOptions, setRoomOptions] = useState<any>(null);
+    const [quoteRooms, setQuoteRooms] = useState<any>(null);
+    const [facilityRooms, setFacilityRooms] = useState<any>({});
+
+    const loadData = async (customerQuoteID: any) => {
+        console.log('Loading Data...')
+        //console.log("Customer Quote ID:", customerQuoteID);
+        setLoading(true)
+        setQuoteID(customerQuoteID)
+        const quoteDetails = await getQuoteDetails(customerQuoteID);
+        console.log("Quote details:", quoteDetails);
+        setCustomerInfo(quoteDetails.customerData)
+        setQuoteInfo(quoteDetails);
+        setQuoteRooms(quoteDetails.quoteInfo.selectedRooms)
+        setFacilityType(quoteDetails.quoteInfo.facilityType)
+        const facilityTypes = await getCBOBuildingTypes();
+        setFacilityOptions(facilityTypes);
+        const facilityRoomOptions = await getFacilityOptions();
+        console.log("facilityRooms", facilityRoomOptions)
+        if (quoteDetails.quoteInfo.facilityType != '') {
+            console.log("facilityType", quoteDetails.quoteInfo.facilityType)
+            console.log("facilityRoomOptions", facilityRoomOptions.facility_options[quoteDetails.quoteInfo.facilityType])
+            setFacilityRooms(facilityRoomOptions.facility_options[quoteDetails.quoteInfo.facilityType])
+        }
+        setRoomOptions(facilityRoomOptions)
+        setLoading(false)
+    }
 
     useEffect(() => {
         const fetchQuote = async () => {
@@ -43,16 +71,8 @@ const CustomerGetQuoteForm: React.FC = () => {
                 const storedQuoteID = sessionStorage.getItem('customerData');
                 console.log("Stored Quote ID:", storedQuoteID);
                 if (storedQuoteID) {
-                    setQuoteID(storedQuoteID);
                     try {
-                        const quoteDetails = await getQuoteDetails(storedQuoteID);
-                        console.log("Quote details:", quoteDetails);
-                        setCustomerInfo(quoteDetails.customerData)
-                        setQuoteInfo(quoteDetails);
-                        setFacilityType(quoteDetails.facilityType)
-                        const facilityTypes = await getCBOBuildingTypes();
-                        setFacilityOptions(facilityTypes);
-
+                        await loadData(storedQuoteID);
                     } catch (error) {
                         console.error("Error fetching quote details:", error);
                     }
@@ -63,21 +83,17 @@ const CustomerGetQuoteForm: React.FC = () => {
         fetchQuote();
     }, []);
 
+   
 
-    const handleLoading = () => {
-        setLoading(true);
-    }
-
-    const handleSetStepOne = () => {
-        setStep(1);
-    }
 
     const handleSetCustomerInfo = (newInfo: any) => {
         setCustomerInfo(newInfo);
     }
 
     const handleSetFacilityType = (newInfo: any) => {
+
         setFacilityType(newInfo);
+        setFacilityRooms(roomOptions.facility_options[facilityType]);
     }
 
     const handleMoveOn = (moveOn: boolean) => {
@@ -89,19 +105,17 @@ const CustomerGetQuoteForm: React.FC = () => {
         setStep(newStep);
     }
 
+    const handleChangeRooms = (newInfo: any) => {
+        setQuoteRooms(newInfo);
+    }
+
 
 
     const startNewQuote = async () => {
         setLoading(true)
         const result = await startQuote();
-        console.log(result.quoteID)
         sessionStorage.setItem('customerData', result.quoteID);
-        setQuoteID(result.quoteID);
-        const quoteDetails = await getQuoteDetails(result.quoteID);
-        console.log("Quote details:", quoteDetails);
-        setQuoteInfo(quoteDetails);
-        setCustomerInfo(quoteDetails.customerData)
-        setLoading(false)
+        loadData(result.quoteID);
     };
 
     if (loading) {
@@ -117,8 +131,10 @@ const CustomerGetQuoteForm: React.FC = () => {
 
     const renderStepComponent = () => {
         switch (step) {
-            case 1: return <CustomerInfo quoteID={quoteID} customerDetails={customerInfo} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeInfo={handleSetCustomerInfo}/>;
-            case 2: return <Quote quoteID={quoteID} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeInfo={handleSetCustomerInfo}/>;
+            case 1: return <CustomerInfo quoteID={quoteID} customerDetails={customerInfo} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeInfo={handleSetCustomerInfo} />;
+            case 2: return <Quote quoteID={quoteID} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeInfo={handleSetFacilityType} />;
+            case 3: return <CustomerAddRooms quoteID={quoteID} facilityRooms={facilityRooms} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeRooms={handleChangeRooms} quoteRooms={quoteRooms}/>;
+
             default: return null;
         }
     };
@@ -162,7 +178,7 @@ const CustomerGetQuoteForm: React.FC = () => {
                     canMoveOn && (
                         <button
                             onClick={() => setStep(step + 1)}
-                            className="px-6 py-2 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition"
+                            className="px-6 py-2 rounded-md bg-[#001F54] text-white font-semibold hover:bg-blue-800 transition"
                         >
                             Next
                         </button>

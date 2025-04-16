@@ -17,18 +17,34 @@ interface QuoteFormProps {
   facilityOptions: BuildingType[];
   onNextStep: (stepNumber: number) => void;
   onMoveOn: (moveOn: boolean) => void;
+  onLoading: (isLoading: boolean) => void;
   onChangeInfo: (newInfo: any) => void;
 }
 
-const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo }) => {
+const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo, onLoading }) => {
   
   console.log(facilityType)
-  const [newFacilityType, setNewFacilityType] = useState<any>(null);
+  const [newFacilityType, setNewFacilityType] = useState<any>(facilityType);
 
-  
+  useEffect(() => {
+      if ((newFacilityType != facilityType) || (newFacilityType === '')) {
+        console.log(newFacilityType)
+        console.log(facilityType)
+        onMoveOn(false);
+      } else {
+        console.log('Move On')
+        console.log(newFacilityType != facilityType)
+        console.log(newFacilityType === '')
+        console.log(newFacilityType)
+        console.log(facilityType)
+        onMoveOn(true);
+      }
+    }, [newFacilityType]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    onLoading(true)
+    onChangeInfo(newFacilityType)
     try {
       await changeFacilityType(quoteID, newFacilityType);
       onNextStep(2)
@@ -51,7 +67,7 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOp
         <div className="flex flex-col text-gray-700">
           <select
             name="facilityType"
-            value={facilityType}
+            value={newFacilityType}
             onChange={(e: ChangeEvent<HTMLSelectElement>) => setNewFacilityType(e.target.value)}
             required
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400"
@@ -67,7 +83,7 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOp
           </select>
         </div>
 
-        {(facilityType != '') && (
+        {(newFacilityType != '' && newFacilityType != facilityType) && (
           <button
             type="submit"
             className="w-full py-4 bg-yellow-500 text-white font-extrabold text-xl rounded-md shadow-md hover:bg-[#001F54] transition duration-300"

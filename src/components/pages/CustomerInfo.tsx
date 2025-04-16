@@ -109,6 +109,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
   };
 
   const normalizeCustomerInfo = (info: any) => ({
+    
     firstName: info.firstName || "",
     lastName: info.lastName || "",
     email: info.email || "",
@@ -124,6 +125,8 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
   });
   
   const hasChanged = () => {
+    console.log("Original Info:", originalInfo);
+    
     const normalizedOriginal = normalizeCustomerInfo(originalInfo);
     const normalizedNew = {
       firstName,
