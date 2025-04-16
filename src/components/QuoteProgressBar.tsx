@@ -5,13 +5,11 @@ interface CustomProgressBarProps {
 }
 
 const CustomProgressBar: React.FC<CustomProgressBarProps> = ({ stepNumber }) => {
-  const progress = stepNumber * 25
+  const progress = stepNumber * (100 / 7)
   return (
     <div className="relative w-full max-w-4xl pt-16 pb-8 mx-auto">
        <div className="text-center mb-4">
-        <span className="text-lg font-bold text-gray-700">
-          Step {stepNumber} of 4
-        </span>
+        
       </div>
 
       {/* Step Numbers */}
@@ -21,10 +19,10 @@ const CustomProgressBar: React.FC<CustomProgressBarProps> = ({ stepNumber }) => 
       <div className="relative h-6 w-full bg-gray-300 rounded-lg overflow-hidden">
         {/* Fading Gradient Bar */}
         <div
-          className="absolute top-0 left-0 h-full animate-continuous-fade"
+          className="absolute top-0 left-0 h-full"
           style={{
             width: `${progress}%`,
-            background: 'linear-gradient(90deg, #FFD700, #1E90FF, #FFD700)',
+            background: '#FFD700',
             backgroundSize: '200% 100%',
           }}
         ></div>

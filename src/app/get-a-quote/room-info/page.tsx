@@ -2,28 +2,27 @@
 
 
 import Header from "@/components/Header";
-
-import AddRoomsQuote from "@/components/AddRoomsQuote";
+import CustomerAddRooms from "@/components/pages/CustomerAddRoomsPage";
 import Footer from '@/components/Footer';
 
-function PackagesPage() {
+function RoomInfoPage() {
   
   return (
-    <div className="flex flex-col w-full min-h-screen">
-      <div className="pb-18">
+    <div className="bg-gray-100 flex w-full flex-col min-h-screen">
+      
         <Header />
-      </div>
+      
 
       {/* Ensures Home takes up all available space between Header and Footer */}
-      <div className="flex-grow pt-28 pb-0 mb-0">
-      <AddRoomsQuote />
+      <div className="flex-grow pt-8 pb-2">
+      <CustomerAddRooms />
       </div>
-      <div className="pt-0 mt-0">
+      
         <Footer />
-      </div>
+      
 
     </div>
   );
 }
 
-export default PackagesPage;
+export default RoomInfoPage;

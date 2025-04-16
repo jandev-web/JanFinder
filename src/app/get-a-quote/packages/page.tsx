@@ -16,12 +16,12 @@ function PackagesPage() {
       
 
       {/* Ensures Home takes up all available space between Header and Footer */}
-      <div className="flex-grow pt-28 pb-0 mb-0">
+      <div className="flex-grow pt-8 pb-2">
       <Packages />
       </div>
-      <div className="pt-0 mt-0">
+      
         <Footer />
-      </div>
+      
 
     </div>
   );

@@ -47,12 +47,12 @@ const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, cost, quoteID }
       const response = await updatePackage(quoteID, pkg);
       const roundCost = roundingUtil(finalCost)
       await updateQuoteCost(quoteID, { finalCost: roundCost });
-      
+
       console.log(response)
       if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
         setTimeout(() => {
-          
+
           router.push(`/get-a-quote/confirm`);
         }, 1000);
       } else {
@@ -65,20 +65,29 @@ const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, cost, quoteID }
   };
 
   return (
-    <div className="bg-gradient-to-r from-[#001F54] to-blue-600 text-white shadow-lg rounded-xl p-8 w-full max-w-lg mx-auto">
-      <h2 className="text-3xl font-extrabold text-yellow-400 mb-4">{cleanPackage.name} Package</h2>
-      <p className="font-semibold text-yellow-300 mb-2">Description:</p>
-      <p className="text-yellow-200 mb-4">{cleanPackage.description}</p>
-      <p className="text-lg font-bold text-yellow-400">Cost: ${finalCost.toFixed(2)}</p>
+    <div className="bg-gradient-to-br from-white to-gray-200 text-white shadow-lg rounded-xl p-8 w-full max-w-lg mx-auto border border-[#001F54]">
+      <h2 className="text-3xl font-extrabold text-[#001F54] mb-4">
+        {cleanPackage.name} Package
+      </h2>
+      <p className="font-semibold text-black mb-2">Description:</p>
+      <p className="text-gray-700 mb-4">{cleanPackage.description}</p>
+      <p className="text-lg font-bold text-black">
+        Cost: <span className='text-yellow-500'>${finalCost.toFixed(2)}</span>
+      </p>
 
-      <h3 className="text-xl font-bold text-yellow-300 mt-6">Included Services:</h3>
+      <h3 className="text-xl font-bold text-[#001F54] mt-6">Included Services:</h3>
       <div className="space-y-6">
         {cleanPackage.rooms.map((room, index) => (
           <div key={index} className="border-b border-gray-300 pb-4">
-            <h4 className="text-xl font-semibold text-[#001F54] mb-2">{room.roomName}</h4>
+            <h4 className="text-xl font-semibold text-yellow-500 mb-2">
+              {room.roomName}
+            </h4>
             <ul className="pl-4 space-y-2">
               {room.tasks.map((task, idx) => (
-                <li key={idx} className="text-sm text-gray-700 flex justify-between items-center">
+                <li
+                  key={idx}
+                  className="text-sm text-gray-700 flex justify-between items-center"
+                >
                   <span className="font-medium">{task.taskName}</span>
                   <span className="italic text-gray-500">{task.taskFrequency}</span>
                 </li>

@@ -1,10 +1,10 @@
-export const startQuote = async () => {
+export const updateCustomerInfo = async (quoteID, firstName, lastName, email, phone, company, address) => {
     
   
-    
-    const apiKey = process.env.NEXT_PUBLIC_START_QUOTE_KEY;
-    const url = process.env.NEXT_PUBLIC_START_QUOTE_URL;
-    
+    const customerInfo = { firstName, lastName, email, phone, company, address };
+    const apiKey = process.env.NEXT_PUBLIC_MEM_UPDATE_CUS_INFO_KEY;
+    const url = process.env.NEXT_PUBLIC_MEM_UPDATE_CUS_INFO_URL;
+    console.log(customerInfo)
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -12,7 +12,7 @@ export const startQuote = async () => {
           'x-api-key': apiKey,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify()
+        body: JSON.stringify({quoteID, customerInfo})
       });
   
       if (!response.ok) {

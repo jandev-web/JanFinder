@@ -4,30 +4,18 @@
 
 import React, { useState, useEffect } from 'react';
 import AddressForm from '@/components/AddressForm';
-import { startQuote } from '../../utils/startQuote';
-import { useRouter } from 'next/navigation';
-import QuoteProgressBar from '../QuoteProgressBar';
+import { updateCustomerInfo } from '@/utils/updateCustomerInfo'
+import LoadingSpinner from '../loadingScreen';
 
-type Building = {
-  name: string;
-  areas: string[];
-};
-
-interface CustomerInfoFormProps {
-  buildingData: Building[];
+interface CustomerInfoProps {
+  quoteID: any;
+  customerDetails: any;
+  onNextStep: (stepNumber: number) => void;
+  onMoveOn: (moveOn: boolean) => void;
+  onChangeInfo: (newInfo: any) => void;
 }
 
-const steps = [
-  "Customer Information",
-  "Facility Type",
-  "Facility Information",
-  "Add Rooms",
-  "Selected Rooms",
-  "Cleaning Frequency",
-  "Get Time"
-];
-
-const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
+const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, onNextStep, onMoveOn, onChangeInfo }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -39,12 +27,11 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
   const [postalCode, setPostalCode] = useState('');
   const [country, setCountry] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
-  const router = useRouter();
-  const memberMade = false
-  const confirmed = 'false'
-  const cbo = 'None'
-  const franchise = 'None'
-  const facilityType = 'None'
+  const [loading, setLoading] = useState(true);
+  const [originalInfo, setOriginalInfo] = useState<any>(customerDetails)
+
+  console.log(customerDetails)
+
   const validateEmail = (email: string) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
 
   const formatPhoneNumber = (value: string) => {
@@ -58,6 +45,30 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
     const formattedPhone = formatPhoneNumber(e.target.value);
     setPhone(formattedPhone);
   };
+
+  useEffect(() => {
+    setLoading(true);
+    if (quoteID) {
+      if (customerDetails) {
+        
+        setFirstName(customerDetails.firstName)
+        setLastName(customerDetails.lastName)
+        setEmail(customerDetails.email)
+        setPhone(customerDetails.phone)
+        setCompany(customerDetails.company)
+        const customerAddress = customerDetails.address
+        setStreet(customerAddress.street)
+        setCity(customerAddress.city)
+        setState(customerAddress.state)
+        setPostalCode(customerAddress.postalCode)
+        setCountry(customerAddress.country)
+      }
+
+    }
+
+    setLoading(false);
+
+  }, [quoteID]);
 
   useEffect(() => {
     const isValid =
@@ -74,6 +85,8 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
 
     setIsFormValid(isValid);
   }, [firstName, lastName, email, phone, company, street, city, state, postalCode, country]);
+
+  
 
   const handleAddressChange = (field: string, value: string) => {
     switch (field) {
@@ -95,8 +108,53 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
     }
   };
 
+  const normalizeCustomerInfo = (info: any) => ({
+    firstName: info.firstName || "",
+    lastName: info.lastName || "",
+    email: info.email || "",
+    phone: info.phone || "",
+    company: info.company || "",
+    address: {
+      street: info.address?.street || "",
+      city: info.address?.city || "",
+      state: info.address?.state || "",
+      postalCode: info.address?.postalCode || "",
+      country: info.address?.country || ""
+    }
+  });
+  
+  const hasChanged = () => {
+    const normalizedOriginal = normalizeCustomerInfo(originalInfo);
+    const normalizedNew = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      company,
+      address: { street, city, state, postalCode, country }
+    };
+    console.log("Normalized Original:", normalizedOriginal);
+    console.log("Normalized New:", normalizedNew);
+    const result =
+      JSON.stringify(normalizedOriginal) !== JSON.stringify(normalizedNew);
+    console.log("Has Changed:", result);
+    return result;
+  };
+
+  useEffect(() => {
+    const didChange = hasChanged()
+    
+    if (isFormValid && !didChange) {
+      onMoveOn(true)
+    }
+
+    
+
+  }, [isFormValid]);
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true);
     const address =
     {
       'street': street,
@@ -108,40 +166,54 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
 
 
     try {
-      const result = await startQuote(firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, cbo, memberMade);
-      console.log(result.quoteID)
-      sessionStorage.setItem('customerData', result.quoteID);
-      router.push(`/get-a-quote/choose-facility`);
+      const result = await updateCustomerInfo(quoteID, firstName, lastName, email, phone, company, address);
+      const newDetails = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        company,
+        address
+      }
+      onChangeInfo(newDetails);
+      console.log(result)
+      onNextStep(1)
     } catch (error) {
       console.error('Error creating quote:', error);
     }
   };
 
+
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+ 
+
   return (
-    <div
-      className="min-h-screen bg-cover pb-20 bg-center flex flex-col items-center justify-center"
-      style={{ backgroundImage: "url('/images/customerInfoPic.jpeg')" }}
-    >
-      <QuoteProgressBar stepNumber={1} />
+    <div>
+
+
       {/* Message About the First Step */}
-      <div className="bg-[#001F54] pt-6 text-white p-6 rounded-lg shadow-lg mb-8 max-w-2xl text-center">
-        <h1 className="text-3xl font-bold mb-2">Step 1: Customer Information</h1>
-        <p className="text-lg">
-          To get your personalized quote, we first need some basic information
-          about you. This will take just a few seconds!
+      <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
+        <h1 className="text-4xl font-bold mb-4">Step <span className='text-yellow-500'>1</span>: Customer Information</h1>
+        <p className="text-xl">
+          To get your personalized quote, we first need some basic information about you.
+          This will only take a few seconds.
         </p>
       </div>
 
       {/* Form Section */}
-      <div className="bg-gradient-to-b from-white via-gray-100 to-gray-200 p-10 rounded-2xl shadow-2xl max-w-2xl mx-auto border-t-4 border-b-4 border-yellow-500">
-        <h2 className="text-4xl font-extrabold text-[#001F54] mb-8 text-center">
+      <div className="bg-gradient-to-br from-white to-gray-200 p-10 rounded-xl shadow-2xl max-w-2xl w-full border border-yellow-500">
+        <h2 className="text-4xl font-extrabold text-[#001F54] text-center mb-8">
           Customer Information
         </h2>
+        <form className="space-y-6" onSubmit={handleSubmit}>
 
-        <form className="space-y-8" onSubmit={handleSubmit}>
           {/* Contact Information Section */}
           <div>
-            <h3 className="text-2xl font-semibold text-[#001F54] border-b-2 border-yellow-500 inline-block pb-1 mb-6">
+            <h3 className="text-2xl font-semibold text-[#001F54] border-b border-yellow-500 pb-2 mb-6 inline-block">
               Contact Information
             </h3>
             <input
@@ -150,7 +222,7 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
-              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-400"
             />
             <input
               type="text"
@@ -158,7 +230,7 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               required
-              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-400"
             />
             <input
               type="email"
@@ -166,7 +238,7 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-400"
             />
             <input
               type="tel"
@@ -174,7 +246,7 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
               value={phone}
               onChange={handlePhoneChange}
               required
-              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-400"
             />
             <input
               type="text"
@@ -182,7 +254,7 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               required
-              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 mb-4 placeholder-gray-400"
             />
           </div>
 
@@ -197,17 +269,18 @@ const CustomerInfo: React.FC<CustomerInfoFormProps> = ({ buildingData }) => {
           />
 
           {/* Submit Button */}
-          {isFormValid && (
+          {(isFormValid && hasChanged()) && (
             <button
               type="submit"
-              className="w-full bg-yellow-500 text-white p-4 rounded-xl font-extrabold text-xl hover:text-yellow-500 hover:bg-[#001F54] transition duration-300"
+              className="w-full py-4 bg-yellow-500 text-white font-extrabold text-xl rounded-md shadow-md hover:bg-[#001F54] transition duration-300"
             >
-              Start the Bidding War
+              Submit
             </button>
           )}
         </form>
       </div>
     </div>
+
 
 
 

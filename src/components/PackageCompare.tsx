@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import GoldBox from '@/components/MetallicBox'
 import updateQuoteCost from '@/utils/updateQuoteCost';
 import roundingUtil from '@/utils/roundingUtil';
+import Button from '@mui/material/Button';
 interface Task {
   taskName: string;
   taskFrequency: string;
@@ -22,13 +23,14 @@ interface PackageOption {
   description: string;
 }
 interface PackageComparisonProps {
+  onBack: () => void;
   packages: PackageOption[];
   recPackage: PackageOption | null;
   cost: any;
   quoteID: any;
 }
 
-const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPackage, cost, quoteID }) => {
+const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, packages, recPackage, cost, quoteID }) => {
   const bronzePackage = packages.find((pkg) => pkg.name === 'Pure Essentials');
   const silverPackage = packages.find((pkg) => pkg.name === 'Radiant Results');
   const goldPackage = packages.find((pkg) => pkg.name === 'Elite Pristine');
@@ -38,7 +40,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPack
 
 
 
-  const bronzeCost= roundingUtil(cost * 0.64);
+  const bronzeCost = roundingUtil(cost * 0.64);
   const silverCost = roundingUtil(cost / 1.2);
   const goldCost = roundingUtil(cost);
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
@@ -63,11 +65,11 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPack
       if (pkg.name === 'Pure Essentials') {
         await updateQuoteCost(quoteID, { finalCost: bronzeCost });
       }
-      
+
       if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
         setTimeout(() => {
-          
+
           router.push(`/get-a-quote/confirm`);
         }, 1000);
       } else {
@@ -82,8 +84,39 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ packages, recPack
   console.log(packages)
   console.log(recPackage)
   return (
-    <div className="p-8 bg-gray-100 space-y-8">
-      <h2 className="text-3xl font-bold text-center text-green-800 mb-8">Compare Our Packages</h2>
+    <div className="p-8 flex flex-col items-center">
+
+      <h2 className="text-3xl font-bold text-center text-[#001F54]">Compare Our Packages</h2>
+      <button
+        onClick={onBack}
+        className="group flex items-center text-[#001F54] hover:text-yellow-500 mb-8"
+      >
+        <span>
+          {/* Default Arrow Icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6 block group-hover:hidden"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          {/* Hover Arrow Icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6 hidden group-hover:block"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
+          </svg>
+        </span>
+        <span>Back to Recommended</span>
+      </button>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {bronzePackage && (

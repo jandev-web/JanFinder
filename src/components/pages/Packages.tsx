@@ -34,7 +34,7 @@ const Packages: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
   const [cost, setCost] = useState(0);
-
+  const [packageName, setPackageName] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Packages: React.FC = () => {
       try {
         if (typeof window !== "undefined") {
           const storedQuoteID = sessionStorage.getItem('customerData');
-          
+
           if (!storedQuoteID) {
             console.warn('No quoteID found in sessionStorage.');
             router.push('/quote');
@@ -63,7 +63,7 @@ const Packages: React.FC = () => {
           const budget = details.quoteInfo.budget
           setCost(baseCost)
           const recPackageName = recPackageUtil(baseCost, budget)
-
+          setPackageName(recPackageName)
           const newRecPackage = packageInfo.find((pkg: PackageOption) => pkg.name === recPackageName);
 
           setPackages(packageInfo);
@@ -82,6 +82,10 @@ const Packages: React.FC = () => {
 
     fetchQuote();
   }, [router]);
+
+  const handleGoBack = () => {
+    setShowComparison(false)
+  }
 
   if (loading) {
     return (
@@ -108,47 +112,40 @@ const Packages: React.FC = () => {
     );
   }
 
+
+
   return (
-    <div className="relative bg-gray-200 flex flex-col items-center justify-center min-h-screen p-6 bg-cover bg-center">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
       {/* Progress Bar */}
-      <div className="w-full max-w-4xl bg-white/80 p-4 rounded-lg shadow-md">
-        <QuoteProgressBar stepNumber={3} />
-      </div>
+
+      <QuoteProgressBar stepNumber={6} />
+
 
       {/* Blurb Below Progress Bar */}
-      <div className="w-full max-w-4xl mt-4 text-center text-gray-700 bg-white/90 p-4 rounded-lg shadow-md">
-        <p className="text-lg">
-          You&apos;re almost finished! Simply select one of the Bid2Clean curated cleaning packages tailored specifically to meet the needs of your
-          facility.
+      <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
+        <h1 className="text-4xl font-bold mb-4">Step <span className='text-yellow-500'>6</span>: Choose your Package</h1>
+        <p className="text-xl">
+          Please select a cleaning package. For your facility needs and budget we suggest the {packageName} Package.
         </p>
       </div>
 
-      {/* Back Button */}
-      {showComparison && (
-        <button
-          className="absolute top-4 left-4 text-green-700 hover:text-green-500 flex items-center bg-white/70 px-3 py-1 rounded-lg shadow-md"
-          onClick={() => setShowComparison(false)}
-        >
-          <span className="mr-2">&#8592;</span> Back to Recommended
-        </button>
-      )}
 
       {showComparison && packages ? (
-        <PackageComparison cost={cost} packages={packages} recPackage={recPackage} quoteID={quoteID} />
+        <PackageComparison onBack={handleGoBack} cost={cost} packages={packages} recPackage={recPackage} quoteID={quoteID} />
       ) : (
-        <div className="p-6 rounded-xl shadow-lg max-w-4xl w-full bg-white/90 text-gray-800 mt-6">
-          <h2 className="text-2xl font-bold text-blue-700 mb-4 text-center">
+        <div className="bg-gradient-to-br from-white to-gray-200 flex flex-col items-center p-8 mb-8 rounded-xl shadow-2xl max-w-2xl w-full border border-yellow-500">
+          <h2 className="text-3xl font-bold text-[#001F54] mb-6 text-center">
             Our Recommended Package
           </h2>
           {recPackage ? (
-            <PackageCard cleanPackage={recPackage} cost={cost} quoteID={quoteID}/>
+            <PackageCard cleanPackage={recPackage} cost={cost} quoteID={quoteID} />
           ) : (
             <p className="text-center">No recommended package available.</p>
           )}
 
           <div className="flex justify-center mt-6">
             <button
-              className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition"
+              className="bg-[#001F54] text-white px-4 py-2 rounded-lg transition"
               onClick={() => setShowComparison(true)}
             >
               See All Packages

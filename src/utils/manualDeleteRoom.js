@@ -1,10 +1,10 @@
-export const updateCustomerInfo = async (quoteID, firstName, lastName, email, phone) => {
+export const manualDeleteRoom = async (quoteID, room) => {
     
   
-    const customerInfo = { firstName, lastName, email, phone };
-    const apiKey = process.env.NEXT_PUBLIC_MEM_UPDATE_CUS_INFO_KEY;
-    const url = process.env.NEXT_PUBLIC_MEM_UPDATE_CUS_INFO_URL;
-    console.log(customerInfo)
+    
+    const apiKey = process.env.NEXT_PUBLIC_MANUAL_DELETE_ROOM_INFO_KEY;
+    const url = process.env.NEXT_PUBLIC_MANUAL_DELETE_ROOM_INFO_URL;
+    
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -12,7 +12,7 @@ export const updateCustomerInfo = async (quoteID, firstName, lastName, email, ph
           'x-api-key': apiKey,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({quoteID, customerInfo})
+        body: JSON.stringify({quoteID, room})
       });
   
       if (!response.ok) {
