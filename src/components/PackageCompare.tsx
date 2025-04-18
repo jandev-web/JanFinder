@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Bronze from '@/components/Bronze';
+import BronzeServiceList from './BronzeServiceList';
 import Silver from '@/components/Silver';
+import SilverServiceList from './SilverServiceList';
 import Gold from '@/components/Gold';
 import { updatePackage } from '@/utils/updatePackageChoice';
 import { useRouter } from 'next/navigation';
@@ -8,6 +10,9 @@ import GoldBox from '@/components/MetallicBox'
 import updateQuoteCost from '@/utils/updateQuoteCost';
 import roundingUtil from '@/utils/roundingUtil';
 import Button from '@mui/material/Button';
+import LoadingSpinner from './loadingScreen';
+import GoldServiceList from './GoldServiceList';
+
 interface Task {
   taskName: string;
   taskFrequency: string;
@@ -25,37 +30,39 @@ interface PackageOption {
 interface PackageComparisonProps {
   onBack: () => void;
   packages: PackageOption[];
-  recPackage: PackageOption | null;
-  cost: any;
+  recPackage: PackageOption;
+  bronzeCost: any;
+  silverCost: any;
+  goldCost: any;
   quoteID: any;
-  onNext: (stepNumber: number) => void;
+  quotePackage: any;
+  bronzePackage: any;
+  silverPackage: any;
+  goldPackage: any;
+  bronzeRec: any;
+  silverRec: any;
+  goldRec: any;
+  bronzeChosen: any;
+  silverChosen: any;
+  goldChosen: any;
+  onMoveBack: (moveBack: boolean) => void;
+  onMoveOn: (moveOn: boolean) => void;
   onChangePackage: (pkg: any) => void;
+  onHideBar: (hideBar: boolean) => void;
 }
 
-const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, onNext, onChangePackage, packages, recPackage, cost, quoteID }) => {
-  const bronzePackage = packages.find((pkg) => pkg.name === 'Pure Essentials');
-  const silverPackage = packages.find((pkg) => pkg.name === 'Radiant Results');
-  const goldPackage = packages.find((pkg) => pkg.name === 'Elite Pristine');
-  const [bronzeRec, setBronzeRec] = useState(false);
-  const [silverRec, setSilverRec] = useState(false);
-  const [goldRec, setGoldRec] = useState(false);
+const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silverCost, goldCost, bronzeRec, silverRec, goldRec, bronzeChosen, goldChosen, silverChosen, bronzePackage, silverPackage, goldPackage, onBack, onHideBar, onMoveBack, onMoveOn, onChangePackage, quotePackage, packages, recPackage, quoteID }) => {
 
-
-
-  const bronzeCost = roundingUtil(cost * 0.64);
-  const silverCost = roundingUtil(cost / 1.2);
-  const goldCost = roundingUtil(cost);
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
-  
 
-  useEffect(() => {
-    setBronzeRec(recPackage?.name === bronzePackage?.name);
-    setSilverRec(recPackage?.name === silverPackage?.name);
-    setGoldRec(recPackage?.name === goldPackage?.name);
+  const handleGoBack = () => {
+    onMoveBack(true);
+    onMoveOn(true)
+    onHideBar(false)
+    onBack()
+  }
 
-  }, [recPackage, bronzePackage, silverPackage, goldPackage]);
-
-  const handleSelectPackage = async (pkg: PackageOption) => {
+  const handleSelectPackage = async (pkg: any) => {
     try {
       const response = await updatePackage(quoteID, pkg);
       onChangePackage(pkg);
@@ -71,23 +78,25 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, onNext, o
 
       if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
-        onNext(6)
+
       } else {
         setConfirmationMessage('Failed to update package. Please try again.');
       }
+      onMoveBack(true)
+      onMoveOn(true)
+      onBack()
     } catch (error) {
       console.error('Error updating package:', error);
       setConfirmationMessage('Error updating package. Please try again.');
     }
   };
 
-  
-  return (
-    <div className="p-8 flex flex-col items-center">
 
-      <h2 className="text-3xl font-bold text-center text-[#001F54]">Compare Our Packages</h2>
+  return (
+    <div className="bg-gradient-to-br from-white to-gray-100 rounded-lg shadow-md p-8 pb-32 flex flex-col items-center">
+      <h2 className="text-3xl font-bold text-center text-[#001F54] mb-8">Compare Our Packages</h2>
       <button
-        onClick={onBack}
+        onClick={handleGoBack}
         className="group flex items-center text-[#001F54] hover:text-yellow-500 mb-8"
       >
         <span>
@@ -116,34 +125,72 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, onNext, o
         </span>
         <span>Back to Recommended</span>
       </button>
+      <div className='flex flex-col pb-32'>
+        <div className="flex flex-row w-full justify-between gap-8">
+          {/* Bronze Package Card */}
+          <div className="flex flex-col w-full">
+            <Bronze
+              cost={bronzeCost}
+              pkg={bronzePackage}
+              rec={bronzeRec}
+              chosen={bronzeChosen}
+              handleSelect={() => handleSelectPackage(bronzePackage)}
+            />
+          </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {bronzePackage && (
-          <Bronze
-            cost={bronzeCost}
-            pkg={bronzePackage}
-            rec={bronzeRec}
-            handleSelect={() => handleSelectPackage(bronzePackage)}
-          />
-        )}
-        {silverPackage && (
-          <Silver
-            cost={silverCost}
-            pkg={silverPackage}
-            rec={silverRec}
-            handleSelect={() => handleSelectPackage(silverPackage)}
-          />
-        )}
-        {goldPackage && (
-          <Gold
-            cost={goldCost}
-            pkg={goldPackage}
-            rec={goldRec}
-            handleSelect={() => handleSelectPackage(goldPackage)}
-          />
-        )}
+          {/* Silver Package Card */}
+          <div className="flex flex-col w-full">
+            <Silver
+              cost={silverCost}
+              pkg={silverPackage}
+              rec={silverRec}
+              chosen={silverChosen}
+              handleSelect={() => handleSelectPackage(silverPackage)}
+            />
+          </div>
+
+          {/* Gold Package Card */}
+          <div className="flex flex-col w-full">
+            <Gold
+              cost={goldCost}
+              pkg={goldPackage}
+              rec={goldRec}
+              chosen={goldChosen}
+              handleSelect={() => handleSelectPackage(goldPackage)}
+            />
+          </div>
+        </div>
+        <div className="flex flex-row w-full justify-between gap-8 mb-8">
+          {/* Bronze Package Card */}
+          <div className="flex flex-col w-full">
+            <BronzeServiceList
+              rec={bronzeRec}
+              pkg={bronzePackage}
+            />
+          </div>
+
+          {/* Silver Package Card */}
+          <div className="flex flex-col w-full">
+            <SilverServiceList
+              rec={silverRec}
+              pkg={silverPackage}
+            />
+          </div>
+
+          {/* Gold Package Card */}
+          <div className="flex flex-col w-full">
+            <GoldServiceList
+              rec={goldRec}
+              pkg={goldPackage}
+            />
+          </div>
+        </div>
       </div>
+
+
     </div>
+
+
   );
 };
 

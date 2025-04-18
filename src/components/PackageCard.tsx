@@ -4,6 +4,10 @@ import { updatePackage } from '@/utils/updatePackageChoice';
 import updateQuoteCost from '@/utils/updateQuoteCost';
 import roundingUtil from '@/utils/roundingUtil';
 
+import GoldRec from './GoldRec';
+import SilverRec from './SilverRec';
+import BronzeRec from './BronzeRec';
+
 interface Task {
   taskName: string;
   taskFrequency: string;
@@ -22,27 +26,36 @@ interface CleanPackage {
 
 interface PackageCardProps {
   cleanPackage: CleanPackage;
-  cost: any;
+  bronzeCost: any;
+  silverCost: any;
+  goldCost: any;
   quoteID: any;
   onNext: (stepNumber: number) => void;
   onChangePackage: (pkg: any) => void;
+  chosen: boolean;
+  bronzeRec: any;
+  silverRec: any;
+  goldRec: any;
+  bronzeChosen: any;
+  silverChosen: any;
+  goldChosen: any;
 }
 
-const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, onChangePackage, cost, quoteID, onNext }) => {
+const PackageCard: React.FC<PackageCardProps> = ({ bronzeCost, silverCost, goldCost, bronzeRec, silverRec, goldRec, bronzeChosen, goldChosen, silverChosen, cleanPackage, chosen, onChangePackage, quoteID, onNext }) => {
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
-  const [finalCost, setFinalCost] = useState(cost);
+  const [finalCost, setFinalCost] = useState(goldCost);
 
   
 
   useEffect(() => {
-    let calculatedCost = roundingUtil(cost);
+    let calculatedCost;
     if (cleanPackage.name === 'Radiant Results') {
-      calculatedCost = roundingUtil(cost / 1.2);
+      calculatedCost = silverCost
     } else if (cleanPackage.name === 'Pure Essentials') {
-      calculatedCost = roundingUtil(cost * 0.64);
+      calculatedCost = bronzeCost;
     }
     setFinalCost(calculatedCost);
-  }, [cleanPackage.name, cost]);
+  }, [cleanPackage.name]);
 
   const handleSelectPackage = async (pkg: CleanPackage) => {
     try {
@@ -64,53 +77,22 @@ const PackageCard: React.FC<PackageCardProps> = ({ cleanPackage, onChangePackage
   };
 
   return (
-    <div className="bg-gradient-to-br from-white to-gray-200 text-white shadow-lg rounded-xl p-8 w-full max-w-lg mx-auto border border-[#001F54]">
-      <h2 className="text-3xl font-extrabold text-[#001F54] mb-4">
-        {cleanPackage.name} Package
-      </h2>
-      <p className="font-semibold text-black mb-2">Description:</p>
-      <p className="text-gray-700 mb-4">{cleanPackage.description}</p>
-      <p className="text-lg font-bold text-black">
-        Cost: <span className='text-yellow-500'>${finalCost.toFixed(2)}</span>
-      </p>
-
-      <h3 className="text-xl font-bold text-[#001F54] mt-6">Included Services:</h3>
-      <div className="space-y-6">
-        {cleanPackage.rooms.map((room, index) => (
-          <div key={index} className="border-b border-gray-300 pb-4">
-            <h4 className="text-xl font-semibold text-yellow-500 mb-2">
-              {room.roomName}
-            </h4>
-            <ul className="pl-4 space-y-2">
-              {room.tasks.map((task, idx) => (
-                <li
-                  key={idx}
-                  className="text-sm text-gray-700 flex justify-between items-center"
-                >
-                  <span className="font-medium">{task.taskName}</span>
-                  <span className="italic text-gray-500">{task.taskFrequency}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      {/* Centered button with confirmation message */}
-      <div className="flex justify-center mt-6">
-        <button
-          onClick={() => handleSelectPackage(cleanPackage)}
-          className="bg-yellow-400 text-[#001F54] font-bold px-6 py-3 rounded-lg hover:bg-yellow-300 transition"
-        >
-          Select {cleanPackage.name}
-        </button>
-      </div>
-
-      {confirmationMessage && (
-        <p className="mt-4 text-center text-yellow-300 font-semibold">
-          {confirmationMessage}
-        </p>
+    <div className="">
+      {((goldRec && !chosen )|| (goldChosen && chosen)) && (
+        <GoldRec chosen={chosen} pkg={cleanPackage} rec={!chosen} cost={goldCost} handleSelect={() => handleSelectPackage(cleanPackage)}/>
       )}
+      {((silverRec && !chosen )|| (silverChosen && chosen)) && (
+        <SilverRec chosen={chosen} pkg={cleanPackage} rec={!chosen} cost={silverCost} handleSelect={() => handleSelectPackage(cleanPackage)}/>
+      )}
+      {((bronzeRec && !chosen )|| (bronzeChosen && chosen)) && (
+        <BronzeRec chosen={chosen} pkg={cleanPackage} rec={!chosen} cost={bronzeCost} handleSelect={() => handleSelectPackage(cleanPackage)}/>
+      )}
+      
+      
+
+      
+
+      
     </div>
   );
 };

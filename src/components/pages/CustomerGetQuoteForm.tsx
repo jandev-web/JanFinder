@@ -40,6 +40,7 @@ const CustomerGetQuoteForm: React.FC = () => {
     const [quoteInfo, setQuoteInfo] = useState<any>(null)
     const [isFinished, setIsFinished] = useState(false)
     const [canMoveOn, setCanMoveOn] = useState(false);
+    const [canMoveBack, setCanMoveBack] = useState(true);
     const [facilityOptions, setFacilityOptions] = useState<BuildingType[]>([]);
     const [facilityType, setFacilityType] = useState<any>(null);
     const [customerInfo, setCustomerInfo] = useState<any>(null);
@@ -53,6 +54,8 @@ const CustomerGetQuoteForm: React.FC = () => {
     const [recPackage, setRecPackage] = useState<any>(null);
     const [cost, setCost] = useState<any>(null);
     const [recPackageName, setRecPackageName] = useState<any>(null);
+    const [hideBar, setHideBar] = useState<any>(false)
+
     const loadData = async (customerQuoteID: any) => {
         setLoading(true)
         setQuoteID(customerQuoteID)
@@ -72,12 +75,12 @@ const CustomerGetQuoteForm: React.FC = () => {
         const budget = quoteDetails.quoteInfo.budget
         setQuoteBudget(budget)
         const currentRooms = quoteDetails.quoteInfo.selectedRooms
-        
+
         setQuoteRooms(currentRooms)
         const baseCost = quoteDetails.costInfo.baseCost
         setCost(baseCost)
         if (currentRooms.length > 0) {
-            
+
             const packageInfo = await getPackageRecs(customerQuoteID);
             setQuotePackageOptions(packageInfo)
             if (baseCost && budget) {
@@ -130,6 +133,10 @@ const CustomerGetQuoteForm: React.FC = () => {
         setCanMoveOn(moveOn);
     }
 
+    const handleMoveBack = (moveBack: boolean) => {
+        setCanMoveBack(moveBack);
+    }
+
     const handleNextStep = (stepNumber: number) => {
         const newStep = stepNumber + 1;
         setStep(newStep);
@@ -153,7 +160,7 @@ const CustomerGetQuoteForm: React.FC = () => {
     }
 
     const handleChangeFrequency = (newInfo: any, newCost: any) => {
-        
+
         setQuoteFrequency(newInfo);
         setCost(newCost);
     }
@@ -171,6 +178,10 @@ const CustomerGetQuoteForm: React.FC = () => {
 
     const handleChangePackage = (newInfo: any) => {
         setQuotePackage(newInfo);
+    }
+
+    const handleHideBar = (hideBar: boolean) => {
+        setHideBar(hideBar)
     }
 
     const startNewQuote = async () => {
@@ -198,7 +209,7 @@ const CustomerGetQuoteForm: React.FC = () => {
             case 3: return <CustomerAddRooms quoteID={quoteID} facilityRooms={facilityRooms} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeRooms={handleChangeRooms} quoteRooms={quoteRooms} />;
             case 4: return <UpdateQuoteFrequency quoteID={quoteID} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeFrequency={handleChangeFrequency} quoteFrequency={quoteFrequency} />;
             case 5: return <UpdateQuoteBudget quoteID={quoteID} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeBudget={handleChangeBudget} quoteBudget={quoteBudget} />;
-            case 6: return <Packages quoteID={quoteID} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangePackage={handleChangePackage} quotePackage={quotePackage} quotePackageOptions={quotePackageOptions} cost={cost} recPackage={recPackage} />;
+            case 6: return <Packages quoteID={quoteID} onHideBar={handleHideBar} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onMoveBack={handleMoveBack} onChangePackage={handleChangePackage} quotePackage={quotePackage} quotePackageOptions={quotePackageOptions} cost={cost} recPackage={recPackage} />;
 
             default: return null;
         }
@@ -227,14 +238,16 @@ const CustomerGetQuoteForm: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
-            <QuoteProgressBar stepNumber={1} />
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center pb-32 py-12 px-4">
+            {!hideBar && (
+                <QuoteProgressBar stepNumber={1} />
+            )}
             <div>
                 {renderStepComponent()}
             </div>
 
             <div className="mt-8 text-center">
-                {step > 1 && (
+                {(step > 1 && canMoveBack) && (
                     <button
                         onClick={handleGoBack}
                         className="px-6 py-2 rounded-md bg-yellow-500 text-white font-semibold mr-2 hover:bg-yellow-600 transition"
