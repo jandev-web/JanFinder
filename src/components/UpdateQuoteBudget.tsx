@@ -9,9 +9,10 @@ interface QuoteFormProps {
   onNextStep: (stepNumber: number) => void;
   onMoveOn: (moveOn: boolean) => void;
   onChangeBudget: (newBudget: any) => void;
+  onCanClick: (step: any, canClick: boolean) => void;
 }
 
-const UpdateQuoteBudget: React.FC<QuoteFormProps> = ({ quoteID, quoteBudget, onNextStep, onMoveOn, onChangeBudget }) => {
+const UpdateQuoteBudget: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quoteBudget, onNextStep, onMoveOn, onChangeBudget }) => {
   const [budget, setBudget] = useState(quoteBudget);
   const [loading, setLoading] = useState(false);
   
@@ -33,6 +34,7 @@ const UpdateQuoteBudget: React.FC<QuoteFormProps> = ({ quoteID, quoteBudget, onN
       onChangeBudget(budget)
       await updateQuoteBudget(quoteID, budget);
       onNextStep(5)
+      onCanClick(5, true)
     } catch (error) {
       console.error('Error updating budget:', error);
     }

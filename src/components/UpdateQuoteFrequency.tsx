@@ -11,9 +11,10 @@ interface QuoteFormProps {
     onNextStep: (stepNumber: number) => void;
     onMoveOn: (moveOn: boolean) => void;
     onChangeFrequency: (newFrequency: any, newCost: any) => void;
+    onCanClick: (step: any, canClick: boolean) => void;
 }
 
-const UpdateQuoteFrequency: React.FC<QuoteFormProps> = ({ quoteID, quoteFrequency, onNextStep, onMoveOn, onChangeFrequency }) => {
+const UpdateQuoteFrequency: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quoteFrequency, onNextStep, onMoveOn, onChangeFrequency }) => {
     const [frequency, setFrequency] = useState<any>(quoteFrequency || '');
     const [loading, setLoading] = useState(false);
 
@@ -47,6 +48,7 @@ const UpdateQuoteFrequency: React.FC<QuoteFormProps> = ({ quoteID, quoteFrequenc
             const newCost = await calculateUpdateCost(quoteID, frequency);
             onChangeFrequency(frequency, newCost);
             onNextStep(4)
+            onCanClick(4, true)
         } catch (error) {
             console.error('Error updating frequency:', error);
             setErrorMessage('Failed to update frequency.');

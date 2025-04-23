@@ -31,7 +31,7 @@ const QuoteDetails: React.FC<QuoteDetailsProps> = ({ buildingData, user }) => {
         try {
             const memberMade = true;
             console.log(confirmed)
-            const quoteData = await startQuote(firstName, lastName, email, phone, company, address, confirmed, facilityType, franchise, owner, memberMade);
+            const quoteData = await startQuote();
             if (quoteData?.quoteID) {
                 router.push(`/members/start-quote/quote?quoteID=${quoteData.quoteID}`);
             } else {

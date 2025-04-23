@@ -49,9 +49,10 @@ interface PackageComparisonProps {
   onMoveOn: (moveOn: boolean) => void;
   onChangePackage: (pkg: any) => void;
   onHideBar: (hideBar: boolean) => void;
+  onUpdateCost: (cost: any) => void;
 }
 
-const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silverCost, goldCost, bronzeRec, silverRec, goldRec, bronzeChosen, goldChosen, silverChosen, bronzePackage, silverPackage, goldPackage, onBack, onHideBar, onMoveBack, onMoveOn, onChangePackage, quotePackage, packages, recPackage, quoteID }) => {
+const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silverCost, goldCost, bronzeRec, silverRec, goldRec, bronzeChosen, goldChosen, silverChosen, bronzePackage, silverPackage, goldPackage, onBack, onHideBar, onMoveBack, onMoveOn, onChangePackage, onUpdateCost, quotePackage, packages, recPackage, quoteID }) => {
 
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
 
@@ -68,12 +69,16 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silve
       onChangePackage(pkg);
       if (pkg.name === 'Radiant Results') {
         await updateQuoteCost(quoteID, { finalCost: silverCost });
+        onUpdateCost(silverCost)
       }
       if (pkg.name === 'Elite Pristine') {
         await updateQuoteCost(quoteID, { finalCost: goldCost });
+        onUpdateCost(goldCost)
       }
       if (pkg.name === 'Pure Essentials') {
+        
         await updateQuoteCost(quoteID, { finalCost: bronzeCost });
+        onUpdateCost(bronzeCost)
       }
 
       if (response.updatedAttributes) {
@@ -83,7 +88,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silve
         setConfirmationMessage('Failed to update package. Please try again.');
       }
       onMoveBack(true)
-      onMoveOn(true)
+      onHideBar(false)
       onBack()
     } catch (error) {
       console.error('Error updating package:', error);

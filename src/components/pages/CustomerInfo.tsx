@@ -13,9 +13,10 @@ interface CustomerInfoProps {
   onNextStep: (stepNumber: number) => void;
   onMoveOn: (moveOn: boolean) => void;
   onChangeInfo: (newInfo: any) => void;
+  onCanClick: (step: any, canClick: boolean) => void;
 }
 
-const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, onNextStep, onMoveOn, onChangeInfo }) => {
+const CustomerInfo: React.FC<CustomerInfoProps> = ({ onCanClick, quoteID, customerDetails, onNextStep, onMoveOn, onChangeInfo }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -145,6 +146,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
 
     if (isFormValid && !didChange) {
       onMoveOn(true)
+      onCanClick(1, true)
     }
 
 
@@ -175,6 +177,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID, customerDetails, o
         address
       }
       onChangeInfo(newDetails);
+      onCanClick(1, true)
       onNextStep(1)
     } catch (error) {
       console.error('Error creating quote:', error);

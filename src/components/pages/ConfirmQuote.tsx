@@ -1,11 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import LoadingSpinner from '@/components/loadingScreen';
-import getQuoteDetails from '@/utils/getQuoteDetails';
 import confirmQuote from '@/utils/confirmQuote'
-import QuoteProgressBar from '@/components/QuoteProgressBar';
+import { useRouter } from 'next/navigation';
 
 interface Task {
     taskName: string;
@@ -43,68 +41,49 @@ interface CustomerInfo {
 }
 
 interface QuoteInfo {
+    quoteID: any;
+    quotePackage: any;
     facilityType: string;
     sqft: string;
+    cost: any;
+    customerDetails: any;
+    quoteRooms: any;
+    roomTypes: any;
+    quoteBudget: any;
+    quoteFrequency: any;
+    onNextStep: (stepNumber: number) => void;
+    onMoveOn: (moveOn: boolean) => void;
+    onMoveBack: (moveBack: boolean) => void;
 }
 
-const ConfirmationPage: React.FC = () => {
+const ConfirmationPage: React.FC<QuoteInfo> = ({ quoteID, roomTypes, quotePackage, facilityType, sqft, cost, customerDetails, quoteRooms, quoteBudget, quoteFrequency, onMoveBack, onMoveOn, onNextStep }) => {
+    
+
+    const [loading, setLoading] = useState(false);
+
+    const addressInfo = customerDetails.address
+    const address = `${addressInfo.street}, ${addressInfo.city} ${addressInfo.state}, ${addressInfo.postalCode}, ${addressInfo.country}`
+
     const router = useRouter();
-    const [quoteID, setQuoteID] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [address, setAddress] = useState<any>('None');
-    const [roomInfo, setRoomInfo] = useState<any>(null);
-
-    const [quoteInfo, setQuoteInfo] = useState<any>(null);
-    useEffect(() => {
-        const fetchCustomerData = async () => {
-
-            setLoading(true);
-
-            try {
-                if (typeof window !== "undefined") {
-                    const storedQuoteID = sessionStorage.getItem('customerData');
-
-                    if (!storedQuoteID) {
-                        console.warn('No quoteID found in sessionStorage.');
-                        router.push('/quote');
-                        return;
-                    }
-
-                    setQuoteID(storedQuoteID);
 
 
-                    const quoteDetails = await getQuoteDetails(storedQuoteID);
-                    setRoomInfo(quoteDetails.quoteInfo.roomTypes);
-                    const addressInfo = quoteDetails.customerData.address
-                    if (!addressInfo.city || !addressInfo.country || !addressInfo.postalCode || !addressInfo.state || !addressInfo.street) {
-                        setAddress('None')
-                    }
-                    else {
-                        const addressString = `${addressInfo.street}, ${addressInfo.city} ${addressInfo.state}, ${addressInfo.postalCode}, ${addressInfo.country}`
-                        setAddress(addressString)
-                    }
-                    setQuoteInfo(quoteDetails);
-                    setLoading(false)
+
+    console.log(cost)
 
 
 
 
-                }
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-                //router.push('/');
-            }
-        };
 
-        fetchCustomerData();
-    }, [quoteID, router]);
 
     const handleConfirm = async () => {
-        if (!quoteID || !quoteInfo) return;
+        if (!quoteID) return;
         try {
+            setLoading(true);
             const confirmedQuote = await confirmQuote(quoteID);
-
-            router.push(`/get-a-quote/confirmation`);
+            
+            router.push('/get-a-quote/confirmed')
+            
+            
         } catch (error) {
             console.error("Confirmation failed:", error);
             alert("Failed to confirm. Please try again.");
@@ -115,15 +94,12 @@ const ConfirmationPage: React.FC = () => {
     if (loading) {
         return <LoadingSpinner />;
     }
-    console.log(quoteInfo)
-
-    const { customerData, quoteInfo: quoteDetails, costInfo, Package } = quoteInfo;
-    console.log(costInfo.finalCost)
+    
 
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-12 px-4">
-            <QuoteProgressBar stepNumber={7} />
+        <div className="flex flex-col items-center">
+            
             <h2 className="text-3xl text-yellow-500 font-bold mb-6">Final Step!</h2>
             {/* Step Message Section */}
             <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
@@ -145,16 +121,16 @@ const ConfirmationPage: React.FC = () => {
                 <div className="space-y-6 border-b border-gray-300">
                     <h2 className="text-xl font-semibold text-yellow-500">Customer Information</h2>
                     <p className='text-gray-600'>
-                        <strong className='text-[#001F54]'>Customer Name:</strong> {customerData?.firstName || 'None'} {customerData?.lastName || ''}
+                        <strong className='text-[#001F54]'>Customer Name:</strong> {customerDetails?.firstName || 'None'} {customerDetails?.lastName || ''}
                     </p>
                     <p className='text-gray-600'>
-                        <strong className='text-[#001F54]'>Company:</strong> {customerData?.company || 'None'}
+                        <strong className='text-[#001F54]'>Company:</strong> {customerDetails?.company || 'None'}
                     </p>
                     <p className='text-gray-600'>
-                        <strong className='text-[#001F54]'>Email:</strong> {customerData?.email || 'None'}
+                        <strong className='text-[#001F54]'>Email:</strong> {customerDetails?.email || 'None'}
                     </p>
                     <p className='text-gray-600'>
-                        <strong className='text-[#001F54]'>Phone:</strong> {customerData?.phone || 'None'}
+                        <strong className='text-[#001F54]'>Phone:</strong> {customerDetails?.phone || 'None'}
                     </p>
                     <p className='text-gray-600 pb-4'>
                         <strong className='text-[#001F54]'>Facility Address:</strong> {address || 'None'}
@@ -165,19 +141,19 @@ const ConfirmationPage: React.FC = () => {
                 <div className="space-y-6 mt-6 border-b border-gray-300">
                     <h2 className="text-2xl font-semibold text-yellow-500">Quote Information</h2>
                     <p className='text-gray-600'>
-                        <strong className='text-[#001F54]'>Facility Type:</strong> {quoteDetails?.facilityType || 'None'}
+                        <strong className='text-[#001F54]'>Facility Type:</strong> {facilityType || 'None'}
                     </p>
                     <p className='text-gray-600'>
-                        <strong className='text-[#001F54]'>Square Footage:</strong> {quoteDetails?.sqft || 'None'}
+                        <strong className='text-[#001F54]'>Square Footage:</strong> {sqft || 'None'}
                     </p>
                     <p className='text-gray-600'>
-                        <strong className='text-[#001F54]'>Frequency:</strong> {quoteDetails?.frequency || 'None'}
+                        <strong className='text-[#001F54]'>Frequency:</strong> {quoteFrequency || 'None'}
                     </p>
                     <p className='text-gray-600'>
-                        <strong className='text-[#001F54]'>Cost:</strong> ${costInfo?.finalCost}
+                        <strong className='text-[#001F54]'>Cost:</strong> ${cost}
                     </p>
                     <p className='text-gray-600 pb-4'>
-                        <strong className='text-[#001F54]'>Package:</strong> {Package?.name || 'None'}
+                        <strong className='text-[#001F54]'>Package:</strong> {quotePackage?.name || 'None'}
                     </p>
                 </div>
 
@@ -186,10 +162,10 @@ const ConfirmationPage: React.FC = () => {
                     <h2 className="text-2xl font-semibold text-yellow-500 mb-6">Room Information</h2>
                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 h-96 overflow-y-auto">
                         <div className="space-y-4">
-                            {Package.rooms.map((room: any, index: number) => (
+                            {quotePackage.rooms.map((room: any, index: number) => (
                                 <div key={index} className="border-b border-gray-300 pb-4">
                                     <h4 className="text-xl font-semibold text-[#001F54] mb-2">
-                                        {room.roomName}: {roomInfo[room.roomName]} sqft
+                                        {room.roomName}: {roomTypes[room.roomName]} sqft
                                     </h4>
                                     <ul className="pl-4 space-y-2">
                                         {room.tasks.map((task: any, idx: number) => (

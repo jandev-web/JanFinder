@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { updateCustomerInfo } from '@/utils/memberUpdateCustomerInfo';
+import { updateCustomerInfo } from '@/utils/updateCustomerInfo';
 import getQuoteDetails from '@/utils/getQuoteDetails';
 
 interface CustomerInfoProps {

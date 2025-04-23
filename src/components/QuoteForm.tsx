@@ -19,9 +19,10 @@ interface QuoteFormProps {
   onMoveOn: (moveOn: boolean) => void;
   onLoading: (isLoading: boolean) => void;
   onChangeInfo: (newInfo: any) => void;
+  onCanClick: (step: any, canClick: boolean) => void;
 }
 
-const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo, onLoading }) => {
+const QuoteForm: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo, onLoading }) => {
   
   const [newFacilityType, setNewFacilityType] = useState<any>(facilityType);
 
@@ -42,6 +43,7 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOp
     try {
       await changeFacilityType(quoteID, newFacilityType);
       onNextStep(2)
+      onCanClick(2, true)
     } catch (error) {
       console.error('Error updating quote:', error);
     }

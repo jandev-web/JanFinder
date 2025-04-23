@@ -40,11 +40,14 @@ interface QuoteFormProps {
   onMoveOn: (moveOn: boolean) => void;
   onMoveBack: (moveBack: boolean) => void;
   onChangePackage: (newPackage: any) => void;
+  onUpdateCost: (cost: any) => void;
   onHideBar: (hideBar: boolean) => void;
+  onCanClick: (step: any, canClick: boolean) => void;
+
 }
 
 
-const Packages: React.FC<QuoteFormProps> = ({ quoteID, cost, quotePackage, quotePackageOptions, recPackage, onNextStep, onMoveOn, onMoveBack, onChangePackage, onHideBar }) => {
+const Packages: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, cost, quotePackage, quotePackageOptions, recPackage, onNextStep, onMoveOn, onMoveBack, onChangePackage, onUpdateCost, onHideBar }) => {
 
   const [loading, setLoading] = useState(false);
   const [packages, setPackages] = useState<any>(quotePackageOptions);
@@ -54,6 +57,7 @@ const Packages: React.FC<QuoteFormProps> = ({ quoteID, cost, quotePackage, quote
   const [packageName, setPackageName] = useState<string | null>(null);
   const [chosenPackage, setChosenPackage] = useState<any>(quotePackage)
 
+  const [showConfirmation, setShowConfirmation] = useState(false)
   const bronzePackage = packages.find((pkg: PackageOption) => pkg.name === 'Pure Essentials');
   const silverPackage = packages.find((pkg: PackageOption) => pkg.name === 'Radiant Results');
   const goldPackage = packages.find((pkg: PackageOption) => pkg.name === 'Elite Pristine');
@@ -74,6 +78,9 @@ const Packages: React.FC<QuoteFormProps> = ({ quoteID, cost, quotePackage, quote
   console.log("quotePackage", quotePackage)
   console.log("quotePackageOptions", quotePackageOptions)
   console.log("cost", cost)
+  console.log("bronzeCost", bronzeCost)
+  console.log("silverCost", silverCost)
+  console.log("goldCost", goldCost)
 
   useEffect(() => {
     if (!chosenPackage || (chosenPackage != quotePackage)) {
@@ -99,6 +106,8 @@ const Packages: React.FC<QuoteFormProps> = ({ quoteID, cost, quotePackage, quote
     setLoading(true)
     setChosenPackage(pkg);
     onChangePackage(pkg);
+    onNextStep(6)
+    onCanClick(6, true)
   };
 
   const handleGoBack = () => {
@@ -141,7 +150,7 @@ const Packages: React.FC<QuoteFormProps> = ({ quoteID, cost, quotePackage, quote
 
 
       {showComparison && packages ? (
-        <PackageComparison bronzeCost={bronzeCost} silverCost={silverCost} goldCost={goldCost} bronzeChosen={bronzeChosen} silverChosen={silverChosen} goldChosen={goldChosen} bronzeRec={bronzeRec} silverRec={silverRec} goldRec={goldRec} bronzePackage={bronzePackage} silverPackage={silverPackage} goldPackage={goldPackage} onBack={handleGoBack} onHideBar={onHideBar} onMoveOn={onMoveOn} onMoveBack={onMoveBack} onChangePackage={handlePackageChange} packages={packages} recPackage={newRecPackage} quotePackage={quotePackage} quoteID={quoteID} />
+        <PackageComparison bronzeCost={bronzeCost} silverCost={silverCost} goldCost={goldCost} bronzeChosen={bronzeChosen} silverChosen={silverChosen} goldChosen={goldChosen} bronzeRec={bronzeRec} silverRec={silverRec} goldRec={goldRec} bronzePackage={bronzePackage} silverPackage={silverPackage} goldPackage={goldPackage} onBack={handleGoBack} onHideBar={onHideBar} onMoveOn={onMoveOn} onMoveBack={onMoveBack} onUpdateCost={onUpdateCost} onChangePackage={handlePackageChange} packages={packages} recPackage={newRecPackage} quotePackage={quotePackage} quoteID={quoteID} />
       ) : (
 
         <div className='flex flex-col items-center'>
@@ -157,24 +166,27 @@ const Packages: React.FC<QuoteFormProps> = ({ quoteID, cost, quotePackage, quote
                 Our Recommended Package
               </h2>
               {recPackage ? (
-                <PackageCard bronzeCost={bronzeCost} silverCost={silverCost} goldCost={goldCost} bronzeChosen={bronzeChosen} silverChosen={silverChosen} goldChosen={goldChosen} bronzeRec={bronzeRec} silverRec={silverRec} goldRec={goldRec} cleanPackage={recPackage} onNext={onNextStep} quoteID={quoteID} onChangePackage={handlePackageChange} chosen={false} />
+                <PackageCard type={'rec'} onUpdateCost={onUpdateCost} bronzeCost={bronzeCost} silverCost={silverCost} goldCost={goldCost} bronzeChosen={bronzeChosen} silverChosen={silverChosen} goldChosen={goldChosen} bronzeRec={bronzeRec} silverRec={silverRec} goldRec={goldRec} cleanPackage={recPackage} onNext={onNextStep} quoteID={quoteID} onChangePackage={handlePackageChange} />
               ) : (
                 <p className="text-center">No recommended package available.</p>
               )}
             </div>
-            <div className="bg-gradient-to-br from-white to-gray-200 flex flex-col items-center p-8 mb-8 rounded-xl shadow-2xl max-w-2xl w-full border border-[#001F54]">
-              <h2 className="text-3xl font-bold text-[#001F54] mb-6 text-center">
-                Your Selected Package
-              </h2>
-              {quotePackage ? (
-                <PackageCard bronzeCost={bronzeCost} silverCost={silverCost} goldCost={goldCost} bronzeChosen={bronzeChosen} silverChosen={silverChosen} goldChosen={goldChosen} bronzeRec={bronzeRec} silverRec={silverRec} goldRec={goldRec} cleanPackage={quotePackage} onNext={onNextStep} quoteID={quoteID} onChangePackage={handlePackageChange} chosen={true} />
-              ) : (
-                <p className="text-center">No recommended package available.</p>
-              )}
+
+            {quotePackage && (
+              <div className="bg-gradient-to-br from-white to-gray-200 flex flex-col items-center p-8 mb-8 rounded-xl shadow-2xl max-w-2xl w-full border border-[#001F54]">
+                <h2 className="text-3xl font-bold text-[#001F54] mb-6 text-center">
+                  Your Selected Package
+                </h2>
+
+                <div className='pt-12'>
+                  <PackageCard type={'chosen'} onUpdateCost={onUpdateCost} bronzeCost={bronzeCost} silverCost={silverCost} goldCost={goldCost} bronzeChosen={bronzeChosen} silverChosen={silverChosen} goldChosen={goldChosen} bronzeRec={bronzeRec} silverRec={silverRec} goldRec={goldRec} cleanPackage={quotePackage} onNext={onNextStep} quoteID={quoteID} onChangePackage={handlePackageChange} />
+                </div>
+              </div>
+            )}
 
 
 
-            </div>
+
           </div>
           <div className="flex justify-center mt-6">
             <button

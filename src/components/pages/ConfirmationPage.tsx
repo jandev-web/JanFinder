@@ -1,32 +1,14 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import getQuoteDetails from "@/utils/getQuoteDetails";
-
+import LoadingSpinner from "@/components/loadingScreen";
 const ConfirmationPage: React.FC = () => {
-  const [quoteID, setQuoteID] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [quoteInfo, setQuoteInfo] = useState<any>(null);
-  const [progress, setProgress] = useState(0);
   const router = useRouter();
-  
-  // Choose a random duration between 20,000 and 30,000 milliseconds (20-30 seconds)
-  const duration = Math.floor(Math.random() * 10000) + 20000;
-  const progressIntervalRef = useRef<number | null>(null);
-
-  // Determine a message based on the current progress
-  const getProgressMessage = (progress: number) => {
-    if (progress < 33) {
-      return "Sending quote to bid...";
-    } else if (progress < 66) {
-      return "Bidding commenced...";
-    } else if (progress < 100) {
-      return "We have a while...";
-    } else {
-      return "Finalizing bid...";
-    }
-  };
 
   // Fetch initial quote details
   useEffect(() => {
@@ -37,10 +19,11 @@ const ConfirmationPage: React.FC = () => {
           const storedQuoteID = sessionStorage.getItem("customerData");
           if (!storedQuoteID) {
             console.warn("No quoteID found in sessionStorage.");
-            router.push("/quote");
+            router.push("/get-a-quote");
             return;
           }
-          setQuoteID(storedQuoteID);
+          sessionStorage.removeItem('customerData');
+
           const quoteDetails = await getQuoteDetails(storedQuoteID);
           setQuoteInfo(quoteDetails);
           setLoading(false);
@@ -53,49 +36,37 @@ const ConfirmationPage: React.FC = () => {
     fetchCustomerData();
   }, [router]);
 
-  // Poll for changes in quoteInfo fields (isAccepted and Owner)
-  useEffect(() => {
-    if (!quoteID) return;
-    const pollInterval = setInterval(async () => {
-      try {
-        const details = await getQuoteDetails(quoteID);
-        setQuoteInfo(details);
-        console.log("Accepted:", details.IsAccepted);
-        // Check if quote has been accepted
-        if (details?.isAccepted === true && details?.Owner && details.Owner !== "None") {
-          // Clear the progress interval if it's running
-          if (progressIntervalRef.current) {
-            clearInterval(progressIntervalRef.current);
-          }
-          clearInterval(pollInterval);
-          router.push("/get-a-quote/winner");
-        }
-      } catch (error) {
-        console.error("Error polling quote details:", error);
-      }
-    }, 2000); // poll every 2 seconds
-
-    return () => clearInterval(pollInterval);
-  }, [quoteID, router]);
-
-  // Progress bar animation
-  
+  // If loading, show spinner
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
-      <h1 className="text-2xl md:text-4xl font-bold mb-6 text-gray-800 text-center">
-        Please sit tight while you wait for the bidding process.
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-12">
+      <h1 className="text-3xl md:text-5xl font-extrabold mb-6 text-center">
+        Congratulations {quoteInfo.customerData.firstName} {quoteInfo.customerData.lastName}, your quote has been sent out to bid!
       </h1>
-      <div className="w-full max-w-md bg-gray-300 rounded-full h-6 mb-4">
-        <div
-          className="bg-blue-500 h-6 rounded-full transition-all duration-100"
-          style={{ width: `${progress}%` }}
-        ></div>
-      </div>
-      <p className="text-lg font-medium text-gray-700">
-        {getProgressMessage(progress)}
+      <p className="text-lg md:text-xl font-semibold mb-8 text-center max-w-lg mx-auto">
+        You will receive an email shortly when one of our Cleaning Companies accepts your bid. Thank you for choosing our service!
+      </p>
+
+      {/* Button Section */}
+      <button
+        className="bg-yellow-500 text-gray-800 font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-yellow-600 transition-all duration-300 transform hover:scale-105"
+      >
+        Click Here to Check Bid Status
+      </button>
+
+      {/* Optional: Additional Information */}
+      <p className="text-sm mt-6 text-center text-gray-300">
+        Need assistance? <a href="mailto:support@company.com" className="underline hover:text-yellow-300">Contact Support</a>
       </p>
     </div>
+
   );
 };
 

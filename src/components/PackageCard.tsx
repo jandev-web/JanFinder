@@ -32,29 +32,29 @@ interface PackageCardProps {
   quoteID: any;
   onNext: (stepNumber: number) => void;
   onChangePackage: (pkg: any) => void;
-  chosen: boolean;
+  onUpdateCost: (cost: any) => void;
   bronzeRec: any;
   silverRec: any;
   goldRec: any;
   bronzeChosen: any;
   silverChosen: any;
   goldChosen: any;
+  type: any;
 }
 
-const PackageCard: React.FC<PackageCardProps> = ({ bronzeCost, silverCost, goldCost, bronzeRec, silverRec, goldRec, bronzeChosen, goldChosen, silverChosen, cleanPackage, chosen, onChangePackage, quoteID, onNext }) => {
+const PackageCard: React.FC<PackageCardProps> = ({ type, bronzeCost, silverCost, goldCost, bronzeRec, silverRec, goldRec, bronzeChosen, goldChosen, silverChosen, cleanPackage, onChangePackage, onUpdateCost, quoteID, onNext }) => {
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
   const [finalCost, setFinalCost] = useState(goldCost);
-
+  console.log(goldCost)
+  console.log(finalCost)
   
 
   useEffect(() => {
-    let calculatedCost;
     if (cleanPackage.name === 'Radiant Results') {
-      calculatedCost = silverCost
+      setFinalCost(silverCost)
     } else if (cleanPackage.name === 'Pure Essentials') {
-      calculatedCost = bronzeCost;
+      setFinalCost(bronzeCost);
     }
-    setFinalCost(calculatedCost);
   }, [cleanPackage.name]);
 
   const handleSelectPackage = async (pkg: CleanPackage) => {
@@ -62,11 +62,11 @@ const PackageCard: React.FC<PackageCardProps> = ({ bronzeCost, silverCost, goldC
       const response = await updatePackage(quoteID, pkg);
       const roundCost = roundingUtil(finalCost)
       await updateQuoteCost(quoteID, { finalCost: roundCost });
+      onUpdateCost(roundCost)
       onChangePackage(pkg);
       
       if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
-        onNext(6)
       } else {
         //setConfirmationMessage('Failed to update package. Please try again.');
       }
@@ -78,14 +78,14 @@ const PackageCard: React.FC<PackageCardProps> = ({ bronzeCost, silverCost, goldC
 
   return (
     <div className="">
-      {((goldRec && !chosen )|| (goldChosen && chosen)) && (
-        <GoldRec chosen={chosen} pkg={cleanPackage} rec={!chosen} cost={goldCost} handleSelect={() => handleSelectPackage(cleanPackage)}/>
+      {((goldRec && (type === 'rec') )|| (goldChosen && (type === 'chosen'))) && (
+        <GoldRec chosen={goldChosen} pkg={cleanPackage} rec={goldRec} cost={goldCost} handleSelect={() => handleSelectPackage(cleanPackage)}/>
       )}
-      {((silverRec && !chosen )|| (silverChosen && chosen)) && (
-        <SilverRec chosen={chosen} pkg={cleanPackage} rec={!chosen} cost={silverCost} handleSelect={() => handleSelectPackage(cleanPackage)}/>
+      {((silverRec && (type === 'rec'))|| (silverChosen && (type === 'chosen'))) && (
+        <SilverRec chosen={silverChosen} pkg={cleanPackage} rec={silverRec} cost={silverCost} handleSelect={() => handleSelectPackage(cleanPackage)}/>
       )}
-      {((bronzeRec && !chosen )|| (bronzeChosen && chosen)) && (
-        <BronzeRec chosen={chosen} pkg={cleanPackage} rec={!chosen} cost={bronzeCost} handleSelect={() => handleSelectPackage(cleanPackage)}/>
+      {((bronzeRec && (type === 'rec'))|| (bronzeChosen && (type === 'chosen'))) && (
+        <BronzeRec chosen={bronzeChosen} pkg={cleanPackage} rec={bronzeRec} cost={bronzeCost} handleSelect={() => handleSelectPackage(cleanPackage)}/>
       )}
       
       

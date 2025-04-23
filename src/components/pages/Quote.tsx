@@ -15,9 +15,10 @@ interface QuoteFormProps {
   onNextStep: (stepNumber: number) => void;
   onMoveOn: (moveOn: boolean) => void;
   onChangeInfo: (newInfo: any) => void;
+  onCanClick: (step: any, canClick: boolean) => void;
 }
 
-const Quote: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo }) => {
+const Quote: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo }) => {
   const [loading, setLoading] = useState(false);
 
   const handleLoading = (isLoading: boolean) => {
@@ -41,7 +42,7 @@ const Quote: React.FC<QuoteFormProps> = ({ quoteID, facilityType, facilityOption
 
       {/* Form Section */}
       
-        <QuoteForm quoteID={quoteID} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={onNextStep} onMoveOn={onMoveOn} onChangeInfo={onChangeInfo} onLoading={handleLoading}/>;
+        <QuoteForm quoteID={quoteID} onCanClick={onCanClick} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={onNextStep} onMoveOn={onMoveOn} onChangeInfo={onChangeInfo} onLoading={handleLoading}/>;
       
     </div>
 
