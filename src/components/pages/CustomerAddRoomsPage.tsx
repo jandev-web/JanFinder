@@ -11,35 +11,33 @@ interface QuoteFormProps {
     quoteID: any;
     facilityType: any;
     facilityRooms: any;
-    quoteRooms: any;
+    
     quoteSqft: any
     onChangeSqft: (newSqft: any) => void;
     onChangeRoomTypes: (newRoomTypes: any) => void;
     quoteRoomTypes: any;
     onNextStep: (stepNumber: number) => void;
     onMoveOn: (moveOn: boolean) => void;
-    onChangeRooms: (facilityRoom: any) => void;
+    
     onCanClick: (step: any, canClick: boolean) => void;
 }
 
-const CustomerAddRooms: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quoteRoomTypes, onChangeRoomTypes, quoteSqft, facilityType, quoteRooms, facilityRooms, onChangeSqft, onNextStep, onMoveOn, onChangeRooms }) => {
+const CustomerAddRooms: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quoteRoomTypes, onChangeRoomTypes, quoteSqft, facilityType, facilityRooms, onChangeSqft, onNextStep, onMoveOn }) => {
 
-    const [rooms, setRooms] = useState<any>(quoteRooms || []);
-    const [roomTypes, setRoomTypes] = useState<any>(quoteRoomTypes || {})
+    const [roomTypes, setRoomTypes] = useState<any>(quoteRoomTypes || [])
     const [showAddRoomForm, setShowAddRoomForm] = useState(false);
     const [sqft, setSqft] = useState(quoteSqft || 0)
     const [loading, setLoading] = useState(false);
     const [hasChanged, setHasChanged] = useState(false)
     const [listLoading, setListLoading] = useState(false);
-
-    console.log("quoteRooms", quoteRooms)
-
+    console.log(quoteRoomTypes)
     useEffect(() => {
-            if (!rooms || rooms.length === 0 || hasChanged) {
+            if (!roomTypes || roomTypes.length === 0 || hasChanged) {
+                console.log('Setting onMove false')
                 setShowAddRoomForm(true);
                 onMoveOn(false);
             }
-    }, [rooms]);
+    }, [roomTypes]);
 
     const handleChangeSqft = (newSqft: any) => {
         setSqft(newSqft);
@@ -49,22 +47,10 @@ const CustomerAddRooms: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quote
     const handleAddRoom = async (newRoom: Room) => {
         setListLoading(true)
         await manualAddRoom(quoteID, newRoom);
-        const newSqft = sqft + newRoom.sqft
+        const newSqft = sqft + newRoom.sqft.totalSqft
         handleChangeSqft(newSqft)
-        setRoomTypes((prevRoomTypes: any) => {
-            const updatedRoomTypes = { ...prevRoomTypes };
-    
-            // Check if the room type already exists
-            if (updatedRoomTypes[newRoom.roomType]) {
-                updatedRoomTypes[newRoom.roomType] += newRoom.sqft;  // Add square footage
-            } else {
-                updatedRoomTypes[newRoom.roomType] = newRoom.sqft;  // Create new entry with sqft
-            }
-            onChangeRoomTypes(updatedRoomTypes)
-            return updatedRoomTypes;
-        });
-        setRooms((prevRooms: any) => [...prevRooms, newRoom]);
-        onChangeRooms((prevRooms: any) => [...prevRooms, newRoom])
+        setRoomTypes((prevRooms: any) => [...prevRooms, newRoom]);
+        onChangeRoomTypes([...roomTypes, newRoom]);
         setHasChanged(true)
         onMoveOn(true)
         setListLoading(false)
@@ -75,24 +61,9 @@ const CustomerAddRooms: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quote
         await manualDeleteRoom(quoteID, oldRoom);
         const newSqft = sqft - oldRoom.sqft
         handleChangeSqft(newSqft)
-        setRoomTypes((prevRoomTypes: any) => {
-            const updatedRoomTypes = { ...prevRoomTypes };
-    
-            // If the room exists, subtract the square footage
-            if (updatedRoomTypes[oldRoom.roomType]) {
-                updatedRoomTypes[oldRoom.roomType] -= oldRoom.sqft;
-    
-                // If the square footage for the room type becomes 0, remove the key
-                if (updatedRoomTypes[oldRoom.roomType] === 0) {
-                    delete updatedRoomTypes[oldRoom.roomType];
-                }
-            }
-            onChangeRoomTypes(updatedRoomTypes)
-            return updatedRoomTypes;
-        });
-        setRooms((prevRooms: any) => prevRooms.filter((room: any) => room !== oldRoom));
-        onChangeRooms((prevRooms: any) => prevRooms.filter((room: any) => room !== oldRoom));
-        if (rooms.length === 0) {
+        setRoomTypes((prevRooms: any) => prevRooms.filter((room: any) => room !== oldRoom));
+        onChangeRoomTypes(roomTypes.filter((room: any) => room !== oldRoom));
+        if (roomTypes.length === 0) {
             setShowAddRoomForm(true);
             onMoveOn(false);
         }
@@ -139,15 +110,15 @@ const CustomerAddRooms: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quote
                 </p>
             </div>
             {showAddRoomForm ? (
-                <CustomerAddRoomForm onAddRoom={handleAddRoom} onExit={onExit} roomTypeOptions={facilityRooms} rooms={rooms} />
+                <CustomerAddRoomForm onAddRoom={handleAddRoom} onExit={onExit} roomTypeOptions={facilityRooms} roomTypes={roomTypes} />
             ) : (
                 <button onClick={() => setShowAddRoomForm(true)} className="self-center bg-[#001F54] hover:bg-[#001840] text-white py-3 px-6 rounded transition duration-300 mb-8">
                     Add Room
                 </button>
             )}
 
-            <CustomerRoomsList rooms={rooms} onDeleteRoom={handleDeleteRoom} listLoading={listLoading}/>
-            {((rooms.length > 0) && hasChanged) &&
+            <CustomerRoomsList roomTypes={roomTypes} onDeleteRoom={handleDeleteRoom} listLoading={listLoading}/>
+            {((roomTypes.length > 0) && hasChanged) &&
                 <button onClick={handleSubmit} className="self-center bg-green-600 hover:bg-[#001840] text-white py-3 px-6 rounded transition duration-300 mt-8">
                     Confirm Room Information
                 </button>

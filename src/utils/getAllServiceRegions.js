@@ -1,6 +1,6 @@
-const createFranchise = async (franchiseName, serviceRegions) => {
-    const apiKey = process.env.NEXT_PUBLIC_CREATE_FRANCHISE_KEY;
-    const url = process.env.NEXT_PUBLIC_CREATE_FRANCHISE_URL;
+const getAllRegions = async () => {
+    const apiKey = process.env.NEXT_PUBLIC_GET_ALL_REGIONS_KEY;
+    const url = process.env.NEXT_PUBLIC_GET_ALL_REGIONS_URL;
   
     try {
       const response = await fetch(url, {
@@ -10,7 +10,6 @@ const createFranchise = async (franchiseName, serviceRegions) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          franchiseName, serviceRegions,
         }),
       });
       
@@ -31,4 +30,4 @@ const createFranchise = async (franchiseName, serviceRegions) => {
     }
   };
   
-  export default createFranchise;
+  export default getAllRegions;

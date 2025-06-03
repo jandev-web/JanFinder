@@ -47,7 +47,6 @@ interface QuoteInfo {
     sqft: string;
     cost: any;
     customerDetails: any;
-    quoteRooms: any;
     roomTypes: any;
     quoteBudget: any;
     quoteFrequency: any;
@@ -56,7 +55,7 @@ interface QuoteInfo {
     onMoveBack: (moveBack: boolean) => void;
 }
 
-const ConfirmationPage: React.FC<QuoteInfo> = ({ quoteID, roomTypes, quotePackage, facilityType, sqft, cost, customerDetails, quoteRooms, quoteBudget, quoteFrequency, onMoveBack, onMoveOn, onNextStep }) => {
+const ConfirmationPage: React.FC<QuoteInfo> = ({ quoteID, roomTypes, quotePackage, facilityType, sqft, cost, customerDetails, quoteBudget, quoteFrequency, onMoveBack, onMoveOn, onNextStep }) => {
     
 
     const [loading, setLoading] = useState(false);

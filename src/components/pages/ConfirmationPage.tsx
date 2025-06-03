@@ -19,7 +19,7 @@ const ConfirmationPage: React.FC = () => {
           const storedQuoteID = sessionStorage.getItem("customerData");
           if (!storedQuoteID) {
             console.warn("No quoteID found in sessionStorage.");
-            router.push("/get-a-quote");
+            //router.push("/get-a-quote");
             return;
           }
           sessionStorage.removeItem('customerData');
