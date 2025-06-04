@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import CBOAvaQuoteCard from './CBOAvaQuoteCard';
-import LoadingSpinner from '@/components/loadingScreen';
+import LoadingSpinner from '@/components/LoadingScreenPhrase';
 import fetchAvailableCBOQuotes from '@/utils/getAvailableQuotesCBO';
 import checkFranchiseTemplates from '@/utils/checkForFranTemplates';
 import getQuoteDetails from '@/utils/getQuoteDetails';
@@ -160,7 +160,7 @@ const CBOAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner />
+        <LoadingSpinner phrase={'Available Contracts'} />
       </div>
     );
   }

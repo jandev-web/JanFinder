@@ -1,6 +1,7 @@
 
 const getPackageRecs = async (quoteID) => {
     const url = process.env.NEXT_PUBLIC_PACKAGE_RECS_URL;
+    
     const apiKey = process.env.NEXT_PUBLIC_PACKAGE_RECS_KEY; 
     const response = await fetch(url, {
         method: 'POST',

@@ -49,7 +49,13 @@ const CustomerAddRooms: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quote
         await manualAddRoom(quoteID, newRoom);
         const newSqft = sqft + newRoom.sqft.totalSqft
         handleChangeSqft(newSqft)
-        setRoomTypes((prevRooms: any) => [...prevRooms, newRoom]);
+        setRoomTypes((prevRooms: any) => {
+            console.log(prevRooms)
+            // Coerce prevRooms into an array if it isn’t one already:
+            const base = Array.isArray(prevRooms) ? prevRooms : [];
+            return [...base, newRoom];
+          });
+          
         onChangeRoomTypes([...roomTypes, newRoom]);
         setHasChanged(true)
         onMoveOn(true)
@@ -61,7 +67,11 @@ const CustomerAddRooms: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quote
         await manualDeleteRoom(quoteID, oldRoom);
         const newSqft = sqft - oldRoom.sqft
         handleChangeSqft(newSqft)
-        setRoomTypes((prevRooms: any) => prevRooms.filter((room: any) => room !== oldRoom));
+        setRoomTypes((prevRooms: any) => {
+            const base = Array.isArray(prevRooms) ? prevRooms : [];
+            return base.filter((room: any) => room !== oldRoom);
+          });
+          
         onChangeRoomTypes(roomTypes.filter((room: any) => room !== oldRoom));
         if (roomTypes.length === 0) {
             setShowAddRoomForm(true);

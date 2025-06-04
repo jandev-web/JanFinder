@@ -67,7 +67,7 @@ const ConfirmationPage: React.FC<QuoteInfo> = ({ quoteID, roomTypes, quotePackag
 
 
 
-    console.log(cost)
+    console.log(quotePackage)
 
 
 

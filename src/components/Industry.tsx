@@ -18,6 +18,8 @@ const IndustryPage: React.FC<IndustryPageProps> = ({ name, image, blurb }) => {
                 <Image
                     src={image}
                     alt={`${name} Cleaning Services`}
+                    width={800}    // e.g. the actual image width
+                    height={600} 
                     className="w-full max-w-2xl rounded-lg shadow-lg"
                 />
             </div>

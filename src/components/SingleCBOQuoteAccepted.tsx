@@ -299,21 +299,22 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
                                 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 h-96 overflow-y-auto">
 
                                     <div className="space-y-4">
-                                        {quotePackage.rooms.map((room: any, index: any) => (
+                                    {quotePackage.rooms.map((room: any, index: any) => (
                                             <div key={index} className="border-b border-gray-300 pb-4">
                                                 <h4 className="text-xl font-semibold text-[#001F54] mb-2">
-                                                    {room.roomName}: {roomInfo[room.roomName]} sqft
+                                                    {room.roomName}:{" "}
+                                                    {
+                                                        // Find the matching room‐object in roomInfo, then read its sqft.totalSqft
+                                                        roomInfo.find((r: any) => r.roomType === room.roomName)
+                                                            ?.sqft?.totalSqft ?? 0
+                                                    }{" "}
+                                                    sqft
                                                 </h4>
                                                 <ul className="pl-4 space-y-2">
                                                     {room.tasks.map((task: any, idx: any) => (
-                                                        <li
-                                                            key={idx}
-                                                            className="flex justify-between items-center text-sm"
-                                                        >
+                                                        <li key={idx} className="flex justify-between items-center text-sm">
                                                             <span className="font-medium">{task.taskName}</span>
-                                                            <span className="italic text-gray-500">
-                                                                {task.taskFrequency}
-                                                            </span>
+                                                            <span className="italic text-gray-500">{task.taskFrequency}</span>
                                                         </li>
                                                     ))}
                                                 </ul>

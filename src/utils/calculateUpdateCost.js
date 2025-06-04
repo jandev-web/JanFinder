@@ -9,6 +9,7 @@ export const calculateUpdateCost = async (quoteID, frequency) => {
         const componentInfo = {payrollTax: 4, overhead: 4, salary: 15, profitPercent: 10}
         
         const timeDetails = await calculateTime(quoteID);
+        console.log(timeDetails)
         const totalTime = timeDetails.totalTime;
 
         const monthDayTime = await getTotalTime(frequency, totalTime);

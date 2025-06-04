@@ -92,7 +92,9 @@ const CustomerAddRoomForm: React.FC<CustomerAddRoomFormProps> = ({ onAddRoom, on
     // Optionally, reset the form fields.
     setSqft(0);
     setRoomType('');
-
+    setSqftValues({})
+    setRoomNumber('')
+    setSelectedFloorTypes([])
   };
 
   const isFormValid = () => {

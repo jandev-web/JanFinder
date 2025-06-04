@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import LoadingSpinner from '@/components/loadingScreen';
+import LoadingSpinner from '@/components/LoadingScreenPhrase';
 
 interface Quote {
     QuoteID: string;
@@ -36,7 +36,7 @@ const AllQuotes: React.FC<AllQuotesProps> = ({ user }) => {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <LoadingSpinner />
+                <LoadingSpinner phrase={'All Contracts'}/>
             </div>
         );
     }

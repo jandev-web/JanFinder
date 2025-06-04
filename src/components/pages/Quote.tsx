@@ -42,7 +42,7 @@ const Quote: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, facilityType, fa
 
       {/* Form Section */}
       
-        <QuoteForm quoteID={quoteID} onCanClick={onCanClick} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={onNextStep} onMoveOn={onMoveOn} onChangeInfo={onChangeInfo} onLoading={handleLoading}/>;
+        <QuoteForm quoteID={quoteID} onCanClick={onCanClick} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={onNextStep} onMoveOn={onMoveOn} onChangeInfo={onChangeInfo} onLoading={handleLoading}/>
       
     </div>
 

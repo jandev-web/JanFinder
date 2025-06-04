@@ -25,11 +25,5 @@ export default async function AcceptedQuotesPage() {
   } catch (error) {
     console.error('Error fetching user:', error);
 
-    // Redirect to the login page if an error occurs
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <LoginError />
-      </div>
-    );
   }
 }

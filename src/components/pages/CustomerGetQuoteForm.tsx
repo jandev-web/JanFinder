@@ -36,7 +36,7 @@ const CustomerGetQuoteForm: React.FC = () => {
     const [facilityType, setFacilityType] = useState<any>(null);
     const [customerInfo, setCustomerInfo] = useState<any>(null);
     const [roomOptions, setRoomOptions] = useState<any>(null);
-    const [quoteRoomTypes, setQuoteRoomTypes] = useState<any>({});
+    const [quoteRoomTypes, setQuoteRoomTypes] = useState<any>([]);
     const [facilityRooms, setFacilityRooms] = useState<any>({});
     const [quoteFrequency, setQuoteFrequency] = useState<any>(null)
     const [quoteBudget, setQuoteBudget] = useState<any>(null)

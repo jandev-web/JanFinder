@@ -313,18 +313,19 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
                                         {quotePackage.rooms.map((room: any, index: any) => (
                                             <div key={index} className="border-b border-gray-300 pb-4">
                                                 <h4 className="text-xl font-semibold text-[#001F54] mb-2">
-                                                    {room.roomName}: {roomInfo[room.roomName]} sqft
+                                                    {room.roomName}:{" "}
+                                                    {
+                                                        // Find the matching room‐object in roomInfo, then read its sqft.totalSqft
+                                                        roomInfo.find((r: any) => r.roomType === room.roomName)
+                                                            ?.sqft?.totalSqft ?? 0
+                                                    }{" "}
+                                                    sqft
                                                 </h4>
                                                 <ul className="pl-4 space-y-2">
                                                     {room.tasks.map((task: any, idx: any) => (
-                                                        <li
-                                                            key={idx}
-                                                            className="flex justify-between items-center text-sm"
-                                                        >
+                                                        <li key={idx} className="flex justify-between items-center text-sm">
                                                             <span className="font-medium">{task.taskName}</span>
-                                                            <span className="italic text-gray-500">
-                                                                {task.taskFrequency}
-                                                            </span>
+                                                            <span className="italic text-gray-500">{task.taskFrequency}</span>
                                                         </li>
                                                     ))}
                                                 </ul>
@@ -338,7 +339,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
 
                     {/* Accept Quote Actions */}
                     <div className="mt-10 text-center">
-                        {(!showAcceptConfirmation && !showRejectConfirmation)? (
+                        {(!showAcceptConfirmation && !showRejectConfirmation) ? (
                             <div>
                                 <button
                                     onClick={() => setShowAcceptConfirmation(true)}
@@ -354,7 +355,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
                                 </button>
                             </div>
                         ) : (
-                            
+
                             <div className="flex justify-center space-x-4">
                                 <button
                                     onClick={() =>

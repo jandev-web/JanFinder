@@ -97,6 +97,8 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID }) => {
       setCustomerData(quoteData.customerData);
       setTimestamp(quoteData.Timestamp);
       setRoomInfo(quoteData.quoteInfo.roomTypes);
+      const newRoomInfo = quoteData.quoteInfo.roomTypes
+      console.log(newRoomInfo)
       setAddress(quoteData.customerData.address);
 
     } catch (error) {
@@ -109,7 +111,7 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID }) => {
       console.log('Accepting quote')
       await acceptQuoteOwner(quoteID, user.franchiseID, user.OwnerID);
       router.push('/members/owner/quotes/available')
-      
+
     } catch (error) {
       console.error('Error accepting quote:', error);
     }
@@ -243,23 +245,25 @@ const OwnerQuote: React.FC<OwnerQuoteProps> = ({ user, quoteID }) => {
                     {quotePackage.rooms.map((room: any, index: any) => (
                       <div key={index} className="border-b border-gray-300 pb-4">
                         <h4 className="text-xl font-semibold text-[#001F54] mb-2">
-                          {room.roomName}: {roomInfo[room.roomName]} sqft
+                          {room.roomName}:{" "}
+                          {
+                            // Find the matching room‐object in roomInfo, then read its sqft.totalSqft
+                            roomInfo.find((r: any) => r.roomType === room.roomName)
+                              ?.sqft?.totalSqft ?? 0
+                          }{" "}
+                          sqft
                         </h4>
                         <ul className="pl-4 space-y-2">
                           {room.tasks.map((task: any, idx: any) => (
-                            <li
-                              key={idx}
-                              className="flex justify-between items-center text-sm"
-                            >
+                            <li key={idx} className="flex justify-between items-center text-sm">
                               <span className="font-medium">{task.taskName}</span>
-                              <span className="italic text-gray-500">
-                                {task.taskFrequency}
-                              </span>
+                              <span className="italic text-gray-500">{task.taskFrequency}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
                     ))}
+
                   </div>
                 </div>
               </div>
