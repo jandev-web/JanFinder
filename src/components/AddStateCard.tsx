@@ -121,7 +121,7 @@ const AddStateCard: React.FC<AddStateCardProps> = ({
             {expandedState && (
                 <div className="mt-4 space-y-2">
                     {stateOption.stateRegions.map((region) => (
-                        <AddRegionCard region={region} isSelected={isRegionSelected(region)} handleRegionSelection={handleRegionSelection} />
+                        <AddRegionCard region={region} key={region.regionName} isSelected={isRegionSelected(region)} handleRegionSelection={handleRegionSelection} />
                     ))}
                 </div>
             )}
