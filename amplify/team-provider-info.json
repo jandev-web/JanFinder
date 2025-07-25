@@ -19,7 +19,8 @@
         "S3Trigger4c87d159": {
           "deploymentBucketName": "amplify-janfinder-dev-1c1b5-deployment",
           "s3Key": "amplify-builds/S3Trigger4c87d159-744d7a35615733715159-build.zip"
-        }
+        },
+        "getRoomTimes": {}
       },
       "storage": {
         "JanFinderBucket": {}

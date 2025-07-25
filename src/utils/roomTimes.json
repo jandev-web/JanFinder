@@ -1,0 +1,818 @@
+[
+  {
+    "roomName": "Single Use Bathroom",
+    "avgRoomSize": 100,
+    "roomTasks": [
+      {
+        "taskName": "Sweep And Mop Floor Using Commercial Grade Cleaners",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00104)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Empty And Reset Trash Liner, Refill All Dispensers, Clean And Disinfect Restroom Fixtures, Clean And Polish Mirrors, Counters, Partitions, And All Bright Work",
+        "taskCalculation": "(2.6545+(0.02221*(roomNumber)*(roomSqft)))*2.375",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "roomName": "Breakrooms",
+    "avgRoomSize": 100,
+    "roomTasks": [
+      {
+        "taskName": "Wipe Off Counters And Sink",
+        "taskCalculation": "(roomNumber)*(4.22)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Wipe Off Tables",
+        "taskCalculation": "((0.02*((roomNumber)*(roomSqft))+4))*(4.01))*(1.375)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Clean Chairs",
+        "taskCalculation": "(0.02*((roomNumber)*(roomSqft))+4))*(0.187)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      },
+      {
+        "taskName": "Clean Out Refrigerators",
+        "taskCalculation": "(6*(roomNumber))-1",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "NA"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Monthly"
+          }
+        ]
+      },
+      {
+        "taskName": "Clean And Disinfect Microwaves",
+        "taskCalculation": "(3*(roomNumber))-1",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "NA"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Empty And Reset Trash Liners",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00248)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Detail Dust - High Dusting",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00405)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Monthly"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "roomName": "Entrance",
+    "avgRoomSize": 100,
+    "roomTasks": [
+      {
+        "taskName": "Spot Clean And Polish Entrance Glass",
+        "taskCalculation": "((roomNumber)*(2))*(1.08)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily Subtracted by one"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily Subtracted by one"
+          }
+        ]
+      },
+      {
+        "taskName": "Clean Both Sides Of Entrance Glass",
+        "taskCalculation": "((roomNumber)*(2))*(2.08)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      },
+      {
+        "taskName": "Vacuum Walk-Off Matts",
+        "taskCalculation": "(roomNumber)*(.15)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Detail Dust - High Dusting",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00405)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Monthly"
+          }
+        ]
+      },
+      {
+        "taskName": "Spot Clean Light Switches, Door Handles",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00104)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "NA"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "roomName": "Exam Rooms",
+    "avgRoomSize": 100,
+    "roomTasks": [
+      {
+        "taskName": "Wipe, Clean, And Disinfect Sinks Exam Tables",
+        "taskCalculation": "(roomNumber)(2.15)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily Subtracted by one"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Wipe, Clean, And Disinfect Sinks",
+        "taskCalculation": "(roomNumber)(1.5)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Detail Dust - High Dusting",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00405)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Monthly"
+          }
+        ]
+      },
+      {
+        "taskName": "Vacuum Upholstered Furniture",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00235)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Bi-Weekly"
+          }
+        ]
+      },
+      {
+        "taskName": "Empty And Reset Trash Liners",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00248)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Damp Wipe And Disinfect Horizontal Surfaces",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.005)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Spot Clean Light Switches, Door Handles",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00104)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "NA"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "roomName": "Storage / Utility Rooms",
+    "avgRoomSize": 100,
+    "roomTasks": [
+      {
+        "taskName": "Detail Dust - High Dusting",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00405)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Monthly"
+          }
+        ]
+      },
+      {
+        "taskName": "Organising Cleaning Stock And Supplies",
+        "taskCalculation": "(roomNumber)*0",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "roomName": "Hallways",
+    "avgRoomSize": 100,
+    "roomTasks": [
+      {
+        "taskName": "Detail Dust - High Dusting",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00405)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Monthly"
+          }
+        ]
+      },
+      {
+        "taskName": "Spot Clean Light Switches, Door Handles",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00104)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "NA"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "roomName": "Lobby / Reception Tasks",
+    "avgRoomSize": 100,
+    "roomTasks": [
+      {
+        "taskName": "Detail Dust - High Dusting",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00405)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Bi-Weekly"
+          }
+        ]
+      },
+      {
+        "taskName": "Dust Horizontal Surfaces",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.001025)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily Subtracted by one"
+          }
+        ]
+      },
+      {
+        "taskName": "Vacuum Upholstered Furniture",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00235)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Bi-Weekly"
+          }
+        ]
+      },
+      {
+        "taskName": "Empty And Reset Trash Liners",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00248)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Damp Wipe And Disinfect Horizontal Surfaces",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.005)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily Subtracted by one"
+          }
+        ]
+      },
+      {
+        "taskName": "Spot Clean Light Switches, Door Handles",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00104)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "NA"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "roomName": "Laboratory / Testing Rooms",
+    "avgRoomSize": 100,
+    "roomTasks": [
+      {
+        "taskName": "Wipe, Clean, And Disinfect Sinks",
+        "taskCalculation": "(roomNumber)(1.5)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Detail Dust - High Dusting",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00405)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Monthly"
+          }
+        ]
+      },
+      {
+        "taskName": "Vacuum Upholstered Furniture",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00235)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Quarterly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Bi-Weekly"
+          }
+        ]
+      },
+      {
+        "taskName": "Empty And Reset Trash Liners",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00248)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Damp Wipe And Disinfect Horizontal Surfaces",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.005)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Spot Clean Light Switches, Door Handles",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00104)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "NA"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "roomName": "Hardfloor",
+    "avgRoomSize": 0,
+    "roomTasks": [
+      {
+        "taskName": "Damp Mop Hard Surface Floors",
+        "taskCalculation": "(roomSqft)*(0.0159)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      },
+      {
+        "taskName": "Spot Mop Stains And Spills",
+        "taskCalculation": "(roomSqft)*(0.00183)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily-1"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily-1"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily-1"
+          }
+        ]
+      },
+      {
+        "taskName": "Dust Mop Hard Surface Floors",
+        "taskCalculation": "(roomSqft)*(0.0087)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Weekly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "roomName": "Carpet",
+    "avgRoomSize": 0,
+    "roomTasks": [
+      {
+        "taskName": "Detail Vacuum Carpet, Corners And Edges",
+        "taskCalculation": "(roomSqft)*(0.0118)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Monthly"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Bi-Weekly"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Weekly"
+          }
+        ]
+      },
+      {
+        "taskName": "Spot Vacuum Carpet (High Traffic Areas)",
+        "taskCalculation": "(roomSqft)*(0.00223)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily-1"
+          }
+        ]
+      }
+    ]
+  }
+]

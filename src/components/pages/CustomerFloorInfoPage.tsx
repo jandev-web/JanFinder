@@ -1,26 +1,22 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import QuoteForm from '../QuoteForm';
+import FloorNumber from '@/components/FloorNumber'
 import LoadingSpinner from '@/components/loadingScreen';
-
-interface BuildingType {
-  name: string;
-}
 
 interface QuoteFormProps {
   quoteID: any;
-  facilityType: any;
-  facilityOptions: BuildingType[];
+  floorNumber: any;
+  stairwells:any;
   onNextStep: (stepNumber: number) => void;
   onMoveOn: (moveOn: boolean) => void;
-  onChangeInfo: (newInfo: any) => void;
+  onChangeFloors: (newFloorNumber: any, newStairwells: any) => void;
   onCanClick: (step: any, canClick: boolean) => void;
 }
 
-const Quote: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo }) => {
+const FloorInfoPage: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, stairwells, floorNumber, onNextStep, onMoveOn, onChangeFloors }) => {
   const [loading, setLoading] = useState(false);
-  console.log(facilityOptions)
+  
   const handleLoading = (isLoading: boolean) => {
     setLoading(isLoading);
 }
@@ -34,19 +30,19 @@ const Quote: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, facilityType, fa
 
       {/* Message About the First Step */}
       <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
-        <h1 className="text-4xl font-bold mb-4">Step 2: Facility Type</h1>
+        <h1 className="text-4xl font-bold mb-4">Step 2: Number of Floors</h1>
         <p className="text-xl">
-          Next, please select which type of facility you are looking for a quote for.
+          Next, add your Facility's floor number and stairwell information.
         </p>
       </div>
 
       {/* Form Section */}
       
-        <QuoteForm quoteID={quoteID} onCanClick={onCanClick} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={onNextStep} onMoveOn={onMoveOn} onChangeInfo={onChangeInfo} onLoading={handleLoading}/>
+        <FloorNumber quoteID={quoteID} onCanClick={onCanClick} floorNumber={floorNumber} stairwells={stairwells} onNextStep={onNextStep} onMoveOn={onMoveOn} onChangeInfo={onChangeFloors} onLoading={handleLoading}/>
       
     </div>
 
   );
 };
 
-export default Quote;
+export default FloorInfoPage;

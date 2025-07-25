@@ -14,7 +14,6 @@ import CustomerInfo from "./pages/CustomerInfo";
 import FinalQuote from "./pages/FinalQuote";
 import SingleCBOQuotePage from "./pages/SingleCBOQuotePage";
 import CBO from "./CBOComponent";
-import CBOQuoteAccepted from "./pages/CBOQuoteAccepted";
 import Contact from "./pages/Contact";
 import Packages from "./pages/Packages";
 import Home from "./pages/Home";
@@ -37,7 +36,6 @@ export {
   FinalQuote,
   SingleCBOQuotePage,
   CBO,
-  CBOQuoteAccepted,
   Contact,
   Packages,
   Home,

@@ -1,0 +1,44 @@
+[
+  {
+    "roomName": "Single Use Bathroom",
+    "avgRoomSize": 100,
+    "roomTasks": [
+      {
+        "taskName": "Sweep And Mop Floor Using Commercial Grade Cleaners",
+        "taskCalculation": "(roomNumber)*(roomSqft)*(0.00104)",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      },
+      {
+        "taskName": "Empty And Reset Trash Liner, Refill All Dispensers, Clean And Disinfect Restroom Fixtures, Clean And Polish Mirrors, Counters, Partitions, And All Bright Work",
+        "taskCalculation": "(2.6545+(0.02221*(roomNumber)*(roomSqft)))*2.375",
+        "taskFrequency": [
+          {
+            "packageName": "bottom",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "middle",
+            "packageFrequency": "Daily"
+          },
+          {
+            "packageName": "top",
+            "packageFrequency": "Daily"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import updateQuoteFrequency from '@/utils/updateQuoteFrequency';
-import { calculateUpdateCost } from '@/utils/calculateUpdateCost'
+import { calculateTime } from '@/utils/calculateTime'
 import LoadingSpinner from '@/components/loadingScreen';
 
 interface QuoteFormProps {
@@ -10,7 +10,7 @@ interface QuoteFormProps {
     quoteFrequency: any;
     onNextStep: (stepNumber: number) => void;
     onMoveOn: (moveOn: boolean) => void;
-    onChangeFrequency: (newFrequency: any, newCost: any) => void;
+    onChangeFrequency: (newFrequency: any, calculatedPackages: any) => void;
     onCanClick: (step: any, canClick: boolean) => void;
 }
 
@@ -22,7 +22,7 @@ const UpdateQuoteFrequency: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, q
 
     
     const frequencyOptions = [
-        'One Time', 'Weekly', '2 Days a Week', '3 Days a Week', '4 Days a Week', '5 Days a Week', '6 Days a Week', '7 Days a Week', '1 Day a Month', 'Quarterly', 'Yearly'
+        'One Time', 'Weekly', '2 Days a Week', '3 Days a Week', '4 Days a Week', '5 Days a Week', '6 Days a Week', '7 Days a Week', 'Bi-Weekly', 'Monthly', 'Quarterly', 'Yearly'
     ];
 
 
@@ -45,10 +45,10 @@ const UpdateQuoteFrequency: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, q
             setLoading(true)
             
             await updateQuoteFrequency(quoteID, frequency);
-            const newCost = await calculateUpdateCost(quoteID, frequency);
-            onChangeFrequency(frequency, newCost);
-            onNextStep(4)
-            onCanClick(4, true)
+            const calculatedPackages = await calculateTime(quoteID)
+            onChangeFrequency(frequency, calculatedPackages.packageOptions);
+            onNextStep(5)
+            onCanClick(5, true)
         } catch (error) {
             console.error('Error updating frequency:', error);
             setErrorMessage('Failed to update frequency.');

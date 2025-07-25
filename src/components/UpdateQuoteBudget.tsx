@@ -33,8 +33,8 @@ const UpdateQuoteBudget: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quot
     try {
       onChangeBudget(budget)
       await updateQuoteBudget(quoteID, budget);
-      onNextStep(5)
-      onCanClick(5, true)
+      onNextStep(6)
+      onCanClick(6, true)
     } catch (error) {
       console.error('Error updating budget:', error);
     }

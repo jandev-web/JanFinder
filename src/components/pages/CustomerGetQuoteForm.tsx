@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { getFacilityOptions } from '@/utils/getFacilityOptions';
 import UpdateQuoteFrequency from "@/components/UpdateQuoteFrequency";
 import UpdateQuoteBudget from "@/components/UpdateQuoteBudget";
-import { getCBOBuildingTypes } from '@/utils/getCBOBuildingTypes';
 import CustomerInfo from "@/components/pages/CustomerInfo";
 import { startQuote } from '@/utils/startQuote';
 import Quote from './Quote';
+import FloorInfoPage from '@/components/pages/CustomerFloorInfoPage'
 import ConfirmPage from '@/components/pages/ConfirmQuote';
 import QuoteProgressBar from '@/components/QuoteProgressBar';
 import LoadingSpinner from '@/components/loadingScreen';
@@ -16,14 +16,9 @@ import CustomerAddRooms from './CustomerAddRoomsPage';
 import Packages from "@/components/pages/Packages";
 import getPackageRecs from '@/utils/getPackageRecs';
 import recPackageUtil from '@/utils/recPackageUtil'
-import { calculateUpdateCost } from '@/utils/calculateUpdateCost';
+import { calculateTime } from '@/utils/calculateTime'
+
 import { useRouter } from 'next/navigation';
-
-
-
-interface BuildingType {
-    name: string;
-}
 
 const CustomerGetQuoteForm: React.FC = () => {
     const [step, setStep] = useState<number>(1);
@@ -32,8 +27,10 @@ const CustomerGetQuoteForm: React.FC = () => {
     const [quoteInfo, setQuoteInfo] = useState<any>(null)
     const [canMoveOn, setCanMoveOn] = useState(false);
     const [canMoveBack, setCanMoveBack] = useState(true);
-    const [facilityOptions, setFacilityOptions] = useState<BuildingType[]>([]);
+    const [facilityOptions, setFacilityOptions] = useState<any>([]);
     const [facilityType, setFacilityType] = useState<any>(null);
+    const [floorNumber, setFloorNumber] = useState<any>(null);
+    const [stairwells, setStairwells] = useState<any>(null)
     const [customerInfo, setCustomerInfo] = useState<any>(null);
     const [roomOptions, setRoomOptions] = useState<any>(null);
     const [quoteRoomTypes, setQuoteRoomTypes] = useState<any>([]);
@@ -46,12 +43,13 @@ const CustomerGetQuoteForm: React.FC = () => {
     const [cost, setCost] = useState<any>(null);
     const [finalCost, setFinalCost] = useState<any>(0)
     const [quoteSqft, setQuoteSqft] = useState<any>(0);
-    const [recPackageName, setRecPackageName] = useState<any>(null);
+    const [recPackageType, setRecPackageType] = useState<any>(null);
     const [hideBar, setHideBar] = useState<any>(false)
 
     const [steps, setSteps] = useState([
         { name: "Customer Information", canClick: true },
         { name: "Facility Type", canClick: false },
+        { name: "Number of Floors", canClick: false },
         { name: "Add Rooms", canClick: false },
         { name: "Frequency", canClick: false },
         { name: "Budget", canClick: false },
@@ -61,7 +59,7 @@ const CustomerGetQuoteForm: React.FC = () => {
 
     const router = useRouter();
 
-    console.log(quoteRoomTypes)
+
 
     const loadData = async (customerQuoteID: any) => {
         setLoading(true)
@@ -80,9 +78,10 @@ const CustomerGetQuoteForm: React.FC = () => {
         }
         setQuoteInfo(quoteDetails);
         setFacilityType(quoteDetails.quoteInfo.facilityType)
-        const facilityTypes = await getCBOBuildingTypes();
-        setFacilityOptions(facilityTypes);
         const facilityRoomOptions = await getFacilityOptions();
+        //console.log(facilityRoomOptions.facility_options)
+        setFacilityOptions(Object.keys(facilityRoomOptions.facility_options));
+
         if (quoteDetails.quoteInfo.facilityType != '') {
             setSteps(prevSteps => {
                 const updatedSteps = [...prevSteps];
@@ -90,31 +89,36 @@ const CustomerGetQuoteForm: React.FC = () => {
                 //console.log(updatedSteps)
                 return updatedSteps;
             })
+
+
             setFacilityRooms(facilityRoomOptions.facility_options[quoteDetails.quoteInfo.facilityType])
-            //console.log(quoteDetails.quoteInfo.roomTypes)
             setQuoteRoomTypes(quoteDetails.quoteInfo.roomTypes)
             if (quoteDetails.quoteInfo.roomTypes.length > 0) {
                 setSteps(prevSteps => {
                     const updatedSteps = [...prevSteps];
-                    updatedSteps[3].canClick = true;
+                    updatedSteps[4].canClick = true;
                     //console.log(updatedSteps)
                     return updatedSteps;
                 })
             }
         }
-        setRoomOptions(facilityRoomOptions);
-        setQuoteSqft(quoteDetails.quoteInfo.sqft)
-        setQuoteFrequency(quoteDetails.quoteInfo.frequency)
-        if (quoteDetails.quoteInfo.frequency != '') {
+        setFloorNumber(quoteDetails.quoteInfo.floors)
+        setStairwells(quoteDetails.quoteInfo.stairwells)
+        console.log(quoteDetails.quoteInfo.floors)
+        if (quoteDetails.quoteInfo.floors != 0) {
             setSteps(prevSteps => {
                 const updatedSteps = [...prevSteps];
-                updatedSteps[4].canClick = true;
-                //console.log(updatedSteps)
+                updatedSteps[3].canClick = true;
+                console.log(updatedSteps)
                 return updatedSteps;
             })
         }
-        const budget = quoteDetails.quoteInfo.budget
-        if (budget && budget != 0) {
+        setRoomOptions(facilityRoomOptions);
+        setQuoteSqft(quoteDetails.quoteInfo.sqft)
+        setQuoteFrequency(quoteDetails.quoteInfo.frequency)
+        const packageInfo = quoteInfo.Package
+        if (quoteDetails.quoteInfo.frequency != '') {
+            setQuotePackageOptions(packageInfo.packageOptions)
             setSteps(prevSteps => {
                 const updatedSteps = [...prevSteps];
                 updatedSteps[5].canClick = true;
@@ -122,32 +126,30 @@ const CustomerGetQuoteForm: React.FC = () => {
                 return updatedSteps;
             })
         }
-        setQuoteBudget(budget)
-        
-        const baseCost = quoteDetails.costInfo.baseCost
-        setCost(baseCost)
-        const quoteFinalCost = quoteDetails.costInfo.finalCost
-        setFinalCost(quoteFinalCost)
-        if (quoteDetails.quoteInfo.roomTypes.length > 0) {
+        const budget = quoteDetails.quoteInfo.budget
+        if (budget && budget != 0) {
+            if (quoteDetails.quoteInfo.frequency != '') {
+                const newRecPackageType = recPackageUtil(quotePackageOptions, budget)
 
-            const packageInfo = await getPackageRecs(customerQuoteID);
-            setQuotePackageOptions(packageInfo)
-            if (baseCost && budget) {
-                const newRecPackageName = recPackageUtil(baseCost, budget)
-                setRecPackageName(newRecPackageName)
-                console.log(newRecPackageName)
-                console.log(packageInfo)
-                const newRecPackage = packageInfo.find((pkg: any) => pkg.name === newRecPackageName);
-                console.log(newRecPackage)
+
+                const newRecPackage = packageInfo.packageOptions.find((pkg: any) => pkg.name === newRecPackageType);
+
                 setRecPackage(newRecPackage);
             }
-        }
-        setQuotePackage(quoteDetails.Package)
-        if (quoteDetails.Package) {
             setSteps(prevSteps => {
                 const updatedSteps = [...prevSteps];
                 updatedSteps[6].canClick = true;
-                console.log(updatedSteps)
+                //console.log(updatedSteps)
+                return updatedSteps;
+            })
+        }
+        setQuoteBudget(budget)
+        setQuotePackage(packageInfo.packageChoice)
+        if (packageInfo.packageChoice) {
+            setSteps(prevSteps => {
+                const updatedSteps = [...prevSteps];
+                updatedSteps[7].canClick = true;
+
                 return updatedSteps;
             })
         }
@@ -175,7 +177,7 @@ const CustomerGetQuoteForm: React.FC = () => {
     const handleCanClick = (step: number, canClick: boolean) => {
         setSteps(prevSteps => {
             const updatedSteps = [...prevSteps];
-            
+
             // If canClick is false, disable the current step and all subsequent steps
             if (!canClick) {
                 for (let i = step; i < updatedSteps.length; i++) {
@@ -185,8 +187,8 @@ const CustomerGetQuoteForm: React.FC = () => {
                 // If canClick is true, only enable the current step
                 updatedSteps[step].canClick = true;
             }
-            
-            console.log(updatedSteps); // Log to see the updated state
+
+
             return updatedSteps;
         });
     };
@@ -205,8 +207,13 @@ const CustomerGetQuoteForm: React.FC = () => {
     const handleSetFacilityType = (newInfo: any) => {
 
         setFacilityType(newInfo);
-        
+
         setFacilityRooms(roomOptions.facility_options[newInfo]);
+    }
+
+    const handleFloorInfo = (newFloorNumber: any, newStairwells: any) => {
+        setStairwells(newStairwells);
+        setFloorNumber(newFloorNumber);
     }
 
     const handleMoveOn = (moveOn: boolean) => {
@@ -223,41 +230,46 @@ const CustomerGetQuoteForm: React.FC = () => {
     }
 
     const handleChangeRoomTypes = async (newInfo: any) => {
-        console.log(newInfo)
+
+
         setQuoteRoomTypes(newInfo);
         if (newInfo.length > 0) {
             const packageInfo = await getPackageRecs(quoteID);
             setQuotePackageOptions(packageInfo)
             if (cost && quoteBudget) {
                 const newRecPackageName = recPackageUtil(cost, quoteBudget)
-                setRecPackageName(newRecPackageName)
-                const newRecPackage = packageInfo.find((pkg: any) => pkg.name === recPackageName);
+                setRecPackageType(newRecPackageName)
+                const newRecPackage = packageInfo.find((pkg: any) => pkg.packageType === recPackageType);
                 setRecPackage(newRecPackage);
             }
             if (quoteFrequency) {
-                calculateUpdateCost(quoteID, quoteFrequency)
+                calculateTime(quoteID)
             }
         }
+
     }
 
     const handleUpdateCost = (newCost: any) => {
         setFinalCost(newCost)
     }
 
-    const handleChangeFrequency = (newInfo: any, newCost: any) => {
+    const handleChangeFrequency = (newInfo: any, calculatedPackages: any) => {
 
         setQuoteFrequency(newInfo);
-        setCost(newCost);
+        console.log(calculatedPackages)
+        setQuotePackageOptions(calculatedPackages);
     }
 
     const handleChangeBudget = (newInfo: any) => {
         setQuoteBudget(newInfo);
-        console.log('NewInfo: ', newInfo)
-        const newRecPackageName = recPackageUtil(cost, newInfo)
-        console.log(newRecPackageName)
-        setRecPackageName(newRecPackageName)
-        const newRecPackage = quotePackageOptions.find((pkg: any) => pkg.name === newRecPackageName);
-        console.log(newRecPackage)
+
+        const newRecPackageType = recPackageUtil(quotePackageOptions, newInfo)
+        console.log(newRecPackageType)
+
+        const newRecPackage = quotePackageOptions.find((pkg: any) => pkg.name === newRecPackageType);
+
+        setRecPackage(newRecPackage);
+
         setRecPackage(newRecPackage);
     }
 
@@ -269,7 +281,7 @@ const CustomerGetQuoteForm: React.FC = () => {
         setHideBar(hideBar)
     }
 
-    
+
 
     const startNewQuote = async () => {
         setLoading(true)
@@ -293,11 +305,12 @@ const CustomerGetQuoteForm: React.FC = () => {
         switch (step) {
             case 1: return <CustomerInfo onCanClick={handleCanClick} quoteID={quoteID} customerDetails={customerInfo} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeInfo={handleSetCustomerInfo} />;
             case 2: return <Quote onCanClick={handleCanClick} quoteID={quoteID} facilityOptions={facilityOptions} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeInfo={handleSetFacilityType} />;
-            case 3: return <CustomerAddRooms onCanClick={handleCanClick} quoteID={quoteID} quoteRoomTypes={quoteRoomTypes} onChangeRoomTypes={handleChangeRoomTypes} facilityRooms={facilityRooms} facilityType={facilityType} onChangeSqft={handleChangeSqft} onNextStep={handleNextStep} onMoveOn={handleMoveOn} quoteSqft={quoteSqft} />;
-            case 4: return <UpdateQuoteFrequency onCanClick={handleCanClick} quoteID={quoteID} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeFrequency={handleChangeFrequency} quoteFrequency={quoteFrequency} />;
-            case 5: return <UpdateQuoteBudget onCanClick={handleCanClick} quoteID={quoteID} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeBudget={handleChangeBudget} quoteBudget={quoteBudget} />;
-            case 6: return <Packages onCanClick={handleCanClick} quoteID={quoteID} onUpdateCost={handleUpdateCost} onHideBar={handleHideBar} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onMoveBack={handleMoveBack} onChangePackage={handleChangePackage} quotePackage={quotePackage} quotePackageOptions={quotePackageOptions} cost={cost} recPackage={recPackage} />;
-            case 7: return <ConfirmPage quoteID={quoteID} roomTypes={quoteRoomTypes} customerDetails={customerInfo} quoteBudget={quoteBudget} quoteFrequency={quoteFrequency} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onMoveBack={handleMoveBack} quotePackage={quotePackage} cost={finalCost} sqft={quoteSqft} />;
+            case 3: return <FloorInfoPage onCanClick={handleCanClick} quoteID={quoteID} floorNumber={floorNumber} stairwells={stairwells} onChangeFloors={handleFloorInfo} onNextStep={handleNextStep} onMoveOn={handleMoveOn} />;
+            case 4: return <CustomerAddRooms onCanClick={handleCanClick} quoteID={quoteID} quoteRoomTypes={quoteRoomTypes} onChangeRoomTypes={handleChangeRoomTypes} facilityRooms={facilityRooms} facilityType={facilityType} onChangeSqft={handleChangeSqft} onNextStep={handleNextStep} onMoveOn={handleMoveOn} quoteSqft={quoteSqft} />;
+            case 5: return <UpdateQuoteFrequency onCanClick={handleCanClick} quoteID={quoteID} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeFrequency={handleChangeFrequency} quoteFrequency={quoteFrequency} />;
+            case 6: return <UpdateQuoteBudget onCanClick={handleCanClick} quoteID={quoteID} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeBudget={handleChangeBudget} quoteBudget={quoteBudget} />;
+            case 7: return <Packages onCanClick={handleCanClick} quoteID={quoteID} onUpdateCost={handleUpdateCost} onHideBar={handleHideBar} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onMoveBack={handleMoveBack} onChangePackage={handleChangePackage} quotePackage={quotePackage} quotePackageOptions={quotePackageOptions} cost={cost} recPackage={recPackage} />;
+            case 8: return <ConfirmPage quoteID={quoteID} roomTypes={quoteRoomTypes} customerDetails={customerInfo} quoteBudget={quoteBudget} quoteFrequency={quoteFrequency} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onMoveBack={handleMoveBack} quotePackage={quotePackage} cost={finalCost} sqft={quoteSqft} />;
             default: return null;
         }
     };
@@ -311,7 +324,7 @@ const CustomerGetQuoteForm: React.FC = () => {
         setStep(clickedStep); // Set the clicked step as the current step
     };
 
-    
+
 
     if (!quoteID && !loading) {
         return (

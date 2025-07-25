@@ -100,7 +100,7 @@ const CBOAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
             let filteredQuotes = []
             for (let i = 0; i < sellRequests.length; i++) {
               const requestQuoteID = sellRequests[i].QuoteID
-              const requestQuote = await getQuoteDetails(requestQuoteID)
+              const requestQuote: any = await getQuoteDetails(requestQuoteID)
 
 
               const offerTime = sellRequests[i].Timestamp

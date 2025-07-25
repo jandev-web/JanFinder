@@ -68,7 +68,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
     const [showAcceptConfirmation, setShowAcceptConfirmation] = useState<boolean>(false);
     const [showRejectConfirmation, setShowRejectConfirmation] = useState<boolean>(false);
     const [isOwner, setIsOwner] = useState<boolean>(false);
-
+    const [numOfRooms, setNumOfRooms] = useState<any>(0)
     const [ownerInfo, setOwnerInfo] = useState<any>(null)
     const [franchiseInfo, setFranchiseInfo] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true);
@@ -90,6 +90,15 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
                     setCustomerData(quoteData.customerData);
                     setTimestamp(quoteData.Timestamp);
                     setRoomInfo(quoteData.quoteInfo.roomTypes);
+                    console.log(quoteData.quoteInfo.roomTypes)
+
+                    let totalRooms = 0;
+                    for (let i = 0; i < quoteData.quoteInfo.roomTypes.length; i++) {
+                        const room = quoteData.quoteInfo.roomTypes[i];
+                        totalRooms += Number(room.roomNumber); // Ensure roomNumber is treated as a number
+                    }
+                    setNumOfRooms(totalRooms);
+
                     setAddress(quoteData.customerData.address);
                     const sellRequestID = quoteData.latestRequest
                     if (sellRequestID) {
@@ -272,6 +281,9 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
                                         <li>
                                             <strong>Frequency:</strong> {quoteInfo.frequency}
                                         </li>
+                                        <li>
+                                            <strong>Number of Rooms:</strong> {numOfRooms}
+                                        </li>
                                     </ul>
                                 </div>
                             )}
@@ -298,29 +310,40 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
                                 </h4>
                                 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 h-96 overflow-y-auto">
 
-                                    <div className="space-y-4">
-                                    {quotePackage.rooms.map((room: any, index: any) => (
-                                            <div key={index} className="border-b border-gray-300 pb-4">
-                                                <h4 className="text-xl font-semibold text-[#001F54] mb-2">
-                                                    {room.roomName}:{" "}
-                                                    {
-                                                        // Find the matching room‐object in roomInfo, then read its sqft.totalSqft
-                                                        roomInfo.find((r: any) => r.roomType === room.roomName)
-                                                            ?.sqft?.totalSqft ?? 0
-                                                    }{" "}
-                                                    sqft
+                                    <div className="space-y-6">
+                                        {quotePackage.rooms.map((room: any, index: any) => (
+                                            <div
+                                                key={index}
+                                                className="rounded-xl border border-gray-200 bg-white shadow-sm p-5"
+                                            >
+                                                <h4 className="text-lg font-bold text-[#001F54] mb-2">
+                                                    {room.roomName}:{' '}
+                                                    <span className="font-normal text-gray-700">
+                                                        {roomInfo.find((r: any) => r.roomType === room.roomName)?.sqft?.totalSqft ?? 0} sqft
+                                                    </span>
                                                 </h4>
-                                                <ul className="pl-4 space-y-2">
+
+                                                <p className="text-gray-700 mb-2">
+                                                    <span className="font-semibold">Number of {room.roomName}s:</span>{' '}
+                                                    {roomInfo.find((r: any) => r.roomType === room.roomName)?.roomNumber ?? 0}
+                                                </p>
+
+                                                <p className="text-gray-800 font-semibold mb-1">Tasks:</p>
+                                                <ul className="pl-5 list-disc space-y-1">
                                                     {room.tasks.map((task: any, idx: any) => (
-                                                        <li key={idx} className="flex justify-between items-center text-sm">
+                                                        <li
+                                                            key={idx}
+                                                            className="flex justify-between text-sm text-gray-600"
+                                                        >
                                                             <span className="font-medium">{task.taskName}</span>
-                                                            <span className="italic text-gray-500">{task.taskFrequency}</span>
+                                                            <span className="italic text-gray-400">{task.taskFrequency}</span>
                                                         </li>
                                                     ))}
                                                 </ul>
                                             </div>
                                         ))}
                                     </div>
+
                                 </div>
                             </div>
                         )}

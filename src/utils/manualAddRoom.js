@@ -1,4 +1,4 @@
-export const manualAddRoom = async (quoteID, room) => {
+export const manualAddRoom = async (quoteID, formInfo) => {
     
   
     
@@ -12,7 +12,7 @@ export const manualAddRoom = async (quoteID, room) => {
           'x-api-key': apiKey,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({quoteID, room})
+        body: JSON.stringify({quoteID, formInfo})
       });
   
       if (!response.ok) {

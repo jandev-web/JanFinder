@@ -26,3 +26,4 @@ export const calculateTime = async (quoteID) => {
         throw new Error('An unexpected error occurred while getting time. Please try again later.');
     }
 };
+     

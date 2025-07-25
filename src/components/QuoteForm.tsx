@@ -7,14 +7,12 @@ import { changeFacilityType } from '@/utils/changeFacilityType';
 
 
 // Define an interface for building types (adjust as needed)
-interface BuildingType {
-  name: string;
-}
+
 
 interface QuoteFormProps {
   quoteID: any;
   facilityType: any;
-  facilityOptions: BuildingType[];
+  facilityOptions: any;
   onNextStep: (stepNumber: number) => void;
   onMoveOn: (moveOn: boolean) => void;
   onLoading: (isLoading: boolean) => void;
@@ -25,7 +23,7 @@ interface QuoteFormProps {
 const QuoteForm: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, facilityType, facilityOptions, onNextStep, onMoveOn, onChangeInfo, onLoading }) => {
   
   const [newFacilityType, setNewFacilityType] = useState<any>(facilityType);
-
+  console.log(facilityOptions)
   useEffect(() => {
       if ((newFacilityType != facilityType) || (newFacilityType === '')) {
         
@@ -71,9 +69,9 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, facilityType
             <option value="" disabled>
               Select Facility Type
             </option>
-            {facilityOptions.map((facility, index) => (
-              <option key={index} value={facility.name}>
-                {facility.name}
+            {facilityOptions.map((facility: any, index: any) => (
+              <option key={index} value={facility}>
+                {facility}
               </option>
             ))}
           </select>

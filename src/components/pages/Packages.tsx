@@ -106,8 +106,8 @@ const Packages: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, cost, quotePa
     setLoading(true)
     setChosenPackage(pkg);
     onChangePackage(pkg);
-    onNextStep(6)
-    onCanClick(6, true)
+    onNextStep(7)
+    onCanClick(7, true)
   };
 
   const handleGoBack = () => {

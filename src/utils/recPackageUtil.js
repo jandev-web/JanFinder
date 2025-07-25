@@ -1,11 +1,12 @@
-function recPackageUtil(cost, budget) {
-    console.log(cost)
+function recPackageUtil(packageOptions, budget) {
+    console.log(packageOptions)
     console.log(budget)
-    const option1 = cost;
-    const option2 = cost / 1.2;
-    const option3 = cost * 0.64;
+    const option1 = packageOptions.find((pkg) => pkg.packageType === 'bottom');
 
-    const diff1 = Math.abs(budget - option1);
+    const option2 = packageOptions.find((pkg) => pkg.packageType === 'middle');
+    const option3 = packageOptions.find((pkg) => pkg.packageType === 'top');
+    console.log(option1)
+    const diff1 = Math.abs(budget - option1.cost);
     const diff2 = Math.abs(budget - option2);
     const diff3 = Math.abs(budget - option3);
     console.log(diff1)
@@ -13,14 +14,14 @@ function recPackageUtil(cost, budget) {
     console.log(diff3)
 
     if (diff1 <= diff2 && diff1 <= diff3) {
-        console.log('Elite Pristine')
-        return 'Elite Pristine';
+        console.log('Top')
+        return 'top';
     } else if (diff2 <= diff1 && diff2 <= diff3) {
-        console.log('Radiant Results')
-        return 'Radiant Results';
+        console.log('Middle')
+        return 'middle';
     } else {
-        console.log('Pure Essentials')
-        return 'Pure Essentials';
+        console.log('bottom')
+        return 'bottom';
     }
 }
 
