@@ -15,14 +15,14 @@ interface QuoteFormProps {
 const UpdateQuoteBudget: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quoteBudget, onNextStep, onMoveOn, onChangeBudget }) => {
   const [budget, setBudget] = useState(quoteBudget);
   const [loading, setLoading] = useState(false);
-  
+
 
   useEffect(() => {
-          if (!budget || (budget != quoteBudget)) {
-              onMoveOn(false);
-          }
-  
-      }, [budget]);
+    if (!budget || (budget != quoteBudget)) {
+      onMoveOn(false);
+    }
+
+  }, [budget]);
 
   const handleBudgetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBudget(event.target.value);
@@ -33,8 +33,8 @@ const UpdateQuoteBudget: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quot
     try {
       onChangeBudget(budget)
       await updateQuoteBudget(quoteID, budget);
-      onNextStep(6)
-      onCanClick(6, true)
+      onNextStep(2)
+      onCanClick(2, true)
     } catch (error) {
       console.error('Error updating budget:', error);
     }
@@ -66,17 +66,17 @@ const UpdateQuoteBudget: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quot
           type="number"
           value={budget}
           onChange={handleBudgetChange}
-          placeholder="Enter your budget"
+          placeholder={(!budget || parseFloat(budget) === 0) ? "Enter your budget" : ""}
           className="w-full p-3 border-2 border-yellow-500 rounded-lg text-[#001F54] focus:outline-none focus:ring-2 focus:ring-yellow-500 mb-4"
         />
         {(budgetIsValid && (budget != quoteBudget)) &&
           <button
-          onClick={handleSaveBudget}
-          className="bg-green-600 items-center hover:bg-green-500 text-center text-white py-3 px-6 rounded transition duration-300 mt-8">
-          Save Budget
-        </button>
+            onClick={handleSaveBudget}
+            className="bg-green-600 items-center hover:bg-green-500 text-center text-white py-3 px-6 rounded transition duration-300 mt-8">
+            Save Budget
+          </button>
         }
-        
+
       </div>
 
     </div>

@@ -68,8 +68,8 @@ const FloorNumber: React.FC<QuoteFormProps> = ({
 
     try {
       await updateFloorInfo(quoteID, newFloorInfo);
-      onNextStep(3);
-      onCanClick(3, true);
+      onNextStep(4);
+      onCanClick(4, true);
     } catch (error) {
       console.error('Error updating quote:', error);
     }

@@ -2,13 +2,16 @@ function recPackageUtil(packageOptions, budget) {
     console.log(packageOptions)
     console.log(budget)
     const option1 = packageOptions.find((pkg) => pkg.packageType === 'bottom');
-
     const option2 = packageOptions.find((pkg) => pkg.packageType === 'middle');
     const option3 = packageOptions.find((pkg) => pkg.packageType === 'top');
+
+    const cost1 = option1.totalTime * 15;
+    const cost2 = option2.totalTime * 15;
+    const cost3 = option3.totalTime * 15;
     console.log(option1)
-    const diff1 = Math.abs(budget - option1.cost);
-    const diff2 = Math.abs(budget - option2);
-    const diff3 = Math.abs(budget - option3);
+    const diff1 = Math.abs(budget - cost1);
+    const diff2 = Math.abs(budget - cost2);
+    const diff3 = Math.abs(budget - cost3);
     console.log(diff1)
     console.log(diff2)
     console.log(diff3)
