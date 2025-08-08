@@ -135,7 +135,13 @@ const CustomQuotes: React.FC<CustomQuotesProps> = ({ user }) => {
                                 <ul className="space-y-4 mt-6">
                                     {quotes?.map((quote) => (
                                         <li key={quote.QuoteID}>
-                                            <OwnerQuoteCard quote={quote} onClick={() => handleQuoteClick(quote)} />
+                                            <OwnerQuoteCard
+                                                quote={quote}
+                                                onClick={() => handleQuoteClick(quote)}
+                                                pendingRequests={[]}
+                                                rejectedRequests={[]}
+                                            />
+
                                         </li>
                                     ))}
                                 </ul>
