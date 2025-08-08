@@ -2,35 +2,22 @@
 
 import React from 'react';
 
-interface Task {
-    taskName: string;
-    taskFrequency: string;
-}
-
-interface Room {
-    roomName: string;
-    tasks: Task[];
-}
-
-interface PackageOption {
-    name: string;
-    rooms: Room[];
-    description: string;
-}
-
 interface PackageProps {
     pkg: any;
-    cost: number;
-    rec: boolean;
-    chosen: boolean;
+    recPackage: any;
+    chosenPackage: any;
     handleSelect: () => void;
 }
 
-const Silver: React.FC<PackageProps> = ({ pkg, rec, chosen, handleSelect, cost }) => {
+const Silver: React.FC<PackageProps> = ({ pkg, recPackage, chosenPackage, handleSelect }) => {
     
 
 
     const iconSrc = '/images/vacuum_icon.png'
+
+    const cost = pkg.packageCost;
+    const rec = pkg.packageType === recPackage.packageType ? true : false;
+    const chosen = pkg.packageType === chosenPackage?.packageType ? true : false;
 
     const bulletPoints = [
         'Deep cleaning of high-traffic areas',
@@ -52,7 +39,7 @@ const Silver: React.FC<PackageProps> = ({ pkg, rec, chosen, handleSelect, cost }
                     alt={`${pkg.name} icon`}
                     className="mx-auto h-16 w-16 mb-4"
                 />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{pkg.name}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{pkg.packageName}</h3>
                 <p className="text-3xl font-bold text-gray-900 mb-4">${cost.toFixed(2)}</p>
                 <ul className="mb-6 space-y-2">
                     {bulletPoints.map((point, idx) => (

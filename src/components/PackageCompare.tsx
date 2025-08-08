@@ -13,48 +13,25 @@ import Button from '@mui/material/Button';
 import LoadingSpinner from './loadingScreen';
 import GoldServiceList from './GoldServiceList';
 
-interface Task {
-  taskName: string;
-  taskFrequency: string;
-}
-
-interface Room {
-  roomName: string;
-  tasks: Task[];
-}
-interface PackageOption {
-  name: string;
-  rooms: Room[];
-  description: string;
-}
 interface PackageComparisonProps {
   onBack: () => void;
-  packages: PackageOption[];
-  recPackage: PackageOption;
-  bronzeCost: any;
-  silverCost: any;
-  goldCost: any;
+  packages: any;
+  recPackage: any;
   quoteID: any;
   quotePackage: any;
-  bronzePackage: any;
-  silverPackage: any;
-  goldPackage: any;
-  bronzeRec: any;
-  silverRec: any;
-  goldRec: any;
-  bronzeChosen: any;
-  silverChosen: any;
-  goldChosen: any;
   onMoveBack: (moveBack: boolean) => void;
   onMoveOn: (moveOn: boolean) => void;
   onChangePackage: (pkg: any) => void;
   onHideBar: (hideBar: boolean) => void;
-  onUpdateCost: (cost: any) => void;
 }
 
-const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silverCost, goldCost, bronzeRec, silverRec, goldRec, bronzeChosen, goldChosen, silverChosen, bronzePackage, silverPackage, goldPackage, onBack, onHideBar, onMoveBack, onMoveOn, onChangePackage, onUpdateCost, quotePackage, packages, recPackage, quoteID }) => {
+const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, onHideBar, onMoveBack, onMoveOn, onChangePackage, quotePackage, packages, recPackage, quoteID }) => {
 
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
+
+  const bronzePackage = packages.find((pkg: any) => pkg.packageType === 'bottom');
+  const silverPackage = packages.find((pkg: any) => pkg.packageType === 'middle');
+  const goldPackage = packages.find((pkg: any) => pkg.packageType === 'top');
 
   const handleGoBack = () => {
     onMoveBack(true);
@@ -67,19 +44,6 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silve
     try {
       const response = await updatePackage(quoteID, pkg);
       onChangePackage(pkg);
-      if (pkg.name === 'Radiant Results') {
-        await updateQuoteCost(quoteID, { finalCost: silverCost });
-        onUpdateCost(silverCost)
-      }
-      if (pkg.name === 'Elite Pristine') {
-        await updateQuoteCost(quoteID, { finalCost: goldCost });
-        onUpdateCost(goldCost)
-      }
-      if (pkg.name === 'Pure Essentials') {
-        
-        await updateQuoteCost(quoteID, { finalCost: bronzeCost });
-        onUpdateCost(bronzeCost)
-      }
 
       if (response.updatedAttributes) {
         setConfirmationMessage('Package updated successfully!');
@@ -135,10 +99,9 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silve
           {/* Bronze Package Card */}
           <div className="flex flex-col w-full">
             <Bronze
-              cost={bronzeCost}
               pkg={bronzePackage}
-              rec={bronzeRec}
-              chosen={bronzeChosen}
+              recPackage={recPackage}
+              chosenPackage={quotePackage}
               handleSelect={() => handleSelectPackage(bronzePackage)}
             />
           </div>
@@ -146,10 +109,9 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silve
           {/* Silver Package Card */}
           <div className="flex flex-col w-full">
             <Silver
-              cost={silverCost}
               pkg={silverPackage}
-              rec={silverRec}
-              chosen={silverChosen}
+              recPackage={recPackage}
+              chosenPackage={quotePackage}
               handleSelect={() => handleSelectPackage(silverPackage)}
             />
           </div>
@@ -157,10 +119,9 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silve
           {/* Gold Package Card */}
           <div className="flex flex-col w-full">
             <Gold
-              cost={goldCost}
               pkg={goldPackage}
-              rec={goldRec}
-              chosen={goldChosen}
+              recPackage={recPackage}
+              chosenPackage={quotePackage}
               handleSelect={() => handleSelectPackage(goldPackage)}
             />
           </div>
@@ -169,24 +130,24 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ bronzeCost, silve
           {/* Bronze Package Card */}
           <div className="flex flex-col w-full">
             <BronzeServiceList
-              rec={bronzeRec}
               pkg={bronzePackage}
+              recPackage={recPackage}
             />
           </div>
 
           {/* Silver Package Card */}
           <div className="flex flex-col w-full">
             <SilverServiceList
-              rec={silverRec}
               pkg={silverPackage}
+              recPackage={recPackage}
             />
           </div>
 
           {/* Gold Package Card */}
           <div className="flex flex-col w-full">
             <GoldServiceList
-              rec={goldRec}
               pkg={goldPackage}
+              recPackage={recPackage}
             />
           </div>
         </div>

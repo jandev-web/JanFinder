@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import OwnerQuoteCard from '@/components/OwnerQuoteCard';
+import OwnerQuoteCard from '@/components/OwnerAvailableQuoteCard';
 import LoadingSpinner from '@/components/loadingScreen';
 import fetchAvailableQuotes from '@/utils/getAvailableQuotesOwner';
 import checkFranchiseTemplates from '@/utils/checkForFranTemplates';

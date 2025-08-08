@@ -4,31 +4,14 @@ import React from 'react';
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-interface Task {
-    taskName: string;
-    taskFrequency: string;
-}
-
-interface Room {
-    roomName: string;
-    tasks: Task[];
-}
-
-interface PackageOption {
-    name: string;
-    rooms: Room[];
-    description: string;
-}
-
 interface PackageProps {
-    pkg: any;
-    cost: number;
-    rec: boolean;
-    chosen: boolean;
-    handleSelect: () => void;
+    quotePackage: any;
+    recPackage: any;
+    type: any;
+    handleSelect: (pkg: any) => void;
 }
 
-const GoldRec: React.FC<PackageProps> = ({ pkg, rec, chosen, handleSelect, cost }) => {
+const GoldRec: React.FC<PackageProps> = ({ quotePackage, recPackage, type, handleSelect }) => {
 
     const iconSrc = '/images/building_icon.png'
 
@@ -38,6 +21,10 @@ const GoldRec: React.FC<PackageProps> = ({ pkg, rec, chosen, handleSelect, cost 
         'Trash removal and waste bin sanitization',
         'Window cleaning (interior and exterior, with screens)'
     ];
+    const pkg = type === 'chosen' ? quotePackage : type === 'rec' ? recPackage : null;
+    const cost = pkg.packageCost;
+    const rec = type === 'rec';
+    const chosen = type === 'chosen';
 
     return (
         <div>
@@ -56,7 +43,7 @@ const GoldRec: React.FC<PackageProps> = ({ pkg, rec, chosen, handleSelect, cost 
                     />
 
                     {/* Name */}
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{pkg.name}</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{pkg.packageName}</h3>
 
                     {/* Cost */}
                     <p className="text-3xl font-bold text-gray-900 mb-4">
@@ -79,23 +66,57 @@ const GoldRec: React.FC<PackageProps> = ({ pkg, rec, chosen, handleSelect, cost 
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                 <Typography className="text-[#001F54] font-bold">See All Services</Typography>
                             </AccordionSummary>
-                            <AccordionDetails>
-                                {pkg?.rooms.map((room: any, index: any) => (
+                            <AccordionDetails className="space-y-6">
+                                {/* ROOM TASKS */}
+                                {pkg?.rooms.map((room: any, index: number) => (
                                     <div key={index} className="border-b border-[#001F54] pb-4">
-                                        <div className="flex flex-col items-start"> {/* Align everything to the right */}
-                                            <h4 className="text-xl font-semibold text-[#001F54] mb-2 text-left">{room.roomName}</h4>
-                                            <ul className="space-y-2">
-                                                {room.tasks.map((task: any, idx: any) => (
-                                                    <li key={idx} className="text-sm text-gray-700 flex justify-between items-center border-b border-gray-200 pt-4">
-                                                        <span className="font-medium flex-grow mr-2 text-left">{task.taskName}</span>
-                                                        <span className="italic text-gray-500 whitespace-nowrap text-right">{task.taskFrequency}</span>
+                                        <div className="flex flex-col items-start">
+                                            <h4 className="text-xl font-semibold text-[#001F54] mb-2 text-left">
+                                                {room.roomName}
+                                            </h4>
+                                            <ul className="space-y-2 w-full">
+                                                {room.roomTasks.map((task: any, idx: number) => (
+                                                    <li key={idx} className="text-sm text-gray-700 flex justify-between items-center border-b border-gray-200 pt-2 pb-1">
+                                                        <span className="font-medium flex-grow text-left">{task.taskName}</span>
+                                                        <span className="italic text-gray-500 whitespace-nowrap text-right">{task.frequency}</span>
                                                     </li>
                                                 ))}
                                             </ul>
                                         </div>
                                     </div>
                                 ))}
+
+                                {/* CARPET TASKS */}
+                                {pkg?.carpet?.tasks?.length > 0 && (
+                                    <div className="border-t border-[#001F54] pt-4">
+                                        <h4 className="text-xl font-semibold text-[#001F54] mb-2 text-left">Carpeted Areas</h4>
+                                        <ul className="space-y-2 w-full">
+                                            {pkg.carpet.tasks.map((task: any, idx: number) => (
+                                                <li key={idx} className="text-sm text-gray-700 flex justify-between items-center border-b border-gray-200 pt-2 pb-1">
+                                                    <span className="font-medium flex-grow text-left">{task.taskName}</span>
+                                                    <span className="italic text-gray-500 whitespace-nowrap text-right">{task.frequency}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+
+                                {/* HARDFLOOR TASKS */}
+                                {pkg?.hardfloor?.tasks?.length > 0 && (
+                                    <div className="border-t border-[#001F54] pt-4">
+                                        <h4 className="text-xl font-semibold text-[#001F54] mb-2 text-left">Hardfloor Areas</h4>
+                                        <ul className="space-y-2 w-full">
+                                            {pkg.hardfloor.tasks.map((task: any, idx: number) => (
+                                                <li key={idx} className="text-sm text-gray-700 flex justify-between items-center border-b border-gray-200 pt-2 pb-1">
+                                                    <span className="font-medium flex-grow text-left">{task.taskName}</span>
+                                                    <span className="italic text-gray-500 whitespace-nowrap text-right">{task.frequency}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </AccordionDetails>
+
                         </Accordion>
                     </div>
                 </div>
@@ -106,8 +127,8 @@ const GoldRec: React.FC<PackageProps> = ({ pkg, rec, chosen, handleSelect, cost 
                         <p className="font-medium text-[#001F54] py2">Selected!</p>
                     ) : (
                         <button
-                            onClick={handleSelect}
-                            className="w-full bg-[#001F54] text-white font-medium py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 flex-shrink-0"
+                            onClick={() => handleSelect(pkg)}
+                            className="w-full bg-yellow-400 text-white font-medium py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 flex-shrink-0"
                         >
                             Select {pkg.name}
                         </button>

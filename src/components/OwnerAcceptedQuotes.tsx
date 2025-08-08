@@ -7,6 +7,7 @@ import LoadingSpinner from '@/components/loadingScreen';
 import fetchOwnerById from '@/utils/getOwnerById'
 import getFranchiseInfo from '@/utils/getFranchiseInfo'
 import fetchFilteredQuotes from '@/utils/getFilteredQuotesOwner';
+import filterOwnerOwnedQuotes from '@/utils/filterOwnerOwnedQuotes'
 
 
 type Address = {
@@ -48,8 +49,9 @@ const OwnerAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
   const [franInfo, setFranInfo] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [pendingRequests, setPendingRequests] = useState<any>(null);
+  const [rejectedRequests, setRejectedRequests] = useState<any>(null);
 
-  
 
   const handleQuoteClick = (quote: Quote) => {
     router.push(`/members/owner/quote/accepted?quoteID=${quote.QuoteID}`);
@@ -62,12 +64,19 @@ const OwnerAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
           const data = await fetchFilteredQuotes(ownerID);
           //console.log(data.memberConfirmed)
           const confirmedQuotes = data.customerConfirmed
-          setQuotes(confirmedQuotes.bought)
+          const boughtQuotes = confirmedQuotes.bought;
+          const quoteIDs = boughtQuotes.map((quote: any) => quote.QuoteID);
+
+          setQuotes(boughtQuotes);
           const fetchedOwnerInfo = await fetchOwnerById(ownerID);
           //console.log(fetchedOwnerInfo)
           const franchiseInfo = await getFranchiseInfo(fetchedOwnerInfo.franchiseID)
           //console.log(franInfo)
           setFranInfo(franchiseInfo.franchiseName);
+          const requestFilteredQuotes = await filterOwnerOwnedQuotes(quoteIDs)
+          console.log(requestFilteredQuotes)
+          setPendingRequests(requestFilteredQuotes.pending)
+          setRejectedRequests(requestFilteredQuotes.rejected)
           setLoading(false);
 
         } catch (error) {
@@ -130,7 +139,7 @@ const OwnerAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
               <ul className="space-y-4 mt-6">
                 {quotes?.map((quote) => (
                   <li key={quote.QuoteID}>
-                    <OwnerQuoteCard quote={quote} onClick={() => handleQuoteClick(quote)} />
+                    <OwnerQuoteCard quote={quote} onClick={() => handleQuoteClick(quote)} rejectedRequests={rejectedRequests} pendingRequests={pendingRequests}/>
                   </li>
                 ))}
               </ul>)}

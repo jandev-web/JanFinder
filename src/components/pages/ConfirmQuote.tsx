@@ -56,7 +56,7 @@ interface QuoteInfo {
 }
 
 const ConfirmationPage: React.FC<QuoteInfo> = ({ quoteID, roomTypes, quotePackage, facilityType, sqft, cost, customerDetails, quoteBudget, quoteFrequency, onMoveBack, onMoveOn, onNextStep }) => {
-    
+
 
     const [loading, setLoading] = useState(false);
 
@@ -79,10 +79,10 @@ const ConfirmationPage: React.FC<QuoteInfo> = ({ quoteID, roomTypes, quotePackag
         try {
             setLoading(true);
             const confirmedQuote = await confirmQuote(quoteID);
-            
+
             router.push('/get-a-quote/confirmed')
-            
-            
+
+
         } catch (error) {
             console.error("Confirmation failed:", error);
             alert("Failed to confirm. Please try again.");
@@ -93,12 +93,12 @@ const ConfirmationPage: React.FC<QuoteInfo> = ({ quoteID, roomTypes, quotePackag
     if (loading) {
         return <LoadingSpinner />;
     }
-    
+
 
 
     return (
         <div className="flex flex-col items-center">
-            
+
             <h2 className="text-3xl text-yellow-500 font-bold mb-6">Final Step!</h2>
             {/* Step Message Section */}
             <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
@@ -149,36 +149,73 @@ const ConfirmationPage: React.FC<QuoteInfo> = ({ quoteID, roomTypes, quotePackag
                         <strong className='text-[#001F54]'>Frequency:</strong> {quoteFrequency || 'None'}
                     </p>
                     <p className='text-gray-600'>
-                        <strong className='text-[#001F54]'>Cost:</strong> ${cost}
+                        <strong className='text-[#001F54]'>Cost:</strong> ${quotePackage?.packageCost}
                     </p>
                     <p className='text-gray-600 pb-4'>
-                        <strong className='text-[#001F54]'>Package:</strong> {quotePackage?.name || 'None'}
+                        <strong className='text-[#001F54]'>Package:</strong> {quotePackage?.packageName || 'None'}
                     </p>
                 </div>
 
                 {/* Room Information */}
                 <div className="space-y-6 mt-6 border-b border-gray-300">
                     <h2 className="text-2xl font-semibold text-yellow-500 mb-6">Room Information</h2>
+
                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 h-96 overflow-y-auto">
                         <div className="space-y-4">
-                            {quotePackage.rooms.map((room: any, index: number) => (
+                            {/* Rooms */}
+                            {quotePackage?.rooms?.map((room: any, index: number) => (
                                 <div key={index} className="border-b border-gray-300 pb-4">
                                     <h4 className="text-xl font-semibold text-[#001F54] mb-2">
-                                        {room.roomName}: {roomTypes[room.roomName]} sqft
+                                        {room.roomName}:
                                     </h4>
                                     <ul className="pl-4 space-y-2">
-                                        {room.tasks.map((task: any, idx: number) => (
+                                        {room.roomTasks?.map((task: any, idx: number) => (
                                             <li key={idx} className="flex justify-between items-center text-sm">
                                                 <span className="font-medium">{task.taskName}</span>
-                                                <span className="italic text-gray-500">{task.taskFrequency}</span>
+                                                <span className="italic text-gray-500">{task.frequency}</span>
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
                             ))}
+
+                            {/* Carpeted Area */}
+                            {quotePackage?.carpet?.tasks?.length > 0 && (
+                                <div className="border-b border-gray-300 pb-4">
+                                    <h4 className="text-xl font-semibold text-[#001F54] mb-2">
+                                        Carpeted Areas:
+                                    </h4>
+                                    <ul className="pl-4 space-y-2">
+                                        {quotePackage.carpet.tasks.map((task: any, idx: number) => (
+                                            <li key={idx} className="flex justify-between items-center text-sm">
+                                                <span className="font-medium">{task.taskName}</span>
+                                                <span className="italic text-gray-500">{task.frequency}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {/* Hardfloor Area */}
+                            {quotePackage?.hardfloor?.tasks?.length > 0 && (
+                                <div className="pb-4">
+                                    <h4 className="text-xl font-semibold text-[#001F54] mb-2">
+                                        Hardfloor Areas:
+                                    </h4>
+                                    <ul className="pl-4 space-y-2">
+                                        {quotePackage.hardfloor.tasks.map((task: any, idx: number) => (
+                                            <li key={idx} className="flex justify-between items-center text-sm">
+                                                <span className="font-medium">{task.taskName}</span>
+                                                <span className="italic text-gray-500">{task.frequency}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
+
 
                 {/* Confirm Button */}
                 <div className="flex justify-center mt-8">

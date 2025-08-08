@@ -6,7 +6,7 @@ import CBOHeader from "./CBOHeader";
 import CBOQuote from "./CBOQuoteCard";
 
 import PackageRecommendations from "./PackageRecs";
-import QuoteForm from "./QuoteForm";
+
 import UploadPDFForm from "./UploadPDF";
 
 
@@ -17,7 +17,7 @@ import CBO from "./CBOComponent";
 import Contact from "./pages/Contact";
 import Packages from "./pages/Packages";
 import Home from "./pages/Home";
-import Quote from "./pages/Quote";
+
 import LandingPage from "./pages/LandingPage";
 
 export {
@@ -29,7 +29,6 @@ export {
   CBOQuote,
  
   PackageRecommendations,
-  QuoteForm,
   UploadPDFForm,
 
   CustomerInfo,
@@ -39,6 +38,5 @@ export {
   Contact,
   Packages,
   Home,
-  Quote,
   LandingPage
 };

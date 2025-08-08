@@ -5,32 +5,20 @@ import getFranchiseInfo from '@/utils/getFranchiseInfo';
 
 interface QuoteCardProps {
   quote: any;
-  pendingRequests: string[];
-  rejectedRequests: string[];
   onClick: () => void;
 }
 
-const OwnerQuoteCard: React.FC<QuoteCardProps> = ({ quote, pendingRequests, rejectedRequests, onClick }) => {
+const OwnerQuoteCard: React.FC<QuoteCardProps> = ({ quote, onClick }) => {
   const { costInfo, Package, customerData, QuoteID } = quote;
   const [error, setError] = useState<string | null>(null);
 
-  // Determine status
-  const isPending = pendingRequests.includes(QuoteID);
-  const isRejected = rejectedRequests.includes(QuoteID);
-
+  
   return (
     <button
       onClick={onClick}
       className="w-full bg-white hover:bg-yellow-300 border border-gray-300 p-4 rounded-lg shadow-lg text-left transition duration-200 ease-in-out relative"
       disabled={error !== null}
     >
-      {/* Status dot */}
-      {(isPending || isRejected) && (
-        <span
-          className={`absolute top-2 right-2 h-3 w-3 rounded-full ${isPending ? 'bg-green-500' : 'bg-red-500'}`}
-          title={isPending ? 'Pending Request' : 'Rejected Request'}
-        ></span>
-      )}
 
       <div className="quote-card">
         <p className="customer-name">

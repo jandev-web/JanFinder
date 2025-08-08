@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getCBOBuildingTypes } from '@/utils/getCBOBuildingTypes';
+
 import MemberBuildingDataForm from '@/components/MemberBuildingDataForm';
 
 interface OwnerBuildingDataProps {
@@ -11,15 +11,7 @@ interface OwnerBuildingDataProps {
 const OwnerBuildingData: React.FC<OwnerBuildingDataProps> = ({ user }) => {
     const [buildingData, setBuildingData] = useState([]);
     //console.log(user)
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getCBOBuildingTypes();
-            //console.log('Building Data: ', data);
-            setBuildingData(data);
-        };
-
-        fetchData();
-    }, []);
+    
 
     return (
         <div>

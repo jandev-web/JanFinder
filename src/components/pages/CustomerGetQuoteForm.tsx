@@ -112,7 +112,7 @@ const CustomerGetQuoteForm: React.FC = () => {
             setSteps(prevSteps => {
                 const updatedSteps = [...prevSteps];
                 updatedSteps[4].canClick = true;
-                console.log(updatedSteps)
+                //console.log(updatedSteps)
                 return updatedSteps;
             })
         }
@@ -137,14 +137,17 @@ const CustomerGetQuoteForm: React.FC = () => {
         //console.log(packageInfo)
         if (quoteDetails.quoteInfo.frequency != '') {
             setQuotePackageOptions(packageInfo.packageOptions)
+            console.log(packageInfo.packageOptions)
             setSteps(prevSteps => {
                 const updatedSteps = [...prevSteps];
                 updatedSteps[6].canClick = true;
                 //console.log(updatedSteps)
                 return updatedSteps;
             })
-            const newRecPackageType = recPackageUtil(quotePackageOptions, budget)
-            const newRecPackage = packageInfo.packageOptions.find((pkg: any) => pkg.name === newRecPackageType);
+            const newRecPackageType = recPackageUtil(packageInfo.packageOptions, budget)
+            const newRecPackage = packageInfo.packageOptions.find((pkg: any) => pkg.packageType === newRecPackageType);
+            console.log("recPackage", newRecPackage)
+
             setRecPackage(newRecPackage);
         }
         setQuotePackage(packageInfo.packageChoice)
@@ -319,6 +322,7 @@ const CustomerGetQuoteForm: React.FC = () => {
                 const newRecPackageType = recPackageUtil(calculatedPackages.packageOptions, quoteBudget)
                 console.log(newRecPackageType)
                 const newRecPackage = quotePackageOptions.find((pkg: any) => pkg.name === newRecPackageType);
+                console.log("recPackage", newRecPackage)
                 setRecPackage(newRecPackage);
             }
         }
@@ -348,7 +352,7 @@ const CustomerGetQuoteForm: React.FC = () => {
         if (quoteBudget) {
             const newRecPackageType = recPackageUtil(calculatedPackages.packageOptions, quoteBudget)
             console.log(newRecPackageType)
-            const newRecPackage = quotePackageOptions.find((pkg: any) => pkg.name === newRecPackageType);
+            const newRecPackage = quotePackageOptions.find((pkg: any) => pkg.packageType === newRecPackageType);
             setRecPackage(newRecPackage);
         }
     }
@@ -402,11 +406,11 @@ const CustomerGetQuoteForm: React.FC = () => {
             case 4:
                 return <FloorInfoPage onCanClick={handleCanClick} quoteID={quoteID} floorNumber={floorNumber} stairwells={stairwells} onChangeFloors={handleFloorInfo} onNextStep={handleNextStep} onMoveOn={handleMoveOn} />;
             case 5:
-                return <CustomerAddRooms onCanClick={handleCanClick} quoteID={quoteID} quoteRoomTypes={quoteRoomTypes} onChangeRoomTypes={handleChangeRoomTypes} facilityRooms={facilityRooms} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} quoteSqft={quoteSqft} quoteFloorTypes={quoteFloorTypes}/>;
+                return <CustomerAddRooms onCanClick={handleCanClick} quoteID={quoteID} quoteRoomTypes={quoteRoomTypes} onChangeRoomTypes={handleChangeRoomTypes} facilityRooms={facilityRooms} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} quoteSqft={quoteSqft} quoteFloorTypes={quoteFloorTypes} />;
             case 6:
                 return <UpdateQuoteFrequency onCanClick={handleCanClick} quoteID={quoteID} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onChangeFrequency={handleChangeFrequency} quoteFrequency={quoteFrequency} />;
             case 7:
-                return <Packages onCanClick={handleCanClick} quoteID={quoteID} onUpdateCost={handleUpdateCost} onHideBar={handleHideBar} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onMoveBack={handleMoveBack} onChangePackage={handleChangePackage} quotePackage={quotePackage} quotePackageOptions={quotePackageOptions} cost={cost} recPackage={recPackage} />;
+                return <Packages onCanClick={handleCanClick} quoteID={quoteID} onUpdateCost={handleUpdateCost} onHideBar={handleHideBar} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onMoveBack={handleMoveBack} onChangePackage={handleChangePackage} quotePackage={quotePackage} quotePackageOptions={quotePackageOptions} recPackage={recPackage} />;
             case 8:
                 return <ConfirmPage quoteID={quoteID} roomTypes={quoteRoomTypes} customerDetails={customerInfo} quoteBudget={quoteBudget} quoteFrequency={quoteFrequency} facilityType={facilityType} onNextStep={handleNextStep} onMoveOn={handleMoveOn} onMoveBack={handleMoveBack} quotePackage={quotePackage} cost={finalCost} sqft={quoteSqft} />;
             default:

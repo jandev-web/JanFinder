@@ -34,7 +34,6 @@ interface QuoteFormProps {
   quoteID: any;
   quotePackage: any;
   quotePackageOptions: any;
-  cost: any;
   recPackage: any;
   onNextStep: (stepNumber: number) => void;
   onMoveOn: (moveOn: boolean) => void;
@@ -47,40 +46,16 @@ interface QuoteFormProps {
 }
 
 
-const Packages: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, cost, quotePackage, quotePackageOptions, recPackage, onNextStep, onMoveOn, onMoveBack, onChangePackage, onUpdateCost, onHideBar }) => {
+const Packages: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, quotePackage, quotePackageOptions, recPackage, onNextStep, onMoveOn, onMoveBack, onChangePackage, onUpdateCost, onHideBar }) => {
 
   const [loading, setLoading] = useState(false);
-  const [packages, setPackages] = useState<any>(quotePackageOptions);
-  const [newRecPackage, setNewRecPackage] = useState<any>(recPackage);
   const [error, setError] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
-  const [packageName, setPackageName] = useState<string | null>(null);
   const [chosenPackage, setChosenPackage] = useState<any>(quotePackage)
-
-  const [showConfirmation, setShowConfirmation] = useState(false)
-  const bronzePackage = packages.find((pkg: PackageOption) => pkg.name === 'Pure Essentials');
-  const silverPackage = packages.find((pkg: PackageOption) => pkg.name === 'Radiant Results');
-  const goldPackage = packages.find((pkg: PackageOption) => pkg.name === 'Elite Pristine');
-
-  const [bronzeRec, setBronzeRec] = useState(false);
-  const [silverRec, setSilverRec] = useState(false);
-  const [goldRec, setGoldRec] = useState(false);
-
-  const [bronzeChosen, setBronzeChosen] = useState(false)
-  const [silverChosen, setSilverChosen] = useState(false)
-  const [goldChosen, setGoldChosen] = useState(false)
-
-  const bronzeCost = roundingUtil(cost * 0.64);
-  const silverCost = roundingUtil(cost / 1.2);
-  const goldCost = roundingUtil(cost);
 
   console.log("recPackage", recPackage)
   console.log("quotePackage", quotePackage)
   console.log("quotePackageOptions", quotePackageOptions)
-  console.log("cost", cost)
-  console.log("bronzeCost", bronzeCost)
-  console.log("silverCost", silverCost)
-  console.log("goldCost", goldCost)
 
   useEffect(() => {
     if (!chosenPackage || (chosenPackage != quotePackage)) {
@@ -88,19 +63,6 @@ const Packages: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, cost, quotePa
     }
 
   }, [chosenPackage]);
-
-  useEffect(() => {
-    setLoading(true)
-    setBronzeRec(recPackage?.name === bronzePackage?.name);
-    setSilverRec(recPackage?.name === silverPackage?.name);
-    setGoldRec(recPackage?.name === goldPackage?.name);
-
-    setBronzeChosen(quotePackage?.name === bronzePackage?.name)
-    setSilverChosen(quotePackage?.name === silverPackage?.name)
-    setGoldChosen(quotePackage?.name === goldPackage?.name)
-    setLoading(false)
-
-  }, [recPackage, quotePackage, bronzePackage, silverPackage, goldPackage]);
 
   const handlePackageChange = async (pkg: any) => {
     setLoading(true)
@@ -149,15 +111,15 @@ const Packages: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, cost, quotePa
 
 
 
-      {showComparison && packages ? (
-        <PackageComparison bronzeCost={bronzeCost} silverCost={silverCost} goldCost={goldCost} bronzeChosen={bronzeChosen} silverChosen={silverChosen} goldChosen={goldChosen} bronzeRec={bronzeRec} silverRec={silverRec} goldRec={goldRec} bronzePackage={bronzePackage} silverPackage={silverPackage} goldPackage={goldPackage} onBack={handleGoBack} onHideBar={onHideBar} onMoveOn={onMoveOn} onMoveBack={onMoveBack} onUpdateCost={onUpdateCost} onChangePackage={handlePackageChange} packages={packages} recPackage={newRecPackage} quotePackage={quotePackage} quoteID={quoteID} />
+      {showComparison && quotePackageOptions ? (
+        <PackageComparison onBack={handleGoBack} onHideBar={onHideBar} onMoveOn={onMoveOn} onMoveBack={onMoveBack} onChangePackage={handlePackageChange} packages={quotePackageOptions} recPackage={recPackage} quotePackage={quotePackage} quoteID={quoteID} />
       ) : (
 
         <div className='flex flex-col items-center'>
           <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
             <h1 className="text-4xl font-bold mb-4">Step <span className='text-yellow-500'>6</span>: Choose your Package</h1>
             <p className="text-xl">
-              Please select a cleaning package. For your facility needs and budget we suggest the {packageName} Package.
+              Please select a cleaning package. For your facility needs and budget we suggest the {recPackage?.packageName} Package.
             </p>
           </div>
           <div className='flex flex-row w-full justify-between gap-8'>
@@ -166,7 +128,7 @@ const Packages: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, cost, quotePa
                 Our Recommended Package
               </h2>
               {recPackage ? (
-                <PackageCard type={'rec'} onUpdateCost={onUpdateCost} bronzeCost={bronzeCost} silverCost={silverCost} goldCost={goldCost} bronzeChosen={bronzeChosen} silverChosen={silverChosen} goldChosen={goldChosen} bronzeRec={bronzeRec} silverRec={silverRec} goldRec={goldRec} cleanPackage={recPackage} onNext={onNextStep} quoteID={quoteID} onChangePackage={handlePackageChange} />
+                <PackageCard type={'rec'} recPackage={recPackage} quotePackage={quotePackage} onNext={onNextStep} quoteID={quoteID} onChangePackage={handlePackageChange} />
               ) : (
                 <p className="text-center">No recommended package available.</p>
               )}
@@ -179,7 +141,7 @@ const Packages: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, cost, quotePa
                 </h2>
 
                 <div className='pt-12'>
-                  <PackageCard type={'chosen'} onUpdateCost={onUpdateCost} bronzeCost={bronzeCost} silverCost={silverCost} goldCost={goldCost} bronzeChosen={bronzeChosen} silverChosen={silverChosen} goldChosen={goldChosen} bronzeRec={bronzeRec} silverRec={silverRec} goldRec={goldRec} cleanPackage={quotePackage} onNext={onNextStep} quoteID={quoteID} onChangePackage={handlePackageChange} />
+                  <PackageCard type={'chosen'} recPackage={recPackage} quotePackage={quotePackage} onNext={onNextStep} quoteID={quoteID} onChangePackage={handlePackageChange} />
                 </div>
               </div>
             )}

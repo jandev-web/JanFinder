@@ -8,7 +8,7 @@ interface CustomProgressBarProps {
 
 const CustomProgressBar: React.FC<CustomProgressBarProps> = ({ stepNumber, steps, onStepClick }) => {
   const progress = (stepNumber / steps.length) * 100;
-  console.log(steps)
+  
   return (
     <div className="relative w-full max-w-4xl pt-16 pb-8 mx-auto">
       <div className="text-center mb-4">

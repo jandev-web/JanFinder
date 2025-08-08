@@ -32,7 +32,7 @@ const FloorInfoPage: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, stairwel
       <div className="bg-[#001F54] text-white p-8 rounded-md shadow-lg max-w-2xl text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">Step 2: Number of Floors</h1>
         <p className="text-xl">
-          Next, add your Facility's floor number and stairwell information.
+          Next, add your Facility&apos; floor number and stairwell information.
         </p>
       </div>
 

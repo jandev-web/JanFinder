@@ -47,8 +47,8 @@ const UpdateQuoteFrequency: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, q
             await updateQuoteFrequency(quoteID, frequency);
             const calculatedPackages = await calculateTime(quoteID)
             onChangeFrequency(frequency, calculatedPackages.packageOptions);
-            onNextStep(5)
-            onCanClick(5, true)
+            onNextStep(6)
+            onCanClick(6, true)
         } catch (error) {
             console.error('Error updating frequency:', error);
             setErrorMessage('Failed to update frequency.');

@@ -171,6 +171,19 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
         }
     };
 
+    const declineAvailableQuote = async () => {
+        try {
+            const inFranchise = true
+            const decision = 'reject'
+            console.log('Rejecting quote')
+            await answerSellRequest(user.CBOID, requestID, inFranchise, decision);
+            //router.push('/members/cbo/quotes/available')
+
+        } catch (error) {
+            console.error('Error rejecting quote:', error);
+        }
+    };
+
 
 
     const goBack = async () => {
@@ -223,16 +236,9 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
                         {/* Left Column: All info except Tasks */}
                         <div className="space-y-6">
                             {/* Price */}
-
                             <div>
-                                <h2 className="text-2xl font-bold text-[#001F54]">Price:</h2>
-                                <p className="mt-2 text-lg text-gray-800">${costInfo?.finalCost}</p>
-                            </div>
-                            <div>
-                                <h2 className="text-2xl font-bold text-[#001F54]">Offered By:</h2>
-                                <p className="mt-2 text-lg text-gray-800">Franchise: {franchiseInfo}</p>
-                                <p className="mt-2 text-lg text-gray-800">Owner: {ownerInfo?.firstName} {ownerInfo?.lastName}</p>
-                                <p className="mt-2 text-lg text-gray-800">Sent At: {offerTime ? formatDate(offerTime) : 'N/A'}</p>
+                                <h2 className="text-2xl font-bold text-[#001F54]">Price</h2>
+                                <p className="mt-2 text-lg text-gray-800">${quotePackage?.packageChoice?.packageCost}</p>
                             </div>
 
                             {address && (
@@ -280,9 +286,6 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
                                         <li>
                                             <strong>Square Feet:</strong> {quoteInfo.sqft}
                                         </li>
-                                        <li>
-                                            <strong>Frequency:</strong> {quoteInfo.frequency}
-                                        </li>
                                     </ul>
                                 </div>
                             )}
@@ -292,10 +295,10 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
                                 <div>
                                     <h3 className="text-xl font-semibold text-[#001F54]">Package Details</h3>
                                     <p className="mt-2 text-gray-800">
-                                        <strong>Package:</strong> {quotePackage.name}
+                                        <strong>Package:</strong> {quotePackage?.packageChoice?.packageName}
                                     </p>
                                     <p className="mt-1 text-gray-800">
-                                        <strong>Cost:</strong> ${costInfo.finalCost}
+                                        <strong>Cost:</strong> ${quotePackage?.packageChoice?.packageCost}
                                     </p>
                                 </div>
                             )}
@@ -305,74 +308,135 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, requestID }) => {
                         {quotePackage && (
                             <div>
                                 <h4 className="text-lg font-semibold text-[#001F54] mb-4">
-                                    Tasks by Room
+                                    Total Day Time: {quotePackage?.packageChoice?.totalDayTimeFromMonth?.toFixed(2)} min/day
                                 </h4>
-                                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 h-96 overflow-y-auto">
+                                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 h-[36rem] overflow-y-auto space-y-6">
 
-                                    <div className="space-y-4">
-                                        {quotePackage.rooms.map((room: any, index: any) => (
+                                    {/* Rooms */}
+                                    <div>
+                                        <h3 className="text-xl font-bold text-[#001F54] mb-4">Rooms</h3>
+                                        {quotePackage?.packageChoice?.rooms?.map((room: any, index: number) => (
                                             <div key={index} className="border-b border-gray-300 pb-4">
-                                                <h4 className="text-xl font-semibold text-[#001F54] mb-2">
-                                                    {room.roomName}:{" "}
-                                                    {
-                                                        // Find the matching room‐object in roomInfo, then read its sqft.totalSqft
-                                                        roomInfo.find((r: any) => r.roomType === room.roomName)
-                                                            ?.sqft?.totalSqft ?? 0
-                                                    }{" "}
-                                                    sqft
+                                                <h4 className="text-lg font-semibold text-[#001F54]">
+                                                    {room.roomName} – <span className="text-gray-600">{room.totalDayTimeFromMonth?.toFixed(2)} min/day</span>
                                                 </h4>
-                                                <ul className="pl-4 space-y-2">
-                                                    {room.tasks.map((task: any, idx: any) => (
-                                                        <li key={idx} className="flex justify-between items-center text-sm">
-                                                            <span className="font-medium">{task.taskName}</span>
-                                                            <span className="italic text-gray-500">{task.taskFrequency}</span>
+                                                <ul className="pl-4 mt-2 space-y-2">
+                                                    {room.roomTasks?.map((task: any, idx: number) => (
+                                                        <li key={idx} className="flex justify-between text-sm">
+                                                            <div className="font-medium">{task.taskName}</div>
+                                                            <div className="italic text-gray-500">
+                                                                {task.frequency} – {task.timePerDayFromMonthly?.toFixed(2)} min/day
+                                                            </div>
                                                         </li>
                                                     ))}
                                                 </ul>
                                             </div>
                                         ))}
                                     </div>
+
+                                    {/* Carpet Tasks */}
+                                    {quotePackage?.packageChoice?.carpet?.tasks?.length > 0 && (
+                                        <div className="border-t border-gray-300 pt-4">
+                                            <h3 className="text-xl font-bold text-[#001F54] mb-2">Carpet</h3>
+                                            <p className="text-gray-600 mb-2">Total: {quotePackage.packageChoice.carpet.totalDayTimeFromMonth?.toFixed(2)} min/day</p>
+                                            <ul className="pl-4 space-y-2">
+                                                {quotePackage.packageChoice.carpet.tasks.map((task: any, idx: number) => (
+                                                    <li key={idx} className="flex justify-between text-sm">
+                                                        <div className="font-medium">{task.taskName}</div>
+                                                        <div className="italic text-gray-500">
+                                                            {task.frequency} – {task.timePerDayFromMonthly?.toFixed(2)} min/day
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {/* Hardfloor Tasks */}
+                                    {quotePackage?.packageChoice?.hardfloor?.tasks?.length > 0 && (
+                                        <div className="border-t border-gray-300 pt-4">
+                                            <h3 className="text-xl font-bold text-[#001F54] mb-2">Hardfloor</h3>
+                                            <p className="text-gray-600 mb-2">Total: {quotePackage.packageChoice.hardfloor.totalDayTimeFromMonth?.toFixed(2)} min/day</p>
+                                            <ul className="pl-4 space-y-2">
+                                                {quotePackage.packageChoice.hardfloor.tasks.map((task: any, idx: number) => (
+                                                    <li key={idx} className="flex justify-between text-sm">
+                                                        <div className="font-medium">{task.taskName}</div>
+                                                        <div className="italic text-gray-500">
+                                                            {task.frequency} – {task.timePerDayFromMonthly?.toFixed(2)} min/day
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {/* Other Time */}
+                                    {quotePackage?.packageChoice?.otherDayTimeFromMonth && (
+                                        <div className="border-t border-gray-300 pt-4">
+                                            <h3 className="text-xl font-bold text-[#001F54] mb-2">Other Tasks</h3>
+                                            <p className="text-gray-600">Total: {quotePackage.packageChoice.otherDayTimeFromMonth?.toFixed(2)} min/day</p>
+                                        </div>
+                                    )}
+
                                 </div>
+
+
                             </div>
+
                         )}
                     </div>
 
                     {/* Accept Quote Actions */}
                     <div className="mt-10 text-center">
                         {(!showAcceptConfirmation && !showRejectConfirmation) ? (
-                            <div>
+                            <div className="flex justify-center space-x-4">
                                 <button
                                     onClick={() => setShowAcceptConfirmation(true)}
-                                    className="px-6 py-3 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
+                                    className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-500 transition"
                                 >
                                     Accept Offer
                                 </button>
                                 <button
                                     onClick={() => setShowRejectConfirmation(true)}
-                                    className="px-6 py-3 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
+                                    className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-500 transition"
                                 >
                                     Decline Offer
                                 </button>
                             </div>
-                        ) : (
-
+                        ) : showAcceptConfirmation ? (
                             <div className="flex justify-center space-x-4">
                                 <button
-                                    onClick={() =>
-                                        acceptAvailableQuote()
-                                    }
+                                    onClick={() => acceptAvailableQuote()}
                                     className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition"
                                 >
                                     Confirm Acceptance
                                 </button>
                                 <button
                                     onClick={() => setShowAcceptConfirmation(false)}
-                                    className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-400 transition"
+                                    className="px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-400 transition"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex justify-center space-x-4">
+                                <button
+                                    onClick={() =>
+                                        declineAvailableQuote()
+                                    }
+                                    className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-500 transition"
+                                >
+                                    Confirm Rejection
+                                </button>
+                                <button
+                                    onClick={() => setShowRejectConfirmation(false)}
+                                    className="px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-400 transition"
                                 >
                                     Cancel
                                 </button>
                             </div>
                         )}
+
                     </div>
                 </div>
             </div>

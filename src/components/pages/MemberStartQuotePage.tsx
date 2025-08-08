@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getCBOBuildingTypes } from '@/utils/getCBOBuildingTypes';
 import QuoteDetails from '@/components/MemberStartQuoteDetails';
 
 
@@ -13,17 +12,7 @@ const MemberStartQuotePage: React.FC<MemberStartQuotePageProps> = ({ user }) => 
     const [buildingData, setBuildingData] = useState([]);
     
     
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getCBOBuildingTypes();
-                setBuildingData(data);
-            } catch (error) {
-                console.error('Error fetching building data:', error);
-            }
-        };
-        fetchData();
-    }, []);
+    
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-8">
