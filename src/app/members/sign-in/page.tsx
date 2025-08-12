@@ -8,7 +8,8 @@ import { Authenticator, useAuthenticator, Button, View, Heading, Text, useTheme,
 import { useRouter } from 'next/navigation';
 import MemberLandingHeader from '@/components/MemberLandingHeader';
 import MemberLandingFooter from '@/components/MemberLandingFooter';
-
+import LoadingSpinner from "@/components/loadingScreen";
+import RoleRouter from "@/components/RouteSignInUser";
 //cognitoUserPoolsTokenProvider.setKeyValueStorage(sessionStorage);
 
 const customTheme: Theme = {
@@ -116,12 +117,15 @@ const components = {
 function CustomAuthenticator() {
   const { user } = useAuthenticator((context) => [context.user]);
 
-  useEffect(() => {
-    if (user) {
-      //signOut();
-      redirect("/members/home");
-    }
-  }, [user]);
+  if (user) {
+    // Once signed in, hand off to RoleRouter which will create missing records and route
+    return (
+      <div className="flex flex-col w-full min-h-screen">
+        <LoadingSpinner />
+        <RoleRouter user={user} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col w-full min-h-screen">

@@ -10,6 +10,8 @@ const FranchiseListPage: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full min-h-screen">
+      
+
       <MemberLandingHeader />
 
       {/* Ensures Home takes up all available space between Header and Footer */}

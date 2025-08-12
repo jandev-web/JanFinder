@@ -1,5 +1,5 @@
 {
- "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"AmplifySandbox\",\"createdWith\":\"1.18.2\",\"stackType\":\"api-AppSync\",\"metadata\":{\"dataSources\":\"dynamodb\",\"authorizationModes\":\"amazon_cognito_identity_pools,amazon_cognito_user_pools,aws_iam\",\"customOperations\":\"\"}}",
+ "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"AmplifySandbox\",\"createdWith\":\"1.20.3\",\"stackType\":\"api-AppSync\",\"metadata\":{\"dataSources\":\"dynamodb\",\"authorizationModes\":\"amazon_cognito_identity_pools,amazon_cognito_user_pools,aws_iam\",\"customOperations\":\"\"}}",
  "Resources": {
   "amplifyDataGraphQLAPI42A6FA33": {
    "Type": "AWS::AppSync::GraphQLApi",
@@ -119,7 +119,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/be3367ddbe21dea5c9ae18b52913990bfe88e18a428c2281ffc0a4b213a52e9b.json"
+       "/44372813cce3aaf1a122bb90471bbcfd4d684fe11fdf3c946b1d63298bfdbef8.json"
       ]
      ]
     }
@@ -209,7 +209,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/aaa256bb540f17f77b2f08376743289c84acb0e9a2e76022d02f93498e8bb2f0.json"
+       "/fa705276ba40a9e176ac4ab825ca04b6bfb6799944a5e8e50fadb9508d3f7305.json"
       ]
      ]
     }
@@ -370,7 +370,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "0457d333165d06eb6c6f378cdab18fc4e0714ab2e47bcdedd45059f77e7f37da.zip"
+     "S3Key": "c49d356cac773d491c5f7ac148995a1181498a8e289429f8612a7f7e3814f535.zip"
     },
     "Description": "/opt/awscli/aws"
    },
@@ -378,7 +378,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AmplifyCodegenAssets/AmplifyCodegenAssetsDeployment/AwsCliLayer/Resource",
-    "aws:asset:path": "asset.0457d333165d06eb6c6f378cdab18fc4e0714ab2e47bcdedd45059f77e7f37da.zip",
+    "aws:asset:path": "asset.c49d356cac773d491c5f7ac148995a1181498a8e289429f8612a7f7e3814f535.zip",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Content"
    }
@@ -688,7 +688,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "c6358465bf49dfae556bb430bf9c81fa578c221b82c308e3707901b1dd654762.zip"
+     "S3Key": "9a1fcb4a7ecba81ad70e9d3fb241f6794497da945dae5f25924e4dd002b65f2d.zip"
     },
     "Environment": {
      "Variables": {
@@ -729,7 +729,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1536MiB/Resource",
-    "aws:asset:path": "asset.c6358465bf49dfae556bb430bf9c81fa578c221b82c308e3707901b1dd654762",
+    "aws:asset:path": "asset.9a1fcb4a7ecba81ad70e9d3fb241f6794497da945dae5f25924e4dd002b65f2d",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -882,7 +882,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "0457d333165d06eb6c6f378cdab18fc4e0714ab2e47bcdedd45059f77e7f37da.zip"
+     "S3Key": "c49d356cac773d491c5f7ac148995a1181498a8e289429f8612a7f7e3814f535.zip"
     },
     "Description": "/opt/awscli/aws"
    },
@@ -890,7 +890,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/modelIntrospectionSchemaBucketDeployment/AwsCliLayer/Resource",
-    "aws:asset:path": "asset.0457d333165d06eb6c6f378cdab18fc4e0714ab2e47bcdedd45059f77e7f37da.zip",
+    "aws:asset:path": "asset.c49d356cac773d491c5f7ac148995a1181498a8e289429f8612a7f7e3814f535.zip",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Content"
    }
@@ -985,10 +985,27 @@
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/AMPLIFY_DATA_MODEL_INTROSPECTION_SCHEMA_KEYParameter/Resource"
    }
   },
+  "AMPLIFYDATADEFAULTNAMEParameterE7C23CC4": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Name": "/amplify/resource_reference/janfinderapp/brendandaly-sandbox-1ef333357f/AMPLIFY_DATA_DEFAULT_NAME",
+    "Tags": {
+     "amplify:deployment-type": "sandbox",
+     "created-by": "amplify"
+    },
+    "Type": "String",
+    "Value": "amplifyData"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/AMPLIFY_DATA_DEFAULT_NAMEParameter/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VRy26DMBD8ltwdN49Dz4SovaRRGqRe0cYsxImxqdcEIYt/r4wLaU87M2vN7K43fP265asFdLQUxX2p5IX7I5LDInMg7uyMZForkEFHuYemoV4L7t8tNNdvlTRyB4QsLfWofB6SRv5hmbhiDexoNO7BQRat0lI/2cBom3sgQkc8CYUV2CjT16gd37Xijm4/C+E191EdkyMMlr8olpNRUvRPOfKBKagvBXCflvoAPdovtCSNZpnUlUJn9FurhQvKDNJyFgcmoeb+bNS4xFifSVMGUc195qzU1Qks1OjQjv2JDAMbF80cVFJXoRePnbbkTD2fPERMOA6eqzB0Dh0JJXnSUarkuMc//0A+oGlG73+WJ2seskA7fVpqdCHjZtoUyG/08ths+HrNV4sbSbm0rXayRn6O9QeHK1D+LwIAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VQy27CMBD8Fu7GhfQLQlB7oYgSqddocTbB4EfqdYiiKP9eOYZQTvNYeTy7CU/WK75aQEdLUV6XSp74sEfyWOYexJUdkWzrBDLoqBigaag3gg+fDprzr0obuQFCllVmcr53aSP/qVycUQPbW4Nb8JDHqKwyTzUyeufDphVX9GFyZxEOVknRP+27jiL8HF4XQ4mNsr1G43kcbWeDARF64mmAkSnQpxL4kFVmBz26H3QkrWG5NLVCb81Ha4QPzkyyajZHJkHz4WjVtMSEz4qRjYxI8yH3Tpr6AA40enTT/CHGMch436wlb/V85ZD64LFroULPAjoSSvK0o0zJqTqbVso91NLUL/lBfEHTTP5L/sHZmyzRxdMZWyK/0NstSfg64avFhaRcutZ4qZEfI/4Brdw2QyICAAA="
    },
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/CDKMetadata/Default"
@@ -1050,109 +1067,118 @@
  "Mappings": {
   "LatestNodeRuntimeMap": {
    "af-south-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-east-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
+   },
+   "ap-east-2": {
+    "value": "nodejs22.x"
    },
    "ap-northeast-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-northeast-2": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-northeast-3": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-south-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-south-2": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-southeast-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-southeast-2": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-southeast-3": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-southeast-4": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ap-southeast-5": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
+   },
+   "ap-southeast-6": {
+    "value": "nodejs22.x"
    },
    "ap-southeast-7": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ca-central-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "ca-west-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "cn-north-1": {
-    "value": "nodejs18.x"
+    "value": "nodejs22.x"
    },
    "cn-northwest-1": {
-    "value": "nodejs18.x"
+    "value": "nodejs22.x"
    },
    "eu-central-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "eu-central-2": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "eu-isoe-west-1": {
     "value": "nodejs18.x"
    },
    "eu-north-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "eu-south-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "eu-south-2": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "eu-west-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "eu-west-2": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "eu-west-3": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
+   },
+   "eusc-de-east-1": {
+    "value": "nodejs22.x"
    },
    "il-central-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "me-central-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "me-south-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "mx-central-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "sa-east-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "us-east-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "us-east-2": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "us-gov-east-1": {
-    "value": "nodejs18.x"
+    "value": "nodejs22.x"
    },
    "us-gov-west-1": {
-    "value": "nodejs18.x"
+    "value": "nodejs22.x"
    },
    "us-iso-east-1": {
     "value": "nodejs18.x"
@@ -1163,11 +1189,14 @@
    "us-isob-east-1": {
     "value": "nodejs18.x"
    },
+   "us-isob-west-1": {
+    "value": "nodejs18.x"
+   },
    "us-west-1": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    },
    "us-west-2": {
-    "value": "nodejs20.x"
+    "value": "nodejs22.x"
    }
   }
  },

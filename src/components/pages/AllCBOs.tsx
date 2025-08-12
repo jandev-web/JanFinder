@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import LoadingSpinner from '@/components/loadingScreen'
 import fetchAllCBOs from '@/utils/getAllCBOs'
 import CBOCard from '@/components/CBOCard'
+import getJoinFranchiseRequests from '@/utils/getJoinFranchiseRequests';
+
 interface CBO {
     franchiseID: string; // Adjust based on your data structure
     franchiseName: string;
@@ -21,8 +23,10 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
     //console.log('AllCBOs.tsx')
     //console.log(user?.signInDetails?.loginId)
     const id = user?.OwnerID
+    const franchiseID = user.franchiseID;
     //console.log('Email: ', user)
     const [cbos, setCBOs] = useState<CBO[]>([]);
+    const [requests, setRequests] = useState<any>([]);
     const [loading, setLoading] = useState(true);
     //const email = user.signInDetails.loginId
     const router = useRouter();
@@ -34,6 +38,8 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
                 if (id) {
                     const data = await fetchAllCBOs(id);
                     setCBOs(data || []);
+                    const result = await getJoinFranchiseRequests(franchiseID);
+                    setRequests(result?.items || []);
                 }
             } catch (error) {
                 console.error('Error fetching CBO data:', error);
@@ -91,10 +97,16 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
             </button>
             <button
                 onClick={handleRequests}
-                className="mt-6 bg-yellow-500 text-[#001F54] font-bold py-2 px-4 rounded hover:bg-yellow-400 transition"
+                className="relative mt-6 bg-yellow-500 text-[#001F54] font-bold py-2 px-4 rounded hover:bg-yellow-400 transition"
             >
                 Pending Requests
+                {requests.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                        {requests.length}
+                    </span>
+                )}
             </button>
+
         </div>
 
     );

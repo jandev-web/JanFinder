@@ -1,11 +1,10 @@
 
 
-import '@/styles/globals.css';
+import '../styles/globals.css';
 import { Inter } from "next/font/google";
 
 
 import { metadata } from './metadata'; // Import the metadata
-import "@aws-amplify/ui-react/styles.css";
 
 import ConfigureAmplifyClientSide from "@/components/ConfigureAmplify";
 

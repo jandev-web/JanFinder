@@ -50,7 +50,7 @@
          "Effect": "Allow",
          "Resource": {
           "Fn::Sub": [
-           "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*-${apiId}-${envName}",
+           "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*-${apiId}-${envName}",
            {
             "apiId": {
              "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPIACBD2C88ApiId"
@@ -65,7 +65,7 @@
          "Effect": "Allow",
          "Resource": {
           "Fn::Sub": [
-           "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*TableManager*",
+           "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:*TableManager*",
            {}
           ]
          }
@@ -147,7 +147,7 @@
          "Effect": "Allow",
          "Resource": {
           "Fn::Sub": [
-           "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*-${apiId}-${envName}",
+           "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*-${apiId}-${envName}",
            {
             "apiId": {
              "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPIACBD2C88ApiId"
@@ -162,7 +162,7 @@
          "Effect": "Allow",
          "Resource": {
           "Fn::Sub": [
-           "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*TableManager*",
+           "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:*TableManager*",
            {}
           ]
          }
@@ -229,7 +229,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "ca9699b9a2845c45e80cba1111f95ae2ac773af7d87163ae9c808ec547e38e00.zip"
+     "S3Key": "23df4a10f7743e90a710888ea87205f23d214aad2b34e617221bec49c1d24ebc.zip"
     },
     "Description": "AmplifyManagedTable - onEvent (amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AmplifyTableManager/TableManagerCustomProvider)",
     "Environment": {
@@ -246,7 +246,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x",
+    "Runtime": "nodejs20.x",
     "Tags": [
      {
       "Key": "amplify:deployment-type",
@@ -271,7 +271,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AmplifyTableManager/TableManagerCustomProvider/framework-onEvent/Resource",
-    "aws:asset:path": "asset.ca9699b9a2845c45e80cba1111f95ae2ac773af7d87163ae9c808ec547e38e00",
+    "aws:asset:path": "asset.23df4a10f7743e90a710888ea87205f23d214aad2b34e617221bec49c1d24ebc",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -283,7 +283,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "ca9699b9a2845c45e80cba1111f95ae2ac773af7d87163ae9c808ec547e38e00.zip"
+     "S3Key": "23df4a10f7743e90a710888ea87205f23d214aad2b34e617221bec49c1d24ebc.zip"
     },
     "Description": "AmplifyManagedTable - isComplete (amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AmplifyTableManager/TableManagerCustomProvider)",
     "Handler": "amplify-table-manager-handler.isComplete",
@@ -293,7 +293,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x",
+    "Runtime": "nodejs20.x",
     "Tags": [
      {
       "Key": "amplify:deployment-type",
@@ -317,7 +317,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AmplifyTableManager/TableManagerCustomProvider/framework-isComplete/Resource",
-    "aws:asset:path": "asset.ca9699b9a2845c45e80cba1111f95ae2ac773af7d87163ae9c808ec547e38e00",
+    "aws:asset:path": "asset.23df4a10f7743e90a710888ea87205f23d214aad2b34e617221bec49c1d24ebc",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -443,7 +443,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zWNSwqDQBBEz5L92PGzyDoKWYagB5B2ppX2MwP2TCSIdw8qrl4VD6pSSB4ZxDdcJNJmiEZuYH2TeDKVRz0oXKReGSdYSzeSKlp78ONG1r+9nmlTI06NQVhfwWrPzu7uypuSrEYR8gLPHUoyyIMeyOcotKmSxIVZkzps5bFj2x1nlyhaWzhr+JyzzhD0cv+mKSQJxLdemKM5WM8TQXnyD/MNPefcAAAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zWNQQqDMBBFz+I+TjWeoBa6LEUPIGMylWhMwEkqRXL3orar9z5v8SXIsoAiw5Vzpafcmh62B3Eg3QZUk8CVu83gDFvjLYnbyx18emvUZ5+nJWFx7jXCdo9OBePd3v6eBFcdMlNguO4QXEEd1UShRqYkGmIfF0XiqG3AwbjhOPuFJJzXBCNf3lJCKaHIRjYmX6ILZiZoTn4Bd9h9p88AAAA="
    },
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/AmplifyTableManager/CDKMetadata/Default"

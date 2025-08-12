@@ -1,5 +1,5 @@
 {
- "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"AmplifySandbox\",\"createdWith\":\"1.9.0\",\"stackType\":\"root\",\"metadata\":{}}",
+ "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"AmplifySandbox\",\"createdWith\":\"1.16.1\",\"stackType\":\"root\",\"metadata\":{}}",
  "Metadata": {
   "AWS::Amplify::Platform": {
    "version": "1",
@@ -31,6 +31,12 @@
     "oauthResponseType",
     "oauthClientId",
     "groups"
+   ]
+  },
+  "AWS::Amplify::Function": {
+   "version": "1",
+   "stackOutputs": [
+    "definedFunctions"
    ]
   },
   "AWS::Amplify::GraphQL": {
@@ -104,16 +110,16 @@
    "Value": "[\"email\"]"
   },
   "passwordPolicyMinLength": {
-   "Value": "8"
+   "Value": "12"
   },
   "passwordPolicyRequirements": {
    "Value": "[\"REQUIRES_NUMBERS\",\"REQUIRES_LOWERCASE\",\"REQUIRES_UPPERCASE\",\"REQUIRES_SYMBOLS\"]"
   },
   "mfaConfiguration": {
-   "Value": "OFF"
+   "Value": "OPTIONAL"
   },
   "mfaTypes": {
-   "Value": "[]"
+   "Value": "[\"TOTP\"]"
   },
   "socialProviders": {
    "Value": ""
@@ -142,7 +148,52 @@
    }
   },
   "groups": {
-   "Value": "[]"
+   "Value": "[{\"Admin\":{\"precedence\":0}},{\"Owner\":{\"precedence\":1}},{\"Member\":{\"precedence\":2}}]"
+  },
+  "definedFunctions": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "[\"",
+      {
+       "Fn::GetAtt": [
+        "auth179371D7",
+        "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthcreateauthchallengelambdaA96ECD4DRef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "auth179371D7",
+        "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthdefineauthchallengelambdaA2FA6187Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "auth179371D7",
+        "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthverifyauthchallengeresponselambda65ED133ERef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "auth179371D7",
+        "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthpresignuplambdaC5A90716Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "auth179371D7",
+        "Outputs.amplifyjanfinderappbrendandalysandbox1ef333357fauthpostconfirmationlambda553511B4Ref"
+       ]
+      },
+      "\"]"
+     ]
+    ]
+   }
   },
   "awsAppsyncApiId": {
    "Value": {
@@ -237,7 +288,7 @@
       {
        "Ref": "AWS::Region"
       },
-      "\\\",\\\"paths\\\":{\\\"contracts/*\\\":{\\\"authenticated\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\"]},\\\"contract-templates/*\\\":{\\\"authenticated\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\"]}}}\"]"
+      "\\\",\\\"paths\\\":{\\\"contracts/*\\\":{\\\"authenticated\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\"]},\\\"contract-templates/*\\\":{\\\"authenticated\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\"]},\\\"quote-templates/*\\\":{\\\"authenticated\\\":[\\\"get\\\",\\\"list\\\",\\\"write\\\"]}}}\"]"
      ]
     ]
    }
@@ -273,7 +324,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/ce11ed2c543600260489ca1efcc268c1b39e73a50efca0f0263848eae36bdd69.json"
+       "/251e9417c91c6fa83eb8a3217e4d133ecb8f4dfabf93ad01637cc4e587c11c83.json"
       ]
      ]
     }
@@ -341,7 +392,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/bc91d9389df49590e1bf5e23cb1a1e14428a718e148c2999b9f9b8f16cde4701.json"
+       "/832c57b4b588d950f8a332fe7df4c760679b3773b7ea105468c730fedcf5b3e8.json"
       ]
      ]
     }
@@ -391,7 +442,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/8f8a6cd859a1e37fa2e237d914fb33a702520f072fa529215a51edf545387e1e.json"
+       "/42bd78d95a428fc2c4e0941011a2075a3f2341e5bde742e7addf44ed4169e2c0.json"
       ]
      ]
     }
@@ -407,7 +458,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzQ31jNQTCwv1k1OydbNyUzSqw4uSUzO1nFOy/MvLSkoLQGx4EJBqcX5pUXJqSC2c35eSmZJZn5erU5efkqqXlaxfpmRkZ6hoZ6BYlZxZqZuUWleSWZuql4QhAYA1rXuim0AAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzI00DNQTCwv1k1OydbNyUzSqw4uSUzO1nFOy/MvLSkoLQGxwEK1Onn5Kal6WcX6ZUZGeoZGegaKWcWZmbpFpXklmbmpekEQGgDU7zjLVAAAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/CDKMetadata/Default"

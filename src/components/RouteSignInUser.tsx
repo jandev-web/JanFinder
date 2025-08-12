@@ -1,10 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+
 import { fetchUserAttributes } from 'aws-amplify/auth';
+import { fetchAuthSession } from 'aws-amplify/auth';
+
 import { useRouter } from 'next/navigation'; // Use useRouter from next/navigation
-import checkUserRole from '@/utils/checkOwnerStatus';
 import MemberLoadingScreen from '@/components/pages/MemberPageLoading';
+
+import createOwner from '@/utils/createOwner';
+import getOwnerById from '@/utils/getOwnerById';
+
+import createCBO from '@/utils/createCBO';
+import fetchCBOById from '@/utils/getCBOByID';
 
 interface RoleRouterProps {
   user: any;
@@ -12,52 +20,105 @@ interface RoleRouterProps {
 
 
 
-const RoleRouter: React.FC<RoleRouterProps> = ({ user }) => {
+const RoleRouter: React.FC<RoleRouterProps> = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  console.log(user)
+  const [busy, setBusy] = useState(true);
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
+    let cancelled = false;
+
+    (async () => {
       try {
-        // Fetch user attributes
-        const fetchedAttributes = await fetchUserAttributes();
-        console.log(fetchedAttributes)
-        
+        const session = await fetchAuthSession();
+        const p = session.tokens?.idToken?.payload ?? {};
 
-        // Check user role
-        const userRole = await checkUserRole(fetchedAttributes.sub);
-        console.log(userRole)
-        const userStatus = userRole.status
-        if (userStatus === 'owner') {
-          console.log('Owner')
-          router.push('/members/owner');
-        } else if (userStatus === 'cbo'){
-          console.log('Not Owner')
+        const sub = p.sub as string | undefined;
+        const email = (p['email'] as string) || '';
+        const given = (p['given_name'] as string) || '';
+        const family = (p['family_name'] as string) || '';
+        const phone = (p['phone_number'] as string) || '';
+        const groups: string[] = (p['cognito:groups'] as string[]) || [];
+
+        if (!sub) {
+          router.push('/members/home');
+          return;
+        }
+
+        const isOwner = groups.includes('Owner');
+        const isMember = groups.includes('Member');
+
+        // ---- OWNER FLOW ----
+        if (isOwner) {
+          let owner: any | null = null;
+
+          // Try to fetch existing owner record
+          try {
+            owner = await getOwnerById(sub);
+          } catch (e: any) {
+            const msg = String(e?.message || '');
+            if (!/404|Not\s*Found/i.test(msg)) throw e; // only ignore 404
+          }
+
+          // If none, create it now with firstSignIn=false
+          if (!owner) {
+            await createOwner({
+              firstName: given,
+              lastName: family,
+              userID: sub,
+              phone,
+              address: { street: '', city: '', state: '', postalCode: '', country: '' },
+              firstSignIn: false,
+            });
+            owner = { firstSignIn: false };
+          }
+
+          // Route based on firstSignIn flag
+          if (owner?.firstSignIn === false) {
+            router.push('/owner/create-franchise'); // onboarding page
+          } else {
+            router.push('/members/owner'); // owner dashboard
+          }
+          return;
+        }
+
+        // ---- MEMBER FLOW ----
+        if (isMember) {
+
+          let member: any | null = null;
+          try {
+            member = await fetchCBOById(sub);
+          } catch (e: any) {
+            const msg = String(e?.message || '');
+            if (!/404|Not\s*Found/i.test(msg)) throw e;
+          }
+          if (!member) {
+            await createCBO({
+              firstName: given,
+              lastName: family,
+              phone,
+            });
+          }
           router.push('/members/cbo');
+          return;
         }
-        else {
-          console.error('Not a user')
-        }
-      } catch (error) {
-        console.error('Error fetching user details or role:', error);
+
+        // Fallback if no recognized group
+        router.push('/members/home');
+      } catch (err) {
+        // On error, don't strand the user
+        router.push('/members/home');
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setBusy(false);
       }
+    })();
+
+    return () => {
+      cancelled = true;
     };
+  }, [router]);
 
-    fetchUserDetails();
-  }, [user?.username, router]);
-
-  if (isLoading) {
-    return <MemberLoadingScreen />;
-  }
-
-  return (
-    <div className="flex flex-col justify-center items-center pt-20">
-      <p>Loading Homepage for {user?.username}...</p>
-    </div>
-  );
+  if (busy) return <MemberLoadingScreen />;
+  return null;
 };
 
 export default RoleRouter;

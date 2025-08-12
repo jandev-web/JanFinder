@@ -1,10 +1,12 @@
 {
   "auth": {
-    "user_pool_id": "us-east-1_yHmaGJjL5",
+    "user_pool_id": "us-east-1_1KCjeJPY8",
     "aws_region": "us-east-1",
-    "user_pool_client_id": "67htbrj5i6m2bpvo6i8192ents",
-    "identity_pool_id": "us-east-1:c67e7e02-2077-4284-b683-89bc1da14406",
-    "mfa_methods": [],
+    "user_pool_client_id": "7kd3c0eafn6enrmk8ot3ta2hn8",
+    "identity_pool_id": "us-east-1:32c9a983-d9a6-4d86-a305-a4e7a3a372cf",
+    "mfa_methods": [
+      "TOTP"
+    ],
     "standard_required_attributes": [
       "email"
     ],
@@ -14,10 +16,26 @@
     "user_verification_types": [
       "email"
     ],
-    "groups": [],
-    "mfa_configuration": "NONE",
+    "groups": [
+      {
+        "Admin": {
+          "precedence": 0
+        }
+      },
+      {
+        "Owner": {
+          "precedence": 1
+        }
+      },
+      {
+        "Member": {
+          "precedence": 2
+        }
+      }
+    ],
+    "mfa_configuration": "OPTIONAL",
     "password_policy": {
-      "min_length": 8,
+      "min_length": 12,
       "require_lowercase": true,
       "require_numbers": true,
       "require_symbols": true,
@@ -26,7 +44,7 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://xgzv6xwimnfqzhzjhxbun42cae.appsync-api.us-east-1.amazonaws.com/graphql",
+    "url": "https://pssupzf2j5cxdosthbtcqvf7aq.appsync-api.us-east-1.amazonaws.com/graphql",
     "aws_region": "us-east-1",
     "default_authorization_type": "AWS_IAM",
     "authorization_types": [
@@ -109,11 +127,11 @@
   },
   "storage": {
     "aws_region": "us-east-1",
-    "bucket_name": "janfindbucket1c1b5-dev",
+    "bucket_name": "amplify-janfinderapp-dev--janfinderstoragebucketa0-g3w7qsvpe9g4",
     "buckets": [
       {
         "name": "JanFinderStorage",
-        "bucket_name": "janfindbucket1c1b5-dev",
+        "bucket_name": "amplify-janfinderapp-dev--janfinderstoragebucketa0-g3w7qsvpe9g4",
         "aws_region": "us-east-1",
         "paths": {
           "contracts/*": {
@@ -129,10 +147,17 @@
               "list",
               "write"
             ]
+          },
+          "quote-templates/*": {
+            "authenticated": [
+              "get",
+              "list",
+              "write"
+            ]
           }
         }
       }
     ]
   },
-  "version": "1.3"
+  "version": "1.4"
 }

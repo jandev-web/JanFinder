@@ -67,14 +67,6 @@
     }
    ]
   },
-  "ShouldUseServerSideEncryption": {
-   "Fn::Equals": [
-    {
-     "Ref": "DynamoDBEnableServerSideEncryption"
-    },
-    "true"
-   ]
-  },
   "ShouldUsePayPerRequestBilling": {
    "Fn::Equals": [
     {
@@ -404,17 +396,12 @@
      ]
     },
     "sseSpecification": {
-     "sseEnabled": {
-      "Fn::If": [
-       "ShouldUseServerSideEncryption",
-       true,
-       false
-      ]
-     }
+     "sseEnabled": false
     },
     "streamSpecification": {
      "streamViewType": "NEW_AND_OLD_IMAGES"
     },
+    "deletionProtectionEnabled": false,
     "allowDestructiveGraphqlSchemaUpdates": true,
     "replaceTableUponGsiUpdate": true,
     "pointInTimeRecoverySpecification": {
@@ -482,7 +469,7 @@
          "Resource": [
           {
            "Fn::Sub": [
-            "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}",
+            "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}",
             {
              "tablename": {
               "Fn::Join": [
@@ -501,7 +488,7 @@
           },
           {
            "Fn::Sub": [
-            "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}/*",
+            "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}/*",
             {
              "tablename": {
               "Fn::Join": [
@@ -753,7 +740,11 @@
          }
         ]
        },
-       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -761,7 +752,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
        },
-       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -925,7 +920,11 @@
          }
         ]
        },
-       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -933,7 +932,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
        },
-       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1125,7 +1128,11 @@
          }
         ]
        },
-       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1133,7 +1140,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
        },
-       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1333,7 +1344,11 @@
          }
         ]
        },
-       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1341,7 +1356,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
        },
-       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1513,7 +1532,11 @@
          }
         ]
        },
-       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1521,7 +1544,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
        },
-       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1652,7 +1679,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPIACBD2C88ApiId"
        },
-       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1660,7 +1691,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
        },
-       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1791,7 +1826,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPIACBD2C88ApiId"
        },
-       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1799,7 +1838,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
        },
-       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1930,7 +1973,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPIACBD2C88ApiId"
        },
-       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -1938,7 +1985,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
        },
-       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -2013,7 +2064,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fdataamplifyDataGraphQLAPIACBD2C88ApiId"
        },
-       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -2021,7 +2076,11 @@
        {
         "Ref": "referencetoamplifyjanfinderappbrendandalysandbox1ef333357fauthNestedStackauthNestedStackResource4DFB5C40Outputsamplifyjanfinderappbrendandalysandbox1ef333357fauthamplifyAuthauthenticatedUserRoleF2D01BE8Ref"
        },
-       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
        {
         "Ref": "AWS::AccountId"
        },
@@ -2049,7 +2108,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WOwW6DMAyGn6X34BU47LyCdtwm2L0yiUEpIUGx06pCvPsEnTrt9PuTP9l/AflrCccD3jjTZsyc7WD5IBYyraAeVdX7L4w4kVDcoAreWLHBq4Y4pKhJVYklTH/Y++eMNz4v5u5xCqaDb+wcnZBJWZxgaYJ72MHRqnCe+e41LPWu112Ngu3z5H96T15vJargezukiHuj38/uSnFVXJ6RmYThbQvFJZySHkm2AuvmfiaZk6h93QoO1g+r8sEQXPjlWhSQ53A8XNjaLCYvdiJoHvkDy8mU/DYBAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WOQW6DQAxFz5L94BJyggbUZVNB95GZMWgS8KCxJ1GEuHsFqVJ19f3kJ/sXUOxzyHd4l8y6azb4FuZPEiXXKNqrKTv+wogjKcUVysDOqw9sapKQoiVTJtEw/mHHrxnvcp7dg3EMroVvbAc6opDxOMJch+Fph4EWg9MkD7YwV5tetRUqNq+T/+kjsV1LlIE736eIW6Pfz8ON4mLkcEYRUoH3NYwc4JjslXQtsKzuKemU1GzrRrH33C+GgyO4yNutKGBfQL67iPdZTKx+JKif+QMBe/8KNgEAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-brendandaly-sandbox-1ef333357f/data/amplifyData/Todo/CDKMetadata/Default"
