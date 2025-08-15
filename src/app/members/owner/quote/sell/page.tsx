@@ -4,19 +4,26 @@ import { redirect } from 'next/navigation';
 import OwnerSellQuotePage from '@/components/pages/OwnerSellQuotePage';
 import LoginError from '@/components/LoginErrorComponent';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
-export default async function SellQuote({ searchParams }: { searchParams: { quoteID?: string } }) {
+type SP = { quoteID?: string | string[] };
+
+export default async function SellQuote({
+  searchParams,
+}: {
+  searchParams: Promise<SP>;
+}) {
   try {
-    // Fetch the authenticated user on the server
+    // Await Next 15's promised searchParams
+    const sp = await searchParams;
+    const rawId = sp?.quoteID;
+    const quoteParam = Array.isArray(rawId) ? rawId[0] : rawId ?? null;
+
+    // Server-side auth
     const user = await AuthGetCurrentUserServer();
-
-    // Redirect to the login page if the user is not authenticated
     if (!user) {
-      redirect('/login');
+      redirect('/login'); // throws
     }
-
-    const quoteParam = searchParams?.quoteID || null;
 
     return (
       <div className="flex w-full flex-col min-h-screen">
@@ -24,9 +31,7 @@ export default async function SellQuote({ searchParams }: { searchParams: { quot
       </div>
     );
   } catch (error) {
-    console.error('Error fetching user:', error);
-
-    // Redirect to login if an error occurs
+    console.error('Error fetching user or search params:', error);
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <LoginError />

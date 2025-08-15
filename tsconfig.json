@@ -15,7 +15,8 @@
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "$amplify/*": [".amplify/generated/*"]
     },
     "target": "ES2017"
     /* no global aws-lambda types here */
@@ -27,5 +28,5 @@
     ".next/types/**/*.ts",
     "amplify/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "amplify/**", ".amplify/**"]
 }

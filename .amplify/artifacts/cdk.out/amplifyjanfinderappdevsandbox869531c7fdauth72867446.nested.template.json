@@ -20,22 +20,7 @@
     ],
     "EmailVerificationMessage": "The verification code to your new account is {####}",
     "EmailVerificationSubject": "Verify your new account",
-    "EnabledMfas": [
-     "SOFTWARE_TOKEN_MFA"
-    ],
     "LambdaConfig": {
-     "CreateAuthChallenge": {
-      "Fn::GetAtt": [
-       "createauthchallengelambda24CF06B1",
-       "Arn"
-      ]
-     },
-     "DefineAuthChallenge": {
-      "Fn::GetAtt": [
-       "defineauthchallengelambda169E2373",
-       "Arn"
-      ]
-     },
      "PostConfirmation": {
       "Fn::GetAtt": [
        "postconfirmationlambda195D98D2",
@@ -47,15 +32,9 @@
        "presignuplambda88F2702A",
        "Arn"
       ]
-     },
-     "VerifyAuthChallengeResponse": {
-      "Fn::GetAtt": [
-       "verifyauthchallengeresponselambda96E27A98",
-       "Arn"
-      ]
      }
     },
-    "MfaConfiguration": "OPTIONAL",
+    "MfaConfiguration": "OFF",
     "Policies": {
      "PasswordPolicy": {
       "MinimumLength": 12,
@@ -100,78 +79,6 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/amplifyAuth/UserPool/Resource"
-   }
-  },
-  "amplifyAuthUserPoolCreateAuthChallengeCognitoF079104F": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "createauthchallengelambda24CF06B1",
-      "Arn"
-     ]
-    },
-    "Principal": "cognito-idp.amazonaws.com",
-    "SourceArn": {
-     "Fn::GetAtt": [
-      "amplifyAuthUserPool4BA7F805",
-      "Arn"
-     ]
-    }
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/amplifyAuth/UserPool/CreateAuthChallengeCognito"
-   }
-  },
-  "amplifyAuthUserPoolDefineAuthChallengeCognitoFB5C5ACA": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "defineauthchallengelambda169E2373",
-      "Arn"
-     ]
-    },
-    "Principal": "cognito-idp.amazonaws.com",
-    "SourceArn": {
-     "Fn::GetAtt": [
-      "amplifyAuthUserPool4BA7F805",
-      "Arn"
-     ]
-    }
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/amplifyAuth/UserPool/DefineAuthChallengeCognito"
-   }
-  },
-  "amplifyAuthUserPoolVerifyAuthChallengeResponseCognito8B3FF4AD": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "verifyauthchallengeresponselambda96E27A98",
-      "Arn"
-     ]
-    },
-    "Principal": "cognito-idp.amazonaws.com",
-    "SourceArn": {
-     "Fn::GetAtt": [
-      "amplifyAuthUserPool4BA7F805",
-      "Arn"
-     ]
-    }
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/amplifyAuth/UserPool/VerifyAuthChallengeResponseCognito"
    }
   },
   "amplifyAuthUserPoolPreSignUpCognito55F45D8E": {
@@ -655,393 +562,6 @@
     "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/amplifyAuth/MemberGroup"
    }
   },
-  "createauthchallengelambdaServiceRoleFA59BD95": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "lambda.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "ManagedPolicyArns": [
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-       ]
-      ]
-     }
-    ],
-    "Tags": [
-     {
-      "Key": "amplify:deployment-type",
-      "Value": "sandbox"
-     },
-     {
-      "Key": "amplify:friendly-name",
-      "Value": "create-auth-challenge"
-     },
-     {
-      "Key": "created-by",
-      "Value": "amplify"
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/create-auth-challenge-lambda/ServiceRole/Resource"
-   }
-  },
-  "createauthchallengelambda24CF06B1": {
-   "Type": "AWS::Lambda::Function",
-   "Properties": {
-    "Architectures": [
-     "x86_64"
-    ],
-    "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "40be0eb2a136ba9346dd346c4efe953ca5c0ea9da865c90740ab7a28d39d60dc.zip"
-    },
-    "Environment": {
-     "Variables": {
-      "AMPLIFY_SSM_ENV_CONFIG": "{}"
-     }
-    },
-    "EphemeralStorage": {
-     "Size": 512
-    },
-    "Handler": "index.handler",
-    "MemorySize": 512,
-    "Role": {
-     "Fn::GetAtt": [
-      "createauthchallengelambdaServiceRoleFA59BD95",
-      "Arn"
-     ]
-    },
-    "Runtime": "nodejs20.x",
-    "Tags": [
-     {
-      "Key": "amplify:deployment-type",
-      "Value": "sandbox"
-     },
-     {
-      "Key": "amplify:friendly-name",
-      "Value": "create-auth-challenge"
-     },
-     {
-      "Key": "created-by",
-      "Value": "amplify"
-     }
-    ],
-    "Timeout": 3
-   },
-   "DependsOn": [
-    "createauthchallengelambdaServiceRoleFA59BD95"
-   ],
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/create-auth-challenge-lambda/Resource",
-    "aws:asset:path": "asset.40be0eb2a136ba9346dd346c4efe953ca5c0ea9da865c90740ab7a28d39d60dc",
-    "aws:asset:is-bundled": true,
-    "aws:asset:property": "Code"
-   }
-  },
-  "defineauthchallengelambdaServiceRole5D55C27B": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "lambda.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "ManagedPolicyArns": [
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-       ]
-      ]
-     }
-    ],
-    "Tags": [
-     {
-      "Key": "amplify:deployment-type",
-      "Value": "sandbox"
-     },
-     {
-      "Key": "amplify:friendly-name",
-      "Value": "define-auth-challenge"
-     },
-     {
-      "Key": "created-by",
-      "Value": "amplify"
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/define-auth-challenge-lambda/ServiceRole/Resource"
-   }
-  },
-  "defineauthchallengelambda169E2373": {
-   "Type": "AWS::Lambda::Function",
-   "Properties": {
-    "Architectures": [
-     "x86_64"
-    ],
-    "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "9df23d8103f07c69c0104f61a026079bd0fff6675ac515ad12cbf1e093873ed4.zip"
-    },
-    "Environment": {
-     "Variables": {
-      "AMPLIFY_SSM_ENV_CONFIG": "{}"
-     }
-    },
-    "EphemeralStorage": {
-     "Size": 512
-    },
-    "Handler": "index.handler",
-    "MemorySize": 512,
-    "Role": {
-     "Fn::GetAtt": [
-      "defineauthchallengelambdaServiceRole5D55C27B",
-      "Arn"
-     ]
-    },
-    "Runtime": "nodejs20.x",
-    "Tags": [
-     {
-      "Key": "amplify:deployment-type",
-      "Value": "sandbox"
-     },
-     {
-      "Key": "amplify:friendly-name",
-      "Value": "define-auth-challenge"
-     },
-     {
-      "Key": "created-by",
-      "Value": "amplify"
-     }
-    ],
-    "Timeout": 3
-   },
-   "DependsOn": [
-    "defineauthchallengelambdaServiceRole5D55C27B"
-   ],
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/define-auth-challenge-lambda/Resource",
-    "aws:asset:path": "asset.9df23d8103f07c69c0104f61a026079bd0fff6675ac515ad12cbf1e093873ed4",
-    "aws:asset:is-bundled": true,
-    "aws:asset:property": "Code"
-   }
-  },
-  "verifyauthchallengeresponselambdaServiceRole60D3C045": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "lambda.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "ManagedPolicyArns": [
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-       ]
-      ]
-     }
-    ],
-    "Tags": [
-     {
-      "Key": "amplify:deployment-type",
-      "Value": "sandbox"
-     },
-     {
-      "Key": "amplify:friendly-name",
-      "Value": "verify-auth-challenge-response"
-     },
-     {
-      "Key": "created-by",
-      "Value": "amplify"
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/verify-auth-challenge-response-lambda/ServiceRole/Resource"
-   }
-  },
-  "verifyauthchallengeresponselambdaServiceRoleDefaultPolicy0ED5EAC0": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": "ssm:GetParameters",
-       "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::Join": [
-          "",
-          [
-           "arn:",
-           {
-            "Ref": "AWS::Partition"
-           },
-           ":ssm:",
-           {
-            "Ref": "AWS::Region"
-           },
-           ":",
-           {
-            "Ref": "AWS::AccountId"
-           },
-           ":parameter/amplify/janfinderapp/dev-sandbox-869531c7fd/GOOGLE_RECAPTCHA_SECRET_KEY"
-          ]
-         ]
-        },
-        {
-         "Fn::Join": [
-          "",
-          [
-           "arn:",
-           {
-            "Ref": "AWS::Partition"
-           },
-           ":ssm:",
-           {
-            "Ref": "AWS::Region"
-           },
-           ":",
-           {
-            "Ref": "AWS::AccountId"
-           },
-           ":parameter/amplify/shared/janfinderapp/GOOGLE_RECAPTCHA_SECRET_KEY"
-          ]
-         ]
-        }
-       ]
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "PolicyName": "verifyauthchallengeresponselambdaServiceRoleDefaultPolicy0ED5EAC0",
-    "Roles": [
-     {
-      "Ref": "verifyauthchallengeresponselambdaServiceRole60D3C045"
-     }
-    ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/verify-auth-challenge-response-lambda/ServiceRole/DefaultPolicy/Resource"
-   }
-  },
-  "verifyauthchallengeresponselambda96E27A98": {
-   "Type": "AWS::Lambda::Function",
-   "Properties": {
-    "Architectures": [
-     "x86_64"
-    ],
-    "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "d46eb5eb39486c427cdbaaa1c506f060dd9a40b73fd93b960a1c69f29de21879.zip"
-    },
-    "Environment": {
-     "Variables": {
-      "GOOGLE_RECAPTCHA_SECRET_KEY": "<value will be resolved during runtime>",
-      "AMPLIFY_SSM_ENV_CONFIG": "{\"GOOGLE_RECAPTCHA_SECRET_KEY\":{\"path\":\"/amplify/janfinderapp/dev-sandbox-869531c7fd/GOOGLE_RECAPTCHA_SECRET_KEY\",\"sharedPath\":\"/amplify/shared/janfinderapp/GOOGLE_RECAPTCHA_SECRET_KEY\"}}"
-     }
-    },
-    "EphemeralStorage": {
-     "Size": 512
-    },
-    "Handler": "index.handler",
-    "MemorySize": 512,
-    "Role": {
-     "Fn::GetAtt": [
-      "verifyauthchallengeresponselambdaServiceRole60D3C045",
-      "Arn"
-     ]
-    },
-    "Runtime": "nodejs20.x",
-    "Tags": [
-     {
-      "Key": "amplify:deployment-type",
-      "Value": "sandbox"
-     },
-     {
-      "Key": "amplify:friendly-name",
-      "Value": "verify-auth-challenge-response"
-     },
-     {
-      "Key": "created-by",
-      "Value": "amplify"
-     }
-    ],
-    "Timeout": 3
-   },
-   "DependsOn": [
-    "verifyauthchallengeresponselambdaServiceRole60D3C045"
-   ],
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/verify-auth-challenge-response-lambda/Resource",
-    "aws:asset:path": "asset.d46eb5eb39486c427cdbaaa1c506f060dd9a40b73fd93b960a1c69f29de21879",
-    "aws:asset:is-bundled": true,
-    "aws:asset:property": "Code"
-   }
-  },
   "presignuplambdaServiceRole3A164369": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -1102,11 +622,10 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "a8e8e02e9bace1e7ba1e06e58a6d96763f21e9c153beadab58d880adfa84c435.zip"
+     "S3Key": "f5ff048b109c8cdf30213851fa5de785342de615b41a945b4f0cf3a9ec5a3076.zip"
     },
     "Environment": {
      "Variables": {
-      "INVITES_TABLE": "InviteCodes",
       "AMPLIFY_SSM_ENV_CONFIG": "{}"
      }
     },
@@ -1145,7 +664,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/pre-sign-up-lambda/Resource",
-    "aws:asset:path": "asset.a8e8e02e9bace1e7ba1e06e58a6d96763f21e9c153beadab58d880adfa84c435",
+    "aws:asset:path": "asset.f5ff048b109c8cdf30213851fa5de785342de615b41a945b4f0cf3a9ec5a3076",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1200,6 +719,71 @@
     "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/post-confirmation-lambda/ServiceRole/Resource"
    }
   },
+  "postconfirmationlambdaServiceRoleDefaultPolicyCD4BF2C1": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "cognito-idp:AdminAddUserToGroup",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":cognito-idp:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":userpool/*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "dynamodb:PutItem",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:dynamodb:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":table/Owner_DB"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "postconfirmationlambdaServiceRoleDefaultPolicyCD4BF2C1",
+    "Roles": [
+     {
+      "Ref": "postconfirmationlambdaServiceRoleD88F89BD"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/post-confirmation-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
   "postconfirmationlambda195D98D2": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
@@ -1210,12 +794,12 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "6ee14e71402529575f29bf64280211b962b8211ba2c47d3382d0011ac2525bc9.zip"
+     "S3Key": "6440c89b5f0b8397a6ef1e03de1b4feb923153e55cbc04a2126fc4c2f13b1ba7.zip"
     },
     "Environment": {
      "Variables": {
       "OWNER_TABLE": "Owner_DB",
-      "S3_BUCKET": "cbo-pic-storage",
+      "FRANCHISE_TABLE": "Franchise_DB",
       "AMPLIFY_SSM_ENV_CONFIG": "{}"
      }
     },
@@ -1248,13 +832,14 @@
     "Timeout": 3
    },
    "DependsOn": [
+    "postconfirmationlambdaServiceRoleDefaultPolicyCD4BF2C1",
     "postconfirmationlambdaServiceRoleD88F89BD"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/post-confirmation-lambda/Resource",
-    "aws:asset:path": "asset.6ee14e71402529575f29bf64280211b962b8211ba2c47d3382d0011ac2525bc9",
+    "aws:asset:path": "asset.6440c89b5f0b8397a6ef1e03de1b4feb923153e55cbc04a2126fc4c2f13b1ba7",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1262,7 +847,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12MwU7DQAxEv6X3jUnTL2gjgbhUVSrO0XbjBie7XhQ7VGiVf0dbFKg4vfGMZyqotiWUG3uTwnVj4ekC6Yii2J3VutHYm7TJxZ5JI6Q3wekUozf1lX/1KmpPyPoY/TmvHbKSfq3lx7uJHveq1r2Hf/2XKc4fi/E2XDoLqb7yCadAIhQ5/z3P7JQiL4ZsgJSHsp25tlqOHQ4CxzvWgpFda0VQBfYZRnZwmN2IerCCi2lQ4jw5NPf0rLYn7heTt2CQp8+qgm0F5WYQomKaWSkgND/8BgNT/fBTAQAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12MTW6DQAyFz5L94BJyggSpVTcRIuoaTQaHGgZPhU2iCHH3aIhoo66+92O/DLJtCunG3iRxdZd4OsN0RFGsT2pdZ+xNqsmFhkkDTF+CQxGCN/mFf/Uqck/I+lr9JZ81spLe1+dXXwaPe1Xrvvt//x9DGH9m421/ri1M+YULHHoSocDx7n1kpxR4NmR7mOJQjBcWwZO7R/tU60zFocZW4LhgXTCyq6wIqsA+wsgODqPrUA9WcDYlShgHh2ZpT2ob4mY2cQtaebtmGWwzSDetECXDyEo9QvnkA4LnvFpkAQAA"
    },
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev-sandbox-869531c7fd/auth/CDKMetadata/Default"
@@ -1550,21 +1135,6 @@
   "amplifyjanfinderappdevsandbox869531c7fdauthamplifyAuthIdentityPool384804E9Ref": {
    "Value": {
     "Ref": "amplifyAuthIdentityPool3FDE84CC"
-   }
-  },
-  "amplifyjanfinderappdevsandbox869531c7fdauthcreateauthchallengelambda1371A742Ref": {
-   "Value": {
-    "Ref": "createauthchallengelambda24CF06B1"
-   }
-  },
-  "amplifyjanfinderappdevsandbox869531c7fdauthdefineauthchallengelambdaDB4CB7C3Ref": {
-   "Value": {
-    "Ref": "defineauthchallengelambda169E2373"
-   }
-  },
-  "amplifyjanfinderappdevsandbox869531c7fdauthverifyauthchallengeresponselambda54678B23Ref": {
-   "Value": {
-    "Ref": "verifyauthchallengeresponselambda96E27A98"
    }
   },
   "amplifyjanfinderappdevsandbox869531c7fdauthpresignuplambdaFF00E16BRef": {

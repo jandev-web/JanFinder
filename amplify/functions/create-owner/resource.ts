@@ -1,9 +1,13 @@
-import { pythonFn } from '../../utils/pythonFn';
+import { defineFunction } from '@aws-amplify/backend';
 
-export const createOwnerFn = pythonFn('create-cbo', {
-  dir: '.', 
+export const createOwnerFn = defineFunction({
+  name: 'create-owner',
+  entry: './handler.ts',
+  resourceGroupName: 'http-api',        // 👈 co-locate with the API
+  timeoutSeconds: 15,
+  memoryMB: 256,
   environment: {
     OWNER_TABLE: 'Owner_DB',
-    S3_BUCKET: 'cbo-pic-storage',
+    FRANCHISE_TABLE: 'Franchise_DB',
   },
 });

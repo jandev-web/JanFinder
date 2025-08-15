@@ -1,9 +1,9 @@
 // app/login/page.tsx - Custom <Authenticator>
 
 "use client";
-
+import { fetchAuthSession } from "aws-amplify/auth";
 import { redirect } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import { Authenticator, useAuthenticator, Button, View, Heading, Text, useTheme, ThemeProvider, Theme } from '@aws-amplify/ui-react';
 import { useRouter } from 'next/navigation';
 import MemberLandingHeader from '@/components/MemberLandingHeader';
@@ -11,6 +11,7 @@ import MemberLandingFooter from '@/components/MemberLandingFooter';
 import LoadingSpinner from "@/components/loadingScreen";
 import RoleRouter from "@/components/RouteSignInUser";
 //cognitoUserPoolsTokenProvider.setKeyValueStorage(sessionStorage);
+import "@aws-amplify/ui-react/styles.css";
 
 const customTheme: Theme = {
   name: 'custom-theme',
@@ -113,16 +114,51 @@ const components = {
   },
 };
 
+function VerifiedGate({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const [ready, setReady] = useState<null | boolean>(null);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const { tokens } = await fetchAuthSession();
+        const ev = tokens?.idToken?.payload?.email_verified;
+        const isVerified = ev === true || ev === "true";
+        if (!alive) return;
+
+        if (isVerified) {
+          setReady(true);
+        } else {
+          setReady(false);
+          router.replace("/members/sign-in/verify-email");
+        }
+      } catch {
+        // If we can't read tokens for some reason, fall back to verify page
+        setReady(false);
+        router.replace("/members/sign-in/verify-email");
+      }
+    })();
+    return () => { alive = false; };
+  }, [router]);
+
+  if (ready === null) return <LoadingSpinner />;
+  return ready ? <>{children}</> : null;
+}
+
+
 
 function CustomAuthenticator() {
   const { user } = useAuthenticator((context) => [context.user]);
-
   if (user) {
-    // Once signed in, hand off to RoleRouter which will create missing records and route
+    console.log('User signed in')
+    console.log(user)
+    // Once signed in, hand off to RoleRouter 
     return (
       <div className="flex flex-col w-full min-h-screen">
-        <LoadingSpinner />
-        <RoleRouter user={user} />
+        <VerifiedGate>
+          <RoleRouter user={user} />
+        </VerifiedGate>
       </div>
     );
   }

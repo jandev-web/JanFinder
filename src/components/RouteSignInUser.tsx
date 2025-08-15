@@ -39,7 +39,11 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
         const phone = (p['phone_number'] as string) || '';
         const groups: string[] = (p['cognito:groups'] as string[]) || [];
 
+        console.log(sub)
+        console.log(groups)
+
         if (!sub) {
+          console.log('No sub found')
           router.push('/members/home');
           return;
         }
@@ -59,25 +63,9 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
             if (!/404|Not\s*Found/i.test(msg)) throw e; // only ignore 404
           }
 
-          // If none, create it now with firstSignIn=false
-          if (!owner) {
-            await createOwner({
-              firstName: given,
-              lastName: family,
-              userID: sub,
-              phone,
-              address: { street: '', city: '', state: '', postalCode: '', country: '' },
-              firstSignIn: false,
-            });
-            owner = { firstSignIn: false };
-          }
 
-          // Route based on firstSignIn flag
-          if (owner?.firstSignIn === false) {
-            router.push('/owner/create-franchise'); // onboarding page
-          } else {
-            router.push('/members/owner'); // owner dashboard
-          }
+          router.push('/members/owner'); // owner dashboard
+
           return;
         }
 
@@ -92,6 +80,7 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
             if (!/404|Not\s*Found/i.test(msg)) throw e;
           }
           if (!member) {
+            console.log('No member found, creating one...')
             await createCBO({
               firstName: given,
               lastName: family,
@@ -103,6 +92,7 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
         }
 
         // Fallback if no recognized group
+        console.log('No recognized group found');
         router.push('/members/home');
       } catch (err) {
         // On error, don't strand the user

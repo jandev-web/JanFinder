@@ -1,12 +1,10 @@
 {
   "auth": {
-    "user_pool_id": "us-east-1_1KCjeJPY8",
+    "user_pool_id": "us-east-1_tqgkMK4zf",
     "aws_region": "us-east-1",
-    "user_pool_client_id": "7kd3c0eafn6enrmk8ot3ta2hn8",
-    "identity_pool_id": "us-east-1:32c9a983-d9a6-4d86-a305-a4e7a3a372cf",
-    "mfa_methods": [
-      "TOTP"
-    ],
+    "user_pool_client_id": "77kv9ln64une04lknqrnc6gkeh",
+    "identity_pool_id": "us-east-1:8b0c1b09-fde5-431c-b415-c71e5088368e",
+    "mfa_methods": [],
     "standard_required_attributes": [
       "email"
     ],
@@ -33,7 +31,7 @@
         }
       }
     ],
-    "mfa_configuration": "OPTIONAL",
+    "mfa_configuration": "NONE",
     "password_policy": {
       "min_length": 12,
       "require_lowercase": true,
@@ -44,7 +42,7 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://pssupzf2j5cxdosthbtcqvf7aq.appsync-api.us-east-1.amazonaws.com/graphql",
+    "url": "https://euonxrpi2zfctju4badau53dmi.appsync-api.us-east-1.amazonaws.com/graphql",
     "aws_region": "us-east-1",
     "default_authorization_type": "AWS_IAM",
     "authorization_types": [
@@ -127,11 +125,11 @@
   },
   "storage": {
     "aws_region": "us-east-1",
-    "bucket_name": "amplify-janfinderapp-dev--janfinderstoragebucketa0-g3w7qsvpe9g4",
+    "bucket_name": "amplify-janfinderapp-dev3-janfinderstoragebucketa0-nedx64qum4zj",
     "buckets": [
       {
         "name": "JanFinderStorage",
-        "bucket_name": "amplify-janfinderapp-dev--janfinderstoragebucketa0-g3w7qsvpe9g4",
+        "bucket_name": "amplify-janfinderapp-dev3-janfinderstoragebucketa0-nedx64qum4zj",
         "aws_region": "us-east-1",
         "paths": {
           "contracts/*": {
@@ -159,5 +157,9 @@
       }
     ]
   },
-  "version": "1.4"
+  "version": "1.4",
+  "custom": {
+    "apiUrl": "https://gyv0m1obyk.execute-api.us-east-1.amazonaws.com",
+    "region": "us-east-1"
+  }
 }

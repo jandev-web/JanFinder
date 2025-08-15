@@ -1,10 +1,11 @@
-import { defineFunction } from "@aws-amplify/backend";
+import { defineFunction } from '@aws-amplify/backend';
 
 export const postConfirmation = defineFunction({
-  name: "post-confirmation",
-  resourceGroupName: "auth",
+  name: 'post-confirmation',
+  entry: './handler.ts',
+  resourceGroupName: 'auth',    // 👈 lives with auth resources
   environment: {
-    OWNER_TABLE: "Owner_DB",        // set your real table name
-    S3_BUCKET: "cbo-pic-storage",   // default profile pic bucket
+    OWNER_TABLE: 'Owner_DB',
+    FRANCHISE_TABLE: 'Franchise_DB',
   },
 });

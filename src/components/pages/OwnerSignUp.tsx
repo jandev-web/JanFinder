@@ -12,6 +12,7 @@ import Image from 'next/image';
 import AddressForm from '@/components/AddressForm';
 import SelectOwnerRegions from '@/components/SelectOwnerRegions';
 import { signUp } from 'aws-amplify/auth';
+import { v4 as uuidv4 } from 'uuid';
 
 import "@aws-amplify/ui-react/styles.css";
 
@@ -86,8 +87,9 @@ const CreateOwnerForm: React.FC = () => {
             given_name: firstName,
             family_name: lastName,
             phone_number: toE164(phone),
+            'custom:role': 'Owner',
+            'custom:FranchiseID': uuidv4()
           },
-          clientMetadata: { role: 'Owner' },
         },
       });
 

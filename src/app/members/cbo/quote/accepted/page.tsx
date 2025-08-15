@@ -4,19 +4,26 @@ import { redirect } from 'next/navigation';
 import CBOSingleAcceptedQuote from '@/components/pages/CBOAcceptedQuote';
 import LoginError from '@/components/LoginErrorComponent';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
-export default async function AcceptedQuotePage({ searchParams }: { searchParams: { id?: string } }) {
+type SP = { id?: string | string[] };
+
+export default async function AcceptedQuotePage({
+  searchParams,
+}: {
+  searchParams: Promise<SP>;
+}) {
   try {
-    // Fetch the authenticated user on the server
+    // 1) Await Next 15's promised searchParams
+    const sp = await searchParams;
+    const rawId = sp?.id;
+    const quoteParam = Array.isArray(rawId) ? rawId[0] : rawId ?? null;
+
+    // 2) Auth on the server
     const user = await AuthGetCurrentUserServer();
-
-    // Redirect to the login page if the user is not authenticated
     if (!user) {
-      redirect('/login');
+      redirect('/login'); // throws; no return needed
     }
-
-    const quoteParam = searchParams?.id || null;
 
     return (
       <div className="flex w-full flex-col min-h-screen">
@@ -24,9 +31,7 @@ export default async function AcceptedQuotePage({ searchParams }: { searchParams
       </div>
     );
   } catch (error) {
-    console.error('Error fetching user:', error);
-
-    // Redirect to login if an error occurs
+    console.error('Error in AcceptedQuotePage:', error);
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <LoginError />

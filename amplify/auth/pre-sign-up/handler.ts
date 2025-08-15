@@ -1,57 +1,46 @@
-import type { PreSignUpTriggerHandler } from "aws-lambda";
-import { DynamoDBClient, GetItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
-import { env } from "$amplify/env/pre-sign-up";
+// amplify/auth/pre-sign-up/handler.ts
+import type { PreSignUpTriggerHandler } from 'aws-lambda';
+import { randomUUID } from 'crypto';
 
-const ddb = new DynamoDBClient({});
+const normalizeRole = (r?: string) => {
+  const v = (r || '').trim().toLowerCase();
+  if (v === 'owner') return 'Owner';
+  if (v === 'member') return 'Member';
+  return undefined;
+};
 
 export const handler: PreSignUpTriggerHandler = async (event) => {
-  // Only handle public sign-up path
-  if (event.triggerSource !== "PreSignUp_SignUp") return event;
+  // Only run for native self sign-up
+  if (event.triggerSource !== 'PreSignUp_SignUp') return event;
 
-  const role = event.request.clientMetadata?.role;               // "Owner" | "Member"
-  const inviteCode = event.request.clientMetadata?.inviteCode;   // required for Member
+  const attrs = event.request.userAttributes ?? {};
 
-  if (!role || !["Owner", "Member"].includes(role)) {
-    throw new Error("Role is required.");
+  // 1) Validate/normalize role (from custom attribute or clientMetadata)
+  const roleIncoming = attrs['custom:role'] ?? event.request.clientMetadata?.role;
+  const role = normalizeRole(roleIncoming);
+  if (!role) {
+    throw new Error("Invalid role. 'custom:role' must be 'Owner' or 'Member'.");
   }
+  event.request.userAttributes['custom:role'] = role;
 
-  if (role === "Member") {
-    if (!inviteCode) throw new Error("Invite code required for members.");
+  // 2) Ensure FranchiseID exists (from custom attr / clientMetadata / generate)
+  let franchiseId =
+    attrs['custom:FranchiseID'] ??
+    event.request.clientMetadata?.FranchiseID;
 
-    const res = await ddb.send(new GetItemCommand({
-      TableName: env.INVITES_TABLE,
-      Key: { code: { S: inviteCode } },
-      ConsistentRead: true,
-    }));
+  if (!franchiseId) {
+    // If you prefer to *require* the client to send it, replace this with:
+    throw new Error("Missing 'custom:FranchiseID'.");
+    //franchiseId = randomUUID();
+  }
+  event.request.userAttributes['custom:FranchiseID'] = franchiseId;
 
-    const item = res.Item;
-    if (!item) throw new Error("Invalid invite code.");
+  // 3) Auto-confirm user; do NOT auto-verify email (you verify on first login)
+  event.response.autoConfirmUser = true;
 
-    const inviteRole = item.role?.S;
-    const franchiseId = item.franchiseId?.S;
-    const expiresAt = item.expiresAt?.S;
-    const maxUses = Number(item.maxUses?.N ?? "1");
-    const usedCount = Number(item.usedCount?.N ?? "0");
-
-    if (inviteRole !== "Member") throw new Error("Invite not valid for Member role.");
-    if (!franchiseId) throw new Error("Invite missing franchiseId.");
-    if (expiresAt && new Date(expiresAt) < new Date()) throw new Error("Invite expired.");
-    if (usedCount >= maxUses) throw new Error("Invite already used.");
-
-    // Stamp attributes on the user being created
-    event.request.userAttributes["custom:role"] = "Member";
-    event.request.userAttributes["custom:franchiseId"] = franchiseId;
-
-    // Soft-increment usage to reduce races
-    await ddb.send(new UpdateItemCommand({
-      TableName: env.INVITES_TABLE,
-      Key: { code: { S: inviteCode } },
-      UpdateExpression: "ADD usedCount :one",
-      ExpressionAttributeValues: { ":one": { N: "1" } },
-    }));
-  } else {
-    // Owner path: no invite required
-    event.request.userAttributes["custom:role"] = "Owner";
+  // 4) If a phone number was provided, auto-verify it to avoid SMS challenges
+  if (attrs['phone_number']) {
+    event.response.autoVerifyPhone = true;
   }
 
   return event;

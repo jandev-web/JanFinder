@@ -1,22 +1,31 @@
 import React from 'react';
-import '@aws-amplify/ui-react/styles.css'; // Ensure the styles are imported
-import { cookiesClient, AuthGetCurrentUserServer } from "@/utils/amplify-utils";
+import '@aws-amplify/ui-react/styles.css';
+import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import CBOQuote from '@/components/pages/SingleCBOQuotePage';
 import CBOHeader from '@/components/CBOHeader';
+import { redirect } from 'next/navigation';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
+type SP = { quoteID?: string | string[]; page?: string | string[] };
 
-export default async function SingleCBOQuotePage({ searchParams }: { searchParams: { quoteID: string; page: string } }) {
-  // Fetch user data server-side
+export default async function SingleCBOQuotePage({
+  searchParams,
+}: {
+  searchParams: Promise<SP>;
+}) {
+  // Await Next 15's promised searchParams
+  const sp = await searchParams;
+  const rawQuote = sp?.quoteID;
+  const rawPage = sp?.page;
+
+  const quoteParam = Array.isArray(rawQuote) ? rawQuote[0] : rawQuote ?? '';
+  const prevPage = Array.isArray(rawPage) ? rawPage[0] : rawPage ?? '';
+
+  // Server-side auth
   const user = await AuthGetCurrentUserServer();
-
-  // Retrieve search parameters
-  const quoteParam = searchParams.quoteID;
-  const prevPage = searchParams.page;
-
   if (!user) {
-    return <div>User not authenticated</div>; // Handle unauthenticated state
+    redirect('/login'); // throws
   }
 
   return (

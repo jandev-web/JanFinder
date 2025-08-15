@@ -43,7 +43,7 @@ export const handler: VerifyAuthChallengeResponseTriggerHandler = async (
   const result = (await response.json()) as GoogleRecaptchaVerifyResponse
 
   if (!result.success) {
-    throw new Error("Verification failed", { cause: result["error-codes"] })
+    throw new Error("Verification failed")
   }
 
   // indicate whether the answer is correct
