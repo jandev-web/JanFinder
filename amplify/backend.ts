@@ -1,41 +1,50 @@
 // amplify/backend.ts
 import { defineBackend } from '@aws-amplify/backend';
 import { Stack, Aws, aws_iam as iam, aws_lambda as lambda } from 'aws-cdk-lib';
-import { postConfirmation } from './auth/post-sign-up-confirmation/resource';
-
-// ✅ Use stable CDK packages (no -alpha)
-import {
-  HttpApi,
-  HttpMethod,
-  CorsHttpMethod,
-} from 'aws-cdk-lib/aws-apigatewayv2';
-import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
-import { HttpUserPoolAuthorizer } from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { storage } from './storage/resource';
+import { postConfirmation } from './auth/post-sign-up-confirmation/resource';
 
-// Your function factories (created via defineFunction provider form)
-import { createOwnerFn } from './functions/create-owner/resource';
-import { createFranchiseFn } from './functions/create-franchise/resource';
-import { createCboFn } from './functions/create-cbo/resource';
+// AppSync resolver / utility functions (these are bound in amplify/data/resource.ts)
+import { createCustomerQuoteFn } from './functions/create-customer-quote/resource';
+import { getFacilityOptionsFn } from './functions/get-facility-options/resource';
+import { calcPackageOptionsFn } from './functions/calc-package-options/resource';
+import { updateQuoteBudgetFn } from './functions/update-quote-budget/resource';
+import { updateCustomerInfoFn } from './functions/update-customer-info/resource';
+import { updateFacilityTypeFn } from './functions/update-facility-type/resource';
+import { updateFloorInfoFn } from './functions/update-floor-info/resource';
+import { confirmQuoteFn } from './functions/confirm-quote/resource';
+import { getQuoteFn } from './functions/get-quote/resource';
+import { updateQuoteRoomsFn } from './functions/update-quote-rooms/resource';
+import { updatePackageChoiceFn } from './functions/update-package-choice/resource';
+import { sendQuoteConfirmationEmailFn } from './functions/send-quote-confirmation-email/resource';
 
-// 1) Bind everything to the backend (gives .resources for each fn)
+// 1) Bind resources
 const backend = defineBackend({
   auth,
   data,
   storage,
-  createOwnerFn,
-  createFranchiseFn,
-  createCboFn,
   postConfirmation,
+  createCustomerQuoteFn,
+  getFacilityOptionsFn,
+  calcPackageOptionsFn,
+  updateQuoteBudgetFn,
+  updateCustomerInfoFn,
+  updateFacilityTypeFn,
+  updateFloorInfoFn,
+  confirmQuoteFn,
+  getQuoteFn,
+  updateQuoteRoomsFn,
+  updatePackageChoiceFn,
+  sendQuoteConfirmationEmailFn,
 });
 
-// after: const backend = defineBackend({...})
+// 2) Cognito user pool tweaks
 const { cfnUserPool } = backend.auth.resources.cfnResources;
 
-// ✅ Keep the attribute the pool already has. Do not remove or change it later.
 const existing = Array.isArray(cfnUserPool.schema) ? [...cfnUserPool.schema] : [];
 let modified = false;
 
@@ -45,20 +54,16 @@ const addCustomStringAttr = (name: string) => {
       name,
       attributeDataType: 'String',
       mutable: true,
-      required: false, // enforce 'required' in PreSignUp, not here
+      required: false,
       stringAttributeConstraints: { minLength: '1', maxLength: '50' },
     });
     modified = true;
   }
 };
-
 addCustomStringAttr('role');
 addCustomStringAttr('FranchiseID');
-
-// Only assign if we actually appended (avoids accidental “modify” ops)
 if (modified) cfnUserPool.schema = existing;
 
-// (You can also keep your password policy)
 cfnUserPool.policies = {
   passwordPolicy: {
     minimumLength: 12,
@@ -69,158 +74,148 @@ cfnUserPool.policies = {
   },
 };
 
-
-const httpApi = new HttpApi(backend.stack, 'AppHttpApi', {
-  corsPreflight: {
-    allowOrigins: ['http://localhost:3000', 'https://bid2clean.com'],
-    allowHeaders: ['Authorization', 'Content-Type'],
-    allowMethods: [CorsHttpMethod.ANY],
-  },
-});
-
-
-// 4) Cognito authorizer from the new pool (stable module)
-const authorizer = new HttpUserPoolAuthorizer(
-  'CognitoAuthorizer',
-  backend.auth.resources.userPool,
-  { userPoolClients: [backend.auth.resources.userPoolClient] }
-);
-
-// 5) Route registry — strongly type as lambda.Function so addEnvironment/etc. exist
-type Route = {
-  path: string;
-  method: HttpMethod;
-  lambda: lambda.Function; // NodejsFunction extends this; cast below
-  auth?: boolean;          // default true
-  name?: string;
-};
-
-const routes: Route[] = [
-  {
-    path: '/owner',
-    method: HttpMethod.POST,
-    lambda: backend.createOwnerFn.resources.lambda as lambda.Function,
-  },
-  {
-    path: '/franchise',
-    method: HttpMethod.POST,
-    lambda: backend.createFranchiseFn.resources.lambda as lambda.Function,
-  },
-  {
-    path: '/cbo',
-    method: HttpMethod.POST,
-    lambda: backend.createCboFn.resources.lambda as lambda.Function,
-  },
-];
-
-// 6) Wire routes to the API
-for (const r of routes) {
-  httpApi.addRoutes({
-    path: r.path,
-    methods: [r.method],
-    authorizer: r.auth === false ? undefined : authorizer,
-    integration: new HttpLambdaIntegration(
-      r.name ?? `Int-${r.path.replace(/\W+/g, '-')}-${r.method}`,
-      r.lambda
-    ),
-  });
-}
-
-// 7) IAM permissions (region/account aware)
-const region = Stack.of(httpApi).region;
+// 3) IAM: allow Identity Pool roles to call this AppSync API (IAM mode)
+const region = Stack.of(backend.data.stack).region; // use data stack's region
 const account = Aws.ACCOUNT_ID;
-//const userPoolArn = backend.auth.resources.userPool.userPoolArn;
+const apiId = backend.data.resources.graphqlApi.apiId;
+const appsyncResourceArn = `arn:${Aws.PARTITION}:appsync:${region}:${account}:apis/${apiId}/*`;
 
-// Convenience refs (already cast above)
-const ownerFn = backend.createOwnerFn.resources.lambda as lambda.Function;
-const franchiseFn = backend.createFranchiseFn.resources.lambda as lambda.Function;
-const cboFn = backend.createCboFn.resources.lambda as lambda.Function;
+backend.auth.resources.authenticatedUserIamRole.addToPrincipalPolicy(
+  new iam.PolicyStatement({
+    actions: ['appsync:GraphQL'],
+    resources: [appsyncResourceArn],
+  })
+);
+backend.auth.resources.unauthenticatedUserIamRole.addToPrincipalPolicy(
+  new iam.PolicyStatement({
+    actions: ['appsync:GraphQL'],
+    resources: [appsyncResourceArn],
+  })
+);
+
+// 4) Convenience refs
 const postConfFn = backend.postConfirmation.resources.lambda as lambda.Function;
+const createQuoteFn = backend.createCustomerQuoteFn.resources.lambda as lambda.Function;
+const calcFn = backend.calcPackageOptionsFn.resources.lambda as lambda.Function;
+const updBudgetFn = backend.updateQuoteBudgetFn.resources.lambda as lambda.Function;
+const updCustomerFn = backend.updateCustomerInfoFn.resources.lambda as lambda.Function;
+const updFacilityFn = backend.updateFacilityTypeFn.resources.lambda as lambda.Function;
+const updFloorFn = backend.updateFloorInfoFn.resources.lambda as lambda.Function;
+const confirmFn = backend.confirmQuoteFn.resources.lambda as lambda.Function;
+const getQuoteLambda = backend.getQuoteFn.resources.lambda as lambda.Function;
+const updQuoteRoomsLambda = backend.updateQuoteRoomsFn.resources.lambda as lambda.Function;
+const updatePkgLambda = backend.updatePackageChoiceFn.resources.lambda as lambda.Function;
+const sendEmailLambda = backend.sendQuoteConfirmationEmailFn.resources.lambda as lambda.Function;
 
+// 5) DDB/SES/Lambda permissions for the above
+sendEmailLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:GetItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+sendEmailLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['ses:SendEmail', 'ses:SendRawEmail'],
+    resources: ['*'],
+  })
+);
+
+updatePkgLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:UpdateItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+updQuoteRoomsLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:UpdateItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+getQuoteLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:GetItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+confirmFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:GetItem', 'dynamodb:UpdateItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+confirmFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['lambda:InvokeFunction'],
+    resources: [`arn:aws:lambda:${region}:${account}:function:SendCustomerConfirmationEmail`],
+  })
+);
+
+updFloorFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:UpdateItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+updFacilityFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:UpdateItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+updCustomerFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:UpdateItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+updBudgetFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:UpdateItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+calcFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:GetItem'],
+    resources: [
+      `arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`,
+      `arn:aws:dynamodb:${region}:${account}:table/RoomTaskCalculations`,
+      `arn:aws:dynamodb:${region}:${account}:table/Facility_Data`,
+    ],
+  })
+);
+calcFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:UpdateItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+createQuoteFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:PutItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
+
+// Auth trigger policies
 const userPoolWildcardArn = `arn:${Aws.PARTITION}:cognito-idp:${region}:${account}:userpool/*`;
-
 postConfFn.addToRolePolicy(
-  new iam.PolicyStatement({
+  new PolicyStatement({
     actions: ['cognito-idp:AdminAddUserToGroup'],
-    resources: [userPoolWildcardArn], // ⬅️ no hard ref to the CFN user pool
-  })
-);
-
-// Keep DDB write permission (this doesn't cause a cycle)
-postConfFn.addToRolePolicy(
-  new iam.PolicyStatement({
-    actions: ['dynamodb:PutItem'],
-    resources: [`arn:aws:dynamodb:${region}:${account}:table/Owner_DB`],
-  })
-);
-
-postConfFn.addToRolePolicy(
-  new iam.PolicyStatement({
-    actions: ['dynamodb:PutItem'],
-    resources: [`arn:aws:dynamodb:${region}:${account}:table/Franchise_DB`],
-  })
-);
-
-// create-cbo: Cognito admin + read Owner_DB + write CBO_DB + S3 read
-cboFn.addToRolePolicy(
-  new iam.PolicyStatement({
-    actions: ['cognito-idp:AdminCreateUser', 'cognito-idp:AdminSetUserPassword'],
     resources: [userPoolWildcardArn],
   })
 );
-cboFn.addToRolePolicy(
-  new iam.PolicyStatement({
-    actions: ['dynamodb:GetItem'],
-    resources: [`arn:aws:dynamodb:${region}:${account}:table/Owner_DB`],
-  })
-);
-cboFn.addToRolePolicy(
-  new iam.PolicyStatement({
+postConfFn.addToRolePolicy(
+  new PolicyStatement({
     actions: ['dynamodb:PutItem'],
-    resources: [`arn:aws:dynamodb:${region}:${account}:table/CBO_DB`],
-  })
-);
-cboFn.addToRolePolicy(
-  new iam.PolicyStatement({
-    actions: ['s3:GetObject'],
-    resources: ['arn:aws:s3:::cbo-pic-storage/*'],
+    resources: [
+      `arn:aws:dynamodb:${region}:${account}:table/Owner_DB`,
+      `arn:aws:dynamodb:${region}:${account}:table/Franchise_DB`,
+    ],
   })
 );
 
-// create-owner: write Owner_DB + read default image
-ownerFn.addToRolePolicy(
-  new iam.PolicyStatement({
-    actions: ['dynamodb:PutItem', 'dynamodb:UpdateItem'],
-    resources: [`arn:aws:dynamodb:${region}:${account}:table/Owner_DB`],
-  })
-);
-ownerFn.addToRolePolicy(
-  new iam.PolicyStatement({
-    actions: ['s3:GetObject'],
-    resources: ['arn:aws:s3:::cbo-pic-storage/*'],
-  })
-);
-
-// create-franchise: write Franchise_DB
-franchiseFn.addToRolePolicy(
-  new iam.PolicyStatement({
-    actions: ['dynamodb:PutItem'],
-    resources: [`arn:aws:dynamodb:${region}:${account}:table/Franchise_DB`],
-  })
-);
-
-// 8) Example dynamic env var
-cboFn.addEnvironment('USER_POOL_ID', backend.auth.resources.userPool.userPoolId);
-
-
-
-
-// 10) Output the API URL for the frontend
-backend.addOutput({
-  custom: {
-    apiUrl: httpApi.apiEndpoint,
-    region,
-  },
-});
 
 export default backend;

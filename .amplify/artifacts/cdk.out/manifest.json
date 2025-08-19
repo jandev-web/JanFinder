@@ -22,7 +22,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1a1b16d46e7648a11882897e5940ce9958a289f55474c6fb7dbe69d4398f6ab5.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/0fffc10eb9e64804c269f16c048e0ee166bab3536f38111207d24fba497ed8a6.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -101,10 +101,22 @@
             "data": "amplifyAuthauthenticatedUserRoleD8DA3689"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyAuth/authenticatedUserRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyAuthauthenticatedUserRoleDefaultPolicy82E52873"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyAuth/unauthenticatedUserRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "amplifyAuthunauthenticatedUserRole2B524D9E"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyAuth/unauthenticatedUserRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyAuthunauthenticatedUserRoleDefaultPolicy1AB22815"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyAuth/IdentityPoolRoleAttachment": [
@@ -189,6 +201,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/reference-to-amplifyjanfinderappdev3sandbox789c476389dataNestedStackdataNestedStackResource3247090DOutputs.amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389dataNestedStackdataNestedStackResource3247090DOutputsamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": [
@@ -365,6 +383,24 @@
             "data": "definedFunctions"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/create-customer-quote-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "createcustomerquotelambdaServiceRoleD5752EF8"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/create-customer-quote-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "createcustomerquotelambdaServiceRoleDefaultPolicy817B9C51"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/create-customer-quote-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "createcustomerquotelambdaFE0BFAD7"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/GraphQLAPI/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -393,610 +429,838 @@
             "data": "NONE_DS"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/AmplifyManagedTableIsCompleteRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AmplifyManagedTableIsCompleteRoleF825222C"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/AmplifyManagedTableOnEventRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AmplifyManagedTableOnEventRoleB4E71DEA"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/AmplifyManagedTableOnEventRole/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AmplifyManagedTableOnEventRoleDefaultPolicyF6DABCB6"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/TableManagerCustomProvider/framework-onEvent/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "TableManagerCustomProviderframeworkonEvent1DFC2ECC"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/TableManagerCustomProvider/framework-isComplete/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "TableManagerCustomProviderframeworkisComplete2E51021B"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/AmplifyTableWaiterStateMachine/Role/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AmplifyTableWaiterStateMachineRole470BE899"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/AmplifyTableWaiterStateMachine/Role/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AmplifyTableWaiterStateMachineRoleDefaultPolicy89F3836A"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/AmplifyTableWaiterStateMachine/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AmplifyTableWaiterStateMachine060600BC"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/CDKMetadata/Default": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "CDKMetadata"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/CDKMetadata/Condition": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "CDKMetadataAvailable"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/reference-to-amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager/amplifyjanfinderappdev3sandbox789c476389dataamplifyDataAmplifyTableManagerTableManagerCustomProviderframeworkonEventC4889FABArn": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyjanfinderappdev3sandbox789c476389dataamplifyDataAmplifyTableManagerTableManagerCustomProviderframeworkonEventC4889FABArn"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyTableManager.NestedStack/AmplifyTableManager.NestedStackResource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyDataAmplifyTableManagerNestedStackAmplifyTableManagerNestedStackResource86290833"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/DynamoDBModelTableReadIOPS": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBModelTableReadIOPS"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/DynamoDBModelTableWriteIOPS": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBModelTableWriteIOPS"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/DynamoDBBillingMode": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBBillingMode"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/DynamoDBEnablePointInTimeRecovery": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBEnablePointInTimeRecovery"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/DynamoDBEnableServerSideEncryption": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBEnableServerSideEncryption"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/HasEnvironmentParameter": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/HasEnvironmentParameter": [
           {
             "type": "aws:cdk:logicalId",
             "data": "HasEnvironmentParameter"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/ShouldUsePayPerRequestBilling": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "ShouldUsePayPerRequestBilling"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/ShouldUsePointInTimeRecovery": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "ShouldUsePointInTimeRecovery"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/TodoTable": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetFacilityOptionsLambdaDataSource": [
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Todo"
+            "data": "FnGetFacilityOptionsLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/TodoTable/Default/Default": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetFacilityOptionsLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TodoTable"
+            "data": "FnGetFacilityOptionsLambdaDataSourceServiceRoleF7EF606E"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetFacilityOptionsLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnGetFacilityOptionsLambdaDataSourceServiceRoleDefaultPolicyEE3F6670"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetFacilityOptionsLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnGetFacilityOptionsLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Todo"
+            "data": "FnGetFacilityOptionsLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/CustomTableTodoTable": [
-          {
-            "type": "graphqltransformer:resourceName",
-            "data": "Todo"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/GetAttTodoTableStreamArn": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnGetFacilityOptionsLambdaDataSource/InvokeFnGetFacilityOptionsLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "GetAttTodoTableStreamArn"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/GetAttTodoTableName": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "GetAttTodoTableName"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/TodoIAMRole": [
-          {
-            "type": "graphqltransformer:resourceName",
-            "data": "TodoIAMRole"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/TodoIAMRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "TodoIAMRole2DA8E66E"
+            "data": "InvokeFnGetFacilityOptionsLambdaDataSourceInvokeFnGetFacilityOptionsLambdaDataSourceAppSyncFunction926C1429"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "TodoIAMRole"
+            "data": "InvokeFnGetFacilityOptionsLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/TodoDataSource": [
-          {
-            "type": "graphqltransformer:resourceName",
-            "data": "TodoTable"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/TodoDataSource/Resource": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryGetFacilityOptionsResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TodoDataSource"
+            "data": "QuerygetFacilityOptionsResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "TodoTable"
+            "data": "Query.getFacilityOptions"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/QuerygetTodoauth0Function/QuerygetTodoauth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnCreateCustomerQuoteLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnCreateCustomerQuoteLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnCreateCustomerQuoteLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "QuerygetTodoauth0FunctionQuerygetTodoauth0FunctionAppSyncFunction846D8436"
+            "data": "FnCreateCustomerQuoteLambdaDataSourceServiceRole1632F773"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnCreateCustomerQuoteLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnCreateCustomerQuoteLambdaDataSourceServiceRoleDefaultPolicyF21D5F7F"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnCreateCustomerQuoteLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnCreateCustomerQuoteLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "QuerygetTodoauth0Function"
+            "data": "FnCreateCustomerQuoteLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/QuerygetTodopostAuth0Function/QuerygetTodopostAuth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnCreateCustomerQuoteLambdaDataSource/InvokeFnCreateCustomerQuoteLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "QuerygetTodopostAuth0FunctionQuerygetTodopostAuth0FunctionAppSyncFunction6BE14593"
+            "data": "InvokeFnCreateCustomerQuoteLambdaDataSourceInvokeFnCreateCustomerQuoteLambdaDataSourceAppSyncFunction5BF2612C"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "QuerygetTodopostAuth0Function"
+            "data": "InvokeFnCreateCustomerQuoteLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/QueryGetTodoDataResolverFn/QueryGetTodoDataResolverFn.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryCreateCustomerQuoteResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "QueryGetTodoDataResolverFnQueryGetTodoDataResolverFnAppSyncFunctionE2B57DAD"
+            "data": "QuerycreateCustomerQuoteResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "QueryGetTodoDataResolverFn"
+            "data": "Query.createCustomerQuote"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/queryGetTodoResolver": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnCalculatePackageOptionsLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnCalculatePackageOptionsLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnCalculatePackageOptionsLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "GetTodoResolver"
+            "data": "FnCalculatePackageOptionsLambdaDataSourceServiceRoleF7BBF17C"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnCalculatePackageOptionsLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnCalculatePackageOptionsLambdaDataSourceServiceRoleDefaultPolicyC13C410D"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnCalculatePackageOptionsLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnCalculatePackageOptionsLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Query.getTodo"
+            "data": "FnCalculatePackageOptionsLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/QuerylistTodosauth0Function/QuerylistTodosauth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnCalculatePackageOptionsLambdaDataSource/InvokeFnCalculatePackageOptionsLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "QuerylistTodosauth0FunctionQuerylistTodosauth0FunctionAppSyncFunction7D761961"
+            "data": "InvokeFnCalculatePackageOptionsLambdaDataSourceInvokeFnCalculatePackageOptionsLambdaDataSourceAppSyncFunctionC6415E2D"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "QuerylistTodosauth0Function"
+            "data": "InvokeFnCalculatePackageOptionsLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/QuerylistTodospostAuth0Function/QuerylistTodospostAuth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryCalculatePackageOptionsResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "QuerylistTodospostAuth0FunctionQuerylistTodospostAuth0FunctionAppSyncFunction154D8577"
+            "data": "QuerycalculatePackageOptionsResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "QuerylistTodospostAuth0Function"
+            "data": "Query.calculatePackageOptions"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/QueryListTodosDataResolverFn/QueryListTodosDataResolverFn.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteBudgetLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnUpdateQuoteBudgetLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteBudgetLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "QueryListTodosDataResolverFnQueryListTodosDataResolverFnAppSyncFunctionF825FE47"
+            "data": "FnUpdateQuoteBudgetLambdaDataSourceServiceRole45743826"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteBudgetLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateQuoteBudgetLambdaDataSourceServiceRoleDefaultPolicyF150DBA7"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteBudgetLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateQuoteBudgetLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "QueryListTodosDataResolverFn"
+            "data": "FnUpdateQuoteBudgetLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/queryListTodosResolver": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnUpdateQuoteBudgetLambdaDataSource/InvokeFnUpdateQuoteBudgetLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "ListTodoResolver"
+            "data": "InvokeFnUpdateQuoteBudgetLambdaDataSourceInvokeFnUpdateQuoteBudgetLambdaDataSourceAppSyncFunctionC651A6BF"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Query.listTodos"
+            "data": "InvokeFnUpdateQuoteBudgetLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationcreateTodoinit0Function/MutationcreateTodoinit0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryUpdateQuoteBudgetResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationcreateTodoinit0FunctionMutationcreateTodoinit0FunctionAppSyncFunction54DE5B8B"
+            "data": "QueryupdateQuoteBudgetResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationcreateTodoinit0Function"
+            "data": "Query.updateQuoteBudget"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationcreateTodoauth0Function/MutationcreateTodoauth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateCustomerInfoLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnUpdateCustomerInfoLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateCustomerInfoLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationcreateTodoauth0FunctionMutationcreateTodoauth0FunctionAppSyncFunction21817E36"
+            "data": "FnUpdateCustomerInfoLambdaDataSourceServiceRole101844E1"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateCustomerInfoLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateCustomerInfoLambdaDataSourceServiceRoleDefaultPolicy0E6371B4"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateCustomerInfoLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateCustomerInfoLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationcreateTodoauth0Function"
+            "data": "FnUpdateCustomerInfoLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationcreateTodopostAuth0Function/MutationcreateTodopostAuth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnUpdateCustomerInfoLambdaDataSource/InvokeFnUpdateCustomerInfoLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationcreateTodopostAuth0FunctionMutationcreateTodopostAuth0FunctionAppSyncFunctionED59EB9F"
+            "data": "InvokeFnUpdateCustomerInfoLambdaDataSourceInvokeFnUpdateCustomerInfoLambdaDataSourceAppSyncFunctionABE00228"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationcreateTodopostAuth0Function"
+            "data": "InvokeFnUpdateCustomerInfoLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationCreateTodoDataResolverFn/MutationCreateTodoDataResolverFn.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryUpdateCustomerInfoResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationCreateTodoDataResolverFnMutationCreateTodoDataResolverFnAppSyncFunction900EC5CF"
+            "data": "QueryupdateCustomerInfoResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationCreateTodoDataResolverFn"
+            "data": "Query.updateCustomerInfo"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/mutationCreateTodoResolver": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateFacilityTypeLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnUpdateFacilityTypeLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateFacilityTypeLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "CreateTodoResolver"
+            "data": "FnUpdateFacilityTypeLambdaDataSourceServiceRole1E900784"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateFacilityTypeLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateFacilityTypeLambdaDataSourceServiceRoleDefaultPolicy7F1EADFC"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateFacilityTypeLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateFacilityTypeLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Mutation.createTodo"
+            "data": "FnUpdateFacilityTypeLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationupdateTodoinit0Function/MutationupdateTodoinit0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnUpdateFacilityTypeLambdaDataSource/InvokeFnUpdateFacilityTypeLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationupdateTodoinit0FunctionMutationupdateTodoinit0FunctionAppSyncFunction1B95BB19"
+            "data": "InvokeFnUpdateFacilityTypeLambdaDataSourceInvokeFnUpdateFacilityTypeLambdaDataSourceAppSyncFunction8E8A44D8"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationupdateTodoinit0Function"
+            "data": "InvokeFnUpdateFacilityTypeLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationupdateTodoauth0Function/MutationupdateTodoauth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryUpdateFacilityTypeResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationupdateTodoauth0FunctionMutationupdateTodoauth0FunctionAppSyncFunction1E4A3112"
+            "data": "QueryupdateFacilityTypeResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationupdateTodoauth0Function"
+            "data": "Query.updateFacilityType"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationupdateTodopostAuth0Function/MutationupdateTodopostAuth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateFloorInfoLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnUpdateFloorInfoLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateFloorInfoLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationupdateTodopostAuth0FunctionMutationupdateTodopostAuth0FunctionAppSyncFunction50C507D7"
+            "data": "FnUpdateFloorInfoLambdaDataSourceServiceRole6FDDA8BF"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateFloorInfoLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateFloorInfoLambdaDataSourceServiceRoleDefaultPolicy4FCA5E4D"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateFloorInfoLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateFloorInfoLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationupdateTodopostAuth0Function"
+            "data": "FnUpdateFloorInfoLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationUpdateTodoDataResolverFn/MutationUpdateTodoDataResolverFn.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnUpdateFloorInfoLambdaDataSource/InvokeFnUpdateFloorInfoLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationUpdateTodoDataResolverFnMutationUpdateTodoDataResolverFnAppSyncFunctionBC238C49"
+            "data": "InvokeFnUpdateFloorInfoLambdaDataSourceInvokeFnUpdateFloorInfoLambdaDataSourceAppSyncFunctionE10E7DF7"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationUpdateTodoDataResolverFn"
+            "data": "InvokeFnUpdateFloorInfoLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/mutationUpdateTodoResolver": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryUpdateFloorInfoResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "UpdateTodoResolver"
+            "data": "QueryupdateFloorInfoResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Mutation.updateTodo"
+            "data": "Query.updateFloorInfo"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationdeleteTodoauth0Function/MutationdeleteTodoauth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnConfirmQuoteLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnConfirmQuoteLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnConfirmQuoteLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationdeleteTodoauth0FunctionMutationdeleteTodoauth0FunctionAppSyncFunctionC82C218C"
+            "data": "FnConfirmQuoteLambdaDataSourceServiceRole3C3D70CF"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnConfirmQuoteLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnConfirmQuoteLambdaDataSourceServiceRoleDefaultPolicyBCDFE4C1"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnConfirmQuoteLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnConfirmQuoteLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationdeleteTodoauth0Function"
+            "data": "FnConfirmQuoteLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationdeleteTodopostAuth0Function/MutationdeleteTodopostAuth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnConfirmQuoteLambdaDataSource/InvokeFnConfirmQuoteLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationdeleteTodopostAuth0FunctionMutationdeleteTodopostAuth0FunctionAppSyncFunction483271A2"
+            "data": "InvokeFnConfirmQuoteLambdaDataSourceInvokeFnConfirmQuoteLambdaDataSourceAppSyncFunction0B8A688B"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationdeleteTodopostAuth0Function"
+            "data": "InvokeFnConfirmQuoteLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/MutationDeleteTodoDataResolverFn/MutationDeleteTodoDataResolverFn.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryConfirmQuoteResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "MutationDeleteTodoDataResolverFnMutationDeleteTodoDataResolverFnAppSyncFunction3879153F"
+            "data": "QueryconfirmQuoteResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "MutationDeleteTodoDataResolverFn"
+            "data": "Query.confirmQuote"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/mutationDeleteTodoResolver": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetQuoteLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnGetQuoteLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetQuoteLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "DeleteTodoResolver"
+            "data": "FnGetQuoteLambdaDataSourceServiceRole67676CC8"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetQuoteLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnGetQuoteLambdaDataSourceServiceRoleDefaultPolicy49A387AA"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetQuoteLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnGetQuoteLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Mutation.deleteTodo"
+            "data": "FnGetQuoteLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/SubscriptiononCreateTodoauth0Function/SubscriptiononCreateTodoauth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnGetQuoteLambdaDataSource/InvokeFnGetQuoteLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptiononCreateTodoauth0FunctionSubscriptiononCreateTodoauth0FunctionAppSyncFunction042EF9E1"
+            "data": "InvokeFnGetQuoteLambdaDataSourceInvokeFnGetQuoteLambdaDataSourceAppSyncFunction171438BE"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "SubscriptiononCreateTodoauth0Function"
+            "data": "InvokeFnGetQuoteLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/SubscriptiononCreateTodopostAuth0Function/SubscriptiononCreateTodopostAuth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryGetQuoteResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptiononCreateTodopostAuth0FunctionSubscriptiononCreateTodopostAuth0FunctionAppSyncFunction18E34C4E"
+            "data": "QuerygetQuoteResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "SubscriptiononCreateTodopostAuth0Function"
+            "data": "Query.getQuote"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/SubscriptionOnCreateTodoDataResolverFn/SubscriptionOnCreateTodoDataResolverFn.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteRoomsLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnUpdateQuoteRoomsLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteRoomsLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptionOnCreateTodoDataResolverFnSubscriptionOnCreateTodoDataResolverFnAppSyncFunction462A70C9"
+            "data": "FnUpdateQuoteRoomsLambdaDataSourceServiceRole9ABB15D7"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteRoomsLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateQuoteRoomsLambdaDataSourceServiceRoleDefaultPolicy3E9323B0"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteRoomsLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateQuoteRoomsLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "SubscriptionOnCreateTodoDataResolverFn"
+            "data": "FnUpdateQuoteRoomsLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/subscriptionOnCreateTodoResolver": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnUpdateQuoteRoomsLambdaDataSource/InvokeFnUpdateQuoteRoomsLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptiononCreateTodoResolver"
+            "data": "InvokeFnUpdateQuoteRoomsLambdaDataSourceInvokeFnUpdateQuoteRoomsLambdaDataSourceAppSyncFunction388F9354"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Subscription.onCreateTodo"
+            "data": "InvokeFnUpdateQuoteRoomsLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/SubscriptiononUpdateTodoauth0Function/SubscriptiononUpdateTodoauth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryUpdateQuoteRoomsResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptiononUpdateTodoauth0FunctionSubscriptiononUpdateTodoauth0FunctionAppSyncFunction80D0DFA3"
+            "data": "QueryupdateQuoteRoomsResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "SubscriptiononUpdateTodoauth0Function"
+            "data": "Query.updateQuoteRooms"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/SubscriptiononUpdateTodopostAuth0Function/SubscriptiononUpdateTodopostAuth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdatePackageChoiceLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnUpdatePackageChoiceLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdatePackageChoiceLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptiononUpdateTodopostAuth0FunctionSubscriptiononUpdateTodopostAuth0FunctionAppSyncFunction04445BC7"
+            "data": "FnUpdatePackageChoiceLambdaDataSourceServiceRole3FE1FEA1"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdatePackageChoiceLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdatePackageChoiceLambdaDataSourceServiceRoleDefaultPolicyC2D8BEC9"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdatePackageChoiceLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdatePackageChoiceLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "SubscriptiononUpdateTodopostAuth0Function"
+            "data": "FnUpdatePackageChoiceLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/SubscriptionOnUpdateTodoDataResolverFn/SubscriptionOnUpdateTodoDataResolverFn.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnUpdatePackageChoiceLambdaDataSource/InvokeFnUpdatePackageChoiceLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptionOnUpdateTodoDataResolverFnSubscriptionOnUpdateTodoDataResolverFnAppSyncFunction523DF0E4"
+            "data": "InvokeFnUpdatePackageChoiceLambdaDataSourceInvokeFnUpdatePackageChoiceLambdaDataSourceAppSyncFunction44757DD9"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "SubscriptionOnUpdateTodoDataResolverFn"
+            "data": "InvokeFnUpdatePackageChoiceLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/subscriptionOnUpdateTodoResolver": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryUpdatePackageChoiceResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptiononUpdateTodoResolver"
+            "data": "QueryupdatePackageChoiceResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Subscription.onUpdateTodo"
+            "data": "Query.updatePackageChoice"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/SubscriptiononDeleteTodoauth0Function/SubscriptiononDeleteTodoauth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnSendQuoteConfirmationEmailLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnSendQuoteConfirmationEmailLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnSendQuoteConfirmationEmailLambdaDataSource/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptiononDeleteTodoauth0FunctionSubscriptiononDeleteTodoauth0FunctionAppSyncFunctionF69F2220"
+            "data": "FnSendQuoteConfirmationEmailLambdaDataSourceServiceRole4D89F8EE"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnSendQuoteConfirmationEmailLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnSendQuoteConfirmationEmailLambdaDataSourceServiceRoleDefaultPolicy8183D8E4"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnSendQuoteConfirmationEmailLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnSendQuoteConfirmationEmailLambdaDataSource"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "SubscriptiononDeleteTodoauth0Function"
+            "data": "FnSendQuoteConfirmationEmailLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/SubscriptiononDeleteTodopostAuth0Function/SubscriptiononDeleteTodopostAuth0Function.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnSendQuoteConfirmationEmailLambdaDataSource/InvokeFnSendQuoteConfirmationEmailLambdaDataSource.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptiononDeleteTodopostAuth0FunctionSubscriptiononDeleteTodopostAuth0FunctionAppSyncFunctionE131CBE7"
+            "data": "InvokeFnSendQuoteConfirmationEmailLambdaDataSourceInvokeFnSendQuoteConfirmationEmailLambdaDataSourceAppSyncFunctionAD533742"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "SubscriptiononDeleteTodopostAuth0Function"
+            "data": "InvokeFnSendQuoteConfirmationEmailLambdaDataSource"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/SubscriptionOnDeleteTodoDataResolverFn/SubscriptionOnDeleteTodoDataResolverFn.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/querySendQuoteConfirmationEmailResolver": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptionOnDeleteTodoDataResolverFnSubscriptionOnDeleteTodoDataResolverFnAppSyncFunction3E641E8C"
+            "data": "QuerysendQuoteConfirmationEmailResolver"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "SubscriptionOnDeleteTodoDataResolverFn"
+            "data": "Query.sendQuoteConfirmationEmail"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/subscriptionOnDeleteTodoResolver": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryGetFacilityOptionsAuthFN/QueryGetFacilityOptionsAuthFN.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "SubscriptiononDeleteTodoResolver"
+            "data": "QueryGetFacilityOptionsAuthFNQueryGetFacilityOptionsAuthFNAppSyncFunction79442B89"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Subscription.onDeleteTodo"
+            "data": "QueryGetFacilityOptionsAuthFN"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/TodoOwnerDataResolverFn/TodoOwnerDataResolverFn.AppSyncFunction": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryCreateCustomerQuoteAuthFN/QueryCreateCustomerQuoteAuthFN.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TodoOwnerDataResolverFnTodoOwnerDataResolverFnAppSyncFunction0C7BF45B"
+            "data": "QueryCreateCustomerQuoteAuthFNQueryCreateCustomerQuoteAuthFNAppSyncFunctionED4ECC6B"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "TodoOwnerDataResolverFn"
+            "data": "QueryCreateCustomerQuoteAuthFN"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/todoOwnerResolver": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryCalculatePackageOptionsAuthFN/QueryCalculatePackageOptionsAuthFN.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TodoownerResolver"
+            "data": "QueryCalculatePackageOptionsAuthFNQueryCalculatePackageOptionsAuthFNAppSyncFunction9FC8F80A"
           },
           {
             "type": "graphqltransformer:resourceName",
-            "data": "Todo.owner"
+            "data": "QueryCalculatePackageOptionsAuthFN"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/CDKMetadata/Default": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryUpdateQuoteBudgetAuthFN/QueryUpdateQuoteBudgetAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryUpdateQuoteBudgetAuthFNQueryUpdateQuoteBudgetAuthFNAppSyncFunctionACC6982E"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryUpdateQuoteBudgetAuthFN"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryUpdateCustomerInfoAuthFN/QueryUpdateCustomerInfoAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryUpdateCustomerInfoAuthFNQueryUpdateCustomerInfoAuthFNAppSyncFunctionA34A2EBF"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryUpdateCustomerInfoAuthFN"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryUpdateFacilityTypeAuthFN/QueryUpdateFacilityTypeAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryUpdateFacilityTypeAuthFNQueryUpdateFacilityTypeAuthFNAppSyncFunction50836151"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryUpdateFacilityTypeAuthFN"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryUpdateFloorInfoAuthFN/QueryUpdateFloorInfoAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryUpdateFloorInfoAuthFNQueryUpdateFloorInfoAuthFNAppSyncFunction1B6D25BB"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryUpdateFloorInfoAuthFN"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryConfirmQuoteAuthFN/QueryConfirmQuoteAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryConfirmQuoteAuthFNQueryConfirmQuoteAuthFNAppSyncFunction3A22D538"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryConfirmQuoteAuthFN"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryGetQuoteAuthFN/QueryGetQuoteAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryGetQuoteAuthFNQueryGetQuoteAuthFNAppSyncFunction6DE8DF8A"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryGetQuoteAuthFN"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryUpdateQuoteRoomsAuthFN/QueryUpdateQuoteRoomsAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryUpdateQuoteRoomsAuthFNQueryUpdateQuoteRoomsAuthFNAppSyncFunctionC3630C3B"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryUpdateQuoteRoomsAuthFN"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryUpdatePackageChoiceAuthFN/QueryUpdatePackageChoiceAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryUpdatePackageChoiceAuthFNQueryUpdatePackageChoiceAuthFNAppSyncFunction71D4438B"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryUpdatePackageChoiceAuthFN"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QuerySendQuoteConfirmationEmailAuthFN/QuerySendQuoteConfirmationEmailAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QuerySendQuoteConfirmationEmailAuthFNQuerySendQuoteConfirmationEmailAuthFNAppSyncFunction22BC72D7"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QuerySendQuoteConfirmationEmailAuthFN"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadata"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/CDKMetadata/Condition": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/CDKMetadata/Condition": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadataAvailable"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/reference-to-amplifyjanfinderappdev3sandbox789c476389dataamplifyDataAmplifyTableManagerNestedStackAmplifyTableManagerNestedStackResourceBA4A6FF6Outputs.amplifyjanfinderappdev3sandbox789c476389dataamplifyDataAmplifyTableManagerTableManagerCustomProviderframeworkonEventC4889FABArn": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataAmplifyTableManagerNestedStackAmplifyTableManagerNestedStackResourceBA4A6FF6Outputsamplifyjanfinderappdev3sandbox789c476389dataamplifyDataAmplifyTableManagerTableManagerCustoB6BC6F07"
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/reference-to-amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": [
           {
             "type": "aws:cdk:logicalId",
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/reference-to-amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref": [
           {
             "type": "aws:cdk:logicalId",
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthunauthenticatedUserRoleC7C1F878Ref": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthunauthenticatedUserRoleC7C1F878Ref": [
           {
             "type": "aws:cdk:logicalId",
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthunauthenticatedUserRoleC7C1F878Ref"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthIdentityPoolFCD7218CRef": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthIdentityPoolFCD7218CRef": [
           {
             "type": "aws:cdk:logicalId",
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthIdentityPoolFCD7218CRef"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/Todo.NestedStack/Todo.NestedStackResource": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389datacreatecustomerquotelambdaD07FBD42Arn": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "amplifyDataTodoNestedStackTodoNestedStackResource551CEA56"
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389datacreatecustomerquotelambdaD07FBD42Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functioncalcpackageoptionslambda5120FF6EArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functioncalcpackageoptionslambda5120FF6EArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatequotebudgetlambdaFA35AF4AArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatequotebudgetlambdaFA35AF4AArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatecustomerinfolambda1296DC37Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatecustomerinfolambda1296DC37Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatefacilitytypelambdaA31A07BAArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefacilitytypelambdaA31A07BAArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatefloorinfolambda3EBAAF2CArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefloorinfolambda3EBAAF2CArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionconfirmquotelambda19A2CF68Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionconfirmquotelambda19A2CF68Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetquotelambdaE3586F78Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetquotelambdaE3586F78Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatequoteroomslambda3FEF8AF3Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatequoteroomslambda3FEF8AF3Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatepackagechoicelambdaC58871DFArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatepackagechoicelambdaC58871DFArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack.NestedStack/FunctionDirectiveStack.NestedStackResource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyDataFunctionDirectiveStackNestedStackFunctionDirectiveStackNestedStackResource1246A302"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AuthRolePolicy01/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyDataAuthRolePolicy01567A5654"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/UnauthRolePolicy01/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyDataUnauthRolePolicy01355B9DCF"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/AmplifyCodegenAssets/AmplifyCodegenAssetsBucket/Resource": [
@@ -1027,36 +1291,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "amplifyDataAmplifyCodegenAssetsAmplifyCodegenAssetsDeploymentCustomResource1536MiB21775929"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/DynamoDBModelTableReadIOPS": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBModelTableReadIOPS"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/DynamoDBModelTableWriteIOPS": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBModelTableWriteIOPS"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/DynamoDBBillingMode": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBBillingMode"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/DynamoDBEnablePointInTimeRecovery": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBEnablePointInTimeRecovery"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/DynamoDBEnableServerSideEncryption": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "DynamoDBEnableServerSideEncryption"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/LatestNodeRuntimeMap": [
@@ -1185,10 +1419,28 @@
             "data": "CDKMetadataAvailable"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyjanfinderappdev3sandbox789c476389datacreatecustomerquotelambdaD07FBD42Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389datacreatecustomerquotelambdaD07FBD42Ref"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": [
           {
             "type": "aws:cdk:logicalId",
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref": [
@@ -1209,10 +1461,64 @@
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthIdentityPoolFCD7218CRef"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": [
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functioncalcpackageoptionslambda5120FF6EArn": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functioncalcpackageoptionslambda5120FF6EArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatequotebudgetlambdaFA35AF4AArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatequotebudgetlambdaFA35AF4AArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatecustomerinfolambda1296DC37Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatecustomerinfolambda1296DC37Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatefacilitytypelambdaA31A07BAArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefacilitytypelambdaA31A07BAArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatefloorinfolambda3EBAAF2CArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefloorinfolambda3EBAAF2CArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionconfirmquotelambda19A2CF68Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionconfirmquotelambda19A2CF68Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetquotelambdaE3586F78Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetquotelambdaE3586F78Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatequoteroomslambda3FEF8AF3Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatequoteroomslambda3FEF8AF3Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatepackagechoicelambdaC58871DFArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatepackagechoicelambdaC58871DFArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Arn"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDGraphQLUrl": [
@@ -1231,6 +1537,348 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "data7552DF31"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/get-facility-options-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getfacilityoptionslambdaServiceRoleEE140FA6"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/get-facility-options-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getfacilityoptionslambda5C45FFFE"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/calc-package-options-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "calcpackageoptionslambdaServiceRole5CDF1F36"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/calc-package-options-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "calcpackageoptionslambdaServiceRoleDefaultPolicyE86A81A2"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/calc-package-options-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "calcpackageoptionslambda281F8E61"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-quote-budget-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatequotebudgetlambdaServiceRoleF95AE16F"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-quote-budget-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatequotebudgetlambdaServiceRoleDefaultPolicy37A98EF4"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-quote-budget-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatequotebudgetlambda21CE2D14"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-customer-info-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatecustomerinfolambdaServiceRole458EB210"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-customer-info-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatecustomerinfolambdaServiceRoleDefaultPolicy499BE27C"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-customer-info-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatecustomerinfolambda923DD483"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-facility-type-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatefacilitytypelambdaServiceRole31C70EFE"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-facility-type-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatefacilitytypelambdaServiceRoleDefaultPolicy50B7B841"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-facility-type-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatefacilitytypelambda876C0512"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-floor-info-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatefloorinfolambdaServiceRole15BA4AF0"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-floor-info-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatefloorinfolambdaServiceRoleDefaultPolicy9EDB3DC0"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-floor-info-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatefloorinfolambda471731FC"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/confirm-quote-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "confirmquotelambdaServiceRoleA1F6DBD7"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/confirm-quote-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "confirmquotelambdaServiceRoleDefaultPolicyAF4C451F"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/confirm-quote-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "confirmquotelambda267F8B40"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/get-quote-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getquotelambdaServiceRole3910614A"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/get-quote-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getquotelambdaServiceRoleDefaultPolicy4EDFB47E"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/get-quote-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getquotelambda86D77946"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-quote-rooms-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatequoteroomslambdaServiceRole12AE1604"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-quote-rooms-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatequoteroomslambdaServiceRoleDefaultPolicy1C12E4EE"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-quote-rooms-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatequoteroomslambda2DAE6BC6"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-package-choice-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatepackagechoicelambdaServiceRoleF80ACCDF"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-package-choice-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatepackagechoicelambdaServiceRoleDefaultPolicyBA11B917"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/update-package-choice-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatepackagechoicelambda82F0AADA"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/send-quote-confirmation-email-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sendquoteconfirmationemaillambdaServiceRoleF81778D4"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/send-quote-confirmation-email-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sendquoteconfirmationemaillambdaServiceRoleDefaultPolicyF30E7C29"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/send-quote-confirmation-email-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sendquoteconfirmationemaillambda869C5BEB"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Ref"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functioncalcpackageoptionslambda5120FF6ERef": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functioncalcpackageoptionslambda5120FF6ERef"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatequotebudgetlambdaFA35AF4ARef": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatequotebudgetlambdaFA35AF4ARef"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatecustomerinfolambda1296DC37Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatecustomerinfolambda1296DC37Ref"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatefacilitytypelambdaA31A07BARef": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatefacilitytypelambdaA31A07BARef"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatefloorinfolambda3EBAAF2CRef": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatefloorinfolambda3EBAAF2CRef"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionconfirmquotelambda19A2CF68Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionconfirmquotelambda19A2CF68Ref"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functiongetquotelambdaE3586F78Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functiongetquotelambdaE3586F78Ref"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatequoteroomslambda3FEF8AF3Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatequoteroomslambda3FEF8AF3Ref"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatepackagechoicelambdaC58871DFRef": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatepackagechoicelambdaC58871DFRef"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Ref"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functioncalcpackageoptionslambda5120FF6EArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functioncalcpackageoptionslambda5120FF6EArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatequotebudgetlambdaFA35AF4AArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatequotebudgetlambdaFA35AF4AArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatecustomerinfolambda1296DC37Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatecustomerinfolambda1296DC37Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatefacilitytypelambdaA31A07BAArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatefacilitytypelambdaA31A07BAArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatefloorinfolambda3EBAAF2CArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatefloorinfolambda3EBAAF2CArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionconfirmquotelambda19A2CF68Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionconfirmquotelambda19A2CF68Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functiongetquotelambdaE3586F78Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functiongetquotelambdaE3586F78Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatequoteroomslambda3FEF8AF3Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatequoteroomslambda3FEF8AF3Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionupdatepackagechoicelambdaC58871DFArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionupdatepackagechoicelambdaC58871DFArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function.NestedStack/function.NestedStackResource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "function1351588B"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/awsAppsyncApiId": [
@@ -1351,198 +1999,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "storage0EC3F24A"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/create-owner-lambda/ServiceRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "createownerlambdaServiceRole109FCCBF"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/create-owner-lambda/ServiceRole/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "createownerlambdaServiceRoleDefaultPolicy135155D3"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/create-owner-lambda/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "createownerlambdaD1128DB7"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/create-franchise-lambda/ServiceRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "createfranchiselambdaServiceRoleEBFA2D86"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/create-franchise-lambda/ServiceRole/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "createfranchiselambdaServiceRoleDefaultPolicyD33B1A7A"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/create-franchise-lambda/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "createfranchiselambdaC8CF3748"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/create-cbo-lambda/ServiceRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "createcbolambdaServiceRole2236CA73"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/create-cbo-lambda/ServiceRole/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "createcbolambdaServiceRoleDefaultPolicy80AE34A2"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/create-cbo-lambda/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "createcbolambdaF64E7CBA"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/CDKMetadata/Default": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "CDKMetadata"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/CDKMetadata/Condition": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "CDKMetadataAvailable"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/amplifyjanfinderappdev3sandbox789c476389httpapicreateownerlambdaC6B4F55DRef": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyjanfinderappdev3sandbox789c476389httpapicreateownerlambdaC6B4F55DRef"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/amplifyjanfinderappdev3sandbox789c476389httpapicreatefranchiselambda9934AE7ARef": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyjanfinderappdev3sandbox789c476389httpapicreatefranchiselambda9934AE7ARef"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/amplifyjanfinderappdev3sandbox789c476389httpapicreatecbolambda3D8B726FRef": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyjanfinderappdev3sandbox789c476389httpapicreatecbolambda3D8B726FRef"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/amplifyjanfinderappdev3sandbox789c476389httpapicreateownerlambdaC6B4F55DArn": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyjanfinderappdev3sandbox789c476389httpapicreateownerlambdaC6B4F55DArn"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/amplifyjanfinderappdev3sandbox789c476389httpapicreatefranchiselambda9934AE7AArn": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyjanfinderappdev3sandbox789c476389httpapicreatefranchiselambda9934AE7AArn"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api/amplifyjanfinderappdev3sandbox789c476389httpapicreatecbolambda3D8B726FArn": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyjanfinderappdev3sandbox789c476389httpapicreatecbolambda3D8B726FArn"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/http-api.NestedStack/http-api.NestedStackResource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "httpapi0C3DDAB5"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApi20126262"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/DefaultStage/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiDefaultStage6DD71F27"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/POST--owner/Int--owner-POST/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiPOSTownerIntownerPOSTC73D58C1"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/POST--owner/Int--owner-POST-Permission": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiPOSTownerIntownerPOSTPermissionDDE61B27"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/POST--owner/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiPOSTownerA200E55B"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/CognitoAuthorizer/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiCognitoAuthorizer9BF3C7E5"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/POST--franchise/Int--franchise-POST/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiPOSTfranchiseIntfranchisePOST5CDCD1F5"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/POST--franchise/Int--franchise-POST-Permission": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiPOSTfranchiseIntfranchisePOSTPermission3B0220A4"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/POST--franchise/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiPOSTfranchiseF0F5CBD5"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/POST--cbo/Int--cbo-POST/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiPOSTcboIntcboPOSTC48F7843"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/POST--cbo/Int--cbo-POST-Permission": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiPOSTcboIntcboPOSTPermissionB99B5191"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/AppHttpApi/POST--cbo/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AppHttpApiPOSTcboC12B1D53"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/customOutputs": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "customOutputs"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/storageRegion": [

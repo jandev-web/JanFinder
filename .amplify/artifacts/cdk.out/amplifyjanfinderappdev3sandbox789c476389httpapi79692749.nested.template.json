@@ -123,7 +123,7 @@
      "Size": 512
     },
     "Handler": "index.handler",
-    "MemorySize": 256,
+    "MemorySize": 512,
     "Role": {
      "Fn::GetAtt": [
       "createownerlambdaServiceRole109FCCBF",
@@ -145,7 +145,7 @@
       "Value": "amplify"
      }
     ],
-    "Timeout": 15
+    "Timeout": 3
    },
    "DependsOn": [
     "createownerlambdaServiceRoleDefaultPolicy135155D3",

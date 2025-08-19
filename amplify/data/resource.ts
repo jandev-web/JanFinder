@@ -1,53 +1,111 @@
-import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
+// amplify/data/resource.ts
+import { a, defineData, type ClientSchema } from '@aws-amplify/backend';
+import { getFacilityOptionsFn } from '../functions/get-facility-options/resource';
+import { createCustomerQuoteFn } from '../functions/create-customer-quote/resource';
+import { calcPackageOptionsFn } from '../functions/calc-package-options/resource';
+import { updateQuoteBudgetFn } from '../functions/update-quote-budget/resource';
+import { updateCustomerInfoFn } from '../functions/update-customer-info/resource';
+import { updateFacilityTypeFn } from '../functions/update-facility-type/resource';
+import { updateFloorInfoFn } from '../functions/update-floor-info/resource';
+import { confirmQuoteFn } from '../functions/confirm-quote/resource';
+import { getQuoteFn } from '../functions/get-quote/resource';
+import { updateQuoteRoomsFn } from '../functions/update-quote-rooms/resource';
+import { updatePackageChoiceFn } from '../functions/update-package-choice/resource';
+import { sendQuoteConfirmationEmailFn } from '../functions/send-quote-confirmation-email/resource';
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any unauthenticated user can "create", "read", "update", 
-and "delete" any "Todo" records.
-=========================================================================*/
 const schema = a.schema({
-  Todo: a
-    .model({
-      content: a.string(),
+  getFacilityOptions: a
+    .query()
+    .returns(a.json())
+    .authorization((allow) => [allow.guest()]) // or your choice
+    .handler(a.handler.function(getFacilityOptionsFn)),
+  createCustomerQuote: a
+    .query()
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'),
+    allow.guest(),])
+    .handler(a.handler.function(createCustomerQuoteFn)),
+  calculatePackageOptions: a
+    .query()
+    .arguments({ quoteID: a.string() })
+    .returns(a.json())
+    .authorization(allow => [allow.guest()])
+    .handler(a.handler.function(calcPackageOptionsFn)),
+  updateQuoteBudget: a
+    .query()
+    .arguments({
+      quoteID: a.string(),
+      budget: a.float(),
     })
-    .authorization((allow) => [allow.owner()]),
+    .returns(a.json())
+    .authorization(allow => [allow.guest()]) // signed-in users
+    .handler(a.handler.function(updateQuoteBudgetFn)),
+  updateCustomerInfo: a
+    .query()
+    .arguments({
+      quoteID: a.string(),
+      customerInfo: a.json(), // or build an object type if you want strict typing
+    })
+    .returns(a.json())
+    .authorization((allow) => [allow.guest()])
+    .handler(a.handler.function(updateCustomerInfoFn)),
+  updateFacilityType: a
+    .query()
+    .arguments({
+      quoteID: a.string(),
+      facilityType: a.string(),
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.guest()])
+    .handler(a.handler.function(updateFacilityTypeFn)),
+  updateFloorInfo: a
+    .query()
+    .arguments({
+      quoteID: a.string(),
+      floorInfo: a.json(), // { floors: number, stairwells: {carpetStairwells?, hardfloorStairwells?} }
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.guest()])
+    .handler(a.handler.function(updateFloorInfoFn)),
+  confirmQuote: a
+    .query()
+    .arguments({ quoteID: a.string() })
+    .returns(a.json())
+    .authorization(allow => [allow.guest()]) // ⬅️ per your request
+    .handler(a.handler.function(confirmQuoteFn)),
+  getQuote: a
+    .query()
+    .arguments({ quoteID: a.string() })
+    .returns(a.json())
+    .authorization(allow => [allow.guest()]) // ⬅️ guest access
+    .handler(a.handler.function(getQuoteFn)),
+  updateQuoteRooms: a
+    .query()
+    .arguments({
+      quoteID: a.string(),
+      formInfo: a.json(), // { roomTypes: [], sqft: number, floorTypes: { ... } }
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.guest()]) // ⬅️ guest
+    .handler(a.handler.function(updateQuoteRoomsFn)),
+  updatePackageChoice: a
+    .query()
+    .arguments({
+      quoteID: a.string(),
+      packageInfo: a.json(),
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.guest()]) // ⬅️ guest
+    .handler(a.handler.function(updatePackageChoiceFn)),
+  sendQuoteConfirmationEmail: a
+    .query()
+    .arguments({ quoteID: a.string() })
+    .returns(a.json())
+    .authorization(allow => [allow.guest()]) // ⬅️ guest
+    .handler(a.handler.function(sendQuoteConfirmationEmailFn)),
 });
-
 export type Schema = ClientSchema<typeof schema>;
-
 export const data = defineData({
   schema,
-  authorizationModes: {
-    defaultAuthorizationMode: 'iam',
-  },
+  authorizationModes: { defaultAuthorizationMode: 'iam' },
 });
-
-/*== STEP 2 ===============================================================
-Go to your frontend source code. From your client-side code, generate a
-Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
-WORK IN THE FRONTEND CODE FILE.)
-
-Using JavaScript or Next.js React Server Components, Middleware, Server 
-Actions or Pages Router? Review how to generate Data clients for those use
-cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
-=========================================================================*/
-
-/*
-"use client"
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
-*/
-
-/*== STEP 3 ===============================================================
-Fetch records from the database and use them in your frontend component.
-(THIS SNIPPET WILL ONLY WORK IN THE FRONTEND CODE FILE.)
-=========================================================================*/
-
-/* For example, in a React component, you can use this snippet in your
-  function's RETURN statement */
-// const { data: todos } = await client.models.Todo.list()
-
-// return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>
