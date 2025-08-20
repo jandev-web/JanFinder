@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, FormEvent } from 'react';
 import LoadingSpinner from '@/components/loadingScreen';
-import { manualAddRoom } from '@/utils/manualAddRoom';
+import { manualAddRoom } from '@/utils/updateQuoteRooms';
 
 interface QuoteFormProps {
   quoteID: any;

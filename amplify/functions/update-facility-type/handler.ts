@@ -1,81 +1,47 @@
-import type { Handler } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import type { Schema } from '../../data/resource';
 
-const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient({}), {
+const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient(), {
   marshallOptions: { removeUndefinedValues: true },
 });
 
 const QUOTES = process.env.CUSTOMER_QUOTES_TABLE || 'CustomerQuotes';
 
-export const handler: Handler = async (event: any) => {
-  try {
-    // Accept Amplify Data (event.arguments) or REST (event.body)
-    let quoteID: string | undefined;
-    let facilityType: string | undefined;
+export const handler: Schema['updateFacilityType']['functionHandler'] = async (event) => {
+  const quoteID = event.arguments?.quoteID as string | undefined;
+  const facilityType = event.arguments?.facilityType as string | undefined;
 
-    if (event?.arguments) {
-      quoteID = event.arguments.quoteID ?? event.arguments?.payload?.quoteID;
-      facilityType = event.arguments.facilityType ?? event.arguments?.payload?.facilityType;
-    } else if (event?.body) {
-      const body = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
-      quoteID = body?.quoteID;
-      facilityType = body?.facilityType;
-    }
+  if (!quoteID) throw new Error('quoteID is required');
+  if (!facilityType) throw new Error('facilityType is required');
 
-    if (!quoteID || !facilityType) {
-      return respond(event, 400, { message: 'Missing quoteID or facilityType' });
-    }
-
-    const updateExpression = `
-      SET quoteInfo.facilityType = :facilityType,
-          quoteInfo.roomTypes = :emptyList,
-          quoteInfo.floorTypes = :emptyFloor,
-          customerMeasurements.roomTypes = :emptyList,
-          customerMeasurements.floorTypes = :emptyFloor
-    `;
-
-    const expressionAttributeValues = {
-      ':facilityType': facilityType,
-      ':emptyList': [] as any[],
-      ':emptyFloor': { hardfloor: 0, carpet: 0 },
-    };
-
-    const result = await ddbDoc.send(
-      new UpdateCommand({
-        TableName: QUOTES,
-        Key: { QuoteID: String(quoteID) },
-        UpdateExpression: updateExpression,
-        ExpressionAttributeValues: expressionAttributeValues,
-        ReturnValues: 'UPDATED_NEW',
-      })
-    );
-
-    return respond(event, 200, {
-      message: 'Facility type updated successfully',
-      updatedAttributes: result.Attributes ?? {},
-    });
-  } catch (e: any) {
-    console.error('Error updating quote:', e);
-    return respond(event, 500, { message: 'Error updating quote', error: e?.message ?? String(e) });
-  }
-};
-
-// Normalize response for REST (API Gateway) vs Amplify Data (AppSync)
-function respond(event: any, statusCode: number, payload: any) {
-  if (event?.requestContext?.http) {
-    // REST
-    return {
-      statusCode,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
+  await ddbDoc.send(
+    new UpdateCommand({
+      TableName: QUOTES,
+      Key: { QuoteID: String(quoteID) },
+      // reset dependent fields when facility changes
+      UpdateExpression: [
+        'SET #qi.#facilityType = :ft',
+        '#qi.#roomTypes      = :emptyList',
+        '#qi.#floorTypes     = :emptyFloor',
+        '#cm.#roomTypes      = :emptyList',
+        '#cm.#floorTypes     = :emptyFloor',
+      ].join(', '),
+      ExpressionAttributeNames: {
+        '#qi': 'quoteInfo',
+        '#cm': 'customerMeasurements',
+        '#facilityType': 'facilityType',
+        '#roomTypes': 'roomTypes',
+        '#floorTypes': 'floorTypes',
       },
-      body: JSON.stringify(payload),
-    };
-  }
-  // Amplify Data
-  if (statusCode >= 400) throw new Error(payload?.message || 'Error');
-  return payload;
-}
+      ExpressionAttributeValues: {
+        ':ft': facilityType,
+        ':emptyList': [],
+        ':emptyFloor': { hardfloor: 0, carpet: 0 },
+      },
+      ReturnValues: 'NONE',
+    })
+  );
+
+  return { message: 'OK' };
+};

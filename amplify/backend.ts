@@ -21,6 +21,7 @@ import { getQuoteFn } from './functions/get-quote/resource';
 import { updateQuoteRoomsFn } from './functions/update-quote-rooms/resource';
 import { updatePackageChoiceFn } from './functions/update-package-choice/resource';
 import { sendQuoteConfirmationEmailFn } from './functions/send-quote-confirmation-email/resource';
+import { updateQuoteFrequencyFn } from './functions/update-quote-frequency/resource';
 
 // 1) Bind resources
 const backend = defineBackend({
@@ -40,6 +41,7 @@ const backend = defineBackend({
   updateQuoteRoomsFn,
   updatePackageChoiceFn,
   sendQuoteConfirmationEmailFn,
+  updateQuoteFrequencyFn,
 });
 
 // 2) Cognito user pool tweaks
@@ -75,23 +77,31 @@ cfnUserPool.policies = {
 };
 
 // 3) IAM: allow Identity Pool roles to call this AppSync API (IAM mode)
+//    IMPORTANT: attach from the DATA stack using role NAMES (strings) to avoid auth -> data edge.
 const region = Stack.of(backend.data.stack).region; // use data stack's region
 const account = Aws.ACCOUNT_ID;
 const apiId = backend.data.resources.graphqlApi.apiId;
 const appsyncResourceArn = `arn:${Aws.PARTITION}:appsync:${region}:${account}:apis/${apiId}/*`;
 
-backend.auth.resources.authenticatedUserIamRole.addToPrincipalPolicy(
-  new iam.PolicyStatement({
-    actions: ['appsync:GraphQL'],
-    resources: [appsyncResourceArn],
-  })
-);
-backend.auth.resources.unauthenticatedUserIamRole.addToPrincipalPolicy(
-  new iam.PolicyStatement({
-    actions: ['appsync:GraphQL'],
-    resources: [appsyncResourceArn],
-  })
-);
+// Get role NAMES (string) — safe to pass to CfnPolicy without creating a construct ref edge
+const unauthRoleName = (backend.auth.resources as any).unauthenticatedUserIamRole.roleName;
+const authRoleName   = (backend.auth.resources as any).authenticatedUserIamRole.roleName;
+
+// Create the policy IN THE DATA STACK and attach to the identity pool roles by name
+new iam.CfnPolicy(backend.data.stack, 'IdentityPoolGraphQLPolicy', {
+  policyName: 'IdentityPoolGraphQLPolicy',
+  roles: [unauthRoleName, authRoleName],
+  policyDocument: {
+    Version: '2012-10-17',
+    Statement: [
+      {
+        Effect: 'Allow',
+        Action: 'appsync:GraphQL',
+        Resource: appsyncResourceArn,
+      },
+    ],
+  },
+});
 
 // 4) Convenience refs
 const postConfFn = backend.postConfirmation.resources.lambda as lambda.Function;
@@ -106,6 +116,7 @@ const getQuoteLambda = backend.getQuoteFn.resources.lambda as lambda.Function;
 const updQuoteRoomsLambda = backend.updateQuoteRoomsFn.resources.lambda as lambda.Function;
 const updatePkgLambda = backend.updatePackageChoiceFn.resources.lambda as lambda.Function;
 const sendEmailLambda = backend.sendQuoteConfirmationEmailFn.resources.lambda as lambda.Function;
+const updFrequencyFn = backend.updateQuoteFrequencyFn.resources.lambda as lambda.Function;
 
 // 5) DDB/SES/Lambda permissions for the above
 sendEmailLambda.addToRolePolicy(
@@ -176,6 +187,12 @@ updBudgetFn.addToRolePolicy(
     resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
   })
 );
+updFrequencyFn.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:UpdateItem'],
+    resources: [`arn:aws:dynamodb:${region}:${account}:table/CustomerQuotes`],
+  })
+);
 calcFn.addToRolePolicy(
   new PolicyStatement({
     actions: ['dynamodb:GetItem'],
@@ -216,6 +233,5 @@ postConfFn.addToRolePolicy(
     ],
   })
 );
-
 
 export default backend;

@@ -11,27 +11,13 @@ const ddbDoc = DynamoDBDocumentClient.from(
 // prefer env; falls back to literal for local
 const CUSTOMER_QUOTES_TABLE = process.env.CUSTOMER_QUOTES_TABLE || "CustomerQuotes";
 
-// remove empty strings so DynamoDB doesn't complain
-function stripEmptyStrings(v: any): any {
-  if (v === "") return undefined;
-  if (Array.isArray(v)) return v.map(stripEmptyStrings).filter(x => x !== undefined);
-  if (v && typeof v === "object") {
-    const out: any = {};
-    for (const [k, val] of Object.entries(v)) {
-      const cleaned = stripEmptyStrings(val);
-      if (cleaned !== undefined) out[k] = cleaned;
-    }
-    return Object.keys(out).length ? out : undefined;
-  }
-  return v;
-}
 
 // ✅ Use the Amplify Data handler type and return your payload directly
 export const handler: Schema["createCustomerQuote"]["functionHandler"] = async (_event) => {
   const timestamp = new Date().toISOString();
   const quoteId = uuidv4();
 
-  const item = stripEmptyStrings({
+  const item = {
     QuoteID: quoteId,
     ConfirmationNumber: "None",
     Franchise: "None",
@@ -72,7 +58,7 @@ export const handler: Schema["createCustomerQuote"]["functionHandler"] = async (
     customerMeasurements: { roomTypes: [], floorTypes: { hardfloor: 0, carpet: 0 }, sqft: 0, stairwells: { carpet: 0, hardfloor: 0 }, floors: 0 },
     ownerMeasurements: { roomTypes: [], floorTypes: { hardfloor: 0, carpet: 0 }, sqft: 0, stairwells: { carpet: 0, hardfloor: 0 }, floors: 0 },
     latestRequest: null,
-  });
+  };
 
   await ddbDoc.send(
     new PutCommand({

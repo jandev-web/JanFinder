@@ -253,6 +253,13 @@
         "Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Ref"
        ]
       },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389dataupdatequotefrequencylambda25A5D866Ref"
+       ]
+      },
       "\"]"
      ]
     ]
@@ -361,14 +368,6 @@
   "auth179371D7": {
    "Type": "AWS::CloudFormation::Stack",
    "Properties": {
-    "Parameters": {
-     "referencetoamplifyjanfinderappdev3sandbox789c476389dataNestedStackdataNestedStackResource3247090DOutputsamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": {
-      "Fn::GetAtt": [
-       "data7552DF31",
-       "Outputs.amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
-      ]
-     }
-    },
     "Tags": [
      {
       "Key": "amplify:deployment-type",
@@ -395,7 +394,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/7bb40199b7b89be5146b079d7311c12da8c4d7b034ee801c4dbb1d4c08e1c6a8.json"
+       "/bd4949fc4aeb545f0180ca91d5a3926b545d925e6213c39148d948384982a664.json"
       ]
      ]
     }
@@ -529,7 +528,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/2c53b1917538c04e29890290b530fd03a5b756a8441b5f30356ce7f41606d161.json"
+       "/c54ae9ef264b02acec5096e6069a7513e4b310e0edc3bd97b7474ea5564da952.json"
       ]
      ]
     }
@@ -571,7 +570,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/daf8f629249e5732ba02b07907f343a64d7c4aa470a30bc147866938f6843116.json"
+       "/3486b3ad06bf80efb40fe1976adc6102e4090552f5d1d64eb692e41d57f4a8a6.json"
       ]
      ]
     }

@@ -1,5 +1,7 @@
-import type { Handler } from 'aws-lambda';
+// functions/get-facility-options/handler.ts
+import type { Schema } from '../../data/resource';
 
+// Static options (unchanged)
 const facilityOptions = {
   Medical: [
     'Single Use Bathroom', 'Multi Use Bathroom', 'Breakrooms', 'Lobby / Reception', 'Entrance', 'Stairwells',
@@ -53,22 +55,9 @@ const facilityOptions = {
   ],
 };
 
-const cors = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
-
-export const handler: Handler = async (event) => {
-  // quick preflight support
-  if ((event as any)?.requestContext?.http?.method === 'OPTIONS') {
-    return { statusCode: 200, headers: cors, body: '' };
-  }
-
-  const body = { facility_options: facilityOptions };
-  return {
-    statusCode: 200,
-    headers: cors,
-    body: JSON.stringify(body),
-  };
+// ✅ Amplify Data resolver only (no REST/CORS/OPTIONS)
+export const handler: Schema['getFacilityOptions']['functionHandler'] = async () => {
+  // Return an object; if your schema uses `a.json()`, this will be serialized to AWSJSON.
+  // Your client util (below) will handle both cases.
+  return { facilityOptions };
 };

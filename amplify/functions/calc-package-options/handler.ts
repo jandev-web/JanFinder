@@ -1,13 +1,9 @@
-import type { Handler } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import {
-  DynamoDBDocumentClient,
-  GetCommand,
-  UpdateCommand,
-} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import type { Schema } from '../../data/resource';
 
-// ---- Dynamo setup
-const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient({}), {
+// DDB setup
+const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient(), {
   marshallOptions: { removeUndefinedValues: true },
 });
 
@@ -15,7 +11,7 @@ const QUOTES = process.env.CUSTOMER_QUOTES_TABLE || 'CustomerQuotes';
 const TASKS  = process.env.ROOM_TASKS_TABLE || 'RoomTaskCalculations';
 const FAC    = process.env.FACILITY_TABLE || 'Facility_Data';
 
-// ---- Helpers
+// Helpers
 const round2 = (n: number) => Number((Math.round(n * 100) / 100).toFixed(2));
 const num = (v: any) => (typeof v === 'number' ? v : Number(v || 0));
 
@@ -41,12 +37,11 @@ const FREQ_MULTIPLIER: Record<string, number> = {
   '7 Days a Week': 30.31,
   'Bi-Weekly': 2.17,
   'Monthly': 1,
-  'Quarterly': 0.333333,   // spelled "Quarterly", but your data sometimes uses "Quaterly"
+  'Quarterly': 0.333333, // note: data sometimes uses "Quaterly"
   'Yearly': 0.083333,
   'NA': 0,
 };
 
-// Normalize Python-ish formula strings to JS
 function normalizeFormula(formula: string) {
   return String(formula)
     .replace(/Decimal\s*\(/g, '(')
@@ -55,9 +50,6 @@ function normalizeFormula(formula: string) {
 
 function evalFormula(formula: string, vars: { roomNumber: number; roomSqft: number }) {
   const src = normalizeFormula(formula);
-  // Evaluates arithmetic expressions referencing roomNumber/roomSqft only.
-  // NOTE: This assumes formulas are simple math (no identifiers beyond those).
-  // If your formulas are more complex, consider a safe expression parser.
   // eslint-disable-next-line no-new-func
   const fn = new Function('roomNumber', 'roomSqft', 'Number', `return (${src});`);
   const val = fn(vars.roomNumber, vars.roomSqft, Number);
@@ -66,34 +58,21 @@ function evalFormula(formula: string, vars: { roomNumber: number; roomSqft: numb
   return out;
 }
 
-// ---- Main handler
-export const handler: Handler = async (event) => {
+// ✅ Amplify Data ONLY
+export const handler: Schema['calculatePackageOptions']['functionHandler'] = async (event) => {
   try {
-    // Accept both Amplify Data (event.arguments) and REST (event.body)
-    const anyEvt = event as any;
-    let quoteID: string | undefined;
+    const quoteID = event.arguments?.quoteID as string | undefined;
+    if (!quoteID) throw new Error('quoteID is required');
 
-    if (anyEvt?.arguments?.quoteID) {
-      quoteID = String(anyEvt.arguments.quoteID);
-    } else if (anyEvt?.arguments?.payload?.quoteID) {
-      quoteID = String(anyEvt.arguments.payload.quoteID);
-    } else if (typeof anyEvt?.body === 'string') {
-      quoteID = JSON.parse(anyEvt.body)?.quoteID;
-    } else if (typeof anyEvt?.body === 'object' && anyEvt.body) {
-      quoteID = anyEvt.body.quoteID;
-    }
-
-    if (!quoteID) {
-      return respond(event, 400, { message: 'Missing quoteID' });
-    }
-
-    // ---- Load quote
-    const quoteRes = await ddbDoc.send(
-      new GetCommand({ TableName: QUOTES, Key: { QuoteID: quoteID } })
-    );
+    // Load quote
+    const quoteRes = await ddbDoc.send(new GetCommand({
+      TableName: QUOTES,
+      Key: { QuoteID: quoteID },
+    }));
     const quoteItem = quoteRes.Item as any;
     if (!quoteItem) {
-      return respond(event, 404, { message: 'Quote not found' });
+      // benign payload to avoid breaking client code
+      return { message: 'Quote not found', packageOptions: [] };
     }
 
     const quoteInfo = quoteItem.quoteInfo ?? {};
@@ -104,13 +83,12 @@ export const handler: Handler = async (event) => {
     const customerFacility = quoteInfo.facilityType;
 
     if (!customerFacility) {
-      return respond(event, 400, { message: 'Missing facilityType in quoteInfo' });
+      // benign payload; client reads packageOptions
+      return { message: 'Missing facilityType', packageOptions: [] };
     }
 
-    // We'll use this consistently (fixes a subtle scoping bug in the Python version)
     const customerMultiplier = FREQ_MULTIPLIER[customerFrequency] ?? 0;
 
-    // ---- Build packages structure
     type PkgKey = 'top' | 'middle' | 'bottom';
     type Pkg = {
       packageName: PkgKey;
@@ -129,7 +107,7 @@ export const handler: Handler = async (event) => {
       bottom: { packageName: 'bottom', packageCost: 0, rooms: [], totalDayTime: 0, totalMonthTime: 0, otherDayTime: 0, otherMonthTime: 0 },
     };
 
-    // ---- Initial per-room sqft estimates
+    // Initial per-room sqft estimates
     let totalEstimatedSqft = 0;
     const roomEstimates: Array<{
       roomName: string;
@@ -145,9 +123,10 @@ export const handler: Handler = async (event) => {
       const roomName = String(r.roomName);
       const roomNumber = num(r.numberOfRooms);
 
-      const taskDataRes = await ddbDoc.send(
-        new GetCommand({ TableName: TASKS, Key: { RoomName: roomName } })
-      );
+      const taskDataRes = await ddbDoc.send(new GetCommand({
+        TableName: TASKS,
+        Key: { RoomName: roomName },
+      }));
       const taskData = (taskDataRes.Item as any) ?? {};
 
       let avgRoomSize: number;
@@ -160,27 +139,20 @@ export const handler: Handler = async (event) => {
 
       const estSqft = roomNumber * avgRoomSize;
       totalEstimatedSqft += estSqft;
-      roomEstimates.push({
-        roomName,
-        roomNumber,
-        avgRoomSize,
-        baseSqft: estSqft,
-      });
+      roomEstimates.push({ roomName, roomNumber, avgRoomSize, baseSqft: estSqft });
     }
 
     const discrepancy = totalSqft - totalEstimatedSqft;
 
-    // ---- Load facility weights
-    const facRes = await ddbDoc.send(
-      new GetCommand({ TableName: FAC, Key: { FacilityName: customerFacility } })
-    );
+    // Facility weights
+    const facRes = await ddbDoc.send(new GetCommand({
+      TableName: FAC,
+      Key: { FacilityName: customerFacility },
+    }));
     const facilityItem = (facRes.Item as any) ?? {};
     const roomsArr = Array.isArray(facilityItem.Rooms) ? facilityItem.Rooms : [];
-    const roomWeights = new Map<string, number>(
-      roomsArr.map((r: any) => [String(r.roomName), num(r.roomWeight ?? 1)])
-    );
+    const roomWeights = new Map<string, number>(roomsArr.map((r: any) => [String(r.roomName), num(r.roomWeight ?? 1)]));
 
-    // ---- Weighted redistribution of discrepancy
     let totalWeighted = 0;
     for (const est of roomEstimates) {
       const w = roomWeights.get(est.roomName) ?? 1;
@@ -194,20 +166,20 @@ export const handler: Handler = async (event) => {
       est.adjustedSqft = est.baseSqft + sqftAdj;
     }
 
-    // ---- Build per-room tasks into packages
+    // Build per-room tasks into packages
     for (const room of roomEstimates) {
       const roomName = room.roomName;
       const roomNumber = room.roomNumber || 1;
       const adjustedSqft = num(room.adjustedSqft);
 
-      const taskDataRes = await ddbDoc.send(
-        new GetCommand({ TableName: TASKS, Key: { RoomName: roomName } })
-      );
+      const taskDataRes = await ddbDoc.send(new GetCommand({
+        TableName: TASKS,
+        Key: { RoomName: roomName },
+      }));
       const taskData = (taskDataRes.Item as any) ?? {};
-
       const distributedSqft = roomNumber ? adjustedSqft / roomNumber : adjustedSqft;
 
-      // Make room shells on each package
+      // create room in each package
       for (const p of Object.values(packages)) {
         p.rooms.push({
           roomName,
@@ -228,22 +200,16 @@ export const handler: Handler = async (event) => {
 
         let dailyTime = 0;
         try {
-          dailyTime = evalFormula(String(formula), {
-            roomNumber: Number(roomNumber),
-            roomSqft: Number(adjustedSqft),
-          });
-        } catch (err) {
-          console.warn(`Formula error for "${taskName}" in ${roomName}:`, err);
+          dailyTime = evalFormula(String(formula), { roomNumber: Number(roomNumber), roomSqft: Number(adjustedSqft) });
+        } catch {
           continue;
         }
 
         for (const freq of freqs) {
-          const pkgName = String(freq.packageName) as 'top' | 'middle' | 'bottom';
+          const pkgName = String(freq.packageName) as PkgKey;
           let frequency = String(freq.packageFrequency);
 
-          // Frequency logic mirrors your Python (keeps "Quaterly" typo if present)
           let multiplier: number | undefined;
-
           if (customerFrequency === 'Quaterly' || customerFrequency === 'One Time') {
             frequency = customerFrequency;
             multiplier = customerMultiplier;
@@ -258,17 +224,12 @@ export const handler: Handler = async (event) => {
             if (frequency === 'Daily') {
               multiplier = customerMultiplier;
             } else if (frequency === 'Daily-1') {
-              if ([
-                '2 Days a Week','3 Days a Week','4 Days a Week',
-                '5 Days a Week','6 Days a Week','7 Days a Week'
-              ].includes(customerFrequency)) {
+              if (['2 Days a Week','3 Days a Week','4 Days a Week','5 Days a Week','6 Days a Week','7 Days a Week'].includes(customerFrequency)) {
                 const newFreq = DAILY_1_DOWNGRADE[customerFrequency] || customerFrequency;
                 multiplier = FREQ_MULTIPLIER[newFreq];
               } else {
                 multiplier = FREQ_MULTIPLIER[customerFrequency];
               }
-            } else if (frequency === 'Bi-Weekly') {
-              multiplier = FREQ_MULTIPLIER[frequency];
             } else {
               multiplier = FREQ_MULTIPLIER[frequency];
             }
@@ -295,7 +256,7 @@ export const handler: Handler = async (event) => {
       }
     }
 
-    // ---- Floor tasks
+    // Floor tasks
     await processFloorTasks({
       totalSqft,
       floorTypes,
@@ -304,7 +265,7 @@ export const handler: Handler = async (event) => {
       packages,
     });
 
-    // ---- Other time
+    // Other time (travel, misc)
     const otherTime = totalSqft * 0.004; // minutes/day
     for (const pkg of Object.values(packages)) {
       pkg.otherDayTime = otherTime;
@@ -313,7 +274,7 @@ export const handler: Handler = async (event) => {
       pkg.totalMonthTime += pkg.otherMonthTime;
     }
 
-    // ---- Rounding & final structure
+    // Round and finalize
     for (const pkg of Object.values(packages)) {
       pkg.totalDayTime = round2(pkg.totalDayTime);
       pkg.totalMonthTime = round2(pkg.totalMonthTime);
@@ -371,29 +332,24 @@ export const handler: Handler = async (event) => {
       };
     });
 
-    // ---- Persist back on the quote
-    await ddbDoc.send(
-      new UpdateCommand({
-        TableName: QUOTES,
-        Key: { QuoteID: quoteID },
-        UpdateExpression: 'SET #P = :packages',
-        ExpressionAttributeNames: { '#P': 'Package' },
-        ExpressionAttributeValues: { ':packages': { packageOptions } },
-      })
-    );
+    // Persist to the quote
+    await ddbDoc.send(new UpdateCommand({
+      TableName: QUOTES,
+      Key: { QuoteID: quoteID },
+      UpdateExpression: 'SET #P = :packages',
+      ExpressionAttributeNames: { '#P': 'Package' },
+      ExpressionAttributeValues: { ':packages': { packageOptions } },
+      ReturnValues: 'NONE',
+    }));
 
-    // Return (Amplify Data expects plain object)
-    return respond(event, 200, {
-      message: 'Package options saved successfully.',
-      packageOptions,
-    });
+    return { message: 'OK', packageOptions };
   } catch (e: any) {
-    console.error('Unhandled error:', e);
-    return respond(event, 500, { message: 'Internal server error', error: e?.message ?? String(e) });
+    console.error('calcPackageOptions error:', e);
+    // For AppSync, throwing returns a GraphQL error
+    throw new Error(e?.message || 'Internal server error');
   }
 };
 
-// ---- floor task helper
 async function processFloorTasks(args: {
   totalSqft: number;
   floorTypes: any;
@@ -402,18 +358,18 @@ async function processFloorTasks(args: {
   packages: Record<'top' | 'middle' | 'bottom', any>;
 }) {
   const { totalSqft, floorTypes, customerFrequency, customerMultiplier, packages } = args;
-
   const floorRoomTypes: Record<string, string> = { hardfloor: 'Hardfloor', carpet: 'Carpet' };
 
   for (const [floorKey, roomLabel] of Object.entries(floorRoomTypes)) {
     if (!(floorKey in floorTypes)) continue;
 
-    const pct = num(floorTypes[floorKey]); // percentage of total
+    const pct = num(floorTypes[floorKey]); // % of total
     const sqft = totalSqft * (pct / 100);
 
-    const taskDataRes = await ddbDoc.send(
-      new GetCommand({ TableName: TASKS, Key: { RoomName: roomLabel } })
-    );
+    const taskDataRes = await ddbDoc.send(new GetCommand({
+      TableName: TASKS,
+      Key: { RoomName: roomLabel },
+    }));
     const taskData = (taskDataRes.Item as any) ?? {};
     const tasksArr = Array.isArray(taskData?.roomTasks) ? taskData.roomTasks : [];
     if (tasksArr.length === 0) continue;
@@ -429,12 +385,8 @@ async function processFloorTasks(args: {
 
         let dailyTime = 0;
         try {
-          dailyTime = evalFormula(String(formula), {
-            roomNumber: 1,
-            roomSqft: Number(sqft),
-          });
-        } catch (err) {
-          console.warn(`Floor formula error for "${taskName}" in ${roomLabel}:`, err);
+          dailyTime = evalFormula(String(formula), { roomNumber: 1, roomSqft: Number(sqft) });
+        } catch {
           continue;
         }
 
@@ -458,17 +410,12 @@ async function processFloorTasks(args: {
             if (frequency === 'Daily') {
               multiplier = customerMultiplier;
             } else if (frequency === 'Daily-1') {
-              if ([
-                '2 Days a Week','3 Days a Week','4 Days a Week',
-                '5 Days a Week','6 Days a Week','7 Days a Week'
-              ].includes(customerFrequency)) {
+              if (['2 Days a Week','3 Days a Week','4 Days a Week','5 Days a Week','6 Days a Week','7 Days a Week'].includes(customerFrequency)) {
                 const newFreq = DAILY_1_DOWNGRADE[customerFrequency] || customerFrequency;
                 multiplier = FREQ_MULTIPLIER[newFreq];
               } else {
                 multiplier = FREQ_MULTIPLIER[customerFrequency];
               }
-            } else if (frequency === 'Bi-Weekly') {
-              multiplier = FREQ_MULTIPLIER[frequency];
             } else {
               multiplier = FREQ_MULTIPLIER[frequency];
             }
@@ -493,26 +440,4 @@ async function processFloorTasks(args: {
       }
     }
   }
-}
-
-// ---- Response unifier (works for Amplify Data and REST)
-function respond(event: any, statusCode: number, payload: any) {
-  // REST (API Gateway HTTP) has requestContext.http
-  if (event?.requestContext?.http) {
-    return {
-      statusCode,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
-      body: JSON.stringify(payload),
-    };
-  }
-  // Amplify Data (AppSync/Lambda resolver) expects the object directly
-  if (statusCode >= 400) {
-    // Throwing makes AppSync return an error; alternatively return a shape you handle on client
-    throw new Error(payload?.message || 'Error');
-  }
-  return payload;
 }

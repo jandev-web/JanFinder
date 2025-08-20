@@ -22,7 +22,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/0fffc10eb9e64804c269f16c048e0ee166bab3536f38111207d24fba497ed8a6.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e2d375e668b59674e2ead18f498fc8ba40b3dca2310a21a6591d5881c892a763.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -101,22 +101,10 @@
             "data": "amplifyAuthauthenticatedUserRoleD8DA3689"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyAuth/authenticatedUserRole/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyAuthauthenticatedUserRoleDefaultPolicy82E52873"
-          }
-        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyAuth/unauthenticatedUserRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "amplifyAuthunauthenticatedUserRole2B524D9E"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyAuth/unauthenticatedUserRole/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyAuthunauthenticatedUserRoleDefaultPolicy1AB22815"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyAuth/IdentityPoolRoleAttachment": [
@@ -201,12 +189,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadataAvailable"
-          }
-        ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/reference-to-amplifyjanfinderappdev3sandbox789c476389dataNestedStackdataNestedStackResource3247090DOutputs.amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389dataNestedStackdataNestedStackResource3247090DOutputsamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/auth/amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": [
@@ -399,6 +381,24 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "createcustomerquotelambdaFE0BFAD7"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/update-quote-frequency-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatequotefrequencylambdaServiceRoleAE9F7EBA"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/update-quote-frequency-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatequotefrequencylambdaServiceRoleDefaultPolicy62C837EE"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/update-quote-frequency-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "updatequotefrequencylambda862F06AF"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/GraphQLAPI/Resource": [
@@ -1011,6 +1011,54 @@
             "data": "Query.sendQuoteConfirmationEmail"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteFrequencyLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnUpdateQuoteFrequencyLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteFrequencyLambdaDataSource/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateQuoteFrequencyLambdaDataSourceServiceRole9D0B5245"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteFrequencyLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateQuoteFrequencyLambdaDataSourceServiceRoleDefaultPolicyF6C6094B"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteFrequencyLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnUpdateQuoteFrequencyLambdaDataSource"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnUpdateQuoteFrequencyLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnUpdateQuoteFrequencyLambdaDataSource/InvokeFnUpdateQuoteFrequencyLambdaDataSource.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InvokeFnUpdateQuoteFrequencyLambdaDataSourceInvokeFnUpdateQuoteFrequencyLambdaDataSourceAppSyncFunction2AD0305E"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "InvokeFnUpdateQuoteFrequencyLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryUpdateQuoteFrequencyResolver": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryupdateQuoteFrequencyResolver"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "Query.updateQuoteFrequency"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryGetFacilityOptionsAuthFN/QueryGetFacilityOptionsAuthFN.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
@@ -1131,6 +1179,16 @@
             "data": "QuerySendQuoteConfirmationEmailAuthFN"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryUpdateQuoteFrequencyAuthFN/QueryUpdateQuoteFrequencyAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryUpdateQuoteFrequencyAuthFNQueryUpdateQuoteFrequencyAuthFNAppSyncFunction9E195C3D"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryUpdateQuoteFrequencyAuthFN"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
@@ -1237,6 +1295,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389dataupdatequotefrequencylambda25A5D866Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389dataupdatequotefrequencylambda25A5D866Arn"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": [
@@ -1407,6 +1471,12 @@
             "data": "AMPLIFYDATADEFAULTNAMEParameterE7C23CC4"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/IdentityPoolGraphQLPolicy": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityPoolGraphQLPolicy"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
@@ -1419,16 +1489,16 @@
             "data": "CDKMetadataAvailable"
           }
         ],
-        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
-          }
-        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyjanfinderappdev3sandbox789c476389datacreatecustomerquotelambdaD07FBD42Ref": [
           {
             "type": "aws:cdk:logicalId",
             "data": "amplifyjanfinderappdev3sandbox789c476389datacreatecustomerquotelambdaD07FBD42Ref"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyjanfinderappdev3sandbox789c476389dataupdatequotefrequencylambda25A5D866Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389dataupdatequotefrequencylambda25A5D866Ref"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": [
@@ -1519,6 +1589,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Arn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDGraphQLUrl": [

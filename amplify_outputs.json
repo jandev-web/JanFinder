@@ -241,6 +241,26 @@
               "isRequired": false
             }
           }
+        },
+        "updateQuoteFrequency": {
+          "name": "updateQuoteFrequency",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "quoteID": {
+              "name": "quoteID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "frequency": {
+              "name": "frequency",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            }
+          }
         }
       }
     }
@@ -279,9 +299,5 @@
       }
     ]
   },
-  "version": "1.4",
-  "custom": {
-    "apiUrl": "https://gyv0m1obyk.execute-api.us-east-1.amazonaws.com",
-    "region": "us-east-1"
-  }
+  "version": "1.4"
 }

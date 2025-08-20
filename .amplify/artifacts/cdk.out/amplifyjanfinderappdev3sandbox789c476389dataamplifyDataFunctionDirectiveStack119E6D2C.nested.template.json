@@ -2630,6 +2630,202 @@
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/querySendQuoteConfirmationEmailResolver"
    }
   },
+  "FnUpdateQuoteFrequencyLambdaDataSourceServiceRole9D0B5245": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "amplifyData"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteFrequencyLambdaDataSource/ServiceRole/Resource"
+   }
+  },
+  "FnUpdateQuoteFrequencyLambdaDataSourceServiceRoleDefaultPolicyF6C6094B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataupdatequotefrequencylambda25A5D866Arn"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataupdatequotefrequencylambda25A5D866Arn"
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "FnUpdateQuoteFrequencyLambdaDataSourceServiceRoleDefaultPolicyF6C6094B",
+    "Roles": [
+     {
+      "Ref": "FnUpdateQuoteFrequencyLambdaDataSourceServiceRole9D0B5245"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteFrequencyLambdaDataSource/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "FnUpdateQuoteFrequencyLambdaDataSource": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+    },
+    "LambdaConfig": {
+     "LambdaFunctionArn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataupdatequotefrequencylambda25A5D866Arn"
+     }
+    },
+    "Name": "FnUpdateQuoteFrequencyLambdaDataSource",
+    "ServiceRoleArn": {
+     "Fn::GetAtt": [
+      "FnUpdateQuoteFrequencyLambdaDataSourceServiceRole9D0B5245",
+      "Arn"
+     ]
+    },
+    "Type": "AWS_LAMBDA"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnUpdateQuoteFrequencyLambdaDataSource/Resource"
+   }
+  },
+  "InvokeFnUpdateQuoteFrequencyLambdaDataSourceInvokeFnUpdateQuoteFrequencyLambdaDataSourceAppSyncFunction2AD0305E": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "FnUpdateQuoteFrequencyLambdaDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "InvokeFnUpdateQuoteFrequencyLambdaDataSource",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/5020abb6437383783e504d5a5a6794bd44aa1e938deb45a2c85f0bed2cd68307.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a20e304512b1fde77dc16ed9d5e0ed03817afcab629ce87ef11c99877b7b1e30.vtl"
+    }
+   },
+   "DependsOn": [
+    "FnUpdateQuoteFrequencyLambdaDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnUpdateQuoteFrequencyLambdaDataSource/InvokeFnUpdateQuoteFrequencyLambdaDataSource.AppSyncFunction"
+   }
+  },
+  "QueryupdateQuoteFrequencyResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+    },
+    "FieldName": "updateQuoteFrequency",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "QueryUpdateQuoteFrequencyAuthFNQueryUpdateQuoteFrequencyAuthFNAppSyncFunction9E195C3D",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "InvokeFnUpdateQuoteFrequencyLambdaDataSourceInvokeFnUpdateQuoteFrequencyLambdaDataSourceAppSyncFunction2AD0305E",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "## [Start] Stash resolver specific context.. **\n$util.qr($ctx.stash.put(\"typeName\", \"Query\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"updateQuoteFrequency\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthunauthenticatedUserRoleC7C1F878Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthIdentityPoolFCD7218CRef"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n{}\n## [End] Stash resolver specific context.. **"
+      ]
+     ]
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/387d5992f5fc03d05de27289457dcc374a84c42a889acb504aff1031047dde00.vtl"
+    },
+    "TypeName": "Query"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryUpdateQuoteFrequencyResolver"
+   }
+  },
   "QueryGetFacilityOptionsAuthFNQueryGetFacilityOptionsAuthFNAppSyncFunction79442B89": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
@@ -2642,7 +2838,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryGetFacilityOptionsAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2686,7 +2882,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryCalculatePackageOptionsAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2708,7 +2904,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateQuoteBudgetAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2730,7 +2926,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateCustomerInfoAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2752,7 +2948,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateFacilityTypeAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2774,7 +2970,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateFloorInfoAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2796,7 +2992,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryConfirmQuoteAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2818,7 +3014,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryGetQuoteAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2840,7 +3036,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateQuoteRoomsAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2862,7 +3058,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdatePackageChoiceAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2884,7 +3080,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QuerySendQuoteConfirmationEmailAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/46f293d51098baa905f2842f91164cbf9121ded892ccc3a3c86d0879c6ab7af0.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -2892,6 +3088,28 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QuerySendQuoteConfirmationEmailAuthFN/QuerySendQuoteConfirmationEmailAuthFN.AppSyncFunction"
+   }
+  },
+  "QueryUpdateQuoteFrequencyAuthFNQueryUpdateQuoteFrequencyAuthFNAppSyncFunction9E195C3D": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QueryUpdateQuoteFrequencyAuthFN",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryUpdateQuoteFrequencyAuthFN/QueryUpdateQuoteFrequencyAuthFN.AppSyncFunction"
    }
   },
   "CDKMetadata": {
@@ -2952,6 +3170,9 @@
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteconfirmationemaillambda8C8B6DF3Arn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389dataupdatequotefrequencylambda25A5D866Arn": {
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": {

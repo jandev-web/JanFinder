@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import CBOBuildingData from '@/components/pages/OwnerBuildingDataPage';
+
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +20,7 @@ export default async function GetDataPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full">
-          <CBOBuildingData user={user} />
+          
         </div>
       </div>
     );

@@ -1,13 +1,13 @@
 // src/utils/data-client.ts
 'use client';
-
-import { initAmplify } from '../amplify/init';
-initAmplify();
-
+import { Amplify } from 'aws-amplify';
+import outputs from '../../amplify_outputs.json';
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../amplify/data/resource';
 
-export const dataClient = generateClient<Schema>({
-  // You can omit this if your default is IAM; explicit is fine:
-  authMode: 'identityPool',
-});
+if (!(globalThis as any).__amplifyConfigured) {
+  Amplify.configure(outputs);
+  (globalThis as any).__amplifyConfigured = true;
+}
+
+export const dataClient = generateClient<Schema>();

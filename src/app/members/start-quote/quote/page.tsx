@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import MemberStartQuoteDetailsPage from '@/components/pages/MemberStartQuoteDetailsPage';
+
 import LoadingSpinner from '@/components/loadingScreen';
 import LoginError from '@/components/LoginErrorComponent';
 
@@ -19,7 +19,7 @@ export default async function AllQuotesPage() {
 
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-       <MemberStartQuoteDetailsPage user={user} />
+       
       </div>
     );
   } catch (error) {

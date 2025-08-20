@@ -55,8 +55,8 @@ const FloorNumber: React.FC<QuoteFormProps> = ({
     onLoading(true);
 
     const newStairwells = {
-      carpetStairwells,
-      hardfloorStairwells,
+      carpet: carpetStairwells,
+      hardfloor: hardfloorStairwells,
     };
 
     onChangeInfo(newFloorNumber, newStairwells);

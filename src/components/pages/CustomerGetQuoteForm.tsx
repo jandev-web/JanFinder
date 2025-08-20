@@ -18,7 +18,7 @@ import recPackageUtil from '@/utils/recPackageUtil'
 import { calculateTime } from '@/utils/calculateTime'
 import updateFloorInfo from '@/utils/updateFloorInfo';
 import { useRouter } from 'next/navigation';
-import { manualAddRoom } from '@/utils/manualAddRoom';
+import updateQuoteRooms from '@/utils/updateQuoteRooms';
 import { updatePackages } from '@/utils/updatePackages';
 import updateQuoteFrequency from '@/utils/updateQuoteFrequency';
 
@@ -71,7 +71,7 @@ const CustomerGetQuoteForm: React.FC = () => {
         setLoading(true)
         setQuoteID(customerQuoteID)
         const quoteDetails = await getQuoteDetails(customerQuoteID);
-        //console.log("Quote details:", quoteDetails);
+        console.log("Quote details:", quoteDetails);
         const quoteCustomerInfo = quoteDetails.customerData
         setCustomerInfo(quoteCustomerInfo)
         if (quoteCustomerInfo.firstName && quoteCustomerInfo.lastName && quoteCustomerInfo.email && quoteCustomerInfo.phone && quoteCustomerInfo.company && quoteCustomerInfo.address.street && quoteCustomerInfo.address.city && quoteCustomerInfo.address.state && quoteCustomerInfo.address.postalCode && quoteCustomerInfo.address.country) {
@@ -95,9 +95,9 @@ const CustomerGetQuoteForm: React.FC = () => {
         setQuoteBudget(budget)
         const facilityRoomOptions: any = await getFacilityOptions();
         setRoomOptions(facilityRoomOptions);
-        setFacilityOptions(Object.keys(facilityRoomOptions.facility_options));
+        setFacilityOptions(Object.keys(facilityRoomOptions));
         if (quoteDetails.quoteInfo.facilityType != '') {
-            setFacilityRooms(facilityRoomOptions.facility_options[quoteDetails.quoteInfo.facilityType])
+            setFacilityRooms(facilityRoomOptions[quoteDetails.quoteInfo.facilityType])
             setSteps(prevSteps => {
                 const updatedSteps = [...prevSteps];
                 updatedSteps[3].canClick = true;
@@ -208,7 +208,7 @@ const CustomerGetQuoteForm: React.FC = () => {
 
     const handleSetFacilityType = async (newInfo: any) => {
         setFacilityType(newInfo);
-        setFacilityRooms(roomOptions.facility_options[newInfo]);
+        setFacilityRooms(roomOptions[newInfo]);
         if (floorNumber && floorNumber != 0) {
             handleCanClick(5, false)
             const newFloorInfo = {
@@ -241,7 +241,7 @@ const CustomerGetQuoteForm: React.FC = () => {
                     carpet: 0
                 }
             }
-            await manualAddRoom(quoteID, formInfo);
+            await updateQuoteRooms(quoteID, formInfo);
         }
         if (quoteFrequency && quoteFrequency != '') {
             setQuoteFrequency('')
@@ -277,6 +277,7 @@ const CustomerGetQuoteForm: React.FC = () => {
             }
             setQuotePackage(null)
             await updatePackages(quoteID, newPackage)
+            
             const calculatedPackages = await calculateTime(quoteID)
             setQuotePackageOptions(calculatedPackages.packageOptions);
             if (quoteBudget) {
