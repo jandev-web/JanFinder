@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import LoginError from '@/components/LoginErrorComponent';
 
 import OwnerAllQuotesPage from '@/components/pages/OwnerAllQuotes';
+import { fetchAuthSession } from 'aws-amplify/auth';
+
 
 
 
@@ -15,7 +17,10 @@ export default async function AllQuotesPage() {
   try {
     // Fetch the authenticated user on the server
     const user = await AuthGetCurrentUserServer();
+    const session = await fetchAuthSession();
 
+    console.log("id token", session?.tokens?.idToken)
+    console.log("access token", session?.tokens?.accessToken)
     // Redirect to the login page if the user is not authenticated
     if (!user) {
       redirect('/login');

@@ -45,7 +45,7 @@ const PackageComparison: React.FC<PackageComparisonProps> = ({ onBack, onHideBar
       const response = await updatePackage(quoteID, pkg);
       onChangePackage(pkg);
 
-      if (response.updatedAttributes) {
+      if (response.message === 'OK') {
         setConfirmationMessage('Package updated successfully!');
 
       } else {

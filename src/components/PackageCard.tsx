@@ -27,7 +27,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ type, quotePackage, recPackag
       const response = await updatePackage(quoteID, pkg);
       onChangePackage(pkg);
       
-      if (response.updatedAttributes) {
+      if (response.message === 'OK') {
         setConfirmationMessage('Package updated successfully!');
       } else {
         //setConfirmationMessage('Failed to update package. Please try again.');

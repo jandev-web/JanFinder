@@ -1,19 +1,14 @@
 
-
+//src/app/layout.tsx
 import '../styles/globals.css';
 import { Inter } from "next/font/google";
-
-
+import Providers from "../components/providers"
+import { initAmplifyServer } from '@/amplify/init.server';
 import { metadata } from './metadata'; // Import the metadata
-
-import { initAmplify } from '../amplify/init'; 
-
-initAmplify();
+initAmplifyServer();
 
 
 const inter = Inter({ subsets: ["latin"] });
-
-
 
 export default function RootLayout({
   children,
@@ -27,7 +22,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
       </head>
       <body className={`${inter.className} w-full`}>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

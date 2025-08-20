@@ -335,7 +335,8 @@ const CustomerGetQuoteForm: React.FC = () => {
     }
 
     const handleChangeFrequency = async (newInfo: any) => {
-        await updateQuoteFrequency(quoteID, newInfo);
+        console.log(newInfo)
+        
         const newPackage = {
             packageChoice: null,
             packageOptions: {
@@ -347,6 +348,7 @@ const CustomerGetQuoteForm: React.FC = () => {
         setQuotePackage(null)
         await updatePackages(quoteID, newPackage)
         const calculatedPackages = await calculateTime(quoteID)
+        console.log(calculatedPackages)
         setQuoteFrequency(newInfo);
         console.log(calculatedPackages)
         setQuotePackageOptions(calculatedPackages.packageOptions);

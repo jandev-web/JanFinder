@@ -10,7 +10,7 @@ interface QuoteFormProps {
     quoteFrequency: any;
     onNextStep: (stepNumber: number) => void;
     onMoveOn: (moveOn: boolean) => void;
-    onChangeFrequency: (newFrequency: any, calculatedPackages: any) => void;
+    onChangeFrequency: (newFrequency: any) => void;
     onCanClick: (step: any, canClick: boolean) => void;
 }
 
@@ -45,8 +45,8 @@ const UpdateQuoteFrequency: React.FC<QuoteFormProps> = ({ onCanClick, quoteID, q
             setLoading(true)
             
             await updateQuoteFrequency(quoteID, frequency);
-            const calculatedPackages = await calculateTime(quoteID)
-            onChangeFrequency(frequency, calculatedPackages.packageOptions);
+            
+            onChangeFrequency(frequency);
             onNextStep(6)
             onCanClick(6, true)
         } catch (error) {

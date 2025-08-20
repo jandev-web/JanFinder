@@ -1,128 +1,173 @@
-import type { Handler } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import type { Schema } from '../../data/resource';
 
-const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient({}), {
+const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient(), {
   marshallOptions: { removeUndefinedValues: true },
 });
-const ses = new SESClient({});
+const ses = new SESClient({ region: process.env.AWS_REGION || 'us-east-1' });
 
-const QUOTES = process.env.CUSTOMER_QUOTES_TABLE || 'CustomerQuotes';
-const SENDER = process.env.SENDER_EMAIL || 'no-reply@example.com';
+const QUOTES  = process.env.CUSTOMER_QUOTES_TABLE || 'CustomerQuotes';
+const SENDER  = process.env.SENDER_EMAIL || 'no-reply@example.com';
 const SITE_URL = process.env.SITE_URL || 'https://bid2clean.com';
 
-export const handler: Handler = async (event: any) => {
-  try {
-    // Support Amplify Data (event.arguments) and REST (event.body)
-    let quoteID: string | undefined;
+type AnyObj = Record<string, any>;
 
-    if (event?.arguments) {
-      quoteID = event.arguments.quoteID ?? event.arguments?.payload?.quoteID;
-    } else if (event?.body) {
-      const body = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
-      quoteID = body?.quoteID;
-    }
+function currency(n: number | string | undefined) {
+  const val = typeof n === 'string' ? Number(n) : n;
+  if (typeof val !== 'number' || Number.isNaN(val)) return '';
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+}
 
-    if (!quoteID) {
-      return respond(event, 400, "Missing 'quoteID' in the payload.");
-    }
+function escapeHtml(s: any) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
-    // 1) Fetch quote
-    const res = await ddbDoc.send(new GetCommand({
-      TableName: QUOTES,
-      Key: { QuoteID: String(quoteID) },
-    }));
+function rowsForFlatTasks(tasks: AnyObj[] | undefined) {
+  if (!Array.isArray(tasks) || tasks.length === 0) return '<tr><td colspan="3">None</td></tr>';
+  return tasks.map(t => {
+    const name = escapeHtml(t.taskName ?? t.name ?? 'Task');
+    const freq = escapeHtml(t.taskFrequency ?? t.frequency ?? '');
+    
+    return `<tr>
+      <td style="padding:8px;border:1px solid #ddd;">${name}</td>
+      <td style="padding:8px;border:1px solid #ddd;">${freq}</td>
+    </tr>`;
+  }).join('');
+}
 
-    const item = res.Item;
-    if (!item) {
-      return respond(event, 404, `No quote found for QuoteID: ${quoteID}`);
-    }
+function sectionForFlatTasks(label: string, tasks: AnyObj[] | undefined) {
+  return `
+    <h2>${escapeHtml(label)}</h2>
+    <table class="info-table">
+      <tr><th>Task</th><th>Frequency</th></tr>
+      ${rowsForFlatTasks(tasks)}
+    </table>
+  `;
+}
 
-    // 2) Extract data
-    const customer = item.customerData ?? {};
-    const firstName = customer.firstName ?? '';
-    const lastName  = customer.lastName ?? '';
-    const email     = customer.email ?? '';
-    const phone     = customer.phone ?? '';
-    const company   = customer.company ?? '';
-    const addr      = customer.address ?? {};
-    const addressStr = [addr.street, addr.city, addr.state, addr.postalCode, addr.country]
-      .filter(Boolean)
-      .join(', ');
+function sectionForRoomTasks(rooms: AnyObj[] | undefined) {
+  if (!Array.isArray(rooms) || rooms.length === 0) {
+    return `
+      <h2>Room Tasks</h2>
+      <table class="info-table"><tr><td>None</td></tr></table>
+    `;
+  }
 
-    const qi = item.quoteInfo ?? {};
-    const frequency = qi.frequency ?? '';
-    const facility  = qi.facilityType ?? '';
-    const roomsList = Array.isArray(qi.roomTypes) ? qi.roomTypes : [];
-    const confirmationNumber = item.ConfirmationNumber ?? '';
+  const blocks = rooms.map(r => {
+    const roomName = escapeHtml(r.roomName ?? r.roomType ?? 'Room');
+    const roomTasks: AnyObj[] = Array.isArray(r.roomTasks) ? r.roomTasks : (Array.isArray(r.tasks) ? r.tasks : []);
+    const rows = rowsForFlatTasks(roomTasks);
+    return `
+      <h3 style="margin-top:10px;">${roomName}</h3>
+      <table class="info-table">
+        <tr><th>Task</th><th>Frequency</th></tr>
+        ${rows}
+      </table>
+    `;
+  }).join('');
 
-    if (!email) {
-      return respond(event, 400, `The retrieved quote does not have an 'email' field.`);
-    }
+  return `<h2>Room Tasks</h2>${blocks}`;
+}
 
-    // 3) Build rooms text & HTML rows
-    let roomsText = '';
-    let roomsHtmlRows = '';
-    if (roomsList.length) {
-      for (const r of roomsList) {
-        const rt = r.roomType ?? 'Unknown';
-        const totalSqft = r?.sqft?.totalSqft ?? 0;
-        roomsText += ` - ${rt}: ${totalSqft} sqft\n`;
-        roomsHtmlRows += (
-          `<tr>
-            <td style="padding:8px;border:1px solid #ddd;">${escapeHtml(rt)}</td>
-            <td style="padding:8px;border:1px solid #ddd;">${totalSqft} sqft</td>
-          </tr>`
-        );
-      }
-    } else {
-      roomsText = 'None\n';
-      roomsHtmlRows = `<tr><td colspan="2">None</td></tr>`;
-    }
+// ✅ Amplify Data ONLY — no REST paths
+export const handler: Schema['sendQuoteConfirmationEmail']['functionHandler'] = async (event) => {
+  const quoteID = event.arguments?.quoteID as string | undefined;
+  if (!quoteID) throw new Error("Missing 'quoteID'");
 
-    // 4) Build email
-    const subject = 'Your Bid2Clean Quote Confirmation';
-    const bodyText = `Dear ${firstName} ${lastName},
+  const res = await ddbDoc.send(new GetCommand({
+    TableName: QUOTES,
+    Key: { QuoteID: String(quoteID) },
+  }));
+  const item: AnyObj | undefined = res.Item as AnyObj | undefined;
+  if (!item) throw new Error(`No quote found for QuoteID: ${quoteID}`);
 
-Thank you for choosing Bid2Clean for your quote request. We are pleased to confirm your quote with the following details:
+  const customer = item.customerData ?? {};
+  const firstName = customer.firstName ?? '';
+  const lastName  = customer.lastName ?? '';
+  const email     = customer.email ?? '';
+  const phone     = customer.phone ?? '';
+  const company   = customer.company ?? '';
+  const addr      = customer.address ?? {};
+  const addressStr = [addr.street, addr.city, addr.state, addr.postalCode, addr.country].filter(Boolean).join(', ');
+
+  const qi = item.quoteInfo ?? {};
+  const frequency = qi.frequency ?? '';
+  const facility  = qi.facilityType ?? '';
+  const confirmationNumber = item.ConfirmationNumber ?? '';
+
+  // Package shape assumed from your message
+  const packageInfo = item?.Package?.packageChoice ?? item?.Package ?? {};
+  const carpetTasks = packageInfo?.carpet?.tasks as AnyObj[] | undefined;
+  const hardfloorTasks = packageInfo?.hardfloor?.tasks as AnyObj[] | undefined;
+  const packageRooms = packageInfo?.rooms as AnyObj[] | undefined;
+  const cost = packageInfo?.packageCost;
+
+  if (!email) throw new Error(`Quote ${quoteID} does not have an email field`);
+
+  // TEXT body (kept succinct)
+  const bodyText = `Dear ${firstName} ${lastName},
+
+Thank you for choosing Bid2Clean. Your quote is confirmed.
 
 Confirmation Number: ${confirmationNumber}
+Package Cost: ${currency(cost)}
 
-Customer Information:
-    Company: ${company}
-    Email: ${email}
-    Phone: ${phone}
-    Address: ${addressStr}
+Customer:
+  Company: ${company}
+  Email: ${email}
+  Phone: ${phone}
+  Address: ${addressStr}
 
-Quote Details:
-    Facility Type: ${facility}
-    Service Frequency: ${frequency}
+Quote:
+  Facility Type: ${facility}
+  Service Frequency: ${frequency}
 
-Selected Rooms:
-${roomsText}
-We appreciate the opportunity to serve you. If you have any questions or need further assistance, please do not hesitate to contact us.
+Carpet Tasks:
+${Array.isArray(carpetTasks) && carpetTasks.length ? carpetTasks.map(t => ` - ${t.taskName ?? t.name ?? 'Task'} (${t.taskFrequency ?? t.frequency ?? ''})`).join('\n') : ' - None'}
+
+Hardfloor Tasks:
+${Array.isArray(hardfloorTasks) && hardfloorTasks.length ? hardfloorTasks.map(t => ` - ${t.taskName ?? t.name ?? 'Task'} (${t.taskFrequency ?? t.frequency ?? ''})`).join('\n') : ' - None'}
+
+Room Tasks:
+${Array.isArray(packageRooms) && packageRooms.length ? packageRooms.map(r => {
+  const roomName = r.roomName ?? r.roomType ?? 'Room';
+  const rts = Array.isArray(r.roomTasks) ? r.roomTasks : (Array.isArray(r.tasks) ? r.tasks : []);
+  return ` * ${roomName}\n${rts.length ? rts.map(t => `    - ${t.taskName ?? t.name ?? 'Task'} (${t.taskFrequency ?? t.frequency ?? ''})`).join('\n') : '    - None'}`;
+}).join('\n') : ' - None'}
+
+You can check your bid status at ${SITE_URL}/quote-status
 
 Sincerely,
 The Bid2Clean Team
 `;
 
-    const bodyHtml = `
+  // HTML body
+  const carpetSection = sectionForFlatTasks('Carpet Tasks', carpetTasks);
+  const hardfloorSection = sectionForFlatTasks('Hardfloor Tasks', hardfloorTasks);
+  const roomsSection = sectionForRoomTasks(packageRooms);
+
+  const bodyHtml = `
 <html>
   <head>
     <style>
       body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-      .container { width: 80%; margin: auto; padding: 20px; background-color: #ffffff; border-radius: 10px;
-                   box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+      .container { width: 80%; margin: auto; padding: 20px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
       .header { background-color: #001F54; color: #FFD700; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
-      h1 { font-size: 36px; font-weight: 700; margin: 0; }
+      h1 { font-size: 32px; font-weight: 700; margin: 0; }
       .content { padding: 20px; }
       .info-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
       .info-table th, .info-table td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+      .cost-pill { display:inline-block; background:#FFF7CC; color:#1F2937; padding:8px 12px; border-radius:8px; font-weight:700; margin-top:8px; }
       .footer { text-align: center; font-size: 12px; color: #777; margin-top: 20px; }
-      .button { background-color: #FFD700; color: #001F54; padding: 12px 20px; text-align: center; text-decoration: none;
-                border-radius: 5px; display: inline-block; font-weight: bold; margin-top: 15px; transition: background-color 0.3s ease; }
+      .button { background-color: #FFD700; color: #001F54; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin-top: 15px; transition: background-color 0.3s ease; }
       .button:hover { background-color: #FFB800; }
+      h2 { margin-top: 24px; }
+      h3 { margin: 8px 0; }
     </style>
   </head>
   <body>
@@ -134,6 +179,7 @@ The Bid2Clean Team
 
         <h2>Confirmation Details</h2>
         <p><strong>Confirmation Number:</strong> ${escapeHtml(confirmationNumber)}</p>
+        <p class="cost-pill">Package Cost: ${escapeHtml(currency(cost))}</p>
 
         <h2>Customer Information</h2>
         <table class="info-table">
@@ -149,11 +195,9 @@ The Bid2Clean Team
           <tr><th>Service Frequency</th><td>${escapeHtml(frequency)}</td></tr>
         </table>
 
-        <h2>Selected Rooms</h2>
-        <table class="info-table">
-          <tr><th>Room Type</th><th>Square Footage</th></tr>
-          ${roomsHtmlRows}
-        </table>
+        ${carpetSection}
+        ${hardfloorSection}
+        ${roomsSection}
 
         <p>If you have questions, reach out to us at info@bid2clean.com.</p>
         <p><a href="${SITE_URL}/quote-status" class="button">Check Bid Status</a></p>
@@ -166,50 +210,17 @@ The Bid2Clean Team
   </body>
 </html>`;
 
-    // 5) Send via SES
-    await ses.send(new SendEmailCommand({
-      Source: SENDER,
-      Destination: { ToAddresses: [email] },
-      Message: {
-        Subject: { Data: subject },
-        Body: {
-          Text: { Data: bodyText },
-          Html: { Data: bodyHtml },
-        },
+  await ses.send(new SendEmailCommand({
+    Source: SENDER,
+    Destination: { ToAddresses: [email] },
+    Message: {
+      Subject: { Data: 'Your Bid2Clean Quote Confirmation' },
+      Body: {
+        Text: { Data: bodyText },
+        Html: { Data: bodyHtml },
       },
-    }));
+    },
+  }));
 
-    return respond(event, 200, 'Confirmation email sent successfully.');
-  } catch (err: any) {
-    console.error('Error in send-quote-confirmation-email:', err);
-    return respond(event, 500, `Error: ${err?.message ?? String(err)}`);
-  }
+  return { message: 'Confirmation email sent successfully.' };
 };
-
-function respond(event: any, statusCode: number, payload: any) {
-  if (event?.requestContext?.http) {
-    // REST response
-    return {
-      statusCode,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-      },
-      body: typeof payload === 'string' ? JSON.stringify({ message: payload }) : JSON.stringify(payload),
-    };
-  }
-  // Amplify Data response
-  if (statusCode >= 400) throw new Error(typeof payload === 'string' ? payload : payload?.message || 'Error');
-  return typeof payload === 'string' ? { message: payload } : payload;
-}
-
-function escapeHtml(s: string) {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-

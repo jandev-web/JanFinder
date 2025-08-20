@@ -1,4 +1,4 @@
-// app/login/page.tsx - Custom <Authenticator>
+// app/sign-in/page.tsx - Custom <Authenticator>
 
 "use client";
 import { fetchAuthSession } from "aws-amplify/auth";
@@ -12,6 +12,20 @@ import LoadingSpinner from "@/components/loadingScreen";
 import RoleRouter from "@/components/RouteSignInUser";
 //cognitoUserPoolsTokenProvider.setKeyValueStorage(sessionStorage);
 import "@aws-amplify/ui-react/styles.css";
+
+function HydrationGate({ children }: { children: ReactNode }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) {
+    // Must be identical on server and client's first render
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+  return <>{children}</>;
+}
 
 const customTheme: Theme = {
   name: 'custom-theme',
@@ -187,8 +201,10 @@ function CustomAuthenticator() {
 
 export default function Login() {
   return (
-    <Authenticator.Provider>
-      <CustomAuthenticator />
-    </Authenticator.Provider>
+    <HydrationGate>
+      <Authenticator.Provider>
+        <CustomAuthenticator />
+      </Authenticator.Provider>
+    </HydrationGate>
   );
 }

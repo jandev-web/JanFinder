@@ -1038,7 +1038,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "1c038e5076efd91565f675dbddc6012ce99b37e43a7a26f7f70ecd66eb28d889.zip"
+     "S3Key": "e6f6c4b23dc262cf0707512bc2d779063f3666a8d9049769adc038c885b078a1.zip"
     },
     "Environment": {
      "Variables": {
@@ -1083,7 +1083,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/confirm-quote-lambda/Resource",
-    "aws:asset:path": "asset.1c038e5076efd91565f675dbddc6012ce99b37e43a7a26f7f70ecd66eb28d889",
+    "aws:asset:path": "asset.e6f6c4b23dc262cf0707512bc2d779063f3666a8d9049769adc038c885b078a1",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1489,7 +1489,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "c45c79206ffccdb62cd7572fb11fd7ee592354328f8c85e1598974dd81a8f6bf.zip"
+     "S3Key": "4c8ac6d8f7c61609ef22347b8ff0481de6bcdfe2a8adc41aab84494364ba0420.zip"
     },
     "Environment": {
      "Variables": {
@@ -1533,7 +1533,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/update-package-choice-lambda/Resource",
-    "aws:asset:path": "asset.c45c79206ffccdb62cd7572fb11fd7ee592354328f8c85e1598974dd81a8f6bf",
+    "aws:asset:path": "asset.4c8ac6d8f7c61609ef22347b8ff0481de6bcdfe2a8adc41aab84494364ba0420",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1647,7 +1647,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "8bd064408e372d8774b7b537adca7e49f22004f5757e6dba582afd1b4f8c430e.zip"
+     "S3Key": "cc999a60eb102e9c6fb6efc193e755ab51e215f0dfc3d8eb22f7abf5f3677cb9.zip"
     },
     "Environment": {
      "Variables": {
@@ -1693,7 +1693,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/send-quote-confirmation-email-lambda/Resource",
-    "aws:asset:path": "asset.8bd064408e372d8774b7b537adca7e49f22004f5757e6dba582afd1b4f8c430e",
+    "aws:asset:path": "asset.cc999a60eb102e9c6fb6efc193e755ab51e215f0dfc3d8eb22f7abf5f3677cb9",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
