@@ -22,6 +22,9 @@ import { updateQuoteRoomsFn } from './functions/update-quote-rooms/resource';
 import { updatePackageChoiceFn } from './functions/update-package-choice/resource';
 import { sendQuoteConfirmationEmailFn } from './functions/send-quote-confirmation-email/resource';
 import { updateQuoteFrequencyFn } from './functions/update-quote-frequency/resource';
+import { getOwnerFn } from './functions/get-owner/resource';
+import { getFranchiseFn } from './functions/get-franchise/resource';
+import { getAvailableQuotesOwnerFn } from './functions/get-quotes-owner-available/resource';
 
 // 1) Bind resources
 const backend = defineBackend({
@@ -42,6 +45,9 @@ const backend = defineBackend({
   updatePackageChoiceFn,
   sendQuoteConfirmationEmailFn,
   updateQuoteFrequencyFn,
+  getOwnerFn,
+  getFranchiseFn,
+  getAvailableQuotesOwnerFn,
 });
 
 // 2) Cognito user pool tweaks
@@ -76,29 +82,40 @@ cfnUserPool.policies = {
   },
 };
 
-// 3) IAM: allow Identity Pool roles to call this AppSync API (IAM mode)
-//    IMPORTANT: attach from the DATA stack using role NAMES (strings) to avoid auth -> data edge.
-const region = Stack.of(backend.data.stack).region; // use data stack's region
+// 3) IAM: allow ALL Identity Pool roles (default + group roles) to call this AppSync API
+const region = Stack.of(backend.data.stack).region;
 const account = Aws.ACCOUNT_ID;
 const apiId = backend.data.resources.graphqlApi.apiId;
+
+// Include both patterns; some accounts prefer /types/*
 const appsyncResourceArn = `arn:${Aws.PARTITION}:appsync:${region}:${account}:apis/${apiId}/*`;
+const appsyncTypesArn    = `arn:${Aws.PARTITION}:appsync:${region}:${account}:apis/${apiId}/types/*`;
 
-// Get role NAMES (string) — safe to pass to CfnPolicy without creating a construct ref edge
-const unauthRoleName = (backend.auth.resources as any).unauthenticatedUserIamRole.roleName;
-const authRoleName   = (backend.auth.resources as any).authenticatedUserIamRole.roleName;
+const authRes = backend.auth.resources as any;
 
-// Create the policy IN THE DATA STACK and attach to the identity pool roles by name
-new iam.CfnPolicy(backend.data.stack, 'IdentityPoolGraphQLPolicy', {
-  policyName: 'IdentityPoolGraphQLPolicy',
-  roles: [unauthRoleName, authRoleName],
+// Discover *every* role the auth stack created that exposes a roleName (includes GroupRoles)
+const discoveredRoleNames = new Set<string>();
+for (const v of Object.values(authRes ?? {})) {
+  const rn = (v as any)?.roleName;
+  if (typeof rn === 'string' && rn.length > 0) discoveredRoleNames.add(rn);
+}
+
+// Be extra defensive: add anything that looks like a GroupRole
+for (const v of Object.values(authRes ?? {})) {
+  const rn = (v as any)?.roleName;
+  if (typeof rn === 'string' && /GroupRole/i.test(rn)) discoveredRoleNames.add(rn);
+}
+
+console.log('[Synth] Attaching GraphQL policy to roles:', Array.from(discoveredRoleNames));
+
+// New logical id so CFN replaces if needed
+new iam.CfnPolicy(backend.data.stack, 'IdentityPoolGraphQLPolicyV2', {
+  policyName: 'IdentityPoolGraphQLPolicyV2',
+  roles: Array.from(discoveredRoleNames),
   policyDocument: {
     Version: '2012-10-17',
     Statement: [
-      {
-        Effect: 'Allow',
-        Action: 'appsync:GraphQL',
-        Resource: appsyncResourceArn,
-      },
+      { Effect: 'Allow', Action: 'appsync:GraphQL', Resource: [appsyncResourceArn, appsyncTypesArn] },
     ],
   },
 });
@@ -117,8 +134,37 @@ const updQuoteRoomsLambda = backend.updateQuoteRoomsFn.resources.lambda as lambd
 const updatePkgLambda = backend.updatePackageChoiceFn.resources.lambda as lambda.Function;
 const sendEmailLambda = backend.sendQuoteConfirmationEmailFn.resources.lambda as lambda.Function;
 const updFrequencyFn = backend.updateQuoteFrequencyFn.resources.lambda as lambda.Function;
+const getOwnerLambda = backend.getOwnerFn.resources.lambda as lambda.Function;
+const getFranchiseLambda = backend.getFranchiseFn.resources.lambda as lambda.Function;
+const getAvailableQuotesOwnerLambda = backend.getAvailableQuotesOwnerFn.resources.lambda as lambda.Function;
 
-// 5) DDB/SES/Lambda permissions for the above
+getAvailableQuotesOwnerLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:Query', 'dynamodb:DescribeTable'],
+    resources: [
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/CustomerQuotes`,
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/CustomerQuotes/index/*`,
+    ],
+  })
+);
+getFranchiseLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:Query', 'dynamodb:GetItem', 'dynamodb:DescribeTable'],
+    resources: [
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/Franchise_DB`,
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/Franchise_DB/index/*`,
+    ],
+  })
+);
+getOwnerLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:Query', 'dynamodb:GetItem', 'dynamodb:DescribeTable'],
+    resources: [
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/Owner_DB`,
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/Owner_DB/index/*`,
+    ],
+  })
+);
 sendEmailLambda.addToRolePolicy(
   new PolicyStatement({
     actions: ['dynamodb:GetItem'],

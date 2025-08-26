@@ -1,6 +1,6 @@
 // src/utils/updatePackageChoice.ts
 'use client';
-import { dataClient } from './data-client';
+import { getDataClient } from './data-client';
 
 type UpdateResult = { message: string };
 
@@ -16,7 +16,7 @@ export async function updatePackage(
   // IMPORTANT: send AWSJSON as a string
   const awsJson = JSON.stringify(clean);
 
-  const { data, errors } = await dataClient.queries.updatePackageChoice(
+  const { data, errors } = await getDataClient().queries.updatePackageChoice(
     { quoteID, packageInfo: awsJson },
     { authMode: 'identityPool' }
   );

@@ -1,5 +1,5 @@
 'use client';
-import { dataClient } from './data-client';
+import { getDataClient } from './data-client';
 
 type FloorTypes = { hardfloor?: number; carpet?: number };
 type FormInfo = { roomTypes: any[]; sqft: number; floorTypes: FloorTypes };
@@ -15,7 +15,7 @@ export async function manualAddRoom(
   const clean = JSON.parse(JSON.stringify(formInfo ?? {}));
   const json = JSON.stringify(clean); // IMPORTANT: a.json() → AWSJSON expects a string
 
-  const { data, errors } = await dataClient.queries.updateQuoteRooms(
+  const { data, errors } = await getDataClient().queries.updateQuoteRooms(
     { quoteID, formInfo: json as any },
     { authMode: 'identityPool' }
   );

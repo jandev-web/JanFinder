@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { changeFacilityType } from '@/utils/changeFacilityType';
-import getQuoteDetails from '@/utils/getQuoteDetails';
 
 interface MemberChangeFacilityTypeProps {
     quoteID: any;
@@ -16,7 +15,7 @@ const ChangeFacilityType: React.FC<MemberChangeFacilityTypeProps> = ({ quoteID, 
     useEffect(() => {
         const fetchQuoteDetails = async () => {
             try {
-                const details = await getQuoteDetails(quoteID);
+                const details = {quoteInfo: {facilityType: 'None'}}
                 const currentFacilityType = details.quoteInfo?.facilityType || 'None';
                 setFacilityType(currentFacilityType);
             } catch (error) {

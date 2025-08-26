@@ -1,35 +1,41 @@
+// src/app/members/owner/page.tsx
+import 'server-only';
 import React from 'react';
-import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { getCurrentUser } from 'aws-amplify/auth/server';
+import { runWithAmplifyServerContext } from '@/utils/amplify-server';
 import Owner from '@/components/pages/Owner';
 import LoginError from '@/components/LoginErrorComponent';
+import { getOwnerByIdServer } from '@/utils/getOwnerByIdServer';
 
-export const dynamic = "force-dynamic";
+type AmplifyUser = Awaited<ReturnType<typeof getCurrentUser>>;
+
+export const dynamic = 'force-dynamic';
 
 export default async function OwnerLanding() {
-  try {
-    // Fetch the authenticated user on the server
-    const user = await AuthGetCurrentUserServer();
+  const authUser = await runWithAmplifyServerContext({
+    nextServerContext: { cookies },
+    operation: (ctx) => getCurrentUser(ctx).catch(() => null as AmplifyUser | null),
+  });
 
-    // Redirect to the login page if the user is not authenticated
-    if (!user) {
-      redirect('/members/sign-in');
-    }
+  if (!authUser) {
+    redirect('/members/sign-in');
+  }
 
-    // Render the Owner component with the user's data
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <Owner user={user} />
-      </div>
-    );
-  } catch (error) {
-    console.error('Error fetching user:', error);
+  const ownerData = await getOwnerByIdServer(authUser.userId);
 
-    // Handle errors by showing a login error component
+  if (!ownerData) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <LoginError />
       </div>
     );
   }
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <Owner ownerData={ownerData} />
+    </div>
+  );
 }

@@ -1,7 +1,7 @@
 // src/utils/updateCustomerInfo.ts
 'use client';
 
-import { dataClient } from './data-client';
+import { getDataClient } from './data-client';
 
 type Address = {
   street?: string; city?: string; state?: string; postalCode?: string; country?: string;
@@ -24,7 +24,7 @@ export async function updateCustomerInfo(
   const clean = JSON.parse(JSON.stringify(customerInfo)); // remove undefined
 
   // ⬇️ send as JSON string for AWSJSON
-  const { data, errors } = await dataClient.queries.updateCustomerInfo(
+  const { data, errors } = await getDataClient().queries.updateCustomerInfo(
     { quoteID, customerInfo: JSON.stringify(clean) as unknown as any },
     { authMode: 'identityPool' }
   );

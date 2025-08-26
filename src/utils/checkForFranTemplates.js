@@ -1,22 +1,21 @@
 import getFranchiseInfo from './getFranchiseInfo';
 
-const checkFranchiseTemplates = async (franchiseID) => {
-  if (!franchiseID) {
+const checkFranchiseTemplates = async (franchise) => {
+  if (!franchise) {
     throw new Error("franchiseID is required");
   }
   
   const missingTemplates = [];
-  console.log("Checking for franchise templates:", franchiseID);
+  
 
   try {
-    const data = await getFranchiseInfo(franchiseID);
     
-    const contractTemplate = data.contractTemplate;
+    const contractTemplate = franchise.contractTemplate;
     if (contractTemplate === 'none') {
       missingTemplates.push("Contract");
     }
     
-    const quoteTemplate = data.quoteTemplate;
+    const quoteTemplate = franchise.quoteTemplate;
     if (quoteTemplate === 'none') {
       missingTemplates.push("Quote");
     }

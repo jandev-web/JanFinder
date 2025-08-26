@@ -1,46 +1,37 @@
+import 'server-only';
 import React from 'react';
-import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import LoginError from '@/components/LoginErrorComponent';
-
+import { cookies } from 'next/headers';
+import { getCurrentUser } from 'aws-amplify/auth/server';
+import { runWithAmplifyServerContext } from '@/utils/amplify-server';
 import OwnerAllQuotesPage from '@/components/pages/OwnerAllQuotes';
-import { fetchAuthSession } from 'aws-amplify/auth';
+import LoginError from '@/components/LoginErrorComponent';
+import { getOwnerByIdServer } from '@/utils/getOwnerByIdServer';
 
-
-
+type AmplifyUser = Awaited<ReturnType<typeof getCurrentUser>>;
 
 export const dynamic = "force-dynamic";
 
-
-
 export default async function AllQuotesPage() {
-  try {
-    // Fetch the authenticated user on the server
-    const user = await AuthGetCurrentUserServer();
-    const session = await fetchAuthSession();
+  const authUser = await runWithAmplifyServerContext({
+    nextServerContext: { cookies },
+    operation: (ctx) => getCurrentUser(ctx).catch(() => null as AmplifyUser | null),
+  });
 
-    console.log("id token", session?.tokens?.idToken)
-    console.log("access token", session?.tokens?.accessToken)
-    // Redirect to the login page if the user is not authenticated
-    if (!user) {
-      redirect('/login');
-    }
-
-    // Render the page content with the authenticated user
-    return (
-      <div className="flex w-full flex-col min-h-screen">
-        <OwnerAllQuotesPage user={user} />
-      </div>
-    );
-  } catch (error) {
-    console.error('Error fetching user:', error);
-
-    // Redirect to the login page if an error occurs
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <LoginError />
-      </div>
-    );
+  if (!authUser) {
+    redirect('/members/sign-in');
   }
+
+  console.log(authUser.userId);
+
+  const ownerData = await getOwnerByIdServer(authUser.userId);
+
+  
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <OwnerAllQuotesPage user={ownerData} />
+    </div>
+  );
 }
+
 

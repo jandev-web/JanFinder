@@ -68,7 +68,7 @@ const OwnerAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
           const quoteIDs = boughtQuotes.map((quote: any) => quote.QuoteID);
 
           setQuotes(boughtQuotes);
-          const fetchedOwnerInfo = await fetchOwnerById(ownerID);
+          const fetchedOwnerInfo: any = await fetchOwnerById(ownerID);
           //console.log(fetchedOwnerInfo)
           const franchiseInfo = await getFranchiseInfo(fetchedOwnerInfo.franchiseID)
           //console.log(franInfo)

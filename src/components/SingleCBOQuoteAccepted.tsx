@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import getQuoteDetails from '@/utils/getQuoteDetails';
 import getQuotePDF from '@/utils/getQuotePDF';
 import { checkIsOwner } from '@/utils/checkIsOwner';
 import makeQuotePDF from '@/utils/generateQuoteDoc'
@@ -82,7 +81,59 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
                 const roleStatus = await checkIsOwner(user);
                 setIsOwner(roleStatus ?? false);
                 if (quoteID) {
-                    const quoteData = await getQuoteDetails(quoteID);
+                    const quoteData = {
+                        "quoteInfo": {
+                            "roomTypes": [
+                                {
+                                    "roomType": "string",
+                                    "roomCount": 0,
+                                    "roomPrice": 0
+                                }
+                            ],
+                            "quoteID": "string",
+                            "quoteName": "string",
+                            "quoteStatus": "string",
+                            "quotePrice": 0,
+                            "quoteDescription": "string",
+                            "quoteNotes": "string",
+                            "quoteDate": "string",
+                            "quoteExpiry": "string"
+                        },
+                        "costInfo": {
+                            "totalCost": 0,
+                            "totalCostWithTax": 0,
+                            "taxRate": 0,
+                            "deposit": 0,
+                            "depositDueDate": "string",
+                            "balanceDue": 0,
+                            "balanceDueDate": "string"
+                        },
+                        "Package": {
+                            "packageID": "string",
+                            "packageName": "string",
+                            "packageDescription": "string",
+                            "packagePrice": 0,
+                            "packageItems": [
+                                "string"
+                            ]
+                        },
+                        "customerData": {
+                            "customerID": "string",
+                            "firstName": "string",
+                            "lastName": "string",
+                            "email": "string",
+                            "phone": "string",
+                            "address": {
+                                "street": "string",
+                                "city": "string",
+                                "state": "string",
+                                "zip": "string"
+                            }
+                        },
+                        "Timestamp": "2024-03-27T00:00:00.000Z",
+                        "OwnerID": "string",
+                        "QuoteID": "string"
+                    }
                     console.log(quoteData);
                     setQuoteInfo(quoteData.quoteInfo);
                     setCostInfo(quoteData.costInfo);
@@ -95,12 +146,12 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
                     let totalRooms = 0;
                     for (let i = 0; i < quoteData.quoteInfo.roomTypes.length; i++) {
                         const room = quoteData.quoteInfo.roomTypes[i];
-                        totalRooms += Number(room.roomNumber); // Ensure roomNumber is treated as a number
+                        totalRooms += Number(1); // Ensure roomNumber is treated as a number
                     }
                     setNumOfRooms(totalRooms);
 
                     setAddress(quoteData.customerData.address);
-                    const sellRequestID = quoteData.latestRequest
+                    const sellRequestID = ''
                     if (sellRequestID) {
                         const sellRequestData = await fetchSellRequestByID(sellRequestID);
                         const sellRequest = sellRequestData.sellRequest

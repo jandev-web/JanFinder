@@ -1,5 +1,5 @@
 'use client';
-import { dataClient } from './data-client';
+import { getDataClient } from './data-client';
 
 type Result = { message: string };
 
@@ -9,7 +9,7 @@ export default async function updateQuoteFrequency(
 ): Promise<Result> {
   if (!quoteID) throw new Error('quoteID is required');
   console.log(frequency)
-  const { data, errors } = await dataClient.queries.updateQuoteFrequency(
+  const { data, errors } = await getDataClient().queries.updateQuoteFrequency(
     { quoteID, frequency },
     { authMode: 'identityPool' }
   );

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import makePayment from "@/utils/makePayment";
 import fetchCBOById from "@/utils/getCBOByID";
-import getQuoteDetails from "@/utils/getQuoteDetails";
 import { useSearchParams } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -36,9 +35,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ user }) => {
         }
 
         if (quoteID) {
-          const quoteData = await getQuoteDetails(quoteID);
-          setQuote(quoteData);
-          setAmount(quoteData?.Package?.cost || 0);
+          const quoteData = {}
+          setQuote(null);
+          setAmount(0);
         } else {
           setMessage("Quote ID is missing.");
         }

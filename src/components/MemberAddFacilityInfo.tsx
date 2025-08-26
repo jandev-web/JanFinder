@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import MemberEditAddressForm from './MemberEditAddressForm';
-import getQuoteDetails from '@/utils/getQuoteDetails';
 
 interface AddFacilityDetailsProps {
     quoteID: any;
@@ -19,8 +18,8 @@ const AddFacilityDetails: React.FC<AddFacilityDetailsProps> = ({ quoteID }) => {
     useEffect(() => {
         const fetchQuoteDetails = async () => {
             try {
-                const details = await getQuoteDetails(quoteID);
-                const address = details.customerData?.address || {};
+                const details = {}
+                const address = { street, city, state, postalCode, country }
                 setStreet(address.street || '');
                 setCity(address.city || '');
                 setState(address.state || '');

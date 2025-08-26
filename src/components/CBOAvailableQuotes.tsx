@@ -6,7 +6,6 @@ import CBOAvaQuoteCard from './CBOAvaQuoteCard';
 import LoadingSpinner from '@/components/LoadingScreenPhrase';
 import fetchAvailableCBOQuotes from '@/utils/getAvailableQuotesCBO';
 import checkFranchiseTemplates from '@/utils/checkForFranTemplates';
-import getQuoteDetails from '@/utils/getQuoteDetails';
 
 type Address = {
   city: string;
@@ -100,7 +99,7 @@ const CBOAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
             let filteredQuotes = []
             for (let i = 0; i < sellRequests.length; i++) {
               const requestQuoteID = sellRequests[i].QuoteID
-              const requestQuote: any = await getQuoteDetails(requestQuoteID)
+              const requestQuote: any = {}
 
 
               const offerTime = sellRequests[i].Timestamp

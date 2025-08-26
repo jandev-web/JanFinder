@@ -4,8 +4,7 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 
 const ddbDoc = DynamoDBDocumentClient.from(
-  new DynamoDBClient({}),
-  { marshallOptions: { removeUndefinedValues: true } }
+  new DynamoDBClient({})
 );
 
 // prefer env; falls back to literal for local
@@ -13,9 +12,19 @@ const CUSTOMER_QUOTES_TABLE = process.env.CUSTOMER_QUOTES_TABLE || "CustomerQuot
 
 
 // ✅ Use the Amplify Data handler type and return your payload directly
-export const handler: Schema["createCustomerQuote"]["functionHandler"] = async (_event) => {
+export const handler: Schema["createCustomerQuote"]["functionHandler"] = async (event, context) => {
   const timestamp = new Date().toISOString();
   const quoteId = uuidv4();
+
+  const ident = (event as any)?.identity ?? (event as any)?.request?.identity ?? {};
+  console.log('[createCustomerQuote] invoked', {
+    awsRequestId: (context as any)?.awsRequestId,
+    authType: ident?.authenticationType || ident?.type || 'Unknown',
+    identityId: ident?.identityId || ident?.sub || 'unknown',
+    sourceIp: Array.isArray(ident?.sourceIp) ? ident.sourceIp[0] : ident?.sourceIp ?? 'unknown',
+    table: CUSTOMER_QUOTES_TABLE,
+    region: process.env.AWS_REGION,
+  });
 
   const item = {
     QuoteID: quoteId,
@@ -60,12 +69,19 @@ export const handler: Schema["createCustomerQuote"]["functionHandler"] = async (
     latestRequest: null,
   };
 
-  await ddbDoc.send(
-    new PutCommand({
-      TableName: CUSTOMER_QUOTES_TABLE,
-      Item: item,
-    })
-  );
+  try {
+    await ddbDoc.send(new PutCommand({ TableName: CUSTOMER_QUOTES_TABLE, Item: item, ConditionExpression: 'attribute_not_exists(QuoteID)' }));
+  } catch (e: any) {
+    console.error('[createCustomerQuote] DDB Put failed', {
+      name: e?.name,
+      code: e?.code,
+      message: e?.message,
+      requestId: e?.$metadata?.requestId,
+      status: e?.$metadata?.httpStatusCode,
+    });
+    throw e;
+  }
+
 
   // 👇 return the payload, NOT {statusCode, body}
   return { message: "Quote added successfully", quoteID: quoteId };

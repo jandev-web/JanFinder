@@ -63,9 +63,9 @@ const CustomQuotes: React.FC<CustomQuotesProps> = ({ user }) => {
                     //console.log(data.memberConfirmed)
                     const confirmedQuotes = data.memberConfirmed
                     setQuotes(confirmedQuotes)
-                    const fetchedOwnerInfo = await fetchOwnerById(ownerID);
+                    const fetchedOwnerInfo: any = await fetchOwnerById(ownerID);
                     //console.log(fetchedOwnerInfo)
-                    const franchiseInfo = await getFranchiseInfo(fetchedOwnerInfo.franchiseID)
+                    const franchiseInfo = await getFranchiseInfo(fetchedOwnerInfo?.franchiseID)
                     //console.log(franInfo)
                     setFranInfo(franchiseInfo.franchiseName);
                     setLoading(false);

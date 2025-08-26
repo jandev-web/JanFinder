@@ -44,7 +44,7 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
 
         if (!sub) {
           console.log('No sub found')
-          router.push('/members/home');
+          //router.push('/members/home');
           return;
         }
 
@@ -53,16 +53,6 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
 
         // ---- OWNER FLOW ----
         if (isOwner) {
-          let owner: any | null = null;
-
-          // Try to fetch existing owner record
-          try {
-            owner = await getOwnerById(sub);
-          } catch (e: any) {
-            const msg = String(e?.message || '');
-            if (!/404|Not\s*Found/i.test(msg)) throw e; // only ignore 404
-          }
-
 
           router.push('/members/owner'); // owner dashboard
 
@@ -93,10 +83,10 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
 
         // Fallback if no recognized group
         console.log('No recognized group found');
-        router.push('/members/home');
+        //router.push('/members/home');
       } catch (err) {
         // On error, don't strand the user
-        router.push('/members/home');
+        //router.push('/members/home');
       } finally {
         if (!cancelled) setBusy(false);
       }

@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { acceptQuote } from '@/utils/CBOAcceptQuote';
-import getQuoteDetails from '@/utils/getQuoteDetails';
 import getQuotePDF from '@/utils/getQuotePDF';
 import { checkIsOwner } from '@/utils/checkIsOwner';
 import fetchCBOById from '@/utils/getCBOByID';
@@ -109,12 +108,64 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID, prevPage }) => {
 
   const fetchQuoteDetails = async (quoteID: string) => {
     try {
-      const quoteData = await getQuoteDetails(quoteID);
-      setQuote(quoteData);
+      const quoteData = {
+          "quoteInfo": {
+            "roomTypes": [
+              {
+                "roomType": "string",
+                "roomCount": 0,
+                "roomPrice": 0
+              }
+            ],
+            "quoteID": "string",
+            "quoteName": "string",
+            "quoteStatus": "string",
+            "quotePrice": 0,
+            "quoteDescription": "string",
+            "quoteNotes": "string",
+            "quoteDate": "string",
+            "quoteExpiry": "string"
+          },
+          "costInfo": {
+            "totalCost": 0,
+            "totalCostWithTax": 0,
+            "taxRate": 0,
+            "deposit": 0,
+            "depositDueDate": "string",
+            "balanceDue": 0,
+            "balanceDueDate": "string"
+          },
+          "Package": {
+            "packageID": "string",
+            "packageName": "string",
+            "packageDescription": "string",
+            "packagePrice": 0,
+            "packageItems": [
+              "string"
+            ]
+          },
+          "customerData": {
+            "customerID": "string",
+            "firstName": "string",
+            "lastName": "string",
+            "email": "string",
+            "phone": "string",
+            "address": {
+              "street": "string",
+              "city": "string",
+              "state": "string",
+              "zip": "string"
+            }
+          },
+          "Timestamp": "2024-03-27T00:00:00.000Z",
+          "OwnerID": "string",
+          "QuoteID": "string"
+       }
+      
       console.log(quoteData)
 
-      if (quoteData.Confirmed && quoteData.QuotePDF) {
-        handleRetrievePDF(quoteData.QuotePDF);
+      if (quoteData) {
+        handleRetrievePDF('');
       }
     } catch (error) {
       console.error('Error fetching quote details:', error);

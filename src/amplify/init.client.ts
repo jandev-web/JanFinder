@@ -6,10 +6,12 @@ import outputs from '../../amplify_outputs.json';
 
 declare global { interface Window { __amplifyConfigured?: boolean } }
 
-const w: (Window & { __amplifyConfigured?: boolean }) | undefined =
-  typeof window === 'undefined' ? undefined : window;
+export function initAmplifyClient() {
+  // ⬇️ Ensure this never runs on the server
+  if (typeof window === 'undefined') return;
 
-if (w && !w.__amplifyConfigured) {
-  Amplify.configure(outputs, { ssr: true });
-  w.__amplifyConfigured = true;
+  if (!window.__amplifyConfigured) {
+    Amplify.configure(outputs, { ssr: true });
+    window.__amplifyConfigured = true;
+  }
 }

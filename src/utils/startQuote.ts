@@ -1,22 +1,31 @@
-// src/utils/startQuote.ts
 'use client';
-import { dataClient } from './data-client';
+import { getDataClient } from './data-client';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { debugIdentity } from './debug-identity';
+
 type StartQuoteResponse = { quoteID: string; message?: string };
 
 export async function startQuote(): Promise<StartQuoteResponse> {
-  // forceRefresh ensures we pick up the new IAM policy
+  console.log('[startQuote] begin');
+
   const s = await fetchAuthSession({ forceRefresh: true });
+  const mode = s.tokens ? 'userPool' : 'identityPool';
+  console.log('[startQuote] session', {
+    identityId: s.identityId,
+    hasCreds: !!s.credentials,
+    hasTokens: !!s.tokens,
+    chosenMode: mode,
+  });
 
-  const { data, errors } =
-    await dataClient.queries.createCustomerQuote({ authMode: 'identityPool' });
+  // no-arg op: pass only the options object
+  const res = await getDataClient().queries.createCustomerQuote({ authMode: mode });
+  console.log('[startQuote] GraphQL envelope', res);
 
-  const payload = typeof data === 'string' ? JSON.parse(data) : data;
-
-  if (!payload || typeof payload.quoteID !== 'string') {
-    throw new Error('Unexpected response from createCustomerQuote');
+  if (res.errors?.length) {
+    res.errors.forEach((e) => console.error('[startQuote] GraphQL error', e));
+    throw new Error(`createCustomerQuote failed: ${res.errors.map(e => e.message).join(' | ')}`);
   }
-  return payload as { quoteID: string; message?: string };
 
+  const payload = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
+  if (!payload?.quoteID) throw new Error('Unexpected response from createCustomerQuote');
+  return payload;
 }

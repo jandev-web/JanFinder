@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { updateCustomerInfo } from '@/utils/updateCustomerInfo';
-import getQuoteDetails from '@/utils/getQuoteDetails';
 
 interface CustomerInfoProps {
     quoteID: any;
@@ -18,7 +17,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ quoteID }) => {
     useEffect(() => {
         const fetchQuoteDetails = async () => {
             try {
-                const details = await getQuoteDetails(quoteID);
+                const details = {customerData: {firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com', phone: '1234567890'}}
                 const customerInfo = details.customerData;
 
                 setFirstName(customerInfo?.firstName || '');

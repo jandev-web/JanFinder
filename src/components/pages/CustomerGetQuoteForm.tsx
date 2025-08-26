@@ -11,7 +11,6 @@ import FloorInfoPage from '@/components/pages/CustomerFloorInfoPage'
 import ConfirmPage from '@/components/pages/ConfirmQuote';
 import QuoteProgressBar from '@/components/QuoteProgressBar';
 import LoadingSpinner from '@/components/loadingScreen';
-import getQuoteDetails from '@/utils/getQuoteDetails';
 import CustomerAddRooms from '../CustomerAddRooms';
 import Packages from "@/components/pages/Packages";
 import recPackageUtil from '@/utils/recPackageUtil'
@@ -21,13 +20,15 @@ import { useRouter } from 'next/navigation';
 import updateQuoteRooms from '@/utils/updateQuoteRooms';
 import { updatePackages } from '@/utils/updatePackages';
 import updateQuoteFrequency from '@/utils/updateQuoteFrequency';
+import getQuoteDetailsClient from '@/utils/getQuoteDetailsClient';
 
 
-const CustomerGetQuoteForm: React.FC = () => {
+
+const CustomerGetQuoteForm: React.FC = ({
+}) => {
     const [step, setStep] = useState<number>(1);
     const [quoteID, setQuoteID] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [quoteInfo, setQuoteInfo] = useState<any>(null)
     const [canMoveOn, setCanMoveOn] = useState(false);
     const [canMoveBack, setCanMoveBack] = useState(true);
     const [facilityOptions, setFacilityOptions] = useState<any>([]);
@@ -43,7 +44,6 @@ const CustomerGetQuoteForm: React.FC = () => {
     const [quotePackageOptions, setQuotePackageOptions] = useState<any>([])
     const [quotePackage, setQuotePackage] = useState<any>(null)
     const [recPackage, setRecPackage] = useState<any>(null);
-    const [cost, setCost] = useState<any>(null);
     const [finalCost, setFinalCost] = useState<any>(0)
     const [quoteSqft, setQuoteSqft] = useState<any>(0);
     const [quoteFloorTypes, setQuoteFloorTypes] = useState<any>({
@@ -70,7 +70,7 @@ const CustomerGetQuoteForm: React.FC = () => {
     const loadData = async (customerQuoteID: any) => {
         setLoading(true)
         setQuoteID(customerQuoteID)
-        const quoteDetails = await getQuoteDetails(customerQuoteID);
+        const quoteDetails = await getQuoteDetailsClient(customerQuoteID);
         console.log("Quote details:", quoteDetails);
         const quoteCustomerInfo = quoteDetails.customerData
         setCustomerInfo(quoteCustomerInfo)
@@ -82,7 +82,7 @@ const CustomerGetQuoteForm: React.FC = () => {
                 return updatedSteps;
             })
         }
-        setQuoteInfo(quoteDetails);
+
         const budget = quoteDetails.quoteInfo.budget
         if (budget && budget != 0) {
             setSteps(prevSteps => {
@@ -163,21 +163,22 @@ const CustomerGetQuoteForm: React.FC = () => {
     }
 
     useEffect(() => {
-        const fetchQuote = async () => {
-            if (typeof window !== "undefined") {
-                const storedQuoteID = sessionStorage.getItem('customerData');
+        (async () => {
 
-                if (storedQuoteID) {
-                    try {
-                        await loadData(storedQuoteID);
-                    } catch (error) {
-                        console.error("Error fetching quote details:", error);
-                    }
-                }
+
+            // Fallback: existing session
+            const stored = typeof window !== 'undefined'
+                ? sessionStorage.getItem('customerData')
+                : null;
+
+            if (stored) {
+                await loadData(stored);
+                return;
             }
+
+            // Nothing to load
             setLoading(false);
-        };
-        fetchQuote();
+        })();
     }, []);
 
     const handleCanClick = (step: number, canClick: boolean) => {
@@ -277,7 +278,7 @@ const CustomerGetQuoteForm: React.FC = () => {
             }
             setQuotePackage(null)
             await updatePackages(quoteID, newPackage)
-            
+
             const calculatedPackages = await calculateTime(quoteID)
             setQuotePackageOptions(calculatedPackages.packageOptions);
             if (quoteBudget) {
@@ -336,7 +337,7 @@ const CustomerGetQuoteForm: React.FC = () => {
 
     const handleChangeFrequency = async (newInfo: any) => {
         console.log(newInfo)
-        
+
         const newPackage = {
             packageChoice: null,
             packageOptions: {

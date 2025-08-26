@@ -1,26 +1,58 @@
-// Mark this as server-only so it never gets bundled client-side.
-export const dynamic = 'force-dynamic';
+// src/utils/getOwnerByIdServer.ts
+import 'server-only';
+import { cookies } from 'next/headers';
+import { createServerDataClient } from '@/utils/data-server';
 
-export async function getOwnerByIdServer(ownerId: string) {
-  // Replace this with your real server-side fetch logic.
-  // Example: call an internal API route or a direct SDK call.
-  // return await someSdk.getOwner({ ownerId });
+// --- helpers ---
+function normalizeOwner(raw: any) {
+  const payload = typeof raw === 'string' ? JSON.parse(raw) : raw;
 
-  const res = await fetch(`${process.env.INTERNAL_API_BASE_URL}/owners/${ownerId}`, {
-    method: 'GET',
-    headers: {
-      // If you need to forward a token from fetchAuthSession(session.tokens?.idToken?.toString()),
-      // add it here as an Authorization header. Keep it SERVER SIDE only.
-      'Content-Type': 'application/json',
-      'x-internal-secret': process.env.INTERNAL_API_SECRET || '',
-    },
-    // Important in Next.js to ensure SSR/edge caching behaves as expected:
-    cache: 'no-store',
-  });
+  // Accept { data: {...} } | { owner: {...} } | {...}
+  const maybeOwner = payload?.owner ?? payload?.data ?? payload;
+  if (!maybeOwner || typeof maybeOwner !== 'object') return null;
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch owner: ${res.status} ${res.statusText}`);
+  const o = maybeOwner as Record<string, any>;
+  return {
+    id: o.OwnerID ?? o.id,
+    franchiseId: o.FranchiseID ?? o.franchiseId,
+    firstName: o.firstName ?? o.firstname,
+    lastName: o.lastName ?? o.lastname,
+    email: o.email,
+    phone: o.phone,
+    address:
+      o.address ?? {
+        country: o.country ?? '',
+        state: o.state ?? '',
+        city: o.city ?? '',
+        street: o.street ?? '',
+        postalCode: o.postalCode ?? '',
+      },
+    createdOn: o.createdOn,
+    firstSignIn: o.firstSignIn,
+    _raw: o,
+  };
+}
+
+export async function getOwnerByIdServer(id: string) {
+  if (!id) return null;
+
+  const client = createServerDataClient(cookies);
+
+  // Note: don't annotate to a stricter type; use the library's shape (errors can be undefined)
+  const res = await client.queries.getOwnerById({ id }, { authMode: 'userPool' });
+
+  // Coerce undefined/null → []
+  const errs = Array.isArray(res.errors) ? res.errors : [];
+  if (errs.length) {
+    console.error('getOwnerByIdServer errors:', errs);
+    return null;
   }
 
-  return res.json();
+  const owner = normalizeOwner(res.data);
+
+  if (!owner && process.env.NODE_ENV !== 'production') {
+    console.warn('getOwnerByIdServer: unexpected owner shape', res.data);
+  }
+
+  return owner;
 }

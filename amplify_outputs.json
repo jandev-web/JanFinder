@@ -261,6 +261,40 @@
               "isRequired": false
             }
           }
+        },
+        "getOwnerById": {
+          "name": "getOwnerById",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "id": {
+              "name": "id",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "getFranchiseInfo": {
+          "name": "getFranchiseInfo",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "franchiseID": {
+              "name": "franchiseID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "getAvailableQuotesOwner": {
+          "name": "getAvailableQuotesOwner",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false
         }
       }
     }

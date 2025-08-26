@@ -1,6 +1,6 @@
 // src/utils/updateFloorInfo.ts
 'use client';
-import { dataClient } from './data-client';
+import { getDataClient } from './data-client';
 
 type FloorInfo = {
   floors: number;
@@ -23,7 +23,7 @@ export default async function updateFloorInfo(
   const clean = { floors, stairwells: { carpet, hardfloor } };
   const json = JSON.stringify(clean); // <-- IMPORTANT for AWSJSON
 
-  const { data, errors } = await dataClient.queries.updateFloorInfo(
+  const { data, errors } = await getDataClient().queries.updateFloorInfo(
     { quoteID, floorInfo: json as any }, // send JSON string
     { authMode: 'identityPool' }
   );

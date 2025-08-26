@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import OwnerQuoteCard from '@/components/OwnerAvailableQuoteCard';
 import LoadingSpinner from '@/components/loadingScreen';
-import fetchAvailableQuotes from '@/utils/getAvailableQuotesOwner';
 import checkFranchiseTemplates from '@/utils/checkForFranTemplates';
 
 type Address = {
@@ -37,17 +36,21 @@ interface Quote {
 
 interface AvaQuotesProps {
   user: any;
+  quotes: any;
+  franchise: any;
 }
 
-const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
+const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user, quotes, franchise }) => {
   const [loading, setLoading] = useState(true);
-  const [quotes, setAvaQuotes] = useState<Quote[]>([]);
+  
   const [error, setError] = useState<string | null>(null);
   const [hasTemplates, setHasTemplates] = useState(true);
   const [missingMessage, setMissingMessage] = useState('');
   const [showTemplatesModal, setShowTemplatesModal] = useState(false);
   const router = useRouter();
-  const ownerID = user?.OwnerID;
+  const ownerID = user?.id;
+  console.log(ownerID)
+  console.log(quotes)
 
   const handleQuoteClick = (quote: Quote) => {
     if (!hasTemplates) {
@@ -61,12 +64,7 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
     if (ownerID) {
       const fetchQuotes = async () => {
         try {
-          const data = await fetchAvailableQuotes(ownerID);
-          console.log("Available quotes:", data);
-          setAvaQuotes(data);
-
-          // Check if the franchise has the required templates
-          const franchiseTemplates = await checkFranchiseTemplates(user?.franchiseID);
+          const franchiseTemplates = await checkFranchiseTemplates(franchise);
           console.log("Franchise templates:", franchiseTemplates);
           if (franchiseTemplates.length === 0) {
             setHasTemplates(true);
@@ -115,7 +113,7 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user }) => {
           <div className="mt-4 text-gray-600">No Available Quotes found.</div>
         ) : (
           <ul className="space-y-4 mt-6">
-            {quotes.map((quote) => (
+            {quotes.map((quote: any) => (
               <li key={quote.QuoteID}>
                 <OwnerQuoteCard
                   quote={quote}

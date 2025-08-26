@@ -9,7 +9,7 @@ interface OwnerHeaderProps {
 }
 
 const OwnerHeader: React.FC<OwnerHeaderProps> = ({ user }) => {
-  
+    console.log(user)
     return (
       <header className="fixed top-0 w-full z-50 bg-white shadow-lg">
         <div className="mx-auto flex w-full relative z-20">

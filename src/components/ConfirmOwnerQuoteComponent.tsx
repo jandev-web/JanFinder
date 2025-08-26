@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import getQuoteDetails from '@/utils/getQuoteDetails';
 import getQuotePDF from '@/utils/getQuotePDF';
 import makeQuotePDF from '@/utils/generateQuoteDoc'
 
@@ -58,8 +57,8 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
         const getQuoteInfo = async () => {
             if (quoteID) {
                 try {
-                    const quoteDetails = await getQuoteDetails(quoteID);
-                    const addressInfo = quoteDetails.customerData.address
+                    const quoteDetails = {}
+                    const addressInfo = {city: '', country: '', postalCode: '', state: '', street: ''}
                     if (!addressInfo.city || !addressInfo.country || !addressInfo.postalCode || !addressInfo.state || !addressInfo.street) {
                         setAddress('None')
                     }
@@ -68,7 +67,7 @@ const ConfirmOwnerQuote: React.FC<ConfirmOwnerQuoteProps> = ({ handleBack, quote
                         setAddress(addressString)
                     }
                     setQuoteInfo(quoteDetails);
-                    if (quoteDetails.QuotePDF != null) {
+                    if (quoteDetails != null) {
                         setHasPDF(true)
                     }
 

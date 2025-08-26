@@ -1,6 +1,6 @@
 'use client';
 
-import { dataClient } from './data-client';
+import { getDataClient } from './data-client';
 
 type UpdateBudgetResult = { message: string };
 
@@ -10,7 +10,7 @@ export async function updateQuoteBudget(quoteID: string, budget: number): Promis
     throw new Error('quoteID and a valid numeric budget are required');
   }
 
-  const { data, errors } = await dataClient.queries.updateQuoteBudget(
+  const { data, errors } = await getDataClient().queries.updateQuoteBudget(
     { quoteID, budget: numeric },
     { authMode: 'identityPool' } // IAM (guest/signed-in via Identity Pool)
   );
