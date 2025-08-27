@@ -1,16 +1,17 @@
 // src/utils/get-facility-options.ts
 'use client';
 
-import { dataClient } from './data-client';
+import { getDataClient } from './data-client';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 export type FacilityOptions = Record<string, string[]>;
 
 export async function getFacilityOptions(): Promise<FacilityOptions> {
-  await fetchAuthSession({ forceRefresh: true });
+  const s = await fetchAuthSession({ forceRefresh: true });
+  const mode = s.tokens ? 'userPool' : 'identityPool';
 
-  const { data, errors } = await dataClient.queries.getFacilityOptions(
-    { authMode: 'identityPool' } // guest-friendly
+  const { data, errors } = await getDataClient().queries.getFacilityOptions(
+    { authMode: mode }
   );
   if (errors?.length) throw new Error(errors.map(e => e.message).join('; '));
 

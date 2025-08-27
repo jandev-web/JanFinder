@@ -1,0 +1,44 @@
+type Query {
+  getFacilityOptions: AWSJSON @function(name: "FnGetFacilityOptions") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  createCustomerQuote: AWSJSON @function(name: "FnCreateCustomerQuote") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  calculatePackageOptions(quoteID: String): AWSJSON @function(name: "FnCalculatePackageOptions") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateQuoteBudget(quoteID: String, budget: Float): AWSJSON @function(name: "FnUpdateQuoteBudget") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateCustomerInfo(quoteID: String, customerInfo: AWSJSON): AWSJSON @function(name: "FnUpdateCustomerInfo") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateFacilityType(quoteID: String, facilityType: String): AWSJSON @function(name: "FnUpdateFacilityType") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateFloorInfo(quoteID: String, floorInfo: AWSJSON): AWSJSON @function(name: "FnUpdateFloorInfo") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  confirmQuote(quoteID: String): AWSJSON @function(name: "FnConfirmQuote") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  getQuote(quoteID: String): AWSJSON @function(name: "FnGetQuote") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateQuoteRooms(quoteID: String, formInfo: AWSJSON): AWSJSON @function(name: "FnUpdateQuoteRooms") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updatePackageChoice(quoteID: String, packageInfo: AWSJSON): AWSJSON @function(name: "FnUpdatePackageChoice") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  sendQuoteConfirmationEmail(quoteID: String): AWSJSON @function(name: "FnSendQuoteConfirmationEmail") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateQuoteFrequency(quoteID: String, frequency: String): AWSJSON @function(name: "FnUpdateQuoteFrequency") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  getOwnerById(id: String!): AWSJSON @function(name: "FnGetOwnerById") @auth(rules: [{allow: private}])
+  getFranchiseInfo(franchiseID: String!): AWSJSON @function(name: "FnGetFranchiseInfo") @auth(rules: [{allow: private}])
+  getAvailableQuotesOwner: AWSJSON @function(name: "FnGetAvailableQuotesOwner") @auth(rules: [{allow: private}])
+}

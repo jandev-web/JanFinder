@@ -1,11 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import FranchiseDayEventList from '@/components/franchiseDailyEvents';
-import fetchOwnerById from '@/utils/getOwnerById';
-import getFranchiseDayEvents from '@/utils/getDaysEventsFranchise';
-import getRecentQuotes from '@/utils/getRecentQuotes'
-import RecentQuotesList from '@/components/RecentQuotesList'
-import LoadingSpinner from '@/components/loadingScreen'
+
 import Image from 'next/image';
 
 interface OwnerComponentProps {

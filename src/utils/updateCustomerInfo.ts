@@ -2,6 +2,7 @@
 'use client';
 
 import { getDataClient } from './data-client';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 type Address = {
   street?: string; city?: string; state?: string; postalCode?: string; country?: string;
@@ -22,11 +23,12 @@ export async function updateCustomerInfo(
 ): Promise<UpdateResult> {
   const customerInfo: CustomerInfo = { firstName, lastName, email, phone, company, address };
   const clean = JSON.parse(JSON.stringify(customerInfo)); // remove undefined
-
+  const s = await fetchAuthSession({ forceRefresh: true });
+  const mode = s.tokens ? 'userPool' : 'identityPool';
   // ⬇️ send as JSON string for AWSJSON
   const { data, errors } = await getDataClient().queries.updateCustomerInfo(
     { quoteID, customerInfo: JSON.stringify(clean) as unknown as any },
-    { authMode: 'identityPool' }
+    { authMode: mode }
   );
 
   if (errors?.length) throw new Error(errors.map(e => e.message).join('; '));

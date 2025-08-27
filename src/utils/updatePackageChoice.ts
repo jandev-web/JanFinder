@@ -1,6 +1,7 @@
 // src/utils/updatePackageChoice.ts
 'use client';
 import { getDataClient } from './data-client';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 type UpdateResult = { message: string };
 
@@ -15,10 +16,11 @@ export async function updatePackage(
 
   // IMPORTANT: send AWSJSON as a string
   const awsJson = JSON.stringify(clean);
-
+  const s = await fetchAuthSession({ forceRefresh: true });
+  const mode = s.tokens ? 'userPool' : 'identityPool';
   const { data, errors } = await getDataClient().queries.updatePackageChoice(
     { quoteID, packageInfo: awsJson },
-    { authMode: 'identityPool' }
+    { authMode: mode }
   );
 
   if (errors?.length) throw new Error(errors.map(e => e.message).join('; '));

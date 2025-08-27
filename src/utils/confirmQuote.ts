@@ -1,5 +1,6 @@
 'use client';
-import { dataClient } from './data-client';
+import { getDataClient } from './data-client';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 type ConfirmResult = {
   message: string;
@@ -12,11 +13,12 @@ type EmailResult = {
 
 export default async function confirmQuote(quoteID: string): Promise<ConfirmResult> {
   if (!quoteID) throw new Error('quoteID is required');
-
+  const s = await fetchAuthSession({ forceRefresh: true });
+  const mode = s.tokens ? 'userPool' : 'identityPool';
   // 1) Confirm the quote (Amplify Data)
-  const { data: confirmData, errors: confirmErrors } = await dataClient.queries.confirmQuote(
+  const { data: confirmData, errors: confirmErrors } = await getDataClient().queries.confirmQuote(
     { quoteID },
-    { authMode: 'identityPool' }
+    { authMode: mode }
   );
   if (confirmErrors?.length) throw new Error(confirmErrors.map(e => e.message).join('; '));
 
@@ -24,11 +26,11 @@ export default async function confirmQuote(quoteID: string): Promise<ConfirmResu
   if (!confirmed || typeof confirmed.message !== 'string' || typeof confirmed.confirmationNumber !== 'string') {
     throw new Error('Unexpected response from confirmQuote');
   }
-
+  
   // 2) Send confirmation email (Amplify Data) — util triggers this, not the Lambda
-  const { data: emailData, errors: emailErrors } = await dataClient.queries.sendQuoteConfirmationEmail(
+  const { data: emailData, errors: emailErrors } = await getDataClient().queries.sendQuoteConfirmationEmail(
     { quoteID },
-    { authMode: 'identityPool' }
+    { authMode: mode }
   );
   if (emailErrors?.length) throw new Error(emailErrors.map(e => e.message).join('; '));
 

@@ -817,16 +817,24 @@
    ]
   }
  },
- "Parameters": {
-  "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref": {
-   "Type": "String"
-  }
- },
  "Outputs": {
+  "amplifyjanfinderappdev3sandbox789c476389storageJanFinderStorageBucket46746B61Arn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "JanFinderStorageBucketA0AAEB6D",
+     "Arn"
+    ]
+   }
+  },
   "amplifyjanfinderappdev3sandbox789c476389storageJanFinderStorageBucket46746B61Ref": {
    "Value": {
     "Ref": "JanFinderStorageBucketA0AAEB6D"
    }
+  }
+ },
+ "Parameters": {
+  "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref": {
+   "Type": "String"
   }
  }
 }

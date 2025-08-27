@@ -1,6 +1,7 @@
 // src/utils/updateFloorInfo.ts
 'use client';
 import { getDataClient } from './data-client';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 type FloorInfo = {
   floors: number;
@@ -22,10 +23,11 @@ export default async function updateFloorInfo(
 
   const clean = { floors, stairwells: { carpet, hardfloor } };
   const json = JSON.stringify(clean); // <-- IMPORTANT for AWSJSON
-
+  const s = await fetchAuthSession({ forceRefresh: true });
+  const mode = s.tokens ? 'userPool' : 'identityPool';
   const { data, errors } = await getDataClient().queries.updateFloorInfo(
     { quoteID, floorInfo: json as any }, // send JSON string
-    { authMode: 'identityPool' }
+    { authMode: mode }
   );
 
   if (errors?.length) throw new Error(errors.map(e => e.message).join('; '));

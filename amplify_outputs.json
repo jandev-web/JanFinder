@@ -296,6 +296,34 @@
           "type": "AWSJSON",
           "isRequired": false
         }
+      },
+      "mutations": {
+        "ownerAcceptQuote": {
+          "name": "ownerAcceptQuote",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "quoteID": {
+              "name": "quoteID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "franchiseID": {
+              "name": "franchiseID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "ownerID": {
+              "name": "ownerID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        }
       }
     }
   },

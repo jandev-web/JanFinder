@@ -356,7 +356,7 @@ const CustomerGetQuoteForm: React.FC = ({
         if (quoteBudget) {
             const newRecPackageType = recPackageUtil(calculatedPackages.packageOptions, quoteBudget)
             console.log(newRecPackageType)
-            const newRecPackage = quotePackageOptions.find((pkg: any) => pkg.packageType === newRecPackageType);
+            const newRecPackage = calculatedPackages.packageOptions.find((pkg: any) => pkg.packageType === newRecPackageType);
             setRecPackage(newRecPackage);
         }
     }

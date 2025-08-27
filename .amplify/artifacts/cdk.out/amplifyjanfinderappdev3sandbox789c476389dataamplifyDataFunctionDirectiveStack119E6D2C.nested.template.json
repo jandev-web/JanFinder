@@ -278,6 +278,202 @@
   }
  },
  "Resources": {
+  "FnOwnerAcceptQuoteLambdaDataSourceServiceRoleFDA6C818": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "amplifyData"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnOwnerAcceptQuoteLambdaDataSource/ServiceRole/Resource"
+   }
+  },
+  "FnOwnerAcceptQuoteLambdaDataSourceServiceRoleDefaultPolicy80CA52AD": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataOwnerAcceptQuotelambda8DFCA54DArn"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataOwnerAcceptQuotelambda8DFCA54DArn"
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "FnOwnerAcceptQuoteLambdaDataSourceServiceRoleDefaultPolicy80CA52AD",
+    "Roles": [
+     {
+      "Ref": "FnOwnerAcceptQuoteLambdaDataSourceServiceRoleFDA6C818"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnOwnerAcceptQuoteLambdaDataSource/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "FnOwnerAcceptQuoteLambdaDataSource": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+    },
+    "LambdaConfig": {
+     "LambdaFunctionArn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataOwnerAcceptQuotelambda8DFCA54DArn"
+     }
+    },
+    "Name": "FnOwnerAcceptQuoteLambdaDataSource",
+    "ServiceRoleArn": {
+     "Fn::GetAtt": [
+      "FnOwnerAcceptQuoteLambdaDataSourceServiceRoleFDA6C818",
+      "Arn"
+     ]
+    },
+    "Type": "AWS_LAMBDA"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnOwnerAcceptQuoteLambdaDataSource/Resource"
+   }
+  },
+  "InvokeFnOwnerAcceptQuoteLambdaDataSourceInvokeFnOwnerAcceptQuoteLambdaDataSourceAppSyncFunctionF0310375": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "FnOwnerAcceptQuoteLambdaDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "InvokeFnOwnerAcceptQuoteLambdaDataSource",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/b25984251889d251b969f6a92623ce798fa614acf9c2001741db7b554360a5be.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a20e304512b1fde77dc16ed9d5e0ed03817afcab629ce87ef11c99877b7b1e30.vtl"
+    }
+   },
+   "DependsOn": [
+    "FnOwnerAcceptQuoteLambdaDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnOwnerAcceptQuoteLambdaDataSource/InvokeFnOwnerAcceptQuoteLambdaDataSource.AppSyncFunction"
+   }
+  },
+  "MutationownerAcceptQuoteResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+    },
+    "FieldName": "ownerAcceptQuote",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "MutationOwnerAcceptQuoteAuthFNMutationOwnerAcceptQuoteAuthFNAppSyncFunctionDB048766",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "InvokeFnOwnerAcceptQuoteLambdaDataSourceInvokeFnOwnerAcceptQuoteLambdaDataSourceAppSyncFunctionF0310375",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "## [Start] Stash resolver specific context.. **\n$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"ownerAcceptQuote\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthunauthenticatedUserRoleC7C1F878Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthIdentityPoolFCD7218CRef"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n{}\n## [End] Stash resolver specific context.. **"
+      ]
+     ]
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/387d5992f5fc03d05de27289457dcc374a84c42a889acb504aff1031047dde00.vtl"
+    },
+    "TypeName": "Mutation"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/mutationOwnerAcceptQuoteResolver"
+   }
+  },
   "FnGetFacilityOptionsLambdaDataSourceServiceRoleF7EF606E": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -3414,6 +3610,28 @@
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryGetAvailableQuotesOwnerResolver"
    }
   },
+  "MutationOwnerAcceptQuoteAuthFNMutationOwnerAcceptQuoteAuthFNAppSyncFunctionDB048766": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationOwnerAcceptQuoteAuthFN",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/8e18f3cebc70282364886a18ce867a8409c5568357ceaed6f86c71740cb443eb.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/MutationOwnerAcceptQuoteAuthFN/MutationOwnerAcceptQuoteAuthFN.AppSyncFunction"
+   }
+  },
   "QueryGetFacilityOptionsAuthFNQueryGetFacilityOptionsAuthFNAppSyncFunction79442B89": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
@@ -3426,7 +3644,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryGetFacilityOptionsAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3470,7 +3688,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryCalculatePackageOptionsAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3492,7 +3710,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateQuoteBudgetAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3514,7 +3732,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateCustomerInfoAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3536,7 +3754,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateFacilityTypeAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3558,7 +3776,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateFloorInfoAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3580,7 +3798,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryConfirmQuoteAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3602,7 +3820,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryGetQuoteAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3624,7 +3842,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateQuoteRoomsAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3646,7 +3864,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdatePackageChoiceAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3668,7 +3886,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QuerySendQuoteConfirmationEmailAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3690,7 +3908,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QueryUpdateQuoteFrequencyAuthFN",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f7a7e34eba49dcb8388c96c0048ce29588c52f25a808573985388b7657cede5d.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c23c1cea1dcbd6ffa2f54a59ed03456b5e2c074e911d1af393a3c0944e973d8.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -3778,7 +3996,7 @@
   }
  },
  "Parameters": {
-  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": {
+  "referencetoamplifyjanfinderappdev3sandbox789c476389dataOwnerAcceptQuotelambda8DFCA54DArn": {
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": {
@@ -3791,6 +4009,9 @@
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthIdentityPoolFCD7218CRef": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": {
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389datacreatecustomerquotelambdaD07FBD42Arn": {

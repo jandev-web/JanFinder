@@ -281,6 +281,20 @@
         "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetquotesowneravailablelambda59261E45Ref"
        ]
       },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389dataOwnerAcceptQuotelambda8DFCA54DRef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "function1351588B",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref"
+       ]
+      },
       "\"]"
      ]
     ]
@@ -432,16 +446,22 @@
    "Type": "AWS::CloudFormation::Stack",
    "Properties": {
     "Parameters": {
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {
+      "Fn::GetAtt": [
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref": {
+      "Fn::GetAtt": [
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref"
+      ]
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": {
       "Fn::GetAtt": [
        "auth179371D7",
        "Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef"
-      ]
-     },
-     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": {
-      "Fn::GetAtt": [
-       "function1351588B",
-       "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn"
       ]
      },
      "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref": {
@@ -460,6 +480,12 @@
       "Fn::GetAtt": [
        "auth179371D7",
        "Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthIdentityPoolFCD7218CRef"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": {
+      "Fn::GetAtt": [
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn"
       ]
      },
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functioncalcpackageoptionslambda5120FF6EArn": {
@@ -539,6 +565,18 @@
        "function1351588B",
        "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetquotesowneravailablelambda59261E45Arn"
       ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageJanFinderStorageBucket46746B61Arn": {
+      "Fn::GetAtt": [
+       "storage0EC3F24A",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389storageJanFinderStorageBucket46746B61Arn"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageJanFinderStorageBucket46746B61Ref": {
+      "Fn::GetAtt": [
+       "storage0EC3F24A",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389storageJanFinderStorageBucket46746B61Ref"
+      ]
      }
     },
     "Tags": [
@@ -567,7 +605,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/92625db4d9a25c8ecbacfb7456b3b2fb179e291093ea478cb08ace26a4934068.json"
+       "/9a47f00bb9e3c55f004f7637e0e4d45959bd5fffcc7cf7c1795b070ea6a48bf0.json"
       ]
      ]
     }
@@ -609,7 +647,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/4f86cb02c4abc8cd509fb83b96762022efcb9d272eb26ea7376403cb3edc2b95.json"
+       "/352602500834b520fc2a9385d52b1c66dbd69a6755bb364c6709d6bbda2d8af4.json"
       ]
      ]
     }
@@ -659,7 +697,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/ec082ae473ccc23f91e59b63a19568361d9de01276bcb64054ae4f3005b60207.json"
+       "/11ef217efdf241c1ea883c8a177d1f1bf71fff2dfa5015787ac2022403bb72e9.json"
       ]
      ]
     }

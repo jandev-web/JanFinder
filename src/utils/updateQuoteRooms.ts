@@ -1,5 +1,6 @@
 'use client';
 import { getDataClient } from './data-client';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 type FloorTypes = { hardfloor?: number; carpet?: number };
 type FormInfo = { roomTypes: any[]; sqft: number; floorTypes: FloorTypes };
@@ -14,10 +15,11 @@ export async function manualAddRoom(
   // Sanitize and stringify for AWSJSON
   const clean = JSON.parse(JSON.stringify(formInfo ?? {}));
   const json = JSON.stringify(clean); // IMPORTANT: a.json() → AWSJSON expects a string
-
+  const s = await fetchAuthSession({ forceRefresh: true });
+  const mode = s.tokens ? 'userPool' : 'identityPool';
   const { data, errors } = await getDataClient().queries.updateQuoteRooms(
     { quoteID, formInfo: json as any },
-    { authMode: 'identityPool' }
+    { authMode: mode }
   );
 
   if (errors?.length) throw new Error(errors.map(e => e.message).join('; '));

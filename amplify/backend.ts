@@ -1,8 +1,7 @@
 // amplify/backend.ts
 import { defineBackend } from '@aws-amplify/backend';
-import { Stack, Aws, aws_iam as iam, aws_lambda as lambda } from 'aws-cdk-lib';
+import { Stack, Duration, Aws, aws_iam as iam, aws_lambda as lambda } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
-
 import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { storage } from './storage/resource';
@@ -25,6 +24,8 @@ import { updateQuoteFrequencyFn } from './functions/update-quote-frequency/resou
 import { getOwnerFn } from './functions/get-owner/resource';
 import { getFranchiseFn } from './functions/get-franchise/resource';
 import { getAvailableQuotesOwnerFn } from './functions/get-quotes-owner-available/resource';
+import { ownerAcceptQuoteFn } from './functions/owner-accept-quote/resource';
+import { sendQuoteAcceptanceEmailFn } from './functions/send-quote-acceptance-email/resource';
 
 // 1) Bind resources
 const backend = defineBackend({
@@ -48,6 +49,9 @@ const backend = defineBackend({
   getOwnerFn,
   getFranchiseFn,
   getAvailableQuotesOwnerFn,
+  ownerAcceptQuoteFn,
+  sendQuoteAcceptanceEmailFn,
+
 });
 
 // 2) Cognito user pool tweaks
@@ -89,7 +93,7 @@ const apiId = backend.data.resources.graphqlApi.apiId;
 
 // Include both patterns; some accounts prefer /types/*
 const appsyncResourceArn = `arn:${Aws.PARTITION}:appsync:${region}:${account}:apis/${apiId}/*`;
-const appsyncTypesArn    = `arn:${Aws.PARTITION}:appsync:${region}:${account}:apis/${apiId}/types/*`;
+const appsyncTypesArn = `arn:${Aws.PARTITION}:appsync:${region}:${account}:apis/${apiId}/types/*`;
 
 const authRes = backend.auth.resources as any;
 
@@ -120,6 +124,15 @@ new iam.CfnPolicy(backend.data.stack, 'IdentityPoolGraphQLPolicyV2', {
   },
 });
 
+const docgenDepsLayer = new lambda.LayerVersion(backend.data.stack, 'DocgenDepsLayer', {
+  code: lambda.Code.fromAsset('amplify/layers/docgen-deps'),
+  compatibleRuntimes: [lambda.Runtime.PYTHON_3_12, lambda.Runtime.PYTHON_3_11],
+  description: 'Third-party deps for docx/pdf generation (adobe sdk, lxml)',
+});
+
+// === S3 bucket from Amplify Storage (prefer dynamic over hard-coded) ===
+const contractBucket = backend.storage.resources.bucket;
+
 // 4) Convenience refs
 const postConfFn = backend.postConfirmation.resources.lambda as lambda.Function;
 const createQuoteFn = backend.createCustomerQuoteFn.resources.lambda as lambda.Function;
@@ -137,6 +150,175 @@ const updFrequencyFn = backend.updateQuoteFrequencyFn.resources.lambda as lambda
 const getOwnerLambda = backend.getOwnerFn.resources.lambda as lambda.Function;
 const getFranchiseLambda = backend.getFranchiseFn.resources.lambda as lambda.Function;
 const getAvailableQuotesOwnerLambda = backend.getAvailableQuotesOwnerFn.resources.lambda as lambda.Function;
+const ownerAcceptQuoteLambda = backend.ownerAcceptQuoteFn.resources.lambda as lambda.Function;
+const sendOwnerAcceptanceEmailLambda = backend.sendQuoteAcceptanceEmailFn.resources.lambda as lambda.Function;
+
+
+
+const getQuotePDFLambda = new lambda.Function(backend.data.stack, 'GetQuotePdfFn', {
+  functionName: 'get-quote-pdf',                // so owner-accept-quote can reference by name
+  runtime: lambda.Runtime.PYTHON_3_12,          // or PYTHON_3_11 if you prefer
+  handler: 'handler.lambda_handler',
+  code: lambda.Code.fromAsset('amplify/functions/get-quote-pdf'),
+  timeout: Duration.minutes(2),
+  memorySize: 1024,
+  environment: {
+    CUSTOMER_QUOTES_TABLE: 'CustomerQuotes',
+    OWNER_TABLE: 'Owner_DB',
+    FRANCHISE_TABLE: 'Franchise_DB',
+    QUOTE_PDF_BUCKET_NAME: contractBucket.bucketName,
+    CONVERT_LAMBDA_NAME: 'convertDocxtoPDF',
+  },
+});
+
+const convertDocxToPdfLambda = new lambda.Function(backend.data.stack, 'ConvertDocxToPdfFn', {
+  functionName: 'convert-docx-to-pdf',
+  runtime: lambda.Runtime.PYTHON_3_12,
+  architecture: lambda.Architecture.X86_64,
+  handler: 'handler.lambda_handler',
+  code: lambda.Code.fromAsset('amplify/functions/convert-docx-to-pdf'),
+  timeout: Duration.minutes(3),
+  memorySize: 1536,
+  layers: [docgenDepsLayer],
+  environment: {
+    CONTRACT_BUCKET: contractBucket.bucketName,
+    ADOBE_SECRET_NAME: 'adobe-credentials', // or make this configurable
+  },
+});
+
+contractBucket.grantReadWrite(getQuotePDFLambda);
+contractBucket.grantReadWrite(convertDocxToPdfLambda);
+
+// === get-quote-pdf runtime permissions ===
+getQuotePDFLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['s3:ListBucket'],                       // <-- add this
+    resources: [`arn:${Aws.PARTITION}:s3:::janfindbucket1c1b5-dev`],
+  })
+);
+getQuotePDFLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['s3:GetObject', 's3:PutObject'],
+    resources: [`arn:${Aws.PARTITION}:s3:::janfindbucket1c1b5-dev/*`],
+  })
+);
+getQuotePDFLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['lambda:InvokeFunction'],
+    resources: [convertDocxToPdfLambda.functionArn],  // <-- not a hard-coded name
+  })
+);
+
+
+// === send-quote-acceptance-email runtime permissions ===
+sendOwnerAcceptanceEmailLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['s3:ListBucket'],                       // <-- add this too (defensive)
+    resources: [`arn:${Aws.PARTITION}:s3:::janfindbucket1c1b5-dev`],
+  })
+);
+sendOwnerAcceptanceEmailLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['s3:GetObject'],
+    resources: [`arn:${Aws.PARTITION}:s3:::janfindbucket1c1b5-dev/*`],
+  })
+);
+
+convertDocxToPdfLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['secretsmanager:GetSecretValue'],
+  resources: [`arn:${Aws.PARTITION}:secretsmanager:${region}:${account}:secret:adobe-credentials*`],
+}));
+contractBucket.grantReadWrite(convertDocxToPdfLambda);
+
+// owner-accept-quote needs permission to invoke both
+ownerAcceptQuoteLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['lambda:InvokeFunction'],
+    resources: [
+      getQuotePDFLambda.functionArn,
+      sendOwnerAcceptanceEmailLambda.functionArn,
+    ],
+  })
+);
+
+// Give owner-accept-quote the *actual* function names to call
+ownerAcceptQuoteLambda.addEnvironment(
+  'GET_QUOTE_PDF_FUNCTION_NAME',
+  getQuotePDFLambda.functionName
+);
+ownerAcceptQuoteLambda.addEnvironment(
+  'SEND_QUOTE_EMAIL_FUNCTION_NAME',
+  sendOwnerAcceptanceEmailLambda.functionName
+);
+
+// And make sure the role can invoke *those* exact ARNs (you already added this, just keep it)
+ownerAcceptQuoteLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['lambda:InvokeFunction'],
+    resources: [
+      getQuotePDFLambda.functionArn,
+      sendOwnerAcceptanceEmailLambda.functionArn,
+    ],
+  })
+);
+
+
+// get-quote-pdf runtime permissions
+getQuotePDFLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:GetItem', 'dynamodb:UpdateItem'],
+    resources: [
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/CustomerQuotes`,
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/Owner_DB`,
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/Franchise_DB`,
+    ],
+  })
+);
+getQuotePDFLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['s3:GetObject', 's3:PutObject'],
+    resources: [`arn:${Aws.PARTITION}:s3:::janfindbucket1c1b5-dev/*`],
+  })
+);
+getQuotePDFLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['lambda:InvokeFunction'],
+    resources: [`arn:${Aws.PARTITION}:lambda:${region}:${account}:function:convertDocxtoPDF`],
+  })
+);
+
+// send-quote-acceptance-email runtime permissions
+sendOwnerAcceptanceEmailLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:GetItem'],
+    resources: [
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/CustomerQuotes`,
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/Franchise_DB`,
+    ],
+  })
+);
+sendOwnerAcceptanceEmailLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['s3:GetObject'],
+    resources: [`arn:${Aws.PARTITION}:s3:::janfindbucket1c1b5-dev/*`],
+  })
+);
+sendOwnerAcceptanceEmailLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['ses:SendRawEmail'],
+    resources: ['*'],
+  })
+);
+
+ownerAcceptQuoteLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:GetItem', 'dynamodb:UpdateItem', 'dynamodb:DescribeTable'],
+    resources: [
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/CustomerQuotes`,
+      `arn:${Aws.PARTITION}:dynamodb:${region}:${account}:table/CustomerQuotes/index/*`,
+    ],
+  })
+);
 
 getAvailableQuotesOwnerLambda.addToRolePolicy(
   new PolicyStatement({

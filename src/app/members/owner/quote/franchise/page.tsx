@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import OwnerSingleAvailableQuote from '@/components/pages/OwnerAvailableQuote';
+import OwnerSingleAcceptedQuote from '@/components/pages/OwnerAcceptedQuote';
 import LoginError from '@/components/LoginErrorComponent';
 
 export const dynamic = 'force-dynamic';
@@ -32,7 +32,7 @@ export default async function AvailableQuotePage({
 
     return (
       <div className="flex w-full flex-col min-h-screen">
-        <OwnerSingleAvailableQuote user={user} quoteID={quoteParam} />
+        <OwnerSingleAcceptedQuote user={user} quoteID={quoteParam} />
       </div>
     );
   } catch (error) {

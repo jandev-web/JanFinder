@@ -1,7 +1,7 @@
 'use client';
 
 import { getDataClient } from './data-client';
-
+import { fetchAuthSession } from 'aws-amplify/auth';
 type UpdateBudgetResult = { message: string };
 
 export async function updateQuoteBudget(quoteID: string, budget: number): Promise<UpdateBudgetResult> {
@@ -9,10 +9,12 @@ export async function updateQuoteBudget(quoteID: string, budget: number): Promis
   if (!quoteID || !Number.isFinite(numeric)) {
     throw new Error('quoteID and a valid numeric budget are required');
   }
+  const s = await fetchAuthSession({ forceRefresh: true });
+  const mode = s.tokens ? 'userPool' : 'identityPool';
 
   const { data, errors } = await getDataClient().queries.updateQuoteBudget(
     { quoteID, budget: numeric },
-    { authMode: 'identityPool' } // IAM (guest/signed-in via Identity Pool)
+    { authMode: mode } // IAM (guest/signed-in via Identity Pool)
   );
 
   if (errors?.length) throw new Error(errors.map(e => e.message).join('; '));
