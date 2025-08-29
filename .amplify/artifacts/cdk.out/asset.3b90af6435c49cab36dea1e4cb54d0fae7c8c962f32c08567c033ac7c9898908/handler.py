@@ -689,18 +689,6 @@ def lambda_handler(event, context):
             UpdateExpression="SET QuotePDF = :url",
             ExpressionAttributeValues={':url': pdf_url}
         )
-        email_fn = os.environ.get('SEND_QUOTE_EMAIL_FUNCTION_NAME')
-        if email_fn:
-            try:
-                payload = {"body": {"quoteID": quote_id}, "requestId": rid}
-                lambda_client.invoke(
-                    FunctionName=email_fn,
-                    InvocationType='Event',
-                    Payload=json.dumps(payload).encode('utf-8'),
-                )
-                _log(rid, "Invoked email lambda", function=email_fn)
-            except Exception as e:
-                _log(rid, "Email lambda invoke failed", error=str(e))
 
         _log(rid, "DONE")
         return {

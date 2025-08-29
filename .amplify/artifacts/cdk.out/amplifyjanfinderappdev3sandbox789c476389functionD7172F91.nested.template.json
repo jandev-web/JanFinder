@@ -171,7 +171,11 @@
          "Fn::Join": [
           "",
           [
-           "arn:aws:dynamodb:",
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
            {
             "Ref": "AWS::Region"
            },
@@ -187,7 +191,11 @@
          "Fn::Join": [
           "",
           [
-           "arn:aws:dynamodb:",
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
            {
             "Ref": "AWS::Region"
            },
@@ -203,7 +211,11 @@
          "Fn::Join": [
           "",
           [
-           "arn:aws:dynamodb:",
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
            {
             "Ref": "AWS::Region"
            },
@@ -224,7 +236,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -376,7 +392,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -526,7 +546,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -676,7 +700,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -826,7 +854,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -979,7 +1011,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -988,26 +1024,6 @@
            "Ref": "AWS::AccountId"
           },
           ":table/CustomerQuotes"
-         ]
-        ]
-       }
-      },
-      {
-       "Action": "lambda:InvokeFunction",
-       "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:aws:lambda:",
-          {
-           "Ref": "AWS::Region"
-          },
-          ":",
-          {
-           "Ref": "AWS::AccountId"
-          },
-          ":function:SendCustomerConfirmationEmail"
          ]
         ]
        }
@@ -1150,7 +1166,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -1300,7 +1320,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -1450,7 +1474,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -1600,7 +1628,11 @@
         "Fn::Join": [
          "",
          [
-          "arn:aws:dynamodb:",
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
           {
            "Ref": "AWS::Region"
           },
@@ -2241,6 +2273,163 @@
     "aws:asset:property": "Code"
    }
   },
+  "setfranchisetemplatelambdaServiceRoleA9B5F135": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "set-franchise-template"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/set-franchise-template-lambda/ServiceRole/Resource"
+   }
+  },
+  "setfranchisetemplatelambdaServiceRoleDefaultPolicy926D8BA1": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:UpdateItem",
+        "dynamodb:GetItem"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":table/Franchise_DB"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "setfranchisetemplatelambdaServiceRoleDefaultPolicy926D8BA1",
+    "Roles": [
+     {
+      "Ref": "setfranchisetemplatelambdaServiceRoleA9B5F135"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/set-franchise-template-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "setfranchisetemplatelambda38CDF050": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "efc8bee6a8a8cef87f4366caaea32eda5863ba775bca63c6e2a34baa70bd54db.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "FRANCHISE_TABLE": "Franchise_DB",
+      "AMPLIFY_SSM_ENV_CONFIG": "{}"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "setfranchisetemplatelambdaServiceRoleA9B5F135",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "set-franchise-template"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "setfranchisetemplatelambdaServiceRoleDefaultPolicy926D8BA1",
+    "setfranchisetemplatelambdaServiceRoleA9B5F135"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/set-franchise-template-lambda/Resource",
+    "aws:asset:path": "asset.efc8bee6a8a8cef87f4366caaea32eda5863ba775bca63c6e2a34baa70bd54db",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
   "sendquoteacceptanceemaillambdaServiceRoleFDB4F97C": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -2297,36 +2486,28 @@
     "PolicyDocument": {
      "Statement": [
       {
-       "Action": "s3:ListBucket",
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*"
+       ],
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Ref": "AWS::Partition"
-          },
-          ":s3:::janfindbucket1c1b5-dev"
+       "Resource": [
+        {
+         "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn"
+           },
+           "/*"
+          ]
          ]
-        ]
-       }
-      },
-      {
-       "Action": "s3:GetObject",
-       "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Ref": "AWS::Partition"
-          },
-          ":s3:::janfindbucket1c1b5-dev/*"
-         ]
-        ]
-       }
+        }
+       ]
       },
       {
        "Action": "dynamodb:GetItem",
@@ -2405,13 +2586,15 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "ff80b65d2a5d03604cbd5e3a2d14aa536fc16aeb3f89a56854ca22a48148ff61.zip"
+     "S3Key": "c575a69f08df5369559c9e54ccccdbe02b88f3394c780ec5e23e105d25fbab74.zip"
     },
     "Environment": {
      "Variables": {
       "CUSTOMER_QUOTES_TABLE": "CustomerQuotes",
       "FRANCHISE_TABLE": "Franchise_DB",
-      "QUOTE_PDF_BUCKET_NAME": "janfindbucket1c1b5-dev",
+      "QUOTE_PDF_BUCKET_NAME": {
+       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef"
+      },
       "FROM_EMAIL": "noreply@bid2clean.com",
       "AMPLIFY_SSM_ENV_CONFIG": "{}"
      }
@@ -2452,7 +2635,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/send-quote-acceptance-email-lambda/Resource",
-    "aws:asset:path": "asset.ff80b65d2a5d03604cbd5e3a2d14aa536fc16aeb3f89a56854ca22a48148ff61",
+    "aws:asset:path": "asset.c575a69f08df5369559c9e54ccccdbe02b88f3394c780ec5e23e105d25fbab74",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -2805,6 +2988,11 @@
     "Ref": "getquotesowneravailablelambda1342B6B2"
    }
   },
+  "amplifyjanfinderappdev3sandbox789c476389functionsetfranchisetemplatelambdaADEF9820Ref": {
+   "Value": {
+    "Ref": "setfranchisetemplatelambda38CDF050"
+   }
+  },
   "amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref": {
    "Value": {
     "Ref": "sendquoteacceptanceemaillambda008F7CD2"
@@ -2814,6 +3002,14 @@
    "Value": {
     "Fn::GetAtt": [
      "sendquoteacceptanceemaillambda008F7CD2",
+     "Arn"
+    ]
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functionsetfranchisetemplatelambdaADEF9820Arn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "setfranchisetemplatelambda38CDF050",
      "Arn"
     ]
    }
@@ -2929,6 +3125,14 @@
      "Arn"
     ]
    }
+  }
+ },
+ "Parameters": {
+  "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef": {
+   "Type": "String"
   }
  }
 }

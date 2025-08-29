@@ -284,78 +284,48 @@ def _replace_in_tree_across_runs(tree, replacements, rid):
         big, spans, _ = do_one_pass(big, spans, ph, val)
 
     return total_replacements
-def validate_docx_stream(stream, rid):
-    """Fail fast if the docx zip or critical XML parts are invalid."""
-    stream.seek(0)
-    with zipfile.ZipFile(stream, 'r') as z:
-        bad = z.testzip()
-        if bad:
-            _log(rid, "DOCX zip corrupt", bad_entry=bad)
-            raise ValueError(f"DOCX ZIP is corrupt at {bad}")
-
-        # Parse core content parts to ensure well-formed XML
-        parts = ['word/document.xml']
-        parts += [n for n in z.namelist() if n.startswith('word/header') and n.endswith('.xml')]
-        parts += [n for n in z.namelist() if n.startswith('word/footer') and n.endswith('.xml')]
-        parts += [n for n in z.namelist() if n.endswith('/footnotes.xml') or n.endswith('/endnotes.xml')]
-
-        for part in parts:
-            try:
-                etree.fromstring(z.read(part))
-            except Exception as e:
-                _log(rid, "DOCX XML invalid", part=part, error=str(e))
-                raise
-    stream.seek(0)
 
 def replace_placeholders_in_docx(doc_stream, placeholders, rid):
     """
-    Edit only content parts likely to contain user-visible text:
-    - word/document.xml
-    - word/header*.xml
-    - word/footer*.xml
-    - footnotes/endnotes
-    Require lxml so we don't corrupt runs.
+    Process all main Word XML parts (document, headers, footers, footnotes, endnotes)
+    and replace [PLACEHOLDER] across split runs.
     """
-    if etree is None:
-        raise RuntimeError("lxml not available; cannot safely replace placeholders across runs")
-
-    updated = {}
+    updated_xml = {}
     with zipfile.ZipFile(doc_stream, 'r') as z:
-        names = z.namelist()
-        parts = []
-        for n in names:
-            if not (n.startswith('word/') and n.endswith('.xml')):
-                continue
-            if (
-                n == 'word/document.xml' or
-                n.startswith('word/header') or
-                n.startswith('word/footer') or
-                n.endswith('/footnotes.xml') or
-                n.endswith('/endnotes.xml')
-            ):
-                parts.append(n)
+        xml_files = [f for f in z.namelist() if f.startswith('word/') and f.endswith('.xml')]
+        _log(rid, "XML files to process", count=len(xml_files))
+        for file in xml_files:
+            xml_content = z.read(file)
+            # If lxml is available, do robust run-spanning replacement
+            if etree is not None:
+                try:
+                    tree = etree.fromstring(xml_content)
+                    reps = _replace_in_tree_across_runs(tree, placeholders, rid)
+                    updated_xml[file] = etree.tostring(tree, encoding='utf-8')
+                    _log(rid, "File processed", file=file, runSpanningReplacements=reps)
+                    continue
+                except Exception as e:
+                    _log(rid, "lxml replace failed; falling back to naive", file=file, error=str(e))
+            # Fallback: naive bytes replace (only works if placeholder isn't split)
+            xml_text = xml_content.decode('utf-8', errors='ignore')
+            replaced = 0
+            for k, v in placeholders.items():
+                if k in xml_text:
+                    xml_text = xml_text.replace(k, str(v))
+                    replaced += 1
+            updated_xml[file] = xml_text.encode('utf-8')
+            _log(rid, "File processed (fallback)", file=file, replacements=replaced)
 
-        _log(rid, "XML parts to process", count=len(parts), parts=parts)
-
-        for file in parts:
-            xml_bytes = z.read(file)
-            tree = etree.fromstring(xml_bytes)
-            reps = _replace_in_tree_across_runs(tree, placeholders, rid)
-            updated[file] = etree.tostring(tree, encoding='utf-8')
-            _log(rid, "Part replaced", file=file, replacements=reps)
-
+        # Write updated zip
         out = BytesIO()
-        with zipfile.ZipFile(out, 'w', compression=zipfile.ZIP_DEFLATED) as new_doc:
-            for name in names:
-                if name in updated:
-                    new_doc.writestr(name, updated[name])
+        with zipfile.ZipFile(out, 'w') as new_doc:
+            for name in z.namelist():
+                if name in updated_xml:
+                    new_doc.writestr(name, updated_xml[name])
                 else:
                     new_doc.writestr(name, z.read(name))
         out.seek(0)
-
-    validate_docx_stream(out, rid)  # ✅ ensure it's healthy
-    return out
-
+        return out
 
 # ---------------------------
 # Data fetch
@@ -636,8 +606,8 @@ def lambda_handler(event, context):
             return {'statusCode': 400, 'body': json.dumps({'message': 'Missing quoteID'}), 'requestId': rid}
 
         # Output locations
-        docx_key = f"customer/{quote_id}/quotes/quote.docx"
-        pdf_key  = f"customer/{quote_id}/quotes/quote.pdf"
+        docx_key = f"protected/quotes/{quote_id}/quote.docx"
+        pdf_key  = f"protected/quotes/{quote_id}/quote.pdf"
         pdf_url  = f"https://{QUOTE_PDF_BUCKET_NAME}.s3.amazonaws.com/{pdf_key}"
         _log(rid, "S3 keys", docx_key=docx_key, pdf_key=pdf_key, pdf_url=pdf_url)
 
@@ -666,8 +636,6 @@ def lambda_handler(event, context):
 
         # Replace placeholders across all XML parts
         updated_doc_stream = replace_placeholders_in_docx(doc_template, placeholders, rid)
-        validate_docx_stream(updated_doc_stream, rid)  # <- add this
-
 
         # Upload filled DOCX
         _log(rid, "Uploading updated DOCX", bucket=QUOTE_PDF_BUCKET_NAME, key=docx_key)
@@ -689,18 +657,6 @@ def lambda_handler(event, context):
             UpdateExpression="SET QuotePDF = :url",
             ExpressionAttributeValues={':url': pdf_url}
         )
-        email_fn = os.environ.get('SEND_QUOTE_EMAIL_FUNCTION_NAME')
-        if email_fn:
-            try:
-                payload = {"body": {"quoteID": quote_id}, "requestId": rid}
-                lambda_client.invoke(
-                    FunctionName=email_fn,
-                    InvocationType='Event',
-                    Payload=json.dumps(payload).encode('utf-8'),
-                )
-                _log(rid, "Invoked email lambda", function=email_fn)
-            except Exception as e:
-                _log(rid, "Email lambda invoke failed", error=str(e))
 
         _log(rid, "DONE")
         return {

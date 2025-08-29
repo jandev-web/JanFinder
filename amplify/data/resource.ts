@@ -17,6 +17,7 @@ import { getOwnerFn } from '../functions/get-owner/resource';
 import { getFranchiseFn } from '../functions/get-franchise/resource';
 import { getAvailableQuotesOwnerFn } from '../functions/get-quotes-owner-available/resource';
 import { ownerAcceptQuoteFn } from '../functions/owner-accept-quote/resource';
+import { setFranchiseTemplateFn } from '../functions/set-franchise-template/resource';
 
 console.log('[Synth] data.defaultAuthorizationMode = iam');
 console.log('[Synth] createCustomerQuote auth = guest + identityPool');
@@ -24,7 +25,7 @@ const schema = a.schema({
   getFacilityOptions: a
     .query()
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(getFacilityOptionsFn)),
   createCustomerQuote: a
@@ -37,7 +38,7 @@ const schema = a.schema({
     .query()
     .arguments({ quoteID: a.string() })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(calcPackageOptionsFn)),
   updateQuoteBudget: a
@@ -47,7 +48,7 @@ const schema = a.schema({
       budget: a.float(),
     })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(updateQuoteBudgetFn)),
   updateCustomerInfo: a
@@ -57,7 +58,7 @@ const schema = a.schema({
       customerInfo: a.json(), // or build an object type if you want strict typing
     })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(updateCustomerInfoFn)),
   updateFacilityType: a
@@ -67,7 +68,7 @@ const schema = a.schema({
       facilityType: a.string(),
     })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(updateFacilityTypeFn)),
   updateFloorInfo: a
@@ -77,14 +78,14 @@ const schema = a.schema({
       floorInfo: a.json(), // { floors: number, stairwells: {carpetStairwells?, hardfloorStairwells?} }
     })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(updateFloorInfoFn)),
   confirmQuote: a
     .query()
     .arguments({ quoteID: a.string() })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(confirmQuoteFn)),
   getQuote: a
@@ -101,7 +102,7 @@ const schema = a.schema({
       formInfo: a.json(), // { roomTypes: [], sqft: number, floorTypes: { ... } }
     })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(updateQuoteRoomsFn)),
   updatePackageChoice: a
@@ -111,21 +112,21 @@ const schema = a.schema({
       packageInfo: a.json(),
     })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(updatePackageChoiceFn)),
   sendQuoteConfirmationEmail: a
     .query()
     .arguments({ quoteID: a.string() })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(sendQuoteConfirmationEmailFn)),
   updateQuoteFrequency: a
     .query()
     .arguments({ quoteID: a.string(), frequency: a.string() })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'),allow.authenticated(),
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
     allow.guest(),])
     .handler(a.handler.function(updateQuoteFrequencyFn)),
   getOwnerById: a
@@ -157,6 +158,16 @@ const schema = a.schema({
     .returns(a.json())
     .authorization((allow) => [allow.authenticated()]) // userPool users (owners)
     .handler(a.handler.function(ownerAcceptQuoteFn)),
+  setFranchiseTemplate: a
+    .mutation()
+    .arguments({
+      franchiseID: a.string().required(),
+      templateType: a.string().required(), // 'quote' | 'contract'
+      isThere: a.boolean().required(),
+    })
+    .returns(a.json())
+    .authorization((allow) => [allow.authenticated()]) // user-pool only (server)
+    .handler(a.handler.function(setFranchiseTemplateFn)),
 });
 
 export type Schema = ClientSchema<typeof schema>;

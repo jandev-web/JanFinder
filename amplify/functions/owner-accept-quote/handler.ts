@@ -89,7 +89,7 @@ export const handler = async (event: AppSyncEvent, context?: any) => {
       const resp = await lambda.send(
         new InvokeCommand({
           FunctionName: GET_QUOTE_PDF_FUNCTION_NAME,
-          InvocationType: 'RequestResponse',
+          InvocationType: 'Event',
           Payload: payload,
         })
       );

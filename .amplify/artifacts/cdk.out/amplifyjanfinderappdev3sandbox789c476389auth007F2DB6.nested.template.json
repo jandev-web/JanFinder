@@ -776,7 +776,11 @@
          "Fn::Join": [
           "",
           [
-           "arn:aws:dynamodb:",
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
            {
             "Ref": "AWS::Region"
            },
@@ -792,7 +796,11 @@
          "Fn::Join": [
           "",
           [
-           "arn:aws:dynamodb:",
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
            {
             "Ref": "AWS::Region"
            },
@@ -1193,6 +1201,16 @@
   "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthunauthenticatedUserRoleC7C1F878Ref": {
    "Value": {
     "Ref": "amplifyAuthunauthenticatedUserRole2B524D9E"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthMemberGroupRole8B2C744ARef": {
+   "Value": {
+    "Ref": "amplifyAuthMemberGroupRole9CB16F5C"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthOwnerGroupRole63132DCARef": {
+   "Value": {
+    "Ref": "amplifyAuthOwnerGroupRoleA401F630"
    }
   }
  }

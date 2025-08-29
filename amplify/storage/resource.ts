@@ -1,16 +1,12 @@
 import { defineStorage } from '@aws-amplify/backend';
 
 export const storage = defineStorage({
-  name: 'JanFinderStorage',
+  name: 'QuoteStorage',
   access: (allow) => ({
-    'contracts/*': [
-      allow.authenticated.to(['read', 'write'])
-    ],
-    'contract-templates/*': [
-      allow.authenticated.to(['read', 'write'])
-    ],
-    'quote-templates/*': [
-      allow.authenticated.to(['read', 'write'])
+    'members/franchise/*': [
+      allow.groups(['Member']).to(['read']),
+      allow.groups(['Owner']).to(['read', 'write', 'delete'])
     ],
   })
 });
+

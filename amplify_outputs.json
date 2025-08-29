@@ -323,38 +323,55 @@
               "isRequired": true
             }
           }
+        },
+        "setFranchiseTemplate": {
+          "name": "setFranchiseTemplate",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "franchiseID": {
+              "name": "franchiseID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "templateType": {
+              "name": "templateType",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "isThere": {
+              "name": "isThere",
+              "isArray": false,
+              "type": "Boolean",
+              "isRequired": true
+            }
+          }
         }
       }
     }
   },
   "storage": {
     "aws_region": "us-east-1",
-    "bucket_name": "amplify-janfinderapp-dev3-janfinderstoragebucketa0-nedx64qum4zj",
+    "bucket_name": "amplify-janfinderapp-dev3-quotestoragebucket235de2-rewllqgvdp64",
     "buckets": [
       {
-        "name": "JanFinderStorage",
-        "bucket_name": "amplify-janfinderapp-dev3-janfinderstoragebucketa0-nedx64qum4zj",
+        "name": "QuoteStorage",
+        "bucket_name": "amplify-janfinderapp-dev3-quotestoragebucket235de2-rewllqgvdp64",
         "aws_region": "us-east-1",
         "paths": {
-          "contracts/*": {
-            "authenticated": [
+          "members/franchise/*": {
+            "groupsMember": [
+              "get",
+              "list"
+            ],
+            "groupsOwner": [
               "get",
               "list",
-              "write"
-            ]
-          },
-          "contract-templates/*": {
-            "authenticated": [
-              "get",
-              "list",
-              "write"
-            ]
-          },
-          "quote-templates/*": {
-            "authenticated": [
-              "get",
-              "list",
-              "write"
+              "write",
+              "delete"
             ]
           }
         }

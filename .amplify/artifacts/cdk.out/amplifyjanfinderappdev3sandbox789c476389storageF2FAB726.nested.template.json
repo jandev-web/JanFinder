@@ -1,7 +1,7 @@
 {
  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"AmplifySandbox\",\"createdWith\":\"1.4.1\",\"stackType\":\"storage-S3\",\"metadata\":{}}",
  "Resources": {
-  "JanFinderStorageBucketA0AAEB6D": {
+  "QuoteStorageBucket235DE222": {
    "Type": "AWS::S3::Bucket",
    "Properties": {
     "CorsConfiguration": {
@@ -37,7 +37,7 @@
      },
      {
       "Key": "amplify:friendly-name",
-      "Value": "JanFinderStorage"
+      "Value": "QuoteStorage"
      },
      {
       "Key": "aws-cdk:auto-delete-objects",
@@ -52,14 +52,14 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/JanFinderStorage/Bucket/Resource"
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/QuoteStorage/Bucket/Resource"
    }
   },
-  "JanFinderStorageBucketPolicy091D89D8": {
+  "QuoteStorageBucketPolicy1CEDDD6B": {
    "Type": "AWS::S3::BucketPolicy",
    "Properties": {
     "Bucket": {
-     "Ref": "JanFinderStorageBucketA0AAEB6D"
+     "Ref": "QuoteStorageBucket235DE222"
     },
     "PolicyDocument": {
      "Statement": [
@@ -77,7 +77,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "JanFinderStorageBucketA0AAEB6D",
+          "QuoteStorageBucket235DE222",
           "Arn"
          ]
         },
@@ -87,7 +87,7 @@
           [
            {
             "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
+             "QuoteStorageBucket235DE222",
              "Arn"
             ]
            },
@@ -116,7 +116,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "JanFinderStorageBucketA0AAEB6D",
+          "QuoteStorageBucket235DE222",
           "Arn"
          ]
         },
@@ -126,7 +126,7 @@
           [
            {
             "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
+             "QuoteStorageBucket235DE222",
              "Arn"
             ]
            },
@@ -143,10 +143,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/JanFinderStorage/Bucket/Policy/Resource"
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/QuoteStorage/Bucket/Policy/Resource"
    }
   },
-  "JanFinderStorageBucketAutoDeleteObjectsCustomResource1E42697A": {
+  "QuoteStorageBucketAutoDeleteObjectsCustomResourceE149AA37": {
    "Type": "Custom::S3AutoDeleteObjects",
    "Properties": {
     "ServiceToken": {
@@ -156,16 +156,16 @@
      ]
     },
     "BucketName": {
-     "Ref": "JanFinderStorageBucketA0AAEB6D"
+     "Ref": "QuoteStorageBucket235DE222"
     }
    },
    "DependsOn": [
-    "JanFinderStorageBucketPolicy091D89D8"
+    "QuoteStorageBucketPolicy1CEDDD6B"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/JanFinderStorage/Bucket/AutoDeleteObjectsCustomResource/Default"
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/QuoteStorage/Bucket/AutoDeleteObjectsCustomResource/Default"
    }
   },
   "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
@@ -228,7 +228,7 @@
       [
        "Lambda function for auto-deleting objects in ",
        {
-        "Ref": "JanFinderStorageBucketA0AAEB6D"
+        "Ref": "QuoteStorageBucket235DE222"
        },
        " S3 bucket."
       ]
@@ -246,23 +246,23 @@
     "aws:asset:property": "Code"
    }
   },
-  "JANFINDERSTORAGEBUCKETNAMEParameterEB42A900": {
+  "QUOTESTORAGEBUCKETNAMEParameter5C8ABD1E": {
    "Type": "AWS::SSM::Parameter",
    "Properties": {
-    "Name": "/amplify/resource_reference/janfinderapp/dev3-sandbox-789c476389/JAN_FINDER_STORAGE_BUCKET_NAME",
+    "Name": "/amplify/resource_reference/janfinderapp/dev3-sandbox-789c476389/QUOTE_STORAGE_BUCKET_NAME",
     "Tags": {
      "amplify:deployment-type": "sandbox",
      "created-by": "amplify"
     },
     "Type": "String",
     "Value": {
-     "Ref": "JanFinderStorageBucketA0AAEB6D"
+     "Ref": "QuoteStorageBucket235DE222"
     }
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/JAN_FINDER_STORAGE_BUCKET_NAMEParameter/Resource"
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/QUOTE_STORAGE_BUCKET_NAMEParameter/Resource"
    }
   },
   "amplifyjanfinderappdev3sandbox789c476389storageAccess4690698D6": {
@@ -273,120 +273,38 @@
       {
        "Action": "s3:GetObject",
        "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/contracts/*"
-          ]
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "QuoteStorageBucket235DE222",
+            "Arn"
+           ]
+          },
+          "/members/franchise/*"
          ]
-        },
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/contract-templates/*"
-          ]
-         ]
-        },
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/quote-templates/*"
-          ]
-         ]
-        }
-       ]
+        ]
+       }
       },
       {
        "Action": "s3:ListBucket",
        "Condition": {
         "StringLike": {
          "s3:prefix": [
-          "contracts/*",
-          "contracts/",
-          "contract-templates/*",
-          "contract-templates/",
-          "quote-templates/*",
-          "quote-templates/"
+          "members/franchise/*",
+          "members/franchise/"
          ]
         }
        },
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "JanFinderStorageBucketA0AAEB6D",
+         "QuoteStorageBucket235DE222",
          "Arn"
         ]
        }
-      },
-      {
-       "Action": "s3:PutObject",
-       "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/contracts/*"
-          ]
-         ]
-        },
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/contract-templates/*"
-          ]
-         ]
-        },
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::GetAtt": [
-             "JanFinderStorageBucketA0AAEB6D",
-             "Arn"
-            ]
-           },
-           "/quote-templates/*"
-          ]
-         ]
-        }
-       ]
       }
      ],
      "Version": "2012-10-17"
@@ -394,7 +312,7 @@
     "PolicyName": "amplifyjanfinderappdev3sandbox789c476389storageAccess4690698D6",
     "Roles": [
      {
-      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref"
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthMemberGroupRole8B2C744ARef"
      }
     ]
    },
@@ -402,6 +320,99 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/amplify-janfinderapp-dev3-sandbox-789c476389--storageAccess4/Resource"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389storageAccess56A977557": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "QuoteStorageBucket235DE222",
+            "Arn"
+           ]
+          },
+          "/members/franchise/*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "s3:ListBucket",
+       "Condition": {
+        "StringLike": {
+         "s3:prefix": [
+          "members/franchise/*",
+          "members/franchise/"
+         ]
+        }
+       },
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "QuoteStorageBucket235DE222",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "s3:PutObject",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "QuoteStorageBucket235DE222",
+            "Arn"
+           ]
+          },
+          "/members/franchise/*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "s3:DeleteObject",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "QuoteStorageBucket235DE222",
+            "Arn"
+           ]
+          },
+          "/members/franchise/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "amplifyjanfinderappdev3sandbox789c476389storageAccess56A977557",
+    "Roles": [
+     {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthOwnerGroupRole63132DCARef"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/storage/amplify-janfinderapp-dev3-sandbox-789c476389--storageAccess5/Resource"
    }
   },
   "CDKMetadata": {
@@ -818,22 +829,25 @@
   }
  },
  "Outputs": {
-  "amplifyjanfinderappdev3sandbox789c476389storageJanFinderStorageBucket46746B61Arn": {
+  "amplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn": {
    "Value": {
     "Fn::GetAtt": [
-     "JanFinderStorageBucketA0AAEB6D",
+     "QuoteStorageBucket235DE222",
      "Arn"
     ]
    }
   },
-  "amplifyjanfinderappdev3sandbox789c476389storageJanFinderStorageBucket46746B61Ref": {
+  "amplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef": {
    "Value": {
-    "Ref": "JanFinderStorageBucketA0AAEB6D"
+    "Ref": "QuoteStorageBucket235DE222"
    }
   }
  },
  "Parameters": {
-  "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref": {
+  "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthMemberGroupRole8B2C744ARef": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthOwnerGroupRole63132DCARef": {
    "Type": "String"
   }
  }

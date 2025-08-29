@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import deleteFranchise from '@/utils/deleteFranchise';
 import getContractTemplate from '@/utils/getContractTemplate';
-import getQuoteTemplate from '@/utils/getQuoteTemplate';
+import getQuoteTemplate from '@/utils/getQuoteTemplateClient';
 
 interface FranchiseInfoProps {
     franchise: any;

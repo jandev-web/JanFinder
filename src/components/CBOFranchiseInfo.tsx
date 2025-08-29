@@ -1,6 +1,6 @@
 import React from 'react';
 import getContractTemplate from '@/utils/getContractTemplate';
-import getQuoteTemplate from '@/utils/getQuoteTemplate';
+import getQuoteTemplate from '@/utils/getQuoteTemplateClient';
 
 interface CBOFranchiseInfoProps {
     franchise: any;

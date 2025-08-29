@@ -157,7 +157,7 @@ export const handler = async (event: AppSyncEvent, context?: any) => {
     log(requestId, 'Franchise resolved', { franchiseName });
 
     // -------- S3: fetch PDF --------
-    const key = `protected/quotes/${quoteID}/quote.pdf`;
+    const key = `customer/${quoteID}/quotes/quote.pdf`;
     log(requestId, 'S3 GetObject (PDF)', { bucket: QUOTE_PDF_BUCKET_NAME, key });
     let pdfBytes: Uint8Array;
     try {
