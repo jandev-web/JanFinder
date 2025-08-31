@@ -1,4 +1,3 @@
-// amplify/data/resource.ts
 import { a, defineData, type ClientSchema } from '@aws-amplify/backend';
 import { getFacilityOptionsFn } from '../functions/get-facility-options/resource';
 import { createCustomerQuoteFn } from '../functions/create-customer-quote/resource';
@@ -18,163 +17,86 @@ import { getFranchiseFn } from '../functions/get-franchise/resource';
 import { getAvailableQuotesOwnerFn } from '../functions/get-quotes-owner-available/resource';
 import { ownerAcceptQuoteFn } from '../functions/owner-accept-quote/resource';
 import { setFranchiseTemplateFn } from '../functions/set-franchise-template/resource';
+import { validateQuoteTemplateProxyFn as testFranchiseQuoteTemplateFn } from '../functions/validate-quote-template-proxy/resource';
 
 console.log('[Synth] data.defaultAuthorizationMode = iam');
 console.log('[Synth] createCustomerQuote auth = guest + identityPool');
+
 const schema = a.schema({
-  getFacilityOptions: a
-    .query()
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  getFacilityOptions: a.query().returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(getFacilityOptionsFn)),
-  createCustomerQuote: a
-    .query()
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  createCustomerQuote: a.query().returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(createCustomerQuoteFn)),
-  calculatePackageOptions: a
-    .query()
-    .arguments({ quoteID: a.string() })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  calculatePackageOptions: a.query().arguments({ quoteID: a.string() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(calcPackageOptionsFn)),
-  updateQuoteBudget: a
-    .query()
-    .arguments({
-      quoteID: a.string(),
-      budget: a.float(),
-    })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  updateQuoteBudget: a.query().arguments({ quoteID: a.string(), budget: a.float() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updateQuoteBudgetFn)),
-  updateCustomerInfo: a
-    .query()
-    .arguments({
-      quoteID: a.string(),
-      customerInfo: a.json(), // or build an object type if you want strict typing
-    })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  updateCustomerInfo: a.query().arguments({ quoteID: a.string(), customerInfo: a.json() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updateCustomerInfoFn)),
-  updateFacilityType: a
-    .query()
-    .arguments({
-      quoteID: a.string(),
-      facilityType: a.string(),
-    })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  updateFacilityType: a.query().arguments({ quoteID: a.string(), facilityType: a.string() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updateFacilityTypeFn)),
-  updateFloorInfo: a
-    .query()
-    .arguments({
-      quoteID: a.string(),
-      floorInfo: a.json(), // { floors: number, stairwells: {carpetStairwells?, hardfloorStairwells?} }
-    })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  updateFloorInfo: a.query().arguments({ quoteID: a.string(), floorInfo: a.json() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updateFloorInfoFn)),
-  confirmQuote: a
-    .query()
-    .arguments({ quoteID: a.string() })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  confirmQuote: a.query().arguments({ quoteID: a.string() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(confirmQuoteFn)),
-  getQuote: a
-    .query()
-    .arguments({ quoteID: a.string() })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  getQuote: a.query().arguments({ quoteID: a.string() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(getQuoteFn)),
-  updateQuoteRooms: a
-    .query()
-    .arguments({
-      quoteID: a.string(),
-      formInfo: a.json(), // { roomTypes: [], sqft: number, floorTypes: { ... } }
-    })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  updateQuoteRooms: a.query().arguments({ quoteID: a.string(), formInfo: a.json() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updateQuoteRoomsFn)),
-  updatePackageChoice: a
-    .query()
-    .arguments({
-      quoteID: a.string(),
-      packageInfo: a.json(),
-    })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  updatePackageChoice: a.query().arguments({ quoteID: a.string(), packageInfo: a.json() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updatePackageChoiceFn)),
-  sendQuoteConfirmationEmail: a
-    .query()
-    .arguments({ quoteID: a.string() })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  sendQuoteConfirmationEmail: a.query().arguments({ quoteID: a.string() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(sendQuoteConfirmationEmailFn)),
-  updateQuoteFrequency: a
-    .query()
-    .arguments({ quoteID: a.string(), frequency: a.string() })
-    .returns(a.json())
-    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(),
-    allow.guest(),])
+  updateQuoteFrequency: a.query().arguments({ quoteID: a.string(), frequency: a.string() }).returns(a.json())
+    .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updateQuoteFrequencyFn)),
-  getOwnerById: a
-    .query()
-    .arguments({ id: a.string().required() })
-    .returns(a.json()) // owner record as JSON
-    .authorization((allow) => [
-      allow.authenticated(), // tighten to groups/owner-only if desired
-    ])
+  getOwnerById: a.query().arguments({ id: a.string().required() }).returns(a.json())
+    .authorization(allow => [allow.authenticated()])
     .handler(a.handler.function(getOwnerFn)),
-  getFranchiseInfo: a
-    .query()
+  getFranchiseInfo: a.query().arguments({ franchiseID: a.string().required() }).returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(getFranchiseFn)),
+  getAvailableQuotesOwner: a.query().returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(getAvailableQuotesOwnerFn)),
+  ownerAcceptQuote: a.mutation().arguments({
+    quoteID: a.string().required(),
+    franchiseID: a.string().required(),
+    ownerID: a.string().required(),
+  }).returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(ownerAcceptQuoteFn)),
+  setFranchiseTemplate: a.mutation().arguments({
+    franchiseID: a.string().required(),
+    templateType: a.string().required(),
+    isThere: a.boolean().required(),
+  }).returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(setFranchiseTemplateFn)),
+  testFranchiseQuoteTemplate: a.mutation()
     .arguments({ franchiseID: a.string().required() })
     .returns(a.json())
-    .authorization((allow) => [allow.authenticated()])
-    .handler(a.handler.function(getFranchiseFn)),
-  getAvailableQuotesOwner: a
-    .query()
-    .returns(a.json()) // Quote[]
-    .authorization((allow) => [allow.authenticated()]) // adjust if guests should access
-    .handler(a.handler.function(getAvailableQuotesOwnerFn)),
-  ownerAcceptQuote: a
-    .mutation()
-    .arguments({
-      quoteID: a.string().required(),
-      franchiseID: a.string().required(),
-      ownerID: a.string().required(),
-    })
-    .returns(a.json())
-    .authorization((allow) => [allow.authenticated()]) // userPool users (owners)
-    .handler(a.handler.function(ownerAcceptQuoteFn)),
-  setFranchiseTemplate: a
-    .mutation()
-    .arguments({
-      franchiseID: a.string().required(),
-      templateType: a.string().required(), // 'quote' | 'contract'
-      isThere: a.boolean().required(),
-    })
-    .returns(a.json())
-    .authorization((allow) => [allow.authenticated()]) // user-pool only (server)
-    .handler(a.handler.function(setFranchiseTemplateFn)),
+    .authorization(allow => [
+      allow.authenticated(),                 // user pool
+      allow.authenticated('identityPool'),   // ← add this
+    ])
+    .handler(a.handler.function(testFranchiseQuoteTemplateFn)),
 });
 
 export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
-  authorizationModes: {
-    defaultAuthorizationMode: 'iam',
-  },
+  authorizationModes: { defaultAuthorizationMode: 'iam' },
 });
-

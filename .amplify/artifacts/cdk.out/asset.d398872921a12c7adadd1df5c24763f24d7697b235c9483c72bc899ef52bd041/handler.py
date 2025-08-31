@@ -2,6 +2,7 @@ import os, boto3, json, base64, traceback
 from io import BytesIO
 import zipfile
 from decimal import Decimal
+from datetime import datetime, timezone
 
 try:
     import lxml.etree as etree
@@ -82,6 +83,29 @@ def _fmt_num(x):
     except Exception:
         return str(x)
 
+def _fmt_ts(v):
+    """Return a readable date/time like 'Aug 29, 2025 1:11 PM'."""
+    if v in (None, ''):
+        return ''
+    try:
+        # epoch seconds / ms?
+        if isinstance(v, (int, float, Decimal)) or (isinstance(v, str) and v.strip().isdigit()):
+            n = float(v)
+            if n > 1e12:  # ms
+                n /= 1000.0
+            dt = datetime.fromtimestamp(n, tz=timezone.utc)
+            return dt.astimezone().strftime('%b %d, %Y %I:%M %p')
+        # ISO-ish strings (handle trailing Z)
+        if isinstance(v, str):
+            s = v.replace('Z', '+00:00')
+            dt = datetime.fromisoformat(s)
+            if dt.tzinfo:
+                dt = dt.astimezone()
+            return dt.strftime('%b %d, %Y %I:%M %p')
+    except Exception:
+        pass
+    return str(v)
+
 # ---------------------------
 # Convert Lambda
 # ---------------------------
@@ -106,7 +130,7 @@ def invoke_convert_lambda(quote_id, docx_key, pdf_key, rid):
     return body
 
 # ---------------------------
-# Text builders for lists
+# Text builders for lists (simple single-placeholder versions)
 # ---------------------------
 def build_room_breakdown_text(pkg_choice):
     lines = []
@@ -147,7 +171,52 @@ def build_floor_tasks_text(section):
         tpm = _fmt_num(t.get('timePerMonth'))
         tpdfm = _fmt_num(t.get('timePerDayFromMonthly'))
         lines.append(f"• {tn} — {fq} — {tpd} min/day — {tpm} min/mo (day-from-mo {tpdfm})")
-    return "\n".join(lines)
+    return "\n".join(lines).strip()
+
+# ---------------------------
+# Text builders for block sections ([*_START] ... [*_END])
+# ---------------------------
+def build_rooms_block(choice):
+    """Expands the [ROOMS_START]...[ROOMS_END] section."""
+    lines = []
+    for r in (choice or {}).get('rooms') or []:
+        name  = r.get('roomName', 'Room / Area')
+        count = _fmt_num(r.get('roomNumber'))
+        size  = _fmt_num(r.get('roomSize'))
+        lines.append(f"Room / Area: {name}")
+        lines.append(f"Number of Rooms: {count} Avg/Size (sqft): {size}")
+
+        tasks = r.get('roomTasks') or r.get('tasks') or []
+        for t in tasks:
+            tn   = t.get('taskName', '')
+            fq   = t.get('frequency', '') or t.get('taskFrequency', '')
+            tpd  = _fmt_num(t.get('timePerDay'))
+            tpm  = _fmt_num(t.get('timePerMonth'))
+            tpdf = _fmt_num(t.get('timePerDayFromMonthly'))
+            lines.append(f"- {tn} — {fq} — {tpd} min/day — {tpm} min/month")
+            lines.append(f"— (from monthly/day: {tpdf})")
+
+        r_day = _fmt_num(r.get('totalDayTime'))
+        r_mon = _fmt_num(r.get('totalMonthTime'))
+        r_dfm = _fmt_num(r.get('totalDayTimeFromMonth'))
+        lines.append(f"Room Totals — Daily: {r_day} min — Monthly: {r_mon} min — From Monthly/Day: {r_dfm}")
+        lines.append("")  # blank line between rooms
+    return "\n".join(lines).strip()
+
+def build_floor_block(section):
+    """Expands either [HARDFLOOR_TASKS_*] or [CARPET_TASKS_*] section (tasks only)."""
+    if not section:
+        return ""
+    lines = []
+    for t in (section.get('tasks') or []):
+        tn   = t.get('taskName','')
+        fq   = t.get('frequency','') or t.get('taskFrequency','')
+        tpd  = _fmt_num(t.get('timePerDay'))
+        tpm  = _fmt_num(t.get('timePerMonth'))
+        tpdf = _fmt_num(t.get('timePerDayFromMonthly'))
+        lines.append(f"- {tn} — {fq} — {tpd} min/day — {tpm} min/month")
+        lines.append(f"— (from monthly/day: {tpdf})")
+    return "\n".join(lines).strip()
 
 def build_package_options_text(package_options):
     # Returns a compact multi-line string and a dict keyed by type
@@ -181,26 +250,7 @@ def _replace_in_tree_across_runs(tree, replacements, rid):
     if not texts:
         return 0
 
-    # Build a big string and map spans -> nodes
     delim = '\u0001'  # unlikely to appear in DOCX text
-    big = []
-    spans = []  # list of (start_idx, end_idx, element)
-    idx = 0
-    for el in texts:
-        s = el.text or ''
-        start = idx
-        big.append(s)
-        idx += len(s)
-        spans.append((start, idx, el))
-        big.append(delim)
-        idx += 1
-    big = ''.join(big)
-
-    total_replacements = 0
-
-    def rebuild():
-        # Rebuild big + spans after each replacement (lengths change)
-        return _rebuild_map(tree)
 
     def _rebuild_map(tree_):
         tnodes = tree_.findall('.//w:t', namespaces=ns)
@@ -215,28 +265,30 @@ def _replace_in_tree_across_runs(tree, replacements, rid):
             ii += 1
         return ''.join(bb), spp
 
-    # Helper for one pass replace
+    big, spans = _rebuild_map(tree)
+
+    total_replacements = 0
+
     def do_one_pass(b, sp, placeholder, value):
         nonlocal total_replacements
-        changed_any = False
         search_start = 0
         while True:
             pos = b.find(placeholder, search_start)
             if pos == -1:
                 break
             end = pos + len(placeholder)
+
             # Find first and last node indices that overlap the match
             first_i = next(i for i,(s,e,_) in enumerate(sp) if e > pos)
             last_i  = next(i for i,(s,e,_) in enumerate(sp) if s < end <= e or (i==len(sp)-1 and end <= e))
 
-            first_s, first_e, first_el = sp[first_i]
-            last_s,  last_e,  last_el  = sp[last_i]
+            first_s, _, first_el = sp[first_i]
+            last_s,  _,  last_el  = sp[last_i]
 
             # local indices inside first/last nodes
             first_local_start = max(0, pos - first_s)
             last_local_end    = max(0, end - last_s)
 
-            # Compose new texts
             first_text = (first_el.text or '')
             last_text  = (last_el.text or '')
 
@@ -246,44 +298,91 @@ def _replace_in_tree_across_runs(tree, replacements, rid):
             # Set first node text to prefix + replacement + suffix
             first_el.text = f"{prefix}{value}{suffix}"
 
-            # Clear all *fully or partially overlapped* middle nodes
+            # Clear all overlapped middle/last nodes
             for j in range(first_i+1, last_i+1):
                 sp[j][2].text = ''
 
-            # Rebuild maps after this replacement
-            b, sp = rebuild()
+            # Rebuild after replacement
+            b, sp = _rebuild_map(tree)
             total_replacements += 1
-            changed_any = True
-            # Continue searching after the position we just replaced
             search_start = pos + len(str(value))
-        return b, sp, changed_any
-
-    # Bind rebuild function properly
-    def _rebuild_map(tree_):
-        tnodes = tree_.findall('.//w:t', namespaces=ns)
-        bb, spp, ii = [], [], 0
-        for el_ in tnodes:
-            s_ = el_.text or ''
-            st = ii
-            bb.append(s_)
-            ii += len(s_)
-            spp.append((st, ii, el_))
-            bb.append(delim)
-            ii += 1
-        return ''.join(bb), spp
-
-    # initial map
-    def _init_map():
-        return _rebuild_map(tree)
-    big, spans = _init_map()
+        return b, sp
 
     # Run replacements
-    for ph, val in replacements.items():
-        if not ph or ph not in big:
+    for ph, val in (replacements or {}).items():
+        if not ph:
             continue
-        big, spans, _ = do_one_pass(big, spans, ph, val)
+        if ph in big:
+            big, spans = do_one_pass(big, spans, ph, val)
 
     return total_replacements
+
+def _replace_blocks_in_tree(tree, blocks, rid):
+    """
+    blocks: list of dicts like:
+      {"start": "[ROOMS_START]", "end": "[ROOMS_END]", "text": "...."}
+    Replaces everything from start..end (inclusive) with the provided text,
+    even if tokens are split across runs.
+    """
+    ns = {'w': W_NS}
+    delim = '\u0001'
+
+    def rebuild():
+        tnodes = tree.findall('.//w:t', namespaces=ns)
+        big, spans, idx = [], [], 0
+        for el in tnodes:
+            s = el.text or ''
+            st = idx
+            big.append(s); idx += len(s)
+            spans.append((st, idx, el))
+            big.append(delim); idx += 1
+        return ''.join(big), spans
+
+    big, spans = rebuild()
+
+    def find_span(pos):
+        for i,(s,e,_) in enumerate(spans):
+            if e > pos:
+                return i
+        return len(spans)-1
+
+    for b in blocks or []:
+        start_tok = b['start']
+        end_tok   = b['end']
+        repl      = b.get('text','')
+
+        search_from = 0
+        while True:
+            s_pos = big.find(start_tok, search_from)
+            if s_pos == -1:
+                break
+            e_pos = big.find(end_tok, s_pos + len(start_tok))
+            if e_pos == -1:
+                break
+            e_pos += len(end_tok)
+
+            first_i = find_span(s_pos)
+            last_i  = find_span(e_pos-1)
+
+            fs, _, fel = spans[first_i]
+            ls, _, lel = spans[last_i]
+
+            first_local = max(0, s_pos - fs)
+            last_local  = max(0, e_pos - ls)
+
+            prefix = (fel.text or '')[:first_local]
+            suffix = (lel.text or '')[last_local:]
+
+            fel.text = f"{prefix}{repl}{suffix}"
+
+            for j in range(first_i+1, last_i+1):
+                spans[j][2].text = ''
+
+            big, spans = rebuild()
+            search_from = s_pos + len(repl)
+
+    return
+
 def validate_docx_stream(stream, rid):
     """Fail fast if the docx zip or critical XML parts are invalid."""
     stream.seek(0)
@@ -307,15 +406,7 @@ def validate_docx_stream(stream, rid):
                 raise
     stream.seek(0)
 
-def replace_placeholders_in_docx(doc_stream, placeholders, rid):
-    """
-    Edit only content parts likely to contain user-visible text:
-    - word/document.xml
-    - word/header*.xml
-    - word/footer*.xml
-    - footnotes/endnotes
-    Require lxml so we don't corrupt runs.
-    """
+def replace_placeholders_in_docx(doc_stream, placeholders, rid, blocks=None):
     if etree is None:
         raise RuntimeError("lxml not available; cannot safely replace placeholders across runs")
 
@@ -340,6 +431,12 @@ def replace_placeholders_in_docx(doc_stream, placeholders, rid):
         for file in parts:
             xml_bytes = z.read(file)
             tree = etree.fromstring(xml_bytes)
+
+            # 1) Replace blocks between START/END markers
+            if blocks:
+                _replace_blocks_in_tree(tree, blocks, rid)
+
+            # 2) Replace normal placeholders (across runs)
             reps = _replace_in_tree_across_runs(tree, placeholders, rid)
             updated[file] = etree.tostring(tree, encoding='utf-8')
             _log(rid, "Part replaced", file=file, replacements=reps)
@@ -353,9 +450,8 @@ def replace_placeholders_in_docx(doc_stream, placeholders, rid):
                     new_doc.writestr(name, z.read(name))
         out.seek(0)
 
-    validate_docx_stream(out, rid)  # ✅ ensure it's healthy
+    validate_docx_stream(out, rid)
     return out
-
 
 # ---------------------------
 # Data fetch
@@ -375,7 +471,6 @@ def fetch_dynamodb_item(table_name, key_name, key_value, rid):
 # ---------------------------
 def load_template_stream(franchise_id, rid):
     candidates = [
-        # Newer Uploader-style (Amplify default "public" level)
         f"members/franchise/{franchise_id}/templates/quote/quote-template.docx",
     ]
     last_err = None
@@ -395,18 +490,9 @@ def load_template_stream(franchise_id, rid):
 # ---------------------------
 def compose_placeholders(quote, owner_info, franchise_info, rid):
     # Base fields
-    qid = _get(quote, ['QuoteID'])
     ts  = _get(quote, ['Timestamp'])
-
-    confirmed_bool = _get(quote, ['Confirmed'])
-    is_confirmed = str(bool(confirmed_bool))
-    is_accepted  = str(_get(quote, ['IsAccepted']))
-    is_available = str(_get(quote, ['isAvailable']))
-    is_sold      = str(_get(quote, ['isSold']))
-
     conf_num  = _get(quote, ['ConfirmationNumber'])
     conf_ts   = _get(quote, ['ConfirmationTimestamp'])
-    acc_ts    = _get(quote, ['AcceptedTimestamp'])
 
     # Customer
     cust = _get(quote, ['customerData'], {})
@@ -464,29 +550,6 @@ def compose_placeholders(quote, owner_info, franchise_info, rid):
     carp_mon   = _fmt_num(_get(_get(choice, ['carpet'], {}), ['totalMonthTime']))
     carp_dfm   = _fmt_num(_get(_get(choice, ['carpet'], {}), ['totalDayTimeFromMonth']))
 
-    opts_text, opts_by_type = build_package_options_text(_get(pkg, ['packageOptions'], []))
-    top = opts_by_type.get('top', {})
-    mid = opts_by_type.get('middle', {})
-    bot = opts_by_type.get('bottom', {})
-
-    # Costs
-    cost_info = _get(quote, ['costInfo'], {})
-    base_cost   = _fmt_money(_get(cost_info, ['baseCost']))
-    final_cost  = _fmt_money(_get(cost_info, ['finalCost']))
-    custom_cost = _fmt_money(_get(cost_info, ['customCost']))
-
-    calcs = _get(quote, ['costCalculations'], {})
-    overhead       = _fmt_num(_get(calcs, ['overhead']))
-    payroll_tax    = _fmt_num(_get(calcs, ['payrollTax']))
-    profit_percent = _fmt_num(_get(calcs, ['profitPercent']))
-    salary         = _fmt_num(_get(calcs, ['salary']))
-
-    # Site verification
-    sv = _get(quote, ['siteVerified'], {})
-    site_v_status = _get(sv, ['verificationStatus'])
-    site_v_time   = _get(sv, ['verificationTimestamp'])
-    site_v_by     = _get(sv, ['verifiedBy'])
-
     # Owner & Franchise
     owner_full = f"{_get(owner_info, ['firstName'])} {_get(owner_info, ['lastName'])}".strip()
     placeholders = {
@@ -502,18 +565,10 @@ def compose_placeholders(quote, owner_info, franchise_info, rid):
         "[FRANCHISE_WEBSITE]": _get(franchise_info, ['Website']),
         "[FRANCHISE_ID]": _get(quote, ['Franchise']),
         # quote meta
-        "[QUOTE_ID]": qid,
-        "[QUOTE_TIMESTAMP]": ts,
-        "[QUOTE_VERSION]": _get(quote, ['QuoteVersion']),
-        "[QUOTE_EXPIRATION_DATE]": _get(quote, ['QuoteExpiration']),
+        "[QUOTE_TIMESTAMP]": _fmt_ts(ts),
         # confirmation / acceptance
-        "[IS_CONFIRMED]": is_confirmed,
         "[CONFIRMATION_NUMBER]": conf_num,
-        "[CONFIRMATION_TIMESTAMP]": conf_ts,
-        "[ACCEPTED_TIMESTAMP]": acc_ts,
-        "[IS_ACCEPTED]": is_accepted,
-        "[IS_AVAILABLE]": is_available,
-        "[IS_SOLD]": is_sold,
+        "[CONFIRMATION_TIMESTAMP]": _fmt_ts(conf_ts),
         # client
         "[CUSTOMER_COMPANY]": customer_company,
         "[CUSTOMER_FIRST_NAME]": customer_first,
@@ -535,14 +590,7 @@ def compose_placeholders(quote, owner_info, franchise_info, rid):
         "[STAIRWELLS_HARDFLOOR]": stairs_hard,
         "[STAIRWELLS_CARPET]": stairs_carpet,
         "[SERVICE_FREQUENCY]": frequency,
-        "[BUDGET]": _fmt_money(budget),
-        "[SERVICE_START_DATE]": _get(quote, ['ServiceStartDate']),
-        "[SERVICE_DAYS]": _get(quote, ['ServiceDays']),
-        "[SERVICE_START_TIME]": _get(quote, ['ServiceStartTime']),
-        "[SERVICE_END_TIME]": _get(quote, ['ServiceEndTime']),
-        "[ACCESS_NOTES]": _get(quote, ['AccessNotes']),
         # owner/preparer
-        "[OWNER_ID]": _get(quote, ['OwnerID']),
         "[OWNER_NAME]": owner_full,
         "[OWNER_TITLE]": _get(owner_info, ['title']),
         "[OWNER_EMAIL]": _get(owner_info, ['email']),
@@ -566,36 +614,6 @@ def compose_placeholders(quote, owner_info, franchise_info, rid):
         "[CARPET_TOTAL_DAY_TIME]": carp_day,
         "[CARPET_TOTAL_MONTH_TIME]": carp_mon,
         "[CARPET_TOTAL_DAY_TIME_FROM_MONTH]": carp_dfm,
-        # options (top/middle/bottom)
-        "[PACKAGE_OPTIONS_COMPARISON]": opts_text,
-        "[OPTION_TOP_NAME]": _get(top, ['packageName']),
-        "[OPTION_TOP_COST]": _fmt_money(_get(top, ['packageCost'])),
-        "[OPTION_TOP_DAY_TIME]": _fmt_num(_get(top, ['totalDayTime'])),
-        "[OPTION_TOP_MONTH_TIME]": _fmt_num(_get(top, ['totalMonthTime'])),
-        "[OPTION_MID_NAME]": _get(mid, ['packageName']),
-        "[OPTION_MID_COST]": _fmt_money(_get(mid, ['packageCost'])),
-        "[OPTION_MID_DAY_TIME]": _fmt_num(_get(mid, ['totalDayTime'])),
-        "[OPTION_MID_MONTH_TIME]": _fmt_num(_get(mid, ['totalMonthTime'])),
-        "[OPTION_BOTTOM_NAME]": _get(bot, ['packageName']),
-        "[OPTION_BOTTOM_COST]": _fmt_money(_get(bot, ['packageCost'])),
-        "[OPTION_BOTTOM_DAY_TIME]": _fmt_num(_get(bot, ['totalDayTime'])),
-        "[OPTION_BOTTOM_MONTH_TIME]": _fmt_num(_get(bot, ['totalMonthTime'])),
-        # costs
-        "[BASE_COST]": base_cost,
-        "[FINAL_COST]": final_cost,
-        "[CUSTOM_COST]": custom_cost,
-        "[OVERHEAD]": overhead,
-        "[SALARY]": salary,
-        "[PAYROLL_TAX]": payroll_tax,
-        "[PROFIT_PERCENT]": profit_percent,
-        # site verification
-        "[SITE_VERIFICATION_STATUS]": site_v_status,
-        "[SITE_VERIFICATION_TIMESTAMP]": site_v_time,
-        "[SITE_VERIFIED_BY]": site_v_by,
-        # acceptance placeholders (leave blank for signature lines)
-        "[ACCEPTANCE_NAME]": "",
-        "[ACCEPTANCE_TITLE]": "",
-        "[ACCEPTANCE_DATE]": "",
     }
 
     # Common synonyms so your docx can use either label
@@ -664,10 +682,21 @@ def lambda_handler(event, context):
         placeholders = compose_placeholders(quote, owner_info, franchise_info, rid)
         _log(rid, "Placeholders prepared", count=len(placeholders))
 
-        # Replace placeholders across all XML parts
-        updated_doc_stream = replace_placeholders_in_docx(doc_template, placeholders, rid)
-        validate_docx_stream(updated_doc_stream, rid)  # <- add this
+        # Build block contents and replace block sections ([*_START] ... [*_END])
+        pkg = _get(quote, ['Package'], {})
+        choice = _get(pkg, ['packageChoice'], {})
+        rooms_block      = build_rooms_block(choice)
+        hardfloor_block  = build_floor_block(_get(choice, ['hardfloor'], {}))
+        carpet_block     = build_floor_block(_get(choice, ['carpet'], {}))
+        blocks = [
+            {"start": "[ROOMS_START]", "end": "[ROOMS_END]", "text": rooms_block},
+            {"start": "[HARDFLOOR_TASKS_START]", "end": "[HARDFLOOR_TASKS_END]", "text": hardfloor_block},
+            {"start": "[CARPET_TASKS_START]", "end": "[CARPET_TASKS_END]", "text": carpet_block},
+        ]
 
+        # Replace placeholders across all XML parts
+        updated_doc_stream = replace_placeholders_in_docx(doc_template, placeholders, rid, blocks=blocks)
+        validate_docx_stream(updated_doc_stream, rid)
 
         # Upload filled DOCX
         _log(rid, "Uploading updated DOCX", bucket=QUOTE_PDF_BUCKET_NAME, key=docx_key)

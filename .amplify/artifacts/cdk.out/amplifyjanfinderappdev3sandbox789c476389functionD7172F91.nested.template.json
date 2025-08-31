@@ -2330,8 +2330,10 @@
      "Statement": [
       {
        "Action": [
+        "dynamodb:GetItem",
         "dynamodb:UpdateItem",
-        "dynamodb:GetItem"
+        "dynamodb:PutItem",
+        "dynamodb:DescribeTable"
        ],
        "Effect": "Allow",
        "Resource": {
@@ -2998,14 +3000,6 @@
     "Ref": "sendquoteacceptanceemaillambda008F7CD2"
    }
   },
-  "amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {
-   "Value": {
-    "Fn::GetAtt": [
-     "sendquoteacceptanceemaillambda008F7CD2",
-     "Arn"
-    ]
-   }
-  },
   "amplifyjanfinderappdev3sandbox789c476389functionsetfranchisetemplatelambdaADEF9820Arn": {
    "Value": {
     "Fn::GetAtt": [
@@ -3122,6 +3116,14 @@
    "Value": {
     "Fn::GetAtt": [
      "getquotesowneravailablelambda1342B6B2",
+     "Arn"
+    ]
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "sendquoteacceptanceemaillambda008F7CD2",
      "Arn"
     ]
    }

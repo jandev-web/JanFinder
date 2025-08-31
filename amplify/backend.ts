@@ -1,7 +1,13 @@
-// amplify/backend.ts
 import { defineBackend } from '@aws-amplify/backend';
-import { Stack, Duration, Aws, aws_iam as iam, aws_lambda as lambda, aws_s3 as s3, } from 'aws-cdk-lib';
+import {
+  Stack, Duration, Aws,
+  aws_iam as iam,
+  aws_lambda as lambda,
+} from 'aws-cdk-lib';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
+import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 
 import { auth } from './auth/resource';
 import { data } from './data/resource';
@@ -29,7 +35,10 @@ import { ownerAcceptQuoteFn } from './functions/owner-accept-quote/resource';
 import { sendQuoteAcceptanceEmailFn } from './functions/send-quote-acceptance-email/resource';
 import { setFranchiseTemplateFn } from './functions/set-franchise-template/resource';
 
-// 1) Bind resources (as-is)
+// ✅ Use the TS proxy (resolver) and call a Python Lambda from here
+import { validateQuoteTemplateProxyFn } from './functions/validate-quote-template-proxy/resource';
+
+// 1) Bind resources
 const backend = defineBackend({
   auth,
   data,
@@ -54,6 +63,7 @@ const backend = defineBackend({
   ownerAcceptQuoteFn,
   sendQuoteAcceptanceEmailFn,
   setFranchiseTemplateFn,
+  validateQuoteTemplateProxyFn,
 });
 
 // === Locals ===
@@ -63,7 +73,7 @@ const partition = Aws.PARTITION;
 const tableArn = (name: string) => `arn:${partition}:dynamodb:${region}:${account}:table/${name}`;
 const tableIndexArn = (name: string) => `${tableArn(name)}/index/*`;
 
-// 2) Cognito user pool tweaks (keep only what app likely needs)
+// 2) Cognito user pool tweaks
 const { cfnUserPool } = backend.auth.resources.cfnResources;
 
 const existing = Array.isArray(cfnUserPool.schema) ? [...cfnUserPool.schema] : [];
@@ -80,11 +90,10 @@ const addCustomStringAttr = (name: string) => {
     modified = true;
   }
 };
-addCustomStringAttr('role');        // CHANGE: keep custom attrs (your app reads these)
-addCustomStringAttr('FranchiseID'); // CHANGE: keep custom attrs
+addCustomStringAttr('role');
+addCustomStringAttr('FranchiseID');
 if (modified) cfnUserPool.schema = existing;
 
-// CHANGE: keep a simple password policy; remove everything else (no advanced security / recovery knobs)
 cfnUserPool.policies = {
   passwordPolicy: {
     minimumLength: 12,
@@ -95,10 +104,10 @@ cfnUserPool.policies = {
   },
 };
 
-// 3) Minimal IAM to allow Identity Pool roles to call AppSync (keep; simplifies client calls with IAM)
+// 3) Minimal IAM to allow Identity Pool roles to call AppSync
 const apiId = backend.data.resources.graphqlApi.apiId;
-const appsyncResourceArn = `arn:${partition}:appsync:${region}:${account}:apis/${apiId}/*`;      // CHANGE: fixed template string
-const appsyncTypesArn = `arn:${partition}:appsync:${region}:${account}:apis/${apiId}/types/*`;  // CHANGE: fixed template string
+const appsyncResourceArn = `arn:${partition}:appsync:${region}:${account}:apis/${apiId}/*`;
+const appsyncTypesArn = `arn:${partition}:appsync:${region}:${account}:apis/${apiId}/types/*`;
 
 const authRes = backend.auth.resources as any;
 const discoveredRoleNames = new Set<string>();
@@ -116,18 +125,12 @@ new iam.CfnPolicy(backend.data.stack, 'IdentityPoolGraphQLPolicyV2', {
   roles: Array.from(discoveredRoleNames),
   policyDocument: {
     Version: '2012-10-17',
-    Statement: [
-      { Effect: 'Allow', Action: 'appsync:GraphQL', Resource: [appsyncResourceArn, appsyncTypesArn] },
-    ],
+    Statement: [{ Effect: 'Allow', Action: 'appsync:GraphQL', Resource: [appsyncResourceArn, appsyncTypesArn] }],
   },
 });
 
-// 4) Storage + simple Lambdas used by your flows
-const contractBucket = backend.storage.resources.bucket;
-// === S3 identity policy for all auth + group roles (covers protected uploads) ===
-const bucketArn = contractBucket.bucketArn;
-
-// amplify/backend.ts (after you compute discoveredRoleNames and have contractBucket)
+// 4) Storage + S3 access
+const contractBucket = backend.storage.resources.bucket as s3.Bucket;
 new iam.CfnPolicy(backend.data.stack, 'IdentityPoolS3PublicRW', {
   policyName: 'IdentityPoolS3PublicRW',
   roles: Array.from(discoveredRoleNames),
@@ -136,31 +139,27 @@ new iam.CfnPolicy(backend.data.stack, 'IdentityPoolS3PublicRW', {
     Statement: [
       {
         Effect: 'Allow',
-        Action: [
-          's3:PutObject','s3:GetObject','s3:DeleteObject',
-          's3:AbortMultipartUpload','s3:ListMultipartUploadParts'
-        ],
+        Action: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject', 's3:AbortMultipartUpload', 's3:ListMultipartUploadParts'],
         Resource: [`${contractBucket.bucketArn}/public/*`],
       },
       {
         Effect: 'Allow',
-        Action: ['s3:ListBucket','s3:ListBucketMultipartUploads'],
+        Action: ['s3:ListBucket', 's3:ListBucketMultipartUploads'],
         Resource: [contractBucket.bucketArn],
-        Condition: { StringLike: { 's3:prefix': ['public/*'] } }
-      }
-    ]
-  }
+        Condition: { StringLike: { 's3:prefix': ['public/*'] } },
+      },
+    ],
+  },
 });
 
-
-// CHANGE: keep the docgen layer if your convert function needs native deps (lxml/Adobe); otherwise delete this block and remove `layers` from the function below.
+// 5) (Optional) deps layer for doc funcs
 const docgenDepsLayer = new lambda.LayerVersion(backend.data.stack, 'DocgenDepsLayer', {
   code: lambda.Code.fromAsset('amplify/layers/docgen-deps'),
   compatibleRuntimes: [lambda.Runtime.PYTHON_3_12, lambda.Runtime.PYTHON_3_11],
   description: 'Doc/PDF deps',
 });
 
-// Convenience refs for functions defined in other files
+// Convenience refs for existing functions
 const postConfFn = backend.postConfirmation.resources.lambda as lambda.Function;
 const createQuoteFn = backend.createCustomerQuoteFn.resources.lambda as lambda.Function;
 const calcFn = backend.calcPackageOptionsFn.resources.lambda as lambda.Function;
@@ -179,24 +178,35 @@ const getFranchiseLambda = backend.getFranchiseFn.resources.lambda as lambda.Fun
 const getAvailableQuotesOwnerLambda = backend.getAvailableQuotesOwnerFn.resources.lambda as lambda.Function;
 const ownerAcceptQuoteLambda = backend.ownerAcceptQuoteFn.resources.lambda as lambda.Function;
 const sendOwnerAcceptanceEmailLambda = backend.sendQuoteAcceptanceEmailFn.resources.lambda as lambda.Function;
-const setFranchiseTemplateLambda = backend.setFranchiseTemplateFn.resources.lambda;
+const setFranchiseTemplateLambda = backend.setFranchiseTemplateFn.resources.lambda as lambda.Function;
+const validateTemplateProxy = backend.validateQuoteTemplateProxyFn.resources.lambda as lambda.Function;
 
-// Minimal custom functions defined here (no tracing/logGroup extras)
-const getQuotePDFLambda = new lambda.Function(backend.data.stack, 'GetQuotePdfFn', {
-  functionName: 'get-quote-pdf',
+// ===== Doc pipeline Lambdas (Python) =====
+const buildQuoteDocContextLambda = new lambda.Function(backend.data.stack, 'BuildQuoteDocContextFn', {
+  functionName: 'build-quote-doc-context',
   runtime: lambda.Runtime.PYTHON_3_12,
   handler: 'handler.lambda_handler',
-  code: lambda.Code.fromAsset('amplify/functions/get-quote-pdf'),
+  code: lambda.Code.fromAsset('amplify/functions/build-quote-doc-context'),
   timeout: Duration.minutes(2),
   memorySize: 1024,
-  layers: [docgenDepsLayer],      
+  layers: [docgenDepsLayer],
   environment: {
     CUSTOMER_QUOTES_TABLE: 'CustomerQuotes',
     OWNER_TABLE: 'Owner_DB',
     FRANCHISE_TABLE: 'Franchise_DB',
-    QUOTE_PDF_BUCKET_NAME: contractBucket.bucketName,
-    CONVERT_LAMBDA_NAME: 'convert-docx-to-pdf', // CHANGE: corrected name; overwritten below with actual function name
+    TEMPLATE_BUCKET: contractBucket.bucketName,
+    OUTPUT_BUCKET: contractBucket.bucketName,
   },
+});
+
+const fillDocxPlaceholdersLambda = new lambda.Function(backend.data.stack, 'FillDocxPlaceholdersFn', {
+  functionName: 'fill-docx-placeholders',
+  runtime: lambda.Runtime.PYTHON_3_12,
+  handler: 'handler.lambda_handler',
+  code: lambda.Code.fromAsset('amplify/functions/fill-docx-placeholders'),
+  timeout: Duration.minutes(2),
+  memorySize: 1024,
+  layers: [docgenDepsLayer],
 });
 
 const convertDocxToPdfLambda = new lambda.Function(backend.data.stack, 'ConvertDocxToPdfFn', {
@@ -207,41 +217,42 @@ const convertDocxToPdfLambda = new lambda.Function(backend.data.stack, 'ConvertD
   code: lambda.Code.fromAsset('amplify/functions/convert-docx-to-pdf'),
   timeout: Duration.minutes(3),
   memorySize: 1536,
-  layers: [docgenDepsLayer], // CHANGE: keep only if needed by your code
+  layers: [docgenDepsLayer],
   environment: {
     CONTRACT_BUCKET: contractBucket.bucketName,
     ADOBE_SECRET_NAME: 'adobe-credentials',
   },
 });
 
-// Basic grants (avoid hard-coded ARNs)
-contractBucket.grantReadWrite(getQuotePDFLambda);
-contractBucket.grantReadWrite(convertDocxToPdfLambda);
-contractBucket.grantRead(sendOwnerAcceptanceEmailLambda); 
-// Minimal invoke relationships
-convertDocxToPdfLambda.grantInvoke(getQuotePDFLambda);
-getQuotePDFLambda.addEnvironment('CONVERT_LAMBDA_NAME', convertDocxToPdfLambda.functionName); // CHANGE: ensure runtime uses actual name
-getQuotePDFLambda.grantInvoke(ownerAcceptQuoteLambda);
-sendOwnerAcceptanceEmailLambda.grantInvoke(ownerAcceptQuoteLambda);
-sendOwnerAcceptanceEmailLambda.grantInvoke(getQuotePDFLambda);
-getQuotePDFLambda.addEnvironment(
-  'SEND_QUOTE_EMAIL_FUNCTION_NAME',
-  sendOwnerAcceptanceEmailLambda.functionName
-);
-ownerAcceptQuoteLambda.addEnvironment('GET_QUOTE_PDF_FUNCTION_NAME', getQuotePDFLambda.functionName);
-ownerAcceptQuoteLambda.addEnvironment('SEND_QUOTE_EMAIL_FUNCTION_NAME', sendOwnerAcceptanceEmailLambda.functionName);
-sendOwnerAcceptanceEmailLambda.addEnvironment('QUOTE_PDF_BUCKET_NAME', contractBucket.bucketName);
-// === Minimal DynamoDB/SES permissions (grouped; no hard-coded ARNs) ===
-setFranchiseTemplateLambda.addToRolePolicy(new PolicyStatement({
-  actions: ['dynamodb:UpdateItem', 'dynamodb:GetItem'],
-  resources: [tableArn('Franchise_DB')],
-}));
+const updateQuoteDocumentLinksLambda = new lambda.Function(backend.data.stack, 'UpdateQuoteDocumentLinksFn', {
+  functionName: 'update-quote-document-links',
+  runtime: lambda.Runtime.PYTHON_3_12,
+  handler: 'handler.lambda_handler',
+  code: lambda.Code.fromAsset('amplify/functions/update-quote-document-links'),
+  timeout: Duration.minutes(1),
+  memorySize: 512,
+  environment: {
+    CUSTOMER_QUOTES_TABLE: 'CustomerQuotes',
+  },
+});
 
-getQuotePDFLambda.addToRolePolicy(new PolicyStatement({
-  actions: ['dynamodb:GetItem', 'dynamodb:UpdateItem'],
+// ===== S3 grants =====
+contractBucket.grantRead(fillDocxPlaceholdersLambda);
+contractBucket.grantWrite(fillDocxPlaceholdersLambda);
+contractBucket.grantReadWrite(convertDocxToPdfLambda);
+contractBucket.grantRead(sendOwnerAcceptanceEmailLambda);
+
+// ===== DynamoDB grants =====
+buildQuoteDocContextLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:GetItem'],
   resources: [tableArn('CustomerQuotes'), tableArn('Owner_DB'), tableArn('Franchise_DB')],
 }));
+updateQuoteDocumentLinksLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:UpdateItem'],
+  resources: [tableArn('CustomerQuotes')],
+}));
 
+// Email lambda perms
 sendOwnerAcceptanceEmailLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:GetItem'],
   resources: [tableArn('CustomerQuotes'), tableArn('Franchise_DB')],
@@ -250,34 +261,31 @@ sendOwnerAcceptanceEmailLambda.addToRolePolicy(new PolicyStatement({
   actions: ['ses:SendRawEmail'],
   resources: ['*'],
 }));
+sendOwnerAcceptanceEmailLambda.addEnvironment('QUOTE_PDF_BUCKET_NAME', contractBucket.bucketName);
 
-// (Optional dependency) allow convert lambda to read the Adobe secret if your code does that
+// SecretsManager access for convert lambda
 convertDocxToPdfLambda.addToRolePolicy(new PolicyStatement({
   actions: ['secretsmanager:GetSecretValue'],
   resources: [`arn:${partition}:secretsmanager:${region}:${account}:secret:adobe-credentials*`],
 }));
 
-// Quote flow DDB access kept simple
+// ===== Existing DDB access kept as-is =====
 ownerAcceptQuoteLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:GetItem', 'dynamodb:UpdateItem', 'dynamodb:DescribeTable'],
   resources: [tableArn('CustomerQuotes'), tableIndexArn('CustomerQuotes')],
 }));
-
 getAvailableQuotesOwnerLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:Query', 'dynamodb:DescribeTable'],
   resources: [tableArn('CustomerQuotes'), tableIndexArn('CustomerQuotes')],
 }));
-
 getFranchiseLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:Query', 'dynamodb:GetItem', 'dynamodb:DescribeTable'],
   resources: [tableArn('Franchise_DB'), tableIndexArn('Franchise_DB')],
 }));
-
 getOwnerLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:Query', 'dynamodb:GetItem', 'dynamodb:DescribeTable'],
   resources: [tableArn('Owner_DB'), tableIndexArn('Owner_DB')],
 }));
-
 sendEmailLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:GetItem'],
   resources: [tableArn('CustomerQuotes')],
@@ -286,7 +294,6 @@ sendEmailLambda.addToRolePolicy(new PolicyStatement({
   actions: ['ses:SendEmail', 'ses:SendRawEmail'],
   resources: ['*'],
 }));
-
 updatePkgLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:UpdateItem'],
   resources: [tableArn('CustomerQuotes')],
@@ -303,7 +310,6 @@ confirmFn.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:GetItem', 'dynamodb:UpdateItem'],
   resources: [tableArn('CustomerQuotes')],
 }));
-
 updFloorFn.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:UpdateItem'],
   resources: [tableArn('CustomerQuotes')],
@@ -336,8 +342,126 @@ createQuoteFn.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:PutItem'],
   resources: [tableArn('CustomerQuotes')],
 }));
+setFranchiseTemplateLambda.addToRolePolicy(new PolicyStatement({
+  actions: [
+    'dynamodb:GetItem',
+    'dynamodb:UpdateItem',
+    'dynamodb:PutItem',
+    'dynamodb:DescribeTable',
+  ],
+  resources: [tableArn('Franchise_DB')],
+}));
 
-// Auth trigger policies (kept minimal)
+// ===== Step Functions state machine =====
+const buildContext = new tasks.LambdaInvoke(backend.data.stack, 'BuildContextTask', {
+  lambdaFunction: buildQuoteDocContextLambda,
+  payload: sfn.TaskInput.fromObject({
+    'quoteID.$': '$.quoteID',
+    'timezone.$': '$.timezone',
+    'requestId.$': '$.requestId'
+  }),
+  outputPath: '$.Payload',
+});
+
+const parseBody = new sfn.Pass(backend.data.stack, 'ParseBuildBody', {
+  parameters: { 'ctx.$': 'States.StringToJson($.body)' },
+  resultPath: '$.parsed',
+  outputPath: '$.parsed.ctx',
+});
+
+const fillDocx = new tasks.LambdaInvoke(backend.data.stack, 'FillDocxTask', {
+  lambdaFunction: fillDocxPlaceholdersLambda,
+  payload: sfn.TaskInput.fromObject({
+    'template_bucket.$': '$.template_bucket',
+    'template_key.$': '$.template_key',
+    'output_bucket.$': '$.output_bucket',
+    'docx_key.$': '$.docx_key',
+    'placeholders.$': '$.placeholders',
+    'blocks.$': '$.blocks',
+    'requestId.$': '$.requestId'
+  }),
+  resultPath: '$.fill',
+  payloadResponseOnly: true,
+});
+
+const convertPdf = new tasks.LambdaInvoke(backend.data.stack, 'ConvertToPdfTask', {
+  lambdaFunction: convertDocxToPdfLambda,
+  payload: sfn.TaskInput.fromObject({
+    'bucket.$': '$.output_bucket',
+    'docx_key.$': '$.docx_key',
+    'pdf_key.$': '$.pdf_key',
+    'requestId.$': '$.requestId'
+  }),
+  resultPath: '$.convert',
+  payloadResponseOnly: true,
+});
+
+const updateLinks = new tasks.LambdaInvoke(backend.data.stack, 'UpdateQuoteLinksTask', {
+  lambdaFunction: updateQuoteDocumentLinksLambda,
+  payload: sfn.TaskInput.fromObject({
+    'quoteID.$': '$.quoteID',
+    'bucket.$': '$.output_bucket',
+    'pdf_key.$': '$.pdf_key',
+    'requestId.$': '$.requestId'
+  }),
+  resultPath: '$.ddb',
+  payloadResponseOnly: true,
+});
+
+const sendEmail = new tasks.LambdaInvoke(backend.data.stack, 'SendAcceptanceEmailTask', {
+  lambdaFunction: sendOwnerAcceptanceEmailLambda,
+  payload: sfn.TaskInput.fromObject({
+    body: { 'quoteID.$': '$.quoteID' },
+    'requestId.$': '$.requestId'
+  }),
+  resultPath: '$.email',
+  payloadResponseOnly: true,
+});
+
+const pipelineDefinition = buildContext
+  .next(parseBody)
+  .next(fillDocx)
+  .next(convertPdf)
+  .next(updateLinks)
+  .next(sendEmail);
+
+const documentPipeline = new sfn.StateMachine(backend.data.stack, 'QuoteDocumentPipeline', {
+  stateMachineName: 'quote-document-pipeline',
+  definitionBody: sfn.DefinitionBody.fromChainable(pipelineDefinition),
+  timeout: Duration.minutes(5),
+});
+
+// Owner lambda: env + permission to start the state machine
+ownerAcceptQuoteLambda.addEnvironment('DOC_PIPELINE_ARN', documentPipeline.stateMachineArn);
+ownerAcceptQuoteLambda.addEnvironment('DEFAULT_TIMEZONE', 'America/Chicago');
+documentPipeline.grantStartExecution(ownerAcceptQuoteLambda);
+
+// ===== Template validation: Python validator + Node proxy (NO worker) =====
+const validateQuoteTemplateLambda = new lambda.Function(backend.data.stack, 'ValidateQuoteTemplateFn', {
+  functionName: 'validate-quote-template',
+  runtime: lambda.Runtime.PYTHON_3_12,
+  handler: 'handler.lambda_handler',
+  code: lambda.Code.fromAsset('amplify/functions/validate-quote-template'), // <-- ensure folder exists
+  timeout: Duration.minutes(2),
+  memorySize: 1024,
+  environment: {
+    TEMPLATE_BUCKET: contractBucket.bucketName,
+    OUTPUT_BUCKET: contractBucket.bucketName,
+    FILL_LAMBDA_NAME: fillDocxPlaceholdersLambda.functionName,
+    CONVERT_LAMBDA_NAME: convertDocxToPdfLambda.functionName,
+  },
+});
+
+// proxy → python
+validateTemplateProxy.addEnvironment('TARGET_FUNCTION_NAME', validateQuoteTemplateLambda.functionName);
+validateQuoteTemplateLambda.grantInvoke(validateTemplateProxy);
+
+// python → S3 and invoke helpers
+contractBucket.grantReadWrite(validateQuoteTemplateLambda);
+fillDocxPlaceholdersLambda.grantInvoke(validateQuoteTemplateLambda);
+convertDocxToPdfLambda.grantInvoke(validateQuoteTemplateLambda);
+
+// Auth trigger policies
 const userPoolWildcardArn = `arn:${partition}:cognito-idp:${region}:${account}:userpool/*`;
 postConfFn.addToRolePolicy(new PolicyStatement({
   actions: ['cognito-idp:AdminAddUserToGroup'],
@@ -348,4 +472,4 @@ postConfFn.addToRolePolicy(new PolicyStatement({
   resources: [tableArn('Owner_DB'), tableArn('Franchise_DB')],
 }));
 
-export default backend;
+export default backend;    

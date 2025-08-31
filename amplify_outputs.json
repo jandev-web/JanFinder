@@ -349,6 +349,20 @@
               "isRequired": true
             }
           }
+        },
+        "testFranchiseQuoteTemplate": {
+          "name": "testFranchiseQuoteTemplate",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "franchiseID": {
+              "name": "franchiseID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
         }
       }
     }

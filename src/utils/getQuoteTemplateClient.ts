@@ -1,4 +1,4 @@
-// utils/getQuoteTemplate.ts (client)
+// utils/getQuoteTemplateClient.ts (client)
 import { getUrl } from 'aws-amplify/storage';
 
 export default async function getQuoteTemplate(franchiseID: string) {

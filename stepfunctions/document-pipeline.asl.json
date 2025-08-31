@@ -1,0 +1,113 @@
+{
+  "Comment": "Reusable document pipeline: build context -> fill docx -> convert -> update DDB -> email",
+  "StartAt": "BuildContext",
+  "States": {
+    "BuildContext": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${BuildContextArn}",
+        "Payload.$": "$"
+      },
+      "ResultPath": "$.build",
+      "Retry": [
+        { "ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 3, "BackoffRate": 2 }
+      ],
+      "Next": "ParseBuildBody"
+    },
+
+    "ParseBuildBody": {
+      "Type": "Pass",
+      "Parameters": {
+        "quoteID.$": "$.build.Payload.body.quoteID",
+        "template_bucket.$": "$.build.Payload.body.template_bucket",
+        "template_key.$": "$.build.Payload.body.template_key",
+        "output_bucket.$": "$.build.Payload.body.output_bucket",
+        "docx_key.$": "$.build.Payload.body.docx_key",
+        "pdf_key.$": "$.build.Payload.body.pdf_key",
+        "pdf_url.$": "$.build.Payload.body.pdf_url",
+        "placeholders.$": "$.build.Payload.body.placeholders",
+        "blocks.$": "$.build.Payload.body.blocks",
+        "requestId.$": "$.build.Payload.requestId"
+      },
+      "Next": "FillDocx"
+    },
+
+    "FillDocx": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${FillDocxArn}",
+        "Payload": {
+          "template_bucket.$": "$.template_bucket",
+          "template_key.$": "$.template_key",
+          "output_bucket.$": "$.output_bucket",
+          "docx_key.$": "$.docx_key",
+          "placeholders.$": "$.placeholders",
+          "blocks.$": "$.blocks",
+          "requestId.$": "$.requestId"
+        }
+      },
+      "ResultPath": "$.fill",
+      "Retry": [
+        { "ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2 }
+      ],
+      "Next": "ConvertToPdf"
+    },
+
+    "ConvertToPdf": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ConvertArn}",
+        "Payload": {
+          "bucket.$": "$.output_bucket",
+          "docx_key.$": "$.docx_key",
+          "pdf_key.$": "$.pdf_key",
+          "requestId.$": "$.requestId"
+        }
+      },
+      "ResultPath": "$.convert",
+      "Retry": [
+        { "ErrorEquals": ["States.ALL"], "IntervalSeconds": 3, "MaxAttempts": 3, "BackoffRate": 2 }
+      ],
+      "Next": "UpdateQuoteLinks"
+    },
+
+    "UpdateQuoteLinks": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${UpdateLinksArn}",
+        "Payload": {
+          "quoteID.$": "$.quoteID",
+          "bucket.$": "$.output_bucket",
+          "pdf_key.$": "$.pdf_key",
+          "requestId.$": "$.requestId"
+        }
+      },
+      "ResultPath": "$.ddb",
+      "Retry": [
+        { "ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 3, "BackoffRate": 2 }
+      ],
+      "Next": "SendEmail"
+    },
+
+    "SendEmail": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${SendEmailArn}",
+        "Payload": {
+          "body": { "quoteID.$": "$.quoteID" },
+          "requestId.$": "$.requestId"
+        }
+      },
+      "ResultPath": "$.email",
+      "Retry": [
+        { "ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2 }
+      ],
+      "End": true
+    }
+  }
+}

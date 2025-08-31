@@ -6,9 +6,10 @@ import { useRouter } from 'next/navigation';
 import { FileUploader } from '@aws-amplify/ui-react-storage';
 import getQuoteTemplate from '@/utils/getQuoteTemplateClient';
 import deleteFranchiseTemplate from '@/utils/deleteFranchiseTemplate';
-import updateFranchisePDFName from '@/utils/setFranchisePDFName';
+import testFranchiseQuoteTemplate from '@/utils/testFranchiseQuoteTemplateClient';
 
-import "@aws-amplify/ui-react/styles.css";
+import '@aws-amplify/ui-react/styles.css';
+
 type Props = {
   owner: any;
   franchise: any;
@@ -17,7 +18,7 @@ type Props = {
 
 export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate }: Props) {
   const router = useRouter();
-  console.log(franchise)
+
   const franchiseID = useMemo(
     () => franchise?.FranchiseID ?? owner?.franchiseID ?? owner?.franchiseId ?? null,
     [franchise, owner]
@@ -26,6 +27,11 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
   const [busy, setBusy] = useState(false);
   const [deleteBusy, setDeleteBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Test-run UI state
+  const [testing, setTesting] = useState(false);
+  const [testPdfUrl, setTestPdfUrl] = useState<string | null>(null);
+  const [issues, setIssues] = useState<string[]>([]);
 
   const hasTemplate = !!(
     franchise?.data?.quoteTemplate &&
@@ -37,24 +43,22 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
     typeof franchise?.quoteTemplate === 'string'
       ? franchise.quoteTemplate
       : hasTemplate
-        ? 'quoteTemplate.docx'
-        : null;
+      ? 'quote-template.docx'
+      : null;
 
   const handleBack = () => router.push('/members/owner/franchise');
 
   const downloadQuoteTemplate = async () => {
-    console.log(franchiseID)
     if (!franchiseID) return;
     setError(null);
     setBusy(true);
     try {
-      const tmpl = await getQuoteTemplate(franchiseID); // { url: string | URL, filename?: string }
+      const tmpl = await getQuoteTemplate(franchiseID);
       if (!tmpl?.url) throw new Error('No URL returned for quote template');
-
       const urlStr = typeof tmpl.url === 'string' ? tmpl.url : tmpl.url.toString();
 
       const a = document.createElement('a');
-      a.href = urlStr; // <-- string now
+      a.href = urlStr;
       if (currentTemplateName) a.download = currentTemplateName;
       document.body.appendChild(a);
       a.click();
@@ -82,7 +86,6 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
     }
   };
 
-
   if (!franchiseID) {
     return (
       <div className="max-w-md mx-auto bg-white p-6">
@@ -106,9 +109,7 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
         &lt; Back to Franchise Info
       </button>
 
-      <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-        Edit Franchise Quote
-      </h2>
+      <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Edit Franchise Quote</h2>
 
       <div className="mb-8">
         <p className="text-lg text-gray-700">Current Quote Template:</p>
@@ -138,8 +139,12 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
+                  />
                 </svg>
               )}
             </button>
@@ -164,29 +169,76 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
 
         <FileUploader
           acceptedFileTypes={['.docx']}
-          path={`members/franchise/${franchiseID}/templates/quote/`} // <-- NO leading slash, NO 'public/' prefix
+          path={`members/franchise/${franchiseID}/templates/quote/`}
           maxFileCount={1}
-          isResumable={false}                                 // single-part upload for now
-          processFile={({ file }) => ({ file, key: 'quote-template.docx' })} // optional: fixed name
-          onUploadStart={(e) => console.log('[Uploader] start', e)}
+          isResumable={false}
+          processFile={({ file }) => ({ file, key: 'quote-template.docx' })}
+          onUploadStart={() => {
+            setError(null);
+            setIssues([]);
+            setTesting(false);
+            setTestPdfUrl(null);
+          }}
           onUploadSuccess={async () => {
             try {
+              // Mark template present
               await setTemplate(franchiseID, 'quote', true);
+
+              // Immediately run a test fill + convert on the uploaded template
+              setTesting(true);
+              const res = await testFranchiseQuoteTemplate(franchiseID);
+              setTesting(false);
+              console.log('testFranchiseQuoteTemplate result:', res);
+
+              // Unwrap proxy/python response shape
+              const payload = typeof res?.body === 'string' ? JSON.parse(res.body) : res;
+
+              if (!payload || (res?.statusCode ?? 200) >= 400) {
+                const msg = payload?.message || res?.message || 'Template test failed.';
+                setError(msg);
+                setIssues(Array.isArray(payload?.issues) ? payload.issues : []);
+                return;
+              }
+
+              setIssues(Array.isArray(payload?.issues) ? payload.issues : []);
+              setTestPdfUrl(typeof payload?.pdfUrl === 'string' ? payload.pdfUrl : null);
+
+              // Refresh the page so "Current Quote Template" link appears if it was missing
               router.refresh();
-            } catch (e) {
-              console.error('setTemplate after upload failed', e);
+            } catch (e: any) {
+              console.error('post-upload error', e);
+              setTesting(false);
+              setError('Upload succeeded, but the test run failed. Please review your template and try again.');
             }
           }}
-          onUploadError={(e) => console.error('[Uploader] error', e)}
+          onUploadError={(e) => {
+            console.error('[Uploader] error', e);
+            setError('Upload failed. Please try again.');
+          }}
         />
 
+        {testing && <div className="text-sm text-gray-600">Running a test fill and conversion…</div>}
 
+        {!!issues.length && (
+          <div className="rounded-lg border border-yellow-300 bg-yellow-50 p-3 text-sm text-yellow-900">
+            <div className="font-semibold mb-1">Template warnings</div>
+            <ul className="list-disc pl-5">
+              {issues.map((i, idx) => (
+                <li key={idx}>{i}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-
-
-
-
-
+        {/* Always show link when available, even if there are warnings */}
+        {!testing && !error && testPdfUrl && (
+          <div className="rounded-lg border border-green-300 bg-green-50 p-3 text-sm text-green-900">
+            Test PDF created:&nbsp;
+            <a className="text-green-800 underline" href={testPdfUrl} target="_blank" rel="noreferrer">
+              quote-template-test.pdf
+            </a>
+          </div>
+        )}
       </div>
 
       {error && <p className="text-red-500 text-center mt-6">{error}</p>}
