@@ -1,0 +1,380 @@
+{
+    "version": 1,
+    "models": {},
+    "enums": {},
+    "nonModels": {},
+    "queries": {
+        "getFacilityOptions": {
+            "name": "getFacilityOptions",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false
+        },
+        "createCustomerQuote": {
+            "name": "createCustomerQuote",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false
+        },
+        "calculatePackageOptions": {
+            "name": "calculatePackageOptions",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                }
+            }
+        },
+        "updateQuoteBudget": {
+            "name": "updateQuoteBudget",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                },
+                "budget": {
+                    "name": "budget",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false
+                }
+            }
+        },
+        "updateCustomerInfo": {
+            "name": "updateCustomerInfo",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                },
+                "customerInfo": {
+                    "name": "customerInfo",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false
+                }
+            }
+        },
+        "updateFacilityType": {
+            "name": "updateFacilityType",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                },
+                "facilityType": {
+                    "name": "facilityType",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                }
+            }
+        },
+        "updateFloorInfo": {
+            "name": "updateFloorInfo",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                },
+                "floorInfo": {
+                    "name": "floorInfo",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false
+                }
+            }
+        },
+        "confirmQuote": {
+            "name": "confirmQuote",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                }
+            }
+        },
+        "getQuote": {
+            "name": "getQuote",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                }
+            }
+        },
+        "updateQuoteRooms": {
+            "name": "updateQuoteRooms",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                },
+                "formInfo": {
+                    "name": "formInfo",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false
+                }
+            }
+        },
+        "updatePackageChoice": {
+            "name": "updatePackageChoice",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                },
+                "packageInfo": {
+                    "name": "packageInfo",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false
+                }
+            }
+        },
+        "sendQuoteConfirmationEmail": {
+            "name": "sendQuoteConfirmationEmail",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                }
+            }
+        },
+        "updateQuoteFrequency": {
+            "name": "updateQuoteFrequency",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                },
+                "frequency": {
+                    "name": "frequency",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false
+                }
+            }
+        },
+        "getOwnerById": {
+            "name": "getOwnerById",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                }
+            }
+        },
+        "getFranchiseInfo": {
+            "name": "getFranchiseInfo",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "franchiseID": {
+                    "name": "franchiseID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                }
+            }
+        },
+        "getAvailableQuotesOwner": {
+            "name": "getAvailableQuotesOwner",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false
+        },
+        "getAcceptedQuotesOwner": {
+            "name": "getAcceptedQuotesOwner",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "franchiseID": {
+                    "name": "franchiseID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                },
+                "ownerID": {
+                    "name": "ownerID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                }
+            }
+        }
+    },
+    "mutations": {
+        "ownerAcceptQuote": {
+            "name": "ownerAcceptQuote",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "quoteID": {
+                    "name": "quoteID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                },
+                "franchiseID": {
+                    "name": "franchiseID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                },
+                "ownerID": {
+                    "name": "ownerID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                }
+            }
+        },
+        "setFranchiseTemplate": {
+            "name": "setFranchiseTemplate",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "franchiseID": {
+                    "name": "franchiseID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                },
+                "templateType": {
+                    "name": "templateType",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                },
+                "isThere": {
+                    "name": "isThere",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": true
+                }
+            }
+        },
+        "testFranchiseQuoteTemplate": {
+            "name": "testFranchiseQuoteTemplate",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "franchiseID": {
+                    "name": "franchiseID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                }
+            }
+        },
+        "testFranchiseContractTemplate": {
+            "name": "testFranchiseContractTemplate",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "franchiseID": {
+                    "name": "franchiseID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                }
+            }
+        },
+        "deleteFranchiseQuoteTemplate": {
+            "name": "deleteFranchiseQuoteTemplate",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "franchiseID": {
+                    "name": "franchiseID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                }
+            }
+        },
+        "deleteFranchiseContractTemplate": {
+            "name": "deleteFranchiseContractTemplate",
+            "isArray": false,
+            "type": "AWSJSON",
+            "isRequired": false,
+            "arguments": {
+                "franchiseID": {
+                    "name": "franchiseID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true
+                }
+            }
+        }
+    }
+}

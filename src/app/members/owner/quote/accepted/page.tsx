@@ -1,43 +1,67 @@
+import 'server-only';
 import React from 'react';
-import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import OwnerSingleAcceptedQuote from '@/components/pages/OwnerAcceptedQuote';
-import LoginError from '@/components/LoginErrorComponent';
+import { cookies } from 'next/headers';
+import { getCurrentUser } from 'aws-amplify/auth/server';
+import { runWithAmplifyServerContext } from '@/utils/amplify-server';
+import { createServerDataClient } from '@/utils/data-server';
 
+import OwnerQuoteClient from '@/components/pages/OwnerSingleAcceptedQuotePage';
+import OwnerFooter from '@/components/OwnerFooter';
+import getQuotePDF from '@/utils/getQuotePDF';
+
+type AmplifyUser = Awaited<ReturnType<typeof getCurrentUser>>;
 export const dynamic = 'force-dynamic';
 
 type SP = { quoteID?: string | string[] };
 
-export default async function AcceptedQuotePage({
-  searchParams,
-}: {
-  searchParams: Promise<SP>;
-}) {
-  try {
-    // Await Next 15's promised searchParams
-    const sp = await searchParams;
-    const rawId = sp?.quoteID;
-    const quoteParam = Array.isArray(rawId) ? rawId[0] : rawId ?? null;
+export default async function Page({ searchParams }: { searchParams: Promise<SP> }) {
+  // 1) auth
+  const authUser = await runWithAmplifyServerContext({
+    nextServerContext: { cookies },
+    operation: (ctx) => getCurrentUser(ctx).catch(() => null as AmplifyUser | null),
+  });
+  if (!authUser) redirect('/members/sign-in');
 
-    // Fetch the authenticated user on the server
-    const user = await AuthGetCurrentUserServer();
+  // 2) read quoteID from query
+  const sp = await searchParams;
+  const raw = sp?.quoteID;
+  const quoteID = Array.isArray(raw) ? raw[0] : raw ?? '';
+  if (!quoteID) redirect('/error');
 
-    // Redirect to the login page if the user is not authenticated
-    if (!user) {
-      redirect('/login'); // throws
-    }
+  // 3) fetch owner
+  const client = createServerDataClient(cookies);
+  const ownerRes = await client.queries.getOwnerById({ id: authUser.userId }, { authMode: 'userPool' });
+  if (ownerRes.errors?.length) redirect('/error');
+  const owner = typeof ownerRes.data === 'string' ? JSON.parse(ownerRes.data) : ownerRes.data;
 
-    return (
-      <div className="flex w-full flex-col min-h-screen">
-        <OwnerSingleAcceptedQuote user={user} quoteID={quoteParam} />
-      </div>
-    );
-  } catch (error) {
-    console.error('Error fetching user or search params:', error);
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <LoginError />
-      </div>
-    );
-  }
+  const userID: string | undefined =
+    owner?.data?.OwnerID ?? owner?.OwnerID ?? owner?.id ?? authUser.userId;
+
+  const franchiseID: string | undefined =
+    owner?.data?.FranchiseID ?? owner?.franchiseId ?? owner?.franchiseID;
+
+  if (!userID || !franchiseID) redirect('/error');
+
+  // 4) fetch quote
+  const quoteRes = await client.queries.getQuote({ quoteID }, { authMode: 'userPool' });
+  if (quoteRes.errors?.length) redirect('/error');
+  const quoteData = typeof quoteRes.data === 'string' ? JSON.parse(quoteRes.data) : quoteRes.data;
+  const initialQuote = quoteData?.quote ?? quoteData ?? null;
+
+  // 5) zero-arg server action that calls the server util getQuotePDF
+  const getQuotePdfAction = async () => {
+    'use server';
+    return await getQuotePDF(quoteID);
+  };
+
+  return (
+    <div className="flex w-full flex-col min-h-screen">
+      <OwnerQuoteClient
+        initialQuote={initialQuote}
+        getQuotePdfAction={getQuotePdfAction}
+      />
+      <OwnerFooter />
+    </div>
+  );
 }

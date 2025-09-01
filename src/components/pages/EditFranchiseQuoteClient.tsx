@@ -5,7 +5,6 @@ import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FileUploader } from '@aws-amplify/ui-react-storage';
 import getQuoteTemplate from '@/utils/getQuoteTemplateClient';
-import deleteFranchiseTemplate from '@/utils/deleteFranchiseTemplate';
 import testFranchiseQuoteTemplate from '@/utils/testFranchiseQuoteTemplateClient';
 
 import '@aws-amplify/ui-react/styles.css';
@@ -14,9 +13,10 @@ type Props = {
   owner: any;
   franchise: any;
   setTemplate: (franchiseID: string, templateType: 'quote' | 'contract', isThere: boolean) => Promise<any>;
+  deleteTemplateAndUnset: (franchiseID: string) => Promise<any>;
 };
 
-export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate }: Props) {
+export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate, deleteTemplateAndUnset }: Props) {
   const router = useRouter();
 
   const franchiseID = useMemo(
@@ -43,8 +43,8 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
     typeof franchise?.quoteTemplate === 'string'
       ? franchise.quoteTemplate
       : hasTemplate
-      ? 'quote-template.docx'
-      : null;
+        ? 'quote-template.docx'
+        : null;
 
   const handleBack = () => router.push('/members/owner/franchise');
 
@@ -76,7 +76,7 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
     setError(null);
     setDeleteBusy(true);
     try {
-      await deleteFranchiseTemplate(franchiseID, 'quote');
+      await deleteTemplateAndUnset(franchiseID);
       router.push('/members/owner/franchise');
     } catch (e: any) {
       console.error('Delete error:', e);
@@ -172,6 +172,7 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
           path={`members/franchise/${franchiseID}/templates/quote/`}
           maxFileCount={1}
           isResumable={false}
+          // Always upload to the expected key; we'll roll back (delete + skip DDB) on failure.
           processFile={({ file }) => ({ file, key: 'quote-template.docx' })}
           onUploadStart={() => {
             setError(null);
@@ -181,34 +182,57 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
           }}
           onUploadSuccess={async () => {
             try {
-              // Mark template present
-              await setTemplate(franchiseID, 'quote', true);
-
-              // Immediately run a test fill + convert on the uploaded template
+              // 1) Validate immediately
               setTesting(true);
               const res = await testFranchiseQuoteTemplate(franchiseID);
               setTesting(false);
-              console.log('testFranchiseQuoteTemplate result:', res);
 
-              // Unwrap proxy/python response shape
               const payload = typeof res?.body === 'string' ? JSON.parse(res.body) : res;
+              const statusOk = (res?.statusCode ?? 200) < 400;
+              const allIssues = Array.isArray(payload?.issues) ? payload.issues : [];
 
-              if (!payload || (res?.statusCode ?? 200) >= 400) {
-                const msg = payload?.message || res?.message || 'Template test failed.';
-                setError(msg);
-                setIssues(Array.isArray(payload?.issues) ? payload.issues : []);
+              // Treat "Missing block marker(s)" as a hard fail; recommendations are warnings.
+              // Fail on *any* issue (warnings included)
+              const passed = statusOk && !!payload?.pdfUrl && allIssues.length === 0;
+
+              if (!passed) {
+                // 2) On failure: DON'T mark in DDB, and remove the just-uploaded file
+                const hasCritical = allIssues.some((i: string) => /Missing block marker/i.test(i));
+
+                setError(
+                  hasCritical
+                    ? 'Template failed validation: required block markers are missing.'
+                    : payload?.message || 'Template failed validation. Please address the warnings and try again.'
+                );
+                setIssues(allIssues);
+                setTestPdfUrl(null);
+                try {
+                  await deleteTemplateAndUnset(franchiseID);
+                } catch (delErr) {
+                  console.warn('Cleanup delete failed (template left on S3):', delErr);
+                }
                 return;
               }
 
-              setIssues(Array.isArray(payload?.issues) ? payload.issues : []);
+              // 3) On success: mark template present in DDB
+              await setTemplate(franchiseID, 'quote', true);
+
+              // 4) Show warnings (if any) and link to test PDF
+              setIssues(allIssues);
               setTestPdfUrl(typeof payload?.pdfUrl === 'string' ? payload.pdfUrl : null);
 
-              // Refresh the page so "Current Quote Template" link appears if it was missing
+              // 5) Refresh so "Current Quote Template" link appears if it was missing
               router.refresh();
             } catch (e: any) {
               console.error('post-upload error', e);
               setTesting(false);
               setError('Upload succeeded, but the test run failed. Please review your template and try again.');
+              // Try to remove the uploaded template since we didn’t validate it
+              try {
+                await deleteTemplateAndUnset(franchiseID);
+              } catch (delErr) {
+                console.warn('Cleanup delete failed (template left on S3):', delErr);
+              }
             }
           }}
           onUploadError={(e) => {
@@ -230,7 +254,7 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
           </div>
         )}
 
-        {/* Always show link when available, even if there are warnings */}
+        {/* Show link when available (passed path sets this) */}
         {!testing && !error && testPdfUrl && (
           <div className="rounded-lg border border-green-300 bg-green-50 p-3 text-sm text-green-900">
             Test PDF created:&nbsp;

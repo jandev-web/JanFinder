@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import getQuotePDF from '@/utils/getQuotePDF';
 import { checkIsOwner } from '@/utils/checkIsOwner';
 import makeQuotePDF from '@/utils/generateQuoteDoc'
 import fetchOwnerById from '@/utils/getOwnerById';
@@ -211,22 +210,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
 
     };
 
-    const downloadPDF = async () => {
-        try {
-            const quotePDF = await getQuotePDF(quoteID);
-
-            const response = await fetch(quotePDF.url);
-            const blob = await response.blob();
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `${customerData.company}_Contract.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (error) {
-            alert('Failed to download PDF. Please try again later.');
-        }
-    };
+    
 
     const formatDate = (timestamp: string) => {
         const date = new Date(timestamp);
@@ -404,12 +388,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
                     <div className="mt-10 text-center">
 
                         <div className="flex justify-center space-x-4">
-                            <button
-                                onClick={() => downloadPDF()}
-                                className="px-6 py-3 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
-                            >
-                                Download Contract PDF
-                            </button>
+                            
                             <button
                                 onClick={() =>
                                     router.push(

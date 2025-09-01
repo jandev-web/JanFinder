@@ -34,9 +34,13 @@ import { getAvailableQuotesOwnerFn } from './functions/get-quotes-owner-availabl
 import { ownerAcceptQuoteFn } from './functions/owner-accept-quote/resource';
 import { sendQuoteAcceptanceEmailFn } from './functions/send-quote-acceptance-email/resource';
 import { setFranchiseTemplateFn } from './functions/set-franchise-template/resource';
+import { deleteFranchiseQuoteTemplateFn } from './functions/delete-franchise-quote-template/resource';
+import { deleteFranchiseContractTemplateFn } from './functions/delete-franchise-contract-template/resource'; // NEW
+import { getAcceptedQuotesOwnerFn } from './functions/get-quotes-owner-accepted/resource';
 
-// ✅ Use the TS proxy (resolver) and call a Python Lambda from here
+// TS proxies that call Python validators
 import { validateQuoteTemplateProxyFn } from './functions/validate-quote-template-proxy/resource';
+import { validateContractTemplateProxyFn } from './functions/validate-contract-template-proxy/resource'; // NEW
 
 // 1) Bind resources
 const backend = defineBackend({
@@ -64,6 +68,10 @@ const backend = defineBackend({
   sendQuoteAcceptanceEmailFn,
   setFranchiseTemplateFn,
   validateQuoteTemplateProxyFn,
+  validateContractTemplateProxyFn, // NEW
+  deleteFranchiseQuoteTemplateFn,
+  deleteFranchiseContractTemplateFn, // NEW
+  getAcceptedQuotesOwnerFn,
 });
 
 // === Locals ===
@@ -130,7 +138,7 @@ new iam.CfnPolicy(backend.data.stack, 'IdentityPoolGraphQLPolicyV2', {
 });
 
 // 4) Storage + S3 access
-const contractBucket = backend.storage.resources.bucket as s3.Bucket;
+const publicBucket = backend.storage.resources.bucket as s3.Bucket;
 new iam.CfnPolicy(backend.data.stack, 'IdentityPoolS3PublicRW', {
   policyName: 'IdentityPoolS3PublicRW',
   roles: Array.from(discoveredRoleNames),
@@ -140,12 +148,12 @@ new iam.CfnPolicy(backend.data.stack, 'IdentityPoolS3PublicRW', {
       {
         Effect: 'Allow',
         Action: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject', 's3:AbortMultipartUpload', 's3:ListMultipartUploadParts'],
-        Resource: [`${contractBucket.bucketArn}/public/*`],
+        Resource: [`${publicBucket.bucketArn}/public/*`],
       },
       {
         Effect: 'Allow',
         Action: ['s3:ListBucket', 's3:ListBucketMultipartUploads'],
-        Resource: [contractBucket.bucketArn],
+        Resource: [publicBucket.bucketArn],
         Condition: { StringLike: { 's3:prefix': ['public/*'] } },
       },
     ],
@@ -179,8 +187,11 @@ const getAvailableQuotesOwnerLambda = backend.getAvailableQuotesOwnerFn.resource
 const ownerAcceptQuoteLambda = backend.ownerAcceptQuoteFn.resources.lambda as lambda.Function;
 const sendOwnerAcceptanceEmailLambda = backend.sendQuoteAcceptanceEmailFn.resources.lambda as lambda.Function;
 const setFranchiseTemplateLambda = backend.setFranchiseTemplateFn.resources.lambda as lambda.Function;
-const validateTemplateProxy = backend.validateQuoteTemplateProxyFn.resources.lambda as lambda.Function;
-
+const validateQuoteProxy = backend.validateQuoteTemplateProxyFn.resources.lambda as lambda.Function;
+const validateContractProxy = backend.validateContractTemplateProxyFn.resources.lambda as lambda.Function; // NEW
+const deleteQuoteTplLambda = backend.deleteFranchiseQuoteTemplateFn.resources.lambda as lambda.Function;
+const deleteContractTplLambda = backend.deleteFranchiseContractTemplateFn.resources.lambda as lambda.Function; // NEW
+const getAcceptedQuotesOwnerLambda = backend.getAcceptedQuotesOwnerFn.resources.lambda as lambda.Function;
 // ===== Doc pipeline Lambdas (Python) =====
 const buildQuoteDocContextLambda = new lambda.Function(backend.data.stack, 'BuildQuoteDocContextFn', {
   functionName: 'build-quote-doc-context',
@@ -194,8 +205,8 @@ const buildQuoteDocContextLambda = new lambda.Function(backend.data.stack, 'Buil
     CUSTOMER_QUOTES_TABLE: 'CustomerQuotes',
     OWNER_TABLE: 'Owner_DB',
     FRANCHISE_TABLE: 'Franchise_DB',
-    TEMPLATE_BUCKET: contractBucket.bucketName,
-    OUTPUT_BUCKET: contractBucket.bucketName,
+    TEMPLATE_BUCKET: publicBucket.bucketName,
+    OUTPUT_BUCKET: publicBucket.bucketName,
   },
 });
 
@@ -219,7 +230,7 @@ const convertDocxToPdfLambda = new lambda.Function(backend.data.stack, 'ConvertD
   memorySize: 1536,
   layers: [docgenDepsLayer],
   environment: {
-    CONTRACT_BUCKET: contractBucket.bucketName,
+    CONTRACT_BUCKET: publicBucket.bucketName, // kept for backward compat in your handler
     ADOBE_SECRET_NAME: 'adobe-credentials',
   },
 });
@@ -237,12 +248,30 @@ const updateQuoteDocumentLinksLambda = new lambda.Function(backend.data.stack, '
 });
 
 // ===== S3 grants =====
-contractBucket.grantRead(fillDocxPlaceholdersLambda);
-contractBucket.grantWrite(fillDocxPlaceholdersLambda);
-contractBucket.grantReadWrite(convertDocxToPdfLambda);
-contractBucket.grantRead(sendOwnerAcceptanceEmailLambda);
+publicBucket.grantRead(fillDocxPlaceholdersLambda);
+publicBucket.grantWrite(fillDocxPlaceholdersLambda);
+publicBucket.grantReadWrite(convertDocxToPdfLambda);
+publicBucket.grantRead(sendOwnerAcceptanceEmailLambda);
+
+publicBucket.grantDelete(deleteQuoteTplLambda);
+publicBucket.grantRead(deleteQuoteTplLambda);
+deleteQuoteTplLambda.addEnvironment('BUCKET_NAME', publicBucket.bucketName);
+deleteQuoteTplLambda.addEnvironment('FRANCHISE_TABLE', 'Franchise_DB');
+
+publicBucket.grantDelete(deleteContractTplLambda);
+publicBucket.grantRead(deleteContractTplLambda);
+deleteContractTplLambda.addEnvironment('BUCKET_NAME', publicBucket.bucketName);
+deleteContractTplLambda.addEnvironment('FRANCHISE_TABLE', 'Franchise_DB');
 
 // ===== DynamoDB grants =====
+deleteQuoteTplLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:UpdateItem'],
+  resources: [tableArn('Franchise_DB')],
+}));
+deleteContractTplLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:UpdateItem'],
+  resources: [tableArn('Franchise_DB')],
+}));
 buildQuoteDocContextLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:GetItem'],
   resources: [tableArn('CustomerQuotes'), tableArn('Owner_DB'), tableArn('Franchise_DB')],
@@ -261,7 +290,7 @@ sendOwnerAcceptanceEmailLambda.addToRolePolicy(new PolicyStatement({
   actions: ['ses:SendRawEmail'],
   resources: ['*'],
 }));
-sendOwnerAcceptanceEmailLambda.addEnvironment('QUOTE_PDF_BUCKET_NAME', contractBucket.bucketName);
+sendOwnerAcceptanceEmailLambda.addEnvironment('QUOTE_PDF_BUCKET_NAME', publicBucket.bucketName);
 
 // SecretsManager access for convert lambda
 convertDocxToPdfLambda.addToRolePolicy(new PolicyStatement({
@@ -351,8 +380,16 @@ setFranchiseTemplateLambda.addToRolePolicy(new PolicyStatement({
   ],
   resources: [tableArn('Franchise_DB')],
 }));
-
-// ===== Step Functions state machine =====
+getAcceptedQuotesOwnerLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:Query', 'dynamodb:DescribeTable'],
+  resources: [
+    tableArn('CustomerQuotes'),
+    tableIndexArn('CustomerQuotes'),
+    tableArn('SellRequest_DB'),
+    tableIndexArn('SellRequest_DB'),
+  ],
+}));
+// ===== Step Functions state machine (quote pipeline) =====
 const buildContext = new tasks.LambdaInvoke(backend.data.stack, 'BuildContextTask', {
   lambdaFunction: buildQuoteDocContextLambda,
   payload: sfn.TaskInput.fromObject({
@@ -436,30 +473,51 @@ ownerAcceptQuoteLambda.addEnvironment('DOC_PIPELINE_ARN', documentPipeline.state
 ownerAcceptQuoteLambda.addEnvironment('DEFAULT_TIMEZONE', 'America/Chicago');
 documentPipeline.grantStartExecution(ownerAcceptQuoteLambda);
 
-// ===== Template validation: Python validator + Node proxy (NO worker) =====
+// ===== Template validation: Python validators + Node proxies =====
 const validateQuoteTemplateLambda = new lambda.Function(backend.data.stack, 'ValidateQuoteTemplateFn', {
   functionName: 'validate-quote-template',
   runtime: lambda.Runtime.PYTHON_3_12,
   handler: 'handler.lambda_handler',
-  code: lambda.Code.fromAsset('amplify/functions/validate-quote-template'), // <-- ensure folder exists
+  code: lambda.Code.fromAsset('amplify/functions/validate-quote-template'),
   timeout: Duration.minutes(2),
   memorySize: 1024,
   environment: {
-    TEMPLATE_BUCKET: contractBucket.bucketName,
-    OUTPUT_BUCKET: contractBucket.bucketName,
+    TEMPLATE_BUCKET: publicBucket.bucketName,
+    OUTPUT_BUCKET: publicBucket.bucketName,
     FILL_LAMBDA_NAME: fillDocxPlaceholdersLambda.functionName,
     CONVERT_LAMBDA_NAME: convertDocxToPdfLambda.functionName,
   },
 });
 
-// proxy → python
-validateTemplateProxy.addEnvironment('TARGET_FUNCTION_NAME', validateQuoteTemplateLambda.functionName);
-validateQuoteTemplateLambda.grantInvoke(validateTemplateProxy);
+const validateContractTemplateLambda = new lambda.Function(backend.data.stack, 'ValidateContractTemplateFn', {
+  functionName: 'validate-contract-template',
+  runtime: lambda.Runtime.PYTHON_3_12,
+  handler: 'handler.lambda_handler',
+  code: lambda.Code.fromAsset('amplify/functions/validate-contract-template'), // NEW folder
+  timeout: Duration.minutes(2),
+  memorySize: 1024,
+  environment: {
+    TEMPLATE_BUCKET: publicBucket.bucketName,
+    OUTPUT_BUCKET: publicBucket.bucketName,
+    FILL_LAMBDA_NAME: fillDocxPlaceholdersLambda.functionName,
+    CONVERT_LAMBDA_NAME: convertDocxToPdfLambda.functionName,
+  },
+});
+
+// proxies → python
+validateQuoteProxy.addEnvironment('TARGET_FUNCTION_NAME', validateQuoteTemplateLambda.functionName);
+validateContractProxy.addEnvironment('TARGET_FUNCTION_NAME', validateContractTemplateLambda.functionName);
+
+validateQuoteTemplateLambda.grantInvoke(validateQuoteProxy);
+validateContractTemplateLambda.grantInvoke(validateContractProxy);
 
 // python → S3 and invoke helpers
-contractBucket.grantReadWrite(validateQuoteTemplateLambda);
+publicBucket.grantReadWrite(validateQuoteTemplateLambda);
+publicBucket.grantReadWrite(validateContractTemplateLambda);
 fillDocxPlaceholdersLambda.grantInvoke(validateQuoteTemplateLambda);
+fillDocxPlaceholdersLambda.grantInvoke(validateContractTemplateLambda);
 convertDocxToPdfLambda.grantInvoke(validateQuoteTemplateLambda);
+convertDocxToPdfLambda.grantInvoke(validateContractTemplateLambda);
 
 // Auth trigger policies
 const userPoolWildcardArn = `arn:${partition}:cognito-idp:${region}:${account}:userpool/*`;
@@ -472,4 +530,4 @@ postConfFn.addToRolePolicy(new PolicyStatement({
   resources: [tableArn('Owner_DB'), tableArn('Franchise_DB')],
 }));
 
-export default backend;    
+export default backend;

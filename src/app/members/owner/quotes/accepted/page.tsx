@@ -1,29 +1,53 @@
-
+import 'server-only';
 import React from 'react';
-import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import OwnerAcceptedQuotesPage from '@/components/pages/OwnerAccQuotesPage';
+import { cookies } from 'next/headers';
+import { getCurrentUser } from 'aws-amplify/auth/server';
+import { runWithAmplifyServerContext } from '@/utils/amplify-server';
+
+import { getOwnerByIdServer } from '@/utils/getOwnerByIdServer';
+import { getFranchiseServer } from '@/utils/getFranchiseServer';
+import { getAcceptedQuotesServer } from '@/utils/getAcceptedOwnerQuotesServer';
+
+import OwnerAcceptedQuotesPage from '@/components/pages/OwnerAcceptedQuotesPage';
 import LoginError from '@/components/LoginErrorComponent';
 
-export const dynamic = "force-dynamic";
+type AmplifyUser = Awaited<ReturnType<typeof getCurrentUser>>;
+export const dynamic = 'force-dynamic';
 
-export default async function AcceptedQuotesPage() {
-  try {
-    // Fetch the authenticated user on the server
-    const user = await AuthGetCurrentUserServer();
+export default async function Page() {
+  // Auth (server)
+  const authUser = await runWithAmplifyServerContext({
+    nextServerContext: { cookies },
+    operation: (ctx) => getCurrentUser(ctx).catch(() => null as AmplifyUser | null),
+  });
+  if (!authUser) redirect('/members/sign-in');
 
-    // Redirect to the login page if the user is not authenticated
-    if (!user) {
-      redirect('/login');
-    }
-
+  // Owner (server)
+  const owner = await getOwnerByIdServer(authUser.userId);
+  if (!owner) {
     return (
-      <div className="flex w-full flex-col min-h-screen">
-        <OwnerAcceptedQuotesPage user={user} />
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <LoginError />
       </div>
     );
-  } catch (error) {
-    console.error('Error fetching user:', error);
-
   }
+
+  // Franchise ID (normalize possible field names)
+  const ownerID = (owner as any)?.id ?? (owner as any)?.OwnerID;
+  const franchiseID: string | undefined = (owner as any)?.franchiseId ?? (owner as any)?.franchiseID ?? undefined;
+
+  // Accepted quotes for this franchise
+  const quotes = ownerID && franchiseID
+    ? await getAcceptedQuotesServer(franchiseID, ownerID)
+    : [];
+
+  // Franchise info (optional)
+  const franchise = franchiseID ? await getFranchiseServer(franchiseID) : null;
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <OwnerAcceptedQuotesPage ownerData={owner} quotes={quotes} franchise={franchise} />
+    </div>
+  );
 }

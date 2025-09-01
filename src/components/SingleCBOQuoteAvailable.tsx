@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import getQuotePDF from '@/utils/getQuotePDF';
 import { checkIsOwner } from '@/utils/checkIsOwner';
 import makeQuotePDF from '@/utils/generateQuoteDoc'
 import fetchSellRequestByID from '@/utils/getSellRequestByID'

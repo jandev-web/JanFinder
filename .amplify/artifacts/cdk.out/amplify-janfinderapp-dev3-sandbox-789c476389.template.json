@@ -298,8 +298,36 @@
       "\",\"",
       {
        "Fn::GetAtt": [
+        "function1351588B",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetquotesowneracceptedlambdaC8930B3ERef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
         "data7552DF31",
         "Outputs.amplifyjanfinderappdev3sandbox789c476389datavalidatequotetemplateproxylambdaE1EE7BEARef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389datavalidatecontracttemplateproxylambda76DA8F54Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389datadeletefranchisequotetemplatelambda2872CF94Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389datadeletefranchisecontracttemplatelambda57852061Ref"
        ]
       },
       "\",\"",
@@ -460,6 +488,18 @@
    "Type": "AWS::CloudFormation::Stack",
    "Properties": {
     "Parameters": {
+     "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn": {
+      "Fn::GetAtt": [
+       "storage0EC3F24A",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef": {
+      "Fn::GetAtt": [
+       "storage0EC3F24A",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef"
+      ]
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": {
       "Fn::GetAtt": [
        "auth179371D7",
@@ -574,16 +614,10 @@
        "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetquotesowneravailablelambda59261E45Arn"
       ]
      },
-     "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn": {
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetquotesowneracceptedlambdaC8930B3EArn": {
       "Fn::GetAtt": [
-       "storage0EC3F24A",
-       "Outputs.amplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn"
-      ]
-     },
-     "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef": {
-      "Fn::GetAtt": [
-       "storage0EC3F24A",
-       "Outputs.amplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef"
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetquotesowneracceptedlambdaC8930B3EArn"
       ]
      },
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {
@@ -619,7 +653,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/3af1e31acc69bdc1cc6e9e423674b7bb6045af4f8b83a1877792bb34f1d6471b.json"
+       "/e9074da18ae413cf6d94c67480b09ccdd92a3db8fb349957004daf2a9971c9b0.json"
       ]
      ]
     }
@@ -675,7 +709,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/03ff8727d09df681772acb92583d10728e61314a839316b3ced6fc0546e51c94.json"
+       "/651bb6b3e74a432682862ecfd0a5bc5fb9b2165c0735605a1e74682d668ec7c3.json"
       ]
      ]
     }

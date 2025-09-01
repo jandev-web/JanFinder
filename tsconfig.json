@@ -27,6 +27,6 @@
     "src/**/*.tsx",
     ".next/types/**/*.ts",
     "amplify/**/*.ts"
-  ],
+, "src/utils/getQuotePDF.ts"  ],
   "exclude": ["node_modules", "amplify/**", ".amplify/**"]
 }

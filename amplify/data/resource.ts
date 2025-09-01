@@ -17,7 +17,15 @@ import { getFranchiseFn } from '../functions/get-franchise/resource';
 import { getAvailableQuotesOwnerFn } from '../functions/get-quotes-owner-available/resource';
 import { ownerAcceptQuoteFn } from '../functions/owner-accept-quote/resource';
 import { setFranchiseTemplateFn } from '../functions/set-franchise-template/resource';
+import { getAcceptedQuotesOwnerFn } from '../functions/get-quotes-owner-accepted/resource';
+
+// Proxies (Node) → Python validators
 import { validateQuoteTemplateProxyFn as testFranchiseQuoteTemplateFn } from '../functions/validate-quote-template-proxy/resource';
+import { validateContractTemplateProxyFn as testFranchiseContractTemplateFn } from '../functions/validate-contract-template-proxy/resource'; // NEW
+
+// Deleters
+import { deleteFranchiseQuoteTemplateFn } from '../functions/delete-franchise-quote-template/resource';
+import { deleteFranchiseContractTemplateFn } from '../functions/delete-franchise-contract-template/resource'; // NEW
 
 console.log('[Synth] data.defaultAuthorizationMode = iam');
 console.log('[Synth] createCustomerQuote auth = guest + identityPool');
@@ -62,6 +70,7 @@ const schema = a.schema({
   updateQuoteFrequency: a.query().arguments({ quoteID: a.string(), frequency: a.string() }).returns(a.json())
     .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updateQuoteFrequencyFn)),
+
   getOwnerById: a.query().arguments({ id: a.string().required() }).returns(a.json())
     .authorization(allow => [allow.authenticated()])
     .handler(a.handler.function(getOwnerFn)),
@@ -71,6 +80,7 @@ const schema = a.schema({
   getAvailableQuotesOwner: a.query().returns(a.json())
     .authorization(allow => [allow.authenticated()])
     .handler(a.handler.function(getAvailableQuotesOwnerFn)),
+
   ownerAcceptQuote: a.mutation().arguments({
     quoteID: a.string().required(),
     franchiseID: a.string().required(),
@@ -78,21 +88,51 @@ const schema = a.schema({
   }).returns(a.json())
     .authorization(allow => [allow.authenticated()])
     .handler(a.handler.function(ownerAcceptQuoteFn)),
+
   setFranchiseTemplate: a.mutation().arguments({
     franchiseID: a.string().required(),
-    templateType: a.string().required(),
+    templateType: a.string().required(), // 'quote' | 'contract'
     isThere: a.boolean().required(),
   }).returns(a.json())
     .authorization(allow => [allow.authenticated()])
     .handler(a.handler.function(setFranchiseTemplateFn)),
+  getAcceptedQuotesOwner: a.query()
+    .arguments({
+      franchiseID: a.string().required(),
+      ownerID: a.string().required(),
+    })
+    .returns(a.json())
+    .authorization(allow => [
+      allow.authenticated(),                // User Pool
+      allow.authenticated('identityPool'),  // (optional) Identity Pool
+    ])
+    .handler(a.handler.function(getAcceptedQuotesOwnerFn)),
+
+  // ===== Validators =====
   testFranchiseQuoteTemplate: a.mutation()
     .arguments({ franchiseID: a.string().required() })
     .returns(a.json())
-    .authorization(allow => [
-      allow.authenticated(),                 // user pool
-      allow.authenticated('identityPool'),   // ← add this
-    ])
+    .authorization(allow => [allow.authenticated(), allow.authenticated('identityPool')])
     .handler(a.handler.function(testFranchiseQuoteTemplateFn)),
+
+  testFranchiseContractTemplate: a.mutation() // NEW
+    .arguments({ franchiseID: a.string().required() })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated(), allow.authenticated('identityPool')])
+    .handler(a.handler.function(testFranchiseContractTemplateFn)),
+
+  // ===== Deleters =====
+  deleteFranchiseQuoteTemplate: a.mutation()
+    .arguments({ franchiseID: a.string().required() })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated(), allow.authenticated('identityPool')])
+    .handler(a.handler.function(deleteFranchiseQuoteTemplateFn)),
+
+  deleteFranchiseContractTemplate: a.mutation() // NEW
+    .arguments({ franchiseID: a.string().required() })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated(), allow.authenticated('identityPool')])
+    .handler(a.handler.function(deleteFranchiseContractTemplateFn)),
 });
 
 export type Schema = ClientSchema<typeof schema>;

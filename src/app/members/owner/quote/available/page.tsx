@@ -12,7 +12,7 @@ type SP = { quoteID?: string | string[] };
 export default async function AvailableQuotePage({
   searchParams,
 }: {
-  searchParams: SP; // ← not a Promise
+  searchParams: Promise<SP> ; // ← not a Promise
 }) {
   const sp = await searchParams;
   const raw = sp?.quoteID;

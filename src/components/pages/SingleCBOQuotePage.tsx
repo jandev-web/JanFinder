@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { acceptQuote } from '@/utils/CBOAcceptQuote';
-import getQuotePDF from '@/utils/getQuotePDF';
 import { checkIsOwner } from '@/utils/checkIsOwner';
 import fetchCBOById from '@/utils/getCBOByID';
 import getFranchiseInfo from '@/utils/getFranchiseInfo';
@@ -164,9 +163,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID, prevPage }) => {
       
       console.log(quoteData)
 
-      if (quoteData) {
-        handleRetrievePDF('');
-      }
+      
     } catch (error) {
       console.error('Error fetching quote details:', error);
     }
@@ -181,14 +178,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID, prevPage }) => {
     }
   };
 
-  const handleRetrievePDF = async (quotePDF: string) => {
-    try {
-      const url = await getQuotePDF(quotePDF);
-      setPdfUrl(url);
-    } catch (error) {
-      console.error('Error retrieving PDF:', error);
-    }
-  };
+  
 
   const goBack = async () => {
     try {

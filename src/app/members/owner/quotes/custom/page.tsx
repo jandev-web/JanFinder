@@ -2,7 +2,6 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import CustomQuotesPage from '@/components/pages/CustomQuotesPage';
 import LoginError from '@/components/LoginErrorComponent';
 
 export const dynamic = "force-dynamic";
@@ -19,7 +18,7 @@ export default async function CustomQuotes() {
 
     return (
       <div className="flex w-full flex-col min-h-screen">
-        <CustomQuotesPage user={user} />
+        
       </div>
     );
   } catch (error) {

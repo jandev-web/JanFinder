@@ -9,6 +9,7 @@ import { runWithAmplifyServerContext } from '@/utils/amplify-server';
 import { setFranchiseTemplateAction } from '@/utils/setFranchiseTemplatesServer';
 import { getOwnerByIdServer } from '@/utils/getOwnerByIdServer';
 import { getFranchiseServer } from '@/utils/getFranchiseServer';
+import deleteFranchiseQuoteTemplateServer from '@/utils/deleteFranchiseQuoteTemplateServer';
 
 import FranchiseEditQuoteClient from '@/components/pages/EditFranchiseQuoteClient';
 import LoginError from '@/components/LoginErrorComponent';
@@ -44,7 +45,7 @@ export default async function Page() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <FranchiseEditQuoteClient owner={owner} franchise={franchise} setTemplate={setFranchiseTemplateAction} />
+      <FranchiseEditQuoteClient owner={owner} franchise={franchise} setTemplate={setFranchiseTemplateAction} deleteTemplateAndUnset={deleteFranchiseQuoteTemplateServer} />
     </div>
   );
 }
