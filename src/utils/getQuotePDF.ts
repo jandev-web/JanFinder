@@ -34,4 +34,3 @@ export default async function getQuotePDF(quoteID: string): Promise<{ url: strin
 
   return { url };
 }
-

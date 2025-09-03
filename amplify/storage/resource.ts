@@ -7,6 +7,10 @@ export const storage = defineStorage({
       allow.groups(['Member']).to(['read']),
       allow.groups(['Owner']).to(['read', 'write', 'delete'])
     ],
+    'customer/*': [
+      allow.groups(['Member']).to(['read']),
+      allow.groups(['Owner']).to(['read', 'write', 'delete'])
+    ],
   })
 });
 

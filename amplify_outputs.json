@@ -315,6 +315,20 @@
               "isRequired": true
             }
           }
+        },
+        "ownerGetAllMembers": {
+          "name": "ownerGetAllMembers",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "ownerID": {
+              "name": "ownerID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
         }
       },
       "mutations": {
@@ -367,6 +381,71 @@
               "isArray": false,
               "type": "Boolean",
               "isRequired": true
+            }
+          }
+        },
+        "sendTransferRequest": {
+          "name": "sendTransferRequest",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "quoteID": {
+              "name": "quoteID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "ownerID": {
+              "name": "ownerID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "targetUser": {
+              "name": "targetUser",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "updateFranchiseInfo": {
+          "name": "updateFranchiseInfo",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "franchiseID": {
+              "name": "franchiseID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "ownerID": {
+              "name": "ownerID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "franchiseName": {
+              "name": "franchiseName",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "franchiseAddress": {
+              "name": "franchiseAddress",
+              "isArray": false,
+              "type": "AWSJSON",
+              "isRequired": true
+            },
+            "serviceRegions": {
+              "name": "serviceRegions",
+              "isArray": true,
+              "type": "String",
+              "isRequired": false,
+              "isArrayNullable": false
             }
           }
         },
@@ -439,6 +518,18 @@
         "aws_region": "us-east-1",
         "paths": {
           "members/franchise/*": {
+            "groupsMember": [
+              "get",
+              "list"
+            ],
+            "groupsOwner": [
+              "get",
+              "list",
+              "write",
+              "delete"
+            ]
+          },
+          "customer/*": {
             "groupsMember": [
               "get",
               "list"

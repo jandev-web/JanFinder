@@ -8,7 +8,6 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
-
 import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { storage } from './storage/resource';
@@ -37,6 +36,9 @@ import { setFranchiseTemplateFn } from './functions/set-franchise-template/resou
 import { deleteFranchiseQuoteTemplateFn } from './functions/delete-franchise-quote-template/resource';
 import { deleteFranchiseContractTemplateFn } from './functions/delete-franchise-contract-template/resource'; // NEW
 import { getAcceptedQuotesOwnerFn } from './functions/get-quotes-owner-accepted/resource';
+import { sendTransferRequestFn } from './functions/owner-send-transfer-request/resource';
+import { ownerGetAllMembersFn } from './functions/owner-get-all-members/resource';
+import { updateFranchiseInfoFn } from './functions/update-franchise-info/resource';
 
 // TS proxies that call Python validators
 import { validateQuoteTemplateProxyFn } from './functions/validate-quote-template-proxy/resource';
@@ -72,6 +74,9 @@ const backend = defineBackend({
   deleteFranchiseQuoteTemplateFn,
   deleteFranchiseContractTemplateFn, // NEW
   getAcceptedQuotesOwnerFn,
+  sendTransferRequestFn,
+  ownerGetAllMembersFn,
+  updateFranchiseInfoFn,
 });
 
 // === Locals ===
@@ -139,26 +144,6 @@ new iam.CfnPolicy(backend.data.stack, 'IdentityPoolGraphQLPolicyV2', {
 
 // 4) Storage + S3 access
 const publicBucket = backend.storage.resources.bucket as s3.Bucket;
-new iam.CfnPolicy(backend.data.stack, 'IdentityPoolS3PublicRW', {
-  policyName: 'IdentityPoolS3PublicRW',
-  roles: Array.from(discoveredRoleNames),
-  policyDocument: {
-    Version: '2012-10-17',
-    Statement: [
-      {
-        Effect: 'Allow',
-        Action: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject', 's3:AbortMultipartUpload', 's3:ListMultipartUploadParts'],
-        Resource: [`${publicBucket.bucketArn}/public/*`],
-      },
-      {
-        Effect: 'Allow',
-        Action: ['s3:ListBucket', 's3:ListBucketMultipartUploads'],
-        Resource: [publicBucket.bucketArn],
-        Condition: { StringLike: { 's3:prefix': ['public/*'] } },
-      },
-    ],
-  },
-});
 
 // 5) (Optional) deps layer for doc funcs
 const docgenDepsLayer = new lambda.LayerVersion(backend.data.stack, 'DocgenDepsLayer', {
@@ -192,6 +177,10 @@ const validateContractProxy = backend.validateContractTemplateProxyFn.resources.
 const deleteQuoteTplLambda = backend.deleteFranchiseQuoteTemplateFn.resources.lambda as lambda.Function;
 const deleteContractTplLambda = backend.deleteFranchiseContractTemplateFn.resources.lambda as lambda.Function; // NEW
 const getAcceptedQuotesOwnerLambda = backend.getAcceptedQuotesOwnerFn.resources.lambda as lambda.Function;
+const sendTransferRequestLambda = backend.sendTransferRequestFn.resources.lambda as lambda.Function;
+const ownerGetAllMembersLambda = backend.ownerGetAllMembersFn.resources.lambda as lambda.Function;
+const updateFranchiseLambda = backend.updateFranchiseInfoFn.resources.lambda;
+
 // ===== Doc pipeline Lambdas (Python) =====
 const buildQuoteDocContextLambda = new lambda.Function(backend.data.stack, 'BuildQuoteDocContextFn', {
   functionName: 'build-quote-doc-context',
@@ -388,6 +377,27 @@ getAcceptedQuotesOwnerLambda.addToRolePolicy(new PolicyStatement({
     tableArn('SellRequest_DB'),
     tableIndexArn('SellRequest_DB'),
   ],
+}));
+sendTransferRequestLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:PutItem'],
+  resources: [tableArn('SellRequest_DB')],
+}));
+sendTransferRequestLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:UpdateItem'],
+  resources: [tableArn('CustomerQuotes')],
+}));
+ownerGetAllMembersLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:GetItem', 'dynamodb:DescribeTable'],
+  resources: [tableArn('Owner_DB')],
+}));
+
+ownerGetAllMembersLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:Scan', 'dynamodb:DescribeTable'],
+  resources: [tableArn('CBO_DB')],
+}));
+updateFranchiseLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:UpdateItem', 'dynamodb:DescribeTable', 'dynamodb:GetItem'],
+  resources: [tableArn('Franchise_DB'), tableArn('Owner_DB')],
 }));
 // ===== Step Functions state machine (quote pipeline) =====
 const buildContext = new tasks.LambdaInvoke(backend.data.stack, 'BuildContextTask', {

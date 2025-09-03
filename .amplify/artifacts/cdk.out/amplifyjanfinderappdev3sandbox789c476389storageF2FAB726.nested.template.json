@@ -273,20 +273,36 @@
       {
        "Action": "s3:GetObject",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          {
-           "Fn::GetAtt": [
-            "QuoteStorageBucket235DE222",
-            "Arn"
-           ]
-          },
-          "/members/franchise/*"
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "QuoteStorageBucket235DE222",
+             "Arn"
+            ]
+           },
+           "/members/franchise/*"
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "QuoteStorageBucket235DE222",
+             "Arn"
+            ]
+           },
+           "/customer/*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": "s3:ListBucket",
@@ -294,7 +310,9 @@
         "StringLike": {
          "s3:prefix": [
           "members/franchise/*",
-          "members/franchise/"
+          "members/franchise/",
+          "customer/*",
+          "customer/"
          ]
         }
        },
@@ -330,20 +348,36 @@
       {
        "Action": "s3:GetObject",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          {
-           "Fn::GetAtt": [
-            "QuoteStorageBucket235DE222",
-            "Arn"
-           ]
-          },
-          "/members/franchise/*"
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "QuoteStorageBucket235DE222",
+             "Arn"
+            ]
+           },
+           "/members/franchise/*"
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "QuoteStorageBucket235DE222",
+             "Arn"
+            ]
+           },
+           "/customer/*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": "s3:ListBucket",
@@ -351,7 +385,9 @@
         "StringLike": {
          "s3:prefix": [
           "members/franchise/*",
-          "members/franchise/"
+          "members/franchise/",
+          "customer/*",
+          "customer/"
          ]
         }
        },
@@ -366,38 +402,70 @@
       {
        "Action": "s3:PutObject",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          {
-           "Fn::GetAtt": [
-            "QuoteStorageBucket235DE222",
-            "Arn"
-           ]
-          },
-          "/members/franchise/*"
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "QuoteStorageBucket235DE222",
+             "Arn"
+            ]
+           },
+           "/members/franchise/*"
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "QuoteStorageBucket235DE222",
+             "Arn"
+            ]
+           },
+           "/customer/*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": "s3:DeleteObject",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          {
-           "Fn::GetAtt": [
-            "QuoteStorageBucket235DE222",
-            "Arn"
-           ]
-          },
-          "/members/franchise/*"
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "QuoteStorageBucket235DE222",
+             "Arn"
+            ]
+           },
+           "/members/franchise/*"
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "QuoteStorageBucket235DE222",
+             "Arn"
+            ]
+           },
+           "/customer/*"
+          ]
+         ]
+        }
+       ]
       }
      ],
      "Version": "2012-10-17"

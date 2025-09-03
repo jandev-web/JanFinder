@@ -48,23 +48,39 @@ const OwnerQuoteClient: React.FC<OwnerQuoteClientProps> = ({
     })}`;
   };
 
+
   const downloadPDF = async () => {
     try {
       const { url } = await getQuotePdfAction();
-      const resp = await fetch(url);
+      const resp = await fetch(url, { method: 'GET' });
+
+      if (!resp.ok) {
+        const text = await resp.text().catch(() => '(no body)');
+        // 403 XML usually includes <Code>AccessDenied</Code> or <Code>SignatureDoesNotMatch</Code>
+        console.error('[downloadPDF] S3 GET failed', {
+          status: resp.status,
+          statusText: resp.statusText,
+          url: url.slice(0, 200) + '...',
+          body: text?.slice(0, 500),
+        });
+        alert('Download failed (HTTP ' + resp.status + '). See console for details.');
+        return;
+      }
+
+      // success
       const blob = await resp.blob();
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      const company = customerData?.company ?? 'Quote';
-      link.download = `${company}_Quote.pdf`;
+      link.download = `${(quote?.customerData?.company ?? 'Quote')}_Quote.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (err) {
-      console.error(err);
-      alert('Failed to download PDF. Please try again later.');
+      console.error('[downloadPDF] exception', err);
+      alert('Failed to download PDF.');
     }
   };
+
 
   const goBack = () => {
     router.push('/members/owner/quotes/available');

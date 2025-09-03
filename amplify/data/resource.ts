@@ -18,6 +18,9 @@ import { getAvailableQuotesOwnerFn } from '../functions/get-quotes-owner-availab
 import { ownerAcceptQuoteFn } from '../functions/owner-accept-quote/resource';
 import { setFranchiseTemplateFn } from '../functions/set-franchise-template/resource';
 import { getAcceptedQuotesOwnerFn } from '../functions/get-quotes-owner-accepted/resource';
+import { sendTransferRequestFn } from '../functions/owner-send-transfer-request/resource';
+import { ownerGetAllMembersFn } from '../functions/owner-get-all-members/resource';
+import { updateFranchiseInfoFn } from '../functions/update-franchise-info/resource';
 
 // Proxies (Node) → Python validators
 import { validateQuoteTemplateProxyFn as testFranchiseQuoteTemplateFn } from '../functions/validate-quote-template-proxy/resource';
@@ -107,7 +110,31 @@ const schema = a.schema({
       allow.authenticated('identityPool'),  // (optional) Identity Pool
     ])
     .handler(a.handler.function(getAcceptedQuotesOwnerFn)),
-
+  sendTransferRequest: a.mutation()
+    .arguments({
+      quoteID: a.string().required(),
+      ownerID: a.string().required(),
+      targetUser: a.string().required(), // CBOID or email or CleanID
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(sendTransferRequestFn)),
+  ownerGetAllMembers: a.query()
+    .arguments({ ownerID: a.string().required() })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(ownerGetAllMembersFn)),
+  updateFranchiseInfo: a.mutation()
+    .arguments({
+      franchiseID: a.string().required(),
+      ownerID: a.string().required(),                 
+      franchiseName: a.string().required(),
+      franchiseAddress: a.json().required(),
+      serviceRegions: a.string().array().required(),  
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(updateFranchiseInfoFn)),
   // ===== Validators =====
   testFranchiseQuoteTemplate: a.mutation()
     .arguments({ franchiseID: a.string().required() })
@@ -133,6 +160,7 @@ const schema = a.schema({
     .returns(a.json())
     .authorization(allow => [allow.authenticated(), allow.authenticated('identityPool')])
     .handler(a.handler.function(deleteFranchiseContractTemplateFn)),
+
 });
 
 export type Schema = ClientSchema<typeof schema>;

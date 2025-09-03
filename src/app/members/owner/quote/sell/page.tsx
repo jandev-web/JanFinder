@@ -1,41 +1,92 @@
+// app/members/owner/quote/sell/page.tsx
+import 'server-only';
 import React from 'react';
-import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import OwnerSellQuotePage from '@/components/pages/OwnerSellQuotePage';
-import LoginError from '@/components/LoginErrorComponent';
+import { cookies } from 'next/headers';
+import { getCurrentUser } from 'aws-amplify/auth/server';
+import { runWithAmplifyServerContext } from '@/utils/amplify-server';
+import { createServerDataClient } from '@/utils/data-server';
 
+import fetchAllCBOs from '@/utils/getAllCBOs';
+import sendTransferRequest from '@/utils/sendTransferRequest';
+
+import OwnerSellQuoteClient from '@/components/pages/OwnerSellQuotePage';
+import OwnerFooter from '@/components/OwnerFooter';
+
+type AmplifyUser = Awaited<ReturnType<typeof getCurrentUser>>;
 export const dynamic = 'force-dynamic';
 
 type SP = { quoteID?: string | string[] };
 
-export default async function SellQuote({
+export default async function SellQuotePage({
   searchParams,
 }: {
   searchParams: Promise<SP>;
 }) {
-  try {
-    // Await Next 15's promised searchParams
-    const sp = await searchParams;
-    const rawId = sp?.quoteID;
-    const quoteParam = Array.isArray(rawId) ? rawId[0] : rawId ?? null;
+  const authUser = await runWithAmplifyServerContext({
+    nextServerContext: { cookies },
+    operation: (ctx) => getCurrentUser(ctx).catch(() => null as AmplifyUser | null),
+  });
+  if (!authUser) redirect('/members/sign-in');
 
-    // Server-side auth
-    const user = await AuthGetCurrentUserServer();
-    if (!user) {
-      redirect('/login'); // throws
+  const sp = await searchParams;
+  const rawId = sp?.quoteID;
+  const quoteID = Array.isArray(rawId) ? rawId[0] : rawId ?? null;
+  if (!quoteID) redirect('/error');
+
+  const client = createServerDataClient(cookies);
+  const ownerRes = await client.queries.getOwnerById({ id: authUser.userId }, { authMode: 'userPool' });
+  if (ownerRes.errors?.length) redirect('/error');
+  const owner = typeof ownerRes.data === 'string' ? JSON.parse(ownerRes.data) : ownerRes.data;
+
+  const userID: string | undefined =
+    owner?.data?.OwnerID ?? owner?.OwnerID ?? owner?.id ?? authUser.userId;
+
+  const franchiseID: string | undefined =
+    owner?.data?.FranchiseID ?? owner?.franchiseId ?? owner?.franchiseID;
+
+  if (!userID || !franchiseID) redirect('/error');
+
+  const quoteRes = await client.queries.getQuote({ quoteID }, { authMode: 'userPool' });
+  if (quoteRes.errors?.length) redirect('/error');
+  const quoteData = typeof quoteRes.data === 'string' ? JSON.parse(quoteRes.data) : quoteRes.data;
+  const initialQuote = quoteData?.quote ?? quoteData ?? null;
+
+  const membersRes = await client.queries.ownerGetAllMembers(
+    { ownerID: userID },
+    { authMode: 'userPool' }
+  );
+  if (membersRes.errors?.length) redirect('/error');
+
+  const membersPayload =
+    typeof membersRes.data === 'string' ? JSON.parse(membersRes.data) : membersRes.data;
+  const franchiseMembers = membersPayload?.members ?? membersPayload?.items ?? [];
+
+  async function sellQuoteAction(form: { quoteID: string; targetUser: string; ownerID: string }) {
+    'use server';
+    const { quoteID, targetUser, ownerID } = form;
+    if (!quoteID || !targetUser || !ownerID) {
+      throw new Error('Missing required fields.');
     }
-
-    return (
-      <div className="flex w-full flex-col min-h-screen">
-        <OwnerSellQuotePage user={user} quoteID={quoteParam} />
-      </div>
+    const serverClient = createServerDataClient(cookies);
+    const { data, errors } = await serverClient.mutations.sendTransferRequest(
+      { quoteID, ownerID, targetUser },
+      { authMode: 'userPool' }
     );
-  } catch (error) {
-    console.error('Error fetching user or search params:', error);
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <LoginError />
-      </div>
-    );
+    if (errors?.length) {
+      throw new Error(errors.map(e => e.message).join('; '));
+    }
+    return typeof data === 'string' ? JSON.parse(data) : data;
   }
+
+  
+
+  return (
+    <OwnerSellQuoteClient
+      owner={owner}
+      quoteID={quoteID}
+      initialMembers={franchiseMembers ?? []}
+      sellQuoteAction={sellQuoteAction}
+    />
+  );
 }

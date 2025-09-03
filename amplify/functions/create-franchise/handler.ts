@@ -49,6 +49,7 @@ export const handler = async (
         Item: {
           FranchiseID: franchiseID,
           franchiseName,
+          franchiseAddress: '',
           contractTemplate: 'none',
           quoteTemplate: 'none',
           FranchiseAccountNumber: franchiseAccountNumber,

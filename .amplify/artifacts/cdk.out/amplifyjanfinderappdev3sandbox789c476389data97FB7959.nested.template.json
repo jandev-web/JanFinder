@@ -1259,7 +1259,7 @@
      ]
     },
     "DefinitionS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/5a70ef0c3702fa26a2e81c282bc9ad1a119e264e30af5e037579f111a1eab1cd.graphql"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/b651c1f0933ecfe927db9a13eae88167ddee45f650e3d6ee33d1d7e61b5a8270.graphql"
     }
    },
    "UpdateReplacePolicy": "Delete",
@@ -1313,6 +1313,12 @@
      },
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsetfranchisetemplatelambdaADEF9820Arn": {
       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsetfranchisetemplatelambdaADEF9820Arn"
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendtransferrequestlambda0A11A3B1Arn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendtransferrequestlambda0A11A3B1Arn"
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefranchiseinfolambda735BB146Arn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefranchiseinfolambda735BB146Arn"
      },
      "referencetoamplifyjanfinderappdev3sandbox789c476389datavalidatequotetemplateproxylambdaE1EE7BEAArn": {
       "Fn::GetAtt": [
@@ -1395,6 +1401,9 @@
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetquotesowneracceptedlambdaC8930B3EArn": {
       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetquotesowneracceptedlambdaC8930B3EArn"
      },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownergetallmemberslambda61F389FFArn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownergetallmemberslambda61F389FFArn"
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": {
       "Fn::GetAtt": [
        "amplifyDataGraphQLAPINONEDS684BF699",
@@ -1432,7 +1441,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/0c82482081489f4e25719d653ac70be4c91cb495081412ede6288c9d11c4c210.json"
+       "/3d469bfd8dac4cc7fb8d19573bcd0fa7850197538ff7d87bd1fe88692c418d16.json"
       ]
      ]
     }
@@ -2142,7 +2151,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "2a037f302948a5dc6c08f9f77b1ba98aa52237ca4dc1501da2de41ae8e8a15d3.zip"
+     "dcb43f8a50ef53d2693e217276244584ebff923de3777c1c02adbf0db4563f89.zip"
     ],
     "SourceMarkers": [
      {}
@@ -2654,7 +2663,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "7b4c50325c8381fde0ef12b8824b99a820d51b43632a7f833854d8bb1b297884.zip"
+     "e23eb2b782fcf817487ca2420503280f56bef3cac276585d9b7711cd05993fc6.zip"
     ],
     "SourceMarkers": [
      {}
@@ -2828,72 +2837,6 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/IdentityPoolGraphQLPolicyV2"
-   }
-  },
-  "IdentityPoolS3PublicRW": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Version": "2012-10-17",
-     "Statement": [
-      {
-       "Effect": "Allow",
-       "Action": [
-        "s3:PutObject",
-        "s3:GetObject",
-        "s3:DeleteObject",
-        "s3:AbortMultipartUpload",
-        "s3:ListMultipartUploadParts"
-       ],
-       "Resource": [
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn"
-           },
-           "/public/*"
-          ]
-         ]
-        }
-       ]
-      },
-      {
-       "Effect": "Allow",
-       "Action": [
-        "s3:ListBucket",
-        "s3:ListBucketMultipartUploads"
-       ],
-       "Resource": [
-        {
-         "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn"
-        }
-       ],
-       "Condition": {
-        "StringLike": {
-         "s3:prefix": [
-          "public/*"
-         ]
-        }
-       }
-      }
-     ]
-    },
-    "PolicyName": "IdentityPoolS3PublicRW",
-    "Roles": [
-     {
-      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref"
-     },
-     {
-      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthunauthenticatedUserRoleC7C1F878Ref"
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/IdentityPoolS3PublicRW"
    }
   },
   "DocgenDepsLayer4BD4E280": {
@@ -4773,6 +4716,12 @@
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsetfranchisetemplatelambdaADEF9820Arn": {
    "Type": "String"
   },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendtransferrequestlambda0A11A3B1Arn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefranchiseinfolambda735BB146Arn": {
+   "Type": "String"
+  },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": {
    "Type": "String"
   },
@@ -4816,6 +4765,9 @@
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetquotesowneracceptedlambdaC8930B3EArn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownergetallmemberslambda61F389FFArn": {
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {
