@@ -1,25 +1,30 @@
+// amplify/functions/build-contract-context/index.ts (or .mjs)
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand, QueryCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 
-const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}), { marshallOptions: { removeUndefinedValues: true } });
+const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}), {
+  marshallOptions: { removeUndefinedValues: true },
+});
 
 export const handler = async (event: any) => {
   try {
-    const { requestID, memberCBOID, timezone } = event || {};
-    if (!requestID || !memberCBOID) throw new Error('Missing requestID/memberCBOID');
+    const { sellRequestID, requestID, memberCBOID } = event || {};
+    if (!sellRequestID || !memberCBOID) {
+      throw new Error('Missing sellRequestID/memberCBOID');
+    }
 
-    const SELL_REQUEST_TABLE = process.env.SELL_REQUEST_TABLE!;
-    const CUSTOMER_QUOTES_TABLE = process.env.CUSTOMER_QUOTES_TABLE!;
-    const OWNER_TABLE = process.env.OWNER_TABLE!;
-    const CBO_TABLE = process.env.CBO_TABLE!;
-    const FRANCHISE_TABLE = process.env.FRANCHISE_TABLE!;
-    const TEMPLATE_BUCKET = process.env.TEMPLATE_BUCKET!;
-    const OUTPUT_BUCKET = process.env.OUTPUT_BUCKET!;
+    const SELL_REQUEST_TABLE   = process.env.SELL_REQUEST_TABLE!;
+    const CUSTOMER_QUOTES_TABLE= process.env.CUSTOMER_QUOTES_TABLE!;
+    const OWNER_TABLE          = process.env.OWNER_TABLE!;
+    const CBO_TABLE            = process.env.CBO_TABLE!;
+    const FRANCHISE_TABLE      = process.env.FRANCHISE_TABLE!;
+    const TEMPLATE_BUCKET      = process.env.TEMPLATE_BUCKET!;
+    const OUTPUT_BUCKET        = process.env.OUTPUT_BUCKET!;
 
-    // --- Load Sell Request (assumes PK RequestID; change if different) ---
+    // --- Load Sell Request by DB PK (assumed attribute name "RequestID") ---
     const reqRes = await ddb.send(new GetCommand({
       TableName: SELL_REQUEST_TABLE,
-      Key: { RequestID: requestID },
+      Key: { RequestID: sellRequestID },     // ← use sellRequestID here
     }));
     const req = reqRes.Item;
     if (!req) throw new Error('Sell request not found');
@@ -27,7 +32,7 @@ export const handler = async (event: any) => {
     const quoteID = req.QuoteID;
     const ownerID = req.FromOwnerID;
 
-    // --- Load Quote, Owner, Member (CBO), Franchise ---
+    // --- Load related records ---
     const quoteRes = await ddb.send(new GetCommand({ TableName: CUSTOMER_QUOTES_TABLE, Key: { QuoteID: quoteID } }));
     const quote = quoteRes.Item ?? {};
 
@@ -41,23 +46,19 @@ export const handler = async (event: any) => {
     const franRes = await ddb.send(new GetCommand({ TableName: FRANCHISE_TABLE, Key: { FranchiseID: franchiseID } }));
     const franchise = franRes.Item ?? {};
 
-    // --- Determine template location ---
-    // Prefer franchise-scoped contract template:
-    //   members/franchise/{FranchiseID}/templates/contract.docx
-    // Adjust if you store a custom key in Franchise_DB.
+    // --- Template location (same bucket, franchise path) ---
     const template_bucket = TEMPLATE_BUCKET;
     const template_key =
       franchise.contractTemplateKey
-        ?? `members/franchise/${franchiseID}/templates/contract.docx`;
+      ?? `members/franchise/${franchiseID}/templates/contract/contract-template.docx`;
 
-    // --- Output destination for this contract ---
+    // --- Output keys (use requestID for uniqueness if present) ---
     const output_bucket = OUTPUT_BUCKET;
+    const rid = requestID || sellRequestID; // fallback if you didn't pass requestID
     const baseKey = `customer/${quoteID}/contracts`;
-    const docx_key = `${baseKey}/contract_${requestID}.docx`;
-    const pdf_key  = `${baseKey}/contract_${requestID}.pdf`;
+    const docx_key = `${baseKey}/contract_${rid}.docx`;
+    const pdf_key  = `${baseKey}/contract_${rid}.pdf`;
 
-    // --- Placeholders for docx ---
-    // Map your template placeholders here.
     const placeholders = {
       owner_name: `${owner.firstName ?? ''} ${owner.lastName ?? ''}`.trim(),
       owner_company: owner.company ?? franchise.legalName ?? '',
@@ -71,11 +72,9 @@ export const handler = async (event: any) => {
       start_date: quote?.StartDate ?? '',
       service_freq: quote?.SelectedPackage?.frequency ?? quote?.frequency ?? '',
       price: `${quote?.SelectedPackage?.price ?? quote?.price ?? ''}`,
-      timezone,
       generated_at: new Date().toISOString(),
     };
 
-    // Email recipients (return to email step)
     const recipients = {
       ownerEmail: owner.email ?? owner.Email,
       memberEmail: member.email ?? member.Email,
@@ -83,6 +82,7 @@ export const handler = async (event: any) => {
     };
 
     return {
+      // inputs for next steps
       template_bucket,
       template_key,
       output_bucket,
@@ -91,7 +91,8 @@ export const handler = async (event: any) => {
       placeholders,
       recipients,
       quoteID,
-      requestID,
+      sellRequestID,     // ← echo back for later steps if desired
+      requestID: rid,    // ← always present downstream
       franchiseID,
       memberCBOID,
     };

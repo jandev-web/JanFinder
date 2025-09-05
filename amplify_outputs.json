@@ -371,6 +371,26 @@
               "isRequired": true
             }
           }
+        },
+        "getPendingSellRequests": {
+          "name": "getPendingSellRequests",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "ownerID": {
+              "name": "ownerID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "quoteID": {
+              "name": "quoteID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
         }
       },
       "mutations": {

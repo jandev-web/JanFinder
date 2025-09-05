@@ -7,8 +7,7 @@ import { getCurrentUser } from 'aws-amplify/auth/server';
 import { runWithAmplifyServerContext } from '@/utils/amplify-server';
 import { createServerDataClient } from '@/utils/data-server';
 
-import fetchAllCBOs from '@/utils/getAllCBOs';
-import sendTransferRequest from '@/utils/sendTransferRequest';
+
 
 import OwnerSellQuoteClient from '@/components/pages/OwnerSellQuotePage';
 import OwnerFooter from '@/components/OwnerFooter';
@@ -61,6 +60,15 @@ export default async function SellQuotePage({
   const membersPayload =
     typeof membersRes.data === 'string' ? JSON.parse(membersRes.data) : membersRes.data;
   const franchiseMembers = membersPayload?.members ?? membersPayload?.items ?? [];
+  const reqRes = await client.queries.getPendingSellRequests(
+    { ownerID: userID, quoteID },
+    { authMode: 'userPool' }
+  );
+  if (reqRes.errors?.length) redirect('/error');
+
+  const reqPayload =
+    typeof reqRes.data === 'string' ? JSON.parse(reqRes.data) : reqRes.data;
+  const pendingRequests = reqPayload?.requests ?? [];
 
   async function sellQuoteAction(form: { quoteID: string; targetUser: string; ownerID: string }) {
     'use server';
@@ -79,14 +87,13 @@ export default async function SellQuotePage({
     return typeof data === 'string' ? JSON.parse(data) : data;
   }
 
-  
-
   return (
     <OwnerSellQuoteClient
       owner={owner}
       quoteID={quoteID}
       initialMembers={franchiseMembers ?? []}
+      initialRequests={pendingRequests}            
       sellQuoteAction={sellQuoteAction}
     />
-  );
+  )
 }

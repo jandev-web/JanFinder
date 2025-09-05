@@ -1,7 +1,6 @@
 import React from 'react';
 import { AuthGetCurrentUserServer } from '@/utils/amplify-utils';
 import { redirect } from 'next/navigation';
-import AddCBOPage from '@/components/pages/OwnerAddCBOPage';
 import OwnerHeader from '@/components/OwnerHeader';
 import FranchiseJoinRequestsPage from '@/components/pages/FranchiseJoinRequestsPage';
 export const dynamic = "force-dynamic";

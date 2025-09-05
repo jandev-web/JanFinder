@@ -404,6 +404,13 @@
       {
        "Fn::GetAtt": [
         "function1351588B",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFERef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "function1351588B",
         "Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref"
        ]
       },
@@ -759,6 +766,12 @@
        "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn"
       ]
      },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn": {
+      "Fn::GetAtt": [
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn"
+      ]
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {
       "Fn::GetAtt": [
        "function1351588B",
@@ -792,7 +805,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/c62fe7c50d101b6001edfb55ff2f7c9944a73fb02d4d1997ef96ef4df1a4bb66.json"
+       "/1bbf6904128bd9eb542f3c58aa9227c11b7e8c46539d808471ba617b50451739.json"
       ]
      ]
     }
@@ -860,7 +873,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/af411de3b4f75437c1a19a161e663a4104291c1c9e51524a47fd5be08a64f72a.json"
+       "/6b37fcbd799dc1365836c0de61b969abe67eb2814bdf33810e2dfcd0f64b9687.json"
       ]
      ]
     }

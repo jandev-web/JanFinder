@@ -49,6 +49,7 @@ import { buildContractContextFn } from './functions/build-contract-context/resou
 import { updateContractLinksFn } from './functions/update-contract-links/resource';
 import { sendContractCreatedEmailFn } from './functions/send-contract-created-email/resource';
 import { memberGetAvailableQuotesFn } from './functions/member-get-available-quotes/resource';
+import { getPendingSellRequestsFn } from './functions/get-pending-sell-requests/resource';
 
 // TS proxies that call Python validators
 import { validateQuoteTemplateProxyFn } from './functions/validate-quote-template-proxy/resource';
@@ -97,7 +98,7 @@ const backend = defineBackend({
   updateContractLinksFn,
   sendContractCreatedEmailFn,
   memberGetAvailableQuotesFn,
-
+  getPendingSellRequestsFn,
 });
 
 // === Locals ===
@@ -211,6 +212,7 @@ const buildCtxLambda = backend.buildContractContextFn.resources.lambda as lambda
 const updateLinksLambda = backend.updateContractLinksFn.resources.lambda as lambda.Function;
 const sendEmail2Lambda = backend.sendContractCreatedEmailFn.resources.lambda as lambda.Function;
 const memberGetAvailableQuotesLambda = backend.memberGetAvailableQuotesFn.resources.lambda as lambda.Function;
+const getPendingSellRequestsLambda = backend.getPendingSellRequestsFn.resources.lambda as lambda.Function;
 
 // ===== Doc pipeline Lambdas (Python) =====
 const buildQuoteDocContextLambda = new lambda.Function(backend.data.stack, 'BuildQuoteDocContextFn', {
@@ -443,6 +445,10 @@ ownerGetAllMembersLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:GetItem', 'dynamodb:DescribeTable'],
   resources: [tableArn('Owner_DB')],
 }));
+getPendingSellRequestsLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:Query', 'dynamodb:Scan', 'dynamodb:DescribeTable'],
+  resources: [tableArn('SellRequest_DB'), tableIndexArn('SellRequest_DB')],
+}));
 
 ownerGetAllMembersLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:Scan', 'dynamodb:DescribeTable'],
@@ -570,17 +576,19 @@ const documentPipeline = new sfn.StateMachine(backend.data.stack, 'QuoteDocument
 });
 
 // tasks
+// 1) Build context — make this the working context for the rest of the flow
 const buildContractCtx = new tasks.LambdaInvoke(backend.data.stack, 'BuildContractContextTask', {
   lambdaFunction: backend.buildContractContextFn.resources.lambda as lambda.Function,
   payload: sfn.TaskInput.fromObject({
-    'requestID.$': '$.requestID',
-    'memberCBOID.$': '$.memberCBOID',
-    'timezone.$': '$.timezone',
-    'requestId.$': '$.requestId',
+    'sellRequestID.$': '$.sellRequestID', // PK in SellRequest_DB
+    'memberCBOID.$': '$.memberCBOID',   // accepting member
+    'requestID.$': '$.requestID',     // tracking id (or seed with Pass + JsonPath.uuid())
   }),
-  outputPath: '$.Payload',
+  payloadResponseOnly: true,             // return ONLY the Lambda's payload
+  // no resultPath here -> this replaces input with a clean context returned by buildContractContext
 });
 
+// 2) Fill DOCX — keep original context and nest the result at $.fill
 const fillContractDocx = new tasks.LambdaInvoke(backend.data.stack, 'FillContractDocxTask', {
   lambdaFunction: fillDocxPlaceholdersLambda,
   payload: sfn.TaskInput.fromObject({
@@ -589,25 +597,24 @@ const fillContractDocx = new tasks.LambdaInvoke(backend.data.stack, 'FillContrac
     'output_bucket.$': '$.output_bucket',
     'docx_key.$': '$.docx_key',
     'placeholders.$': '$.placeholders',
-    'blocks': {}, // optional
-    'requestId.$': '$.requestId',
   }),
-  resultPath: '$.fill',
   payloadResponseOnly: true,
+  resultPath: '$.fill', // <— IMPORTANT: do not clobber the context
 });
 
+// 3) Convert to PDF — read from the context you built (ignore fill.body.*)
 const convertContractPdf = new tasks.LambdaInvoke(backend.data.stack, 'ConvertContractToPdfTask', {
   lambdaFunction: convertDocxToPdfLambda,
   payload: sfn.TaskInput.fromObject({
-    'bucket.$': '$.output_bucket',
+    'bucket.$': '$.output_bucket', // <— comes from buildContractContext return
     'docx_key.$': '$.docx_key',
     'pdf_key.$': '$.pdf_key',
-    'requestId.$': '$.requestId',
   }),
-  resultPath: '$.convert',
   payloadResponseOnly: true,
+  resultPath: '$.convert',
 });
 
+// 4) Update DB links — still use the original context values
 const updateContractLinks = new tasks.LambdaInvoke(backend.data.stack, 'UpdateContractLinksTask', {
   lambdaFunction: backend.updateContractLinksFn.resources.lambda as lambda.Function,
   payload: sfn.TaskInput.fromObject({
@@ -615,12 +622,15 @@ const updateContractLinks = new tasks.LambdaInvoke(backend.data.stack, 'UpdateCo
     'requestID.$': '$.requestID',
     'bucket.$': '$.output_bucket',
     'pdf_key.$': '$.pdf_key',
-    'requestId.$': '$.requestId',
+    'sellRequestID.$': '$.sellRequestID',
+    'newOwnerID.$':  '$.memberCBOID',
+    // optionally add 'sellRequestID.$': '$.sellRequestID'
   }),
-  resultPath: '$.ddb',
   payloadResponseOnly: true,
+  resultPath: '$.ddb',
 });
 
+// 5) Send email — same pattern
 const sendContractEmail = new tasks.LambdaInvoke(backend.data.stack, 'SendContractCreatedEmailTask', {
   lambdaFunction: backend.sendContractCreatedEmailFn.resources.lambda as lambda.Function,
   payload: sfn.TaskInput.fromObject({
@@ -628,18 +638,19 @@ const sendContractEmail = new tasks.LambdaInvoke(backend.data.stack, 'SendContra
     'recipients.$': '$.recipients',
     'bucket.$': '$.output_bucket',
     'pdf_key.$': '$.pdf_key',
-    'requestId.$': '$.requestId',
   }),
-  resultPath: '$.email',
   payloadResponseOnly: true,
+  resultPath: '$.email',
 });
 
+// Chain
 const memberContractDefinition = buildContractCtx
   .next(fillContractDocx)
   .next(convertContractPdf)
   .next(updateContractLinks)
   .next(sendContractEmail);
 
+publicBucket.grantRead(sendEmail2Lambda);
 const memberContractSm = new sfn.StateMachine(backend.data.stack, 'MemberAcceptSellRequestPipeline', {
   stateMachineName: 'member-accept-sell-request-pipeline',
   definitionBody: sfn.DefinitionBody.fromChainable(memberContractDefinition),

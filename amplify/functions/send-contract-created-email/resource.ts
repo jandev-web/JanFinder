@@ -5,6 +5,6 @@ export const sendContractCreatedEmailFn = defineFunction({
   entry: './handler.ts',
   resourceGroupName: 'data',
   environment: {
-    FROM_EMAIL: 'no-reply@yourdomain.com', // adjust
+    FROM_EMAIL: 'noreply@bid2clean.com', // adjust
   },
 });

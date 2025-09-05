@@ -22,7 +22,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/b9e41cd3a45dc8e2f6891430f3f7836f0be0427427eca1a0d9b2219dad1dce5d.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/d2392927defbc48fb269ebd65159b081a6c7951aa2bb586bffa3f89554fa9399.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -2163,6 +2163,54 @@
             "data": "Query.memberGetAvailableQuotes"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetPendingSellRequestsLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnGetPendingSellRequestsLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetPendingSellRequestsLambdaDataSource/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnGetPendingSellRequestsLambdaDataSourceServiceRoleAEF5FA10"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetPendingSellRequestsLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnGetPendingSellRequestsLambdaDataSourceServiceRoleDefaultPolicy03287C09"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnGetPendingSellRequestsLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnGetPendingSellRequestsLambdaDataSource"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnGetPendingSellRequestsLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnGetPendingSellRequestsLambdaDataSource/InvokeFnGetPendingSellRequestsLambdaDataSource.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InvokeFnGetPendingSellRequestsLambdaDataSourceInvokeFnGetPendingSellRequestsLambdaDataSourceAppSyncFunction463F7C71"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "InvokeFnGetPendingSellRequestsLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryGetPendingSellRequestsResolver": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QuerygetPendingSellRequestsResolver"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "Query.getPendingSellRequests"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/MutationOwnerAcceptQuoteAuthFN/MutationOwnerAcceptQuoteAuthFN.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
@@ -2493,6 +2541,16 @@
             "data": "QueryMemberGetAvailableQuotesAuthFN"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryGetPendingSellRequestsAuthFN/QueryGetPendingSellRequestsAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryGetPendingSellRequestsAuthFNQueryGetPendingSellRequestsAuthFNAppSyncFunctionABBC7725"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryGetPendingSellRequestsAuthFN"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
@@ -2725,6 +2783,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389datamembergetavailablequoteslambdaDD9903EDArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": [
@@ -3369,6 +3433,12 @@
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": [
           {
             "type": "aws:cdk:logicalId",
@@ -3825,6 +3895,24 @@
             "data": "cbocompletesignuplambda16B627BC"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/get-pending-sell-requests-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getpendingsellrequestslambdaServiceRole9818698A"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/get-pending-sell-requests-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getpendingsellrequestslambdaServiceRoleDefaultPolicy7602828A"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/get-pending-sell-requests-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getpendingsellrequestslambda1E8533A3"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/function/send-quote-acceptance-email-lambda/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -3999,6 +4087,12 @@
             "data": "amplifyjanfinderappdev3sandbox789c476389functioncbocompletesignuplambdaCA8BB1E0Ref"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFERef": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFERef"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref": [
           {
             "type": "aws:cdk:logicalId",
@@ -4147,6 +4241,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "amplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": [

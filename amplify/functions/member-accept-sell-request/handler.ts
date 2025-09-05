@@ -6,20 +6,19 @@ export const handler = async (event: any) => {
   try {
     const args = event?.arguments ?? {};
     console.log('member-accept-sell-request args:', args);
-  
-    const requestID = (args.requestID ?? '').trim();
-    console.log('requestID:', requestID);
-    const memberCBOID = (args.memberCBOID ?? '').trim();
-    const timezone = (args.timezone ?? 'America/New_York');
 
-    if (!requestID || !memberCBOID) {
+    const sellRequestID = (args.requestID ?? '').trim();
+    console.log('requestID:', sellRequestID);
+    const memberCBOID = (args.memberCBOID ?? '').trim();
+    const requestID = crypto.randomUUID();
+    if (!sellRequestID || !memberCBOID) {
       throw new Error('Missing requestID or memberCBOID');
     }
 
     const input = JSON.stringify({
-      requestID,
+      sellRequestID,
       memberCBOID,
-      timezone,
+      requestID,
     });
 
     const stateMachineArn = process.env.STATE_MACHINE_ARN!;

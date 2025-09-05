@@ -906,7 +906,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "482f0bb0517793497418bb3200337e89478c77832915e816e777a497aa56cbb3.zip"
+     "S3Key": "ec4812e8a73a44f184a8e92d5b6be7c09c469df28ac78c32f4cd7e40d9df3440.zip"
     },
     "Environment": {
      "Variables": {
@@ -952,7 +952,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/member-accept-sell-request-lambda/Resource",
-    "aws:asset:path": "asset.482f0bb0517793497418bb3200337e89478c77832915e816e777a497aa56cbb3",
+    "aws:asset:path": "asset.ec4812e8a73a44f184a8e92d5b6be7c09c469df28ac78c32f4cd7e40d9df3440",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1603,7 +1603,7 @@
      ]
     },
     "DefinitionS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/38a437b54a325e2f7403df5ee9f8d98155909f7941f1f871abbe6e0a1270dece.graphql"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f0e66fd72310ffaf71395e972733145e7e38479a6588a89a9e4911a37548b32f.graphql"
     }
    },
    "UpdateReplacePolicy": "Delete",
@@ -1775,6 +1775,9 @@
        "Arn"
       ]
      },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn"
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": {
       "Fn::GetAtt": [
        "amplifyDataGraphQLAPINONEDS684BF699",
@@ -1812,7 +1815,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/08ecbe96559d7cf5dd993e34e5a84a7ac7666b13809080c691749fade4d148d8.json"
+       "/6454269b7441068dc6886ca644217374dfad98ecf4cda18e53d0ea68c137cb1b.json"
       ]
      ]
     }
@@ -2537,7 +2540,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "53cc09b788876d6245ad5bdbd35bf93c961c7e89ce7e04b3baa58f8e1813bb48.zip"
+     "f1eead899a43329291046a06bb84f05f5d3cc745b8954f234f0930ab57632e72.zip"
     ],
     "SourceMarkers": [
      {}
@@ -3049,7 +3052,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "7fa32da82448fb5eddce72da4dc16082e04234ed152dcf38f223e92cd2d763ed.zip"
+     "d5813313d508f45d57c3ebdf573437e7e78b8e078bc8c51b7b17190f36a37c86.zip"
     ],
     "SourceMarkers": [
      {}
@@ -3331,7 +3334,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "182a9e82ed6c2c11b2ab05f3da3d37c461bca7ca95ea8808cf1da43143d94721.zip"
+     "S3Key": "f0b43bb7f5128cc7253261c2c995acb22a134e6949b43bc4a03e9c2b3ba2391e.zip"
     },
     "Environment": {
      "Variables": {
@@ -3385,7 +3388,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/build-contract-context-lambda/Resource",
-    "aws:asset:path": "asset.182a9e82ed6c2c11b2ab05f3da3d37c461bca7ca95ea8808cf1da43143d94721",
+    "aws:asset:path": "asset.f0b43bb7f5128cc7253261c2c995acb22a134e6949b43bc4a03e9c2b3ba2391e",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -3517,7 +3520,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "c3353f6920f01f6ef89cecf9bb506010269b02e5541fa6c7b97dbaedff7ba7ef.zip"
+     "S3Key": "5e8e9625250ae9638ee92808561ab03b0ecaa005f93000dfbd905a3b8f60b8b1.zip"
     },
     "Environment": {
      "Variables": {
@@ -3562,7 +3565,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/update-contract-links-lambda/Resource",
-    "aws:asset:path": "asset.c3353f6920f01f6ef89cecf9bb506010269b02e5541fa6c7b97dbaedff7ba7ef",
+    "aws:asset:path": "asset.5e8e9625250ae9638ee92808561ab03b0ecaa005f93000dfbd905a3b8f60b8b1",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -3629,6 +3632,30 @@
        ],
        "Effect": "Allow",
        "Resource": "*"
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn"
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
       }
      ],
      "Version": "2012-10-17"
@@ -3656,11 +3683,11 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "0d08e19a7be7c274e368281be04bae2f81ed804e86de0d6afb6970f639cbe6f0.zip"
+     "S3Key": "057f55805aab48e9b284f296a26a5dd8465d0166de6d174dd292d7885e6d21b6.zip"
     },
     "Environment": {
      "Variables": {
-      "FROM_EMAIL": "no-reply@yourdomain.com",
+      "FROM_EMAIL": "noreply@bid2clean.com",
       "AMPLIFY_SSM_ENV_CONFIG": "{}"
      }
     },
@@ -3700,7 +3727,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/send-contract-created-email-lambda/Resource",
-    "aws:asset:path": "asset.0d08e19a7be7c274e368281be04bae2f81ed804e86de0d6afb6970f639cbe6f0",
+    "aws:asset:path": "asset.057f55805aab48e9b284f296a26a5dd8465d0166de6d174dd292d7885e6d21b6",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -4940,46 +4967,42 @@
      "Fn::Join": [
       "",
       [
-       "{\"StartAt\":\"BuildContractContextTask\",\"States\":{\"BuildContractContextTask\":{\"Next\":\"FillContractDocxTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"OutputPath\":\"$.Payload\",\"Resource\":\"arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+       "{\"StartAt\":\"BuildContractContextTask\",\"States\":{\"BuildContractContextTask\":{\"Next\":\"FillContractDocxTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "buildcontractcontextlambdaBDF12C5D",
          "Arn"
         ]
        },
-       "\",\"Payload\":{\"requestID.$\":\"$.requestID\",\"memberCBOID.$\":\"$.memberCBOID\",\"timezone.$\":\"$.timezone\",\"requestId.$\":\"$.requestId\"}}},\"FillContractDocxTask\":{\"Next\":\"ConvertContractToPdfTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.fill\",\"Resource\":\"",
+       "\",\"Parameters\":{\"sellRequestID.$\":\"$.sellRequestID\",\"memberCBOID.$\":\"$.memberCBOID\",\"requestID.$\":\"$.requestID\"}},\"FillContractDocxTask\":{\"Next\":\"ConvertContractToPdfTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.fill\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "FillDocxPlaceholdersFn7D11A7C7",
          "Arn"
         ]
        },
-       "\",\"Parameters\":{\"template_bucket.$\":\"$.template_bucket\",\"template_key.$\":\"$.template_key\",\"output_bucket.$\":\"$.output_bucket\",\"docx_key.$\":\"$.docx_key\",\"placeholders.$\":\"$.placeholders\",\"blocks\":{},\"requestId.$\":\"$.requestId\"}},\"ConvertContractToPdfTask\":{\"Next\":\"UpdateContractLinksTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.convert\",\"Resource\":\"",
+       "\",\"Parameters\":{\"template_bucket.$\":\"$.template_bucket\",\"template_key.$\":\"$.template_key\",\"output_bucket.$\":\"$.output_bucket\",\"docx_key.$\":\"$.docx_key\",\"placeholders.$\":\"$.placeholders\"}},\"ConvertContractToPdfTask\":{\"Next\":\"UpdateContractLinksTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.convert\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "ConvertDocxToPdfFn7C6C736D",
          "Arn"
         ]
        },
-       "\",\"Parameters\":{\"bucket.$\":\"$.output_bucket\",\"docx_key.$\":\"$.docx_key\",\"pdf_key.$\":\"$.pdf_key\",\"requestId.$\":\"$.requestId\"}},\"UpdateContractLinksTask\":{\"Next\":\"SendContractCreatedEmailTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.ddb\",\"Resource\":\"",
+       "\",\"Parameters\":{\"bucket.$\":\"$.output_bucket\",\"docx_key.$\":\"$.docx_key\",\"pdf_key.$\":\"$.pdf_key\"}},\"UpdateContractLinksTask\":{\"Next\":\"SendContractCreatedEmailTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.ddb\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "updatecontractlinkslambda8AE23B40",
          "Arn"
         ]
        },
-       "\",\"Parameters\":{\"quoteID.$\":\"$.quoteID\",\"requestID.$\":\"$.requestID\",\"bucket.$\":\"$.output_bucket\",\"pdf_key.$\":\"$.pdf_key\",\"requestId.$\":\"$.requestId\"}},\"SendContractCreatedEmailTask\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.email\",\"Resource\":\"",
+       "\",\"Parameters\":{\"quoteID.$\":\"$.quoteID\",\"requestID.$\":\"$.requestID\",\"bucket.$\":\"$.output_bucket\",\"pdf_key.$\":\"$.pdf_key\",\"sellRequestID.$\":\"$.sellRequestID\",\"newOwnerID.$\":\"$.memberCBOID\"}},\"SendContractCreatedEmailTask\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.email\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "sendcontractcreatedemaillambda0FD76413",
          "Arn"
         ]
        },
-       "\",\"Parameters\":{\"quoteID.$\":\"$.quoteID\",\"recipients.$\":\"$.recipients\",\"bucket.$\":\"$.output_bucket\",\"pdf_key.$\":\"$.pdf_key\",\"requestId.$\":\"$.requestId\"}}},\"TimeoutSeconds\":300}"
+       "\",\"Parameters\":{\"quoteID.$\":\"$.quoteID\",\"recipients.$\":\"$.recipients\",\"bucket.$\":\"$.output_bucket\",\"pdf_key.$\":\"$.pdf_key\"}}},\"TimeoutSeconds\":300}"
       ]
      ]
     },
@@ -6019,6 +6042,9 @@
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn": {
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {

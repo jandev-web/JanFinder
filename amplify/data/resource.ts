@@ -28,6 +28,7 @@ import { cboCompleteSignupFn } from '../functions/cbo-complete-signup/resource';
 import { getCboFn } from '../functions/get-cbo/resource';
 import { memberAcceptSellRequestFn } from '../functions/member-accept-sell-request/resource';
 import { memberGetAvailableQuotesFn } from '../functions/member-get-available-quotes/resource';
+import { getPendingSellRequestsFn } from '../functions/get-pending-sell-requests/resource';
 
 // Proxies (Node) → Python validators
 import { validateQuoteTemplateProxyFn as testFranchiseQuoteTemplateFn } from '../functions/validate-quote-template-proxy/resource';
@@ -223,6 +224,14 @@ const schema = a.schema({
     .returns(a.json())
     .authorization(allow => [allow.authenticated()])
     .handler(a.handler.function(memberGetAvailableQuotesFn)),
+  getPendingSellRequests: a.query()
+    .arguments({
+      ownerID: a.string().required(),
+      quoteID: a.string().required(),
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()]) // same as your other owner queries
+    .handler(a.handler.function(getPendingSellRequestsFn)),
 });
 
 export type Schema = ClientSchema<typeof schema>;
