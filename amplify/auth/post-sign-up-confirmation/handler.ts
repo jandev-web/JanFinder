@@ -9,17 +9,16 @@ import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { env } from '$amplify/env/post-confirmation';
 import { v4 as uuidv4 } from 'uuid';
 
-
 const cognito = new CognitoIdentityProviderClient({});
 const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const handler: PostConfirmationTriggerHandler = async (event) => {
   if (event.triggerSource !== 'PostConfirmation_ConfirmSignUp') return event;
-  console.log(process.env.OWNER_TABLE)
+
   const attrs = event.request.userAttributes || {};
   const role = attrs['custom:role'];        // "Owner" | "Member"
-  const sub = attrs['sub'];  
-  const franchiseId = attrs['custom:FranchiseID'];          
+  const sub = attrs['sub'];
+  const franchiseId = attrs['custom:FranchiseID'];
   const email = attrs['email'] || '';
   const given = attrs['given_name'] || '';
   const family = attrs['family_name'] || '';
@@ -27,7 +26,7 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
   const username = event.userName;          // cognito:username
   const userPoolId = event.userPoolId;
 
-  // 1) Add user to the matching group (keeps authorization clean)
+  // Add user to the matching group
   if (role === 'Owner' || role === 'Member') {
     await cognito.send(
       new AdminAddUserToGroupCommand({
@@ -38,13 +37,13 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
     );
   }
 
-  // 2) Create domain records
+  // Create Owner & Franchise domain records on Owner signup (unchanged)
   if (role === 'Owner' && sub) {
     const now = new Date().toISOString();
-    console.log('Creating Owner record for', sub);
+
     await ddbDoc.send(
       new PutCommand({
-        TableName: env.OWNER_TABLE, // e.g., "Owner_DB"
+        TableName: env.OWNER_TABLE,
         Item: {
           OwnerID: sub,
           email,
@@ -52,43 +51,28 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
           lastName: family,
           phone,
           FranchiseID: franchiseId,
-          address: {
-            street: '',
-            city: '',
-            state: '',
-            postalCode: '',
-            country: '',
-          },
-          firstSignIn: false, // your flag
+          address: { street: '', city: '', state: '', postalCode: '', country: '' },
+          firstSignIn: false,
           createdOn: now,
         },
-        // If the trigger retries, avoid double writes
         ConditionExpression: 'attribute_not_exists(OwnerID)',
       })
     );
-    console.log('Created Owner record for', sub);
-    console.log('Creating Franchise');
-    
-    const franchiseAccountNumber = uuidv4()
+
+    const franchiseAccountNumber = uuidv4();
     await ddbDoc.send(
       new PutCommand({
-        TableName: env.FRANCHISE_TABLE, // e.g., "Franchise_DB"
+        TableName: env.FRANCHISE_TABLE,
         Item: {
           FranchiseID: franchiseId,
           OwnerID: sub,
           franchiseName: '',
-          franchiseAddress: {
-            street: '',
-            city: '',
-            state: '',
-            postalCode: '',
-            country: '',
-          },
+          franchiseAddress: { street: '', city: '', state: '', postalCode: '', country: '' },
           franchisePhone: '',
           franchiseEmail: '',
           franchiseWebsite: '',
           franchiseDescription: '',
-          franchiseAccountNumber: franchiseAccountNumber,
+          franchiseAccountNumber,
           franchiseLogo: false,
           franchiseStatus: 'Pending',
           serviceRegions: null,
@@ -96,14 +80,11 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
           quoteTemplate: false,
           createdOn: now,
         },
-        // If the trigger retries, avoid double writes
         ConditionExpression: 'attribute_not_exists(FranchiseID)',
       })
     );
   }
-
-  // For Members, you can add your CBO/Member_DB creation later:
-  // if (role === 'Member' && sub) { /* put into Member_DB */ }
-
+  
+  // For Members, domain record is created later by your cboCompleteSignup lambda.
   return event;
 };

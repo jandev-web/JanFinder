@@ -1,39 +1,46 @@
-
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+// src/app/members/owner/page.tsx
+import 'server-only';
+import React from 'react';
 import { redirect } from 'next/navigation';
-import LoginError from '@/components/LoginErrorComponent';
-
-import '@aws-amplify/ui-react/styles.css'; // Ensure the styles are imported
+import { cookies } from 'next/headers';
+import { getCurrentUser } from 'aws-amplify/auth/server';
+import { runWithAmplifyServerContext } from '@/utils/amplify-server';
 import CBO from '@/components/pages/CBO';
-import MemberLoadingScreen from '@/components/pages/MemberPageLoading';
+import LoginError from '@/components/LoginErrorComponent';
+import { getCboByIdServer } from '@/utils/getCboByIdServer';
 
-import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
+type AmplifyUser = Awaited<ReturnType<typeof getCurrentUser>>;
 
-export const dynamic = "force-dynamic";
-
-
-
-export default async function CBOPage() {
+export const dynamic = 'force-dynamic';
+export default async function CBOLanding() {
   try {
-    // Fetch the authenticated user on the server
-    const user = await AuthGetCurrentUserServer();
+    const authUser = await runWithAmplifyServerContext({
+      nextServerContext: { cookies },
+      operation: (ctx) => getCurrentUser(ctx).catch(() => null as AmplifyUser | null),
+    });
 
-    // Redirect to the login page if the user is not authenticated
-    if (!user) {
+    if (!authUser) {
       redirect('/members/sign-in');
     }
 
-    // Render the Owner component with the user's data
+    const cboData = await getCboByIdServer(authUser.userId)
+    console.log(cboData);
+    if (!cboData) {
+      return (
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+          <LoginError />
+        </div>
+      );
+    }
+
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <CBO user={user} />
+        <CBO cboData={cboData} />
       </div>
     );
   } catch (error) {
     console.error('Error fetching user:', error);
 
-    // Handle errors by showing a login error component
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <LoginError />

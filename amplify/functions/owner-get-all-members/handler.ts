@@ -39,7 +39,7 @@ export const handler = async (event: any) => {
       new ScanCommand({
         TableName: CBO_TABLE,
         FilterExpression: '#fid = :fid',
-        ExpressionAttributeNames: { '#fid': 'franchiseID' },
+        ExpressionAttributeNames: { '#fid': 'FranchiseID' },
         ExpressionAttributeValues: { ':fid': franchiseID },
       })
     );

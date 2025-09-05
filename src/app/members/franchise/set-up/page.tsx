@@ -1,3 +1,4 @@
+//TODO: add a check that if franchise status is complete and not pending, this page auto redirects back to mambers/owner/home
 import 'server-only';
 import React from 'react';
 import { cookies } from 'next/headers';

@@ -21,6 +21,13 @@ import { getAcceptedQuotesOwnerFn } from '../functions/get-quotes-owner-accepted
 import { sendTransferRequestFn } from '../functions/owner-send-transfer-request/resource';
 import { ownerGetAllMembersFn } from '../functions/owner-get-all-members/resource';
 import { updateFranchiseInfoFn } from '../functions/update-franchise-info/resource';
+import { addCboFranchiseFn } from '../functions/add-cbo-franchise/resource';
+import { ownerInviteCboFn } from '../functions/owner-invite-cbo/resource';
+import { getJoinRequestFn } from '../functions/get-join-request/resource';
+import { cboCompleteSignupFn } from '../functions/cbo-complete-signup/resource';
+import { getCboFn } from '../functions/get-cbo/resource';
+import { memberAcceptSellRequestFn } from '../functions/member-accept-sell-request/resource';
+import { memberGetAvailableQuotesFn } from '../functions/member-get-available-quotes/resource';
 
 // Proxies (Node) → Python validators
 import { validateQuoteTemplateProxyFn as testFranchiseQuoteTemplateFn } from '../functions/validate-quote-template-proxy/resource';
@@ -127,14 +134,27 @@ const schema = a.schema({
   updateFranchiseInfo: a.mutation()
     .arguments({
       franchiseID: a.string().required(),
-      ownerID: a.string().required(),                 
+      ownerID: a.string().required(),
       franchiseName: a.string().required(),
       franchiseAddress: a.json().required(),
-      serviceRegions: a.string().array().required(),  
+      serviceRegions: a.string().array().required(),
     })
     .returns(a.json())
     .authorization(allow => [allow.authenticated()])
     .handler(a.handler.function(updateFranchiseInfoFn)),
+  addCBOFranchise: a.mutation()
+    .arguments({
+      franchiseID: a.string().required(),
+      member: a.json().required(),
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(addCboFranchiseFn)),
+  getCBOById: a.query()
+    .arguments({ id: a.string().required() })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()])   
+    .handler(a.handler.function(getCboFn)),
   // ===== Validators =====
   testFranchiseQuoteTemplate: a.mutation()
     .arguments({ franchiseID: a.string().required() })
@@ -147,6 +167,15 @@ const schema = a.schema({
     .returns(a.json())
     .authorization(allow => [allow.authenticated(), allow.authenticated('identityPool')])
     .handler(a.handler.function(testFranchiseContractTemplateFn)),
+  memberAcceptSellRequest: a.mutation()
+    .arguments({
+      requestID: a.string().required(),
+      memberCBOID: a.string().required(),
+      timezone: a.string(), // optional
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(memberAcceptSellRequestFn)),
 
   // ===== Deleters =====
   deleteFranchiseQuoteTemplate: a.mutation()
@@ -160,7 +189,40 @@ const schema = a.schema({
     .returns(a.json())
     .authorization(allow => [allow.authenticated(), allow.authenticated('identityPool')])
     .handler(a.handler.function(deleteFranchiseContractTemplateFn)),
+  ownerInviteCBO: a.mutation()
+    .arguments({ franchiseID: a.string().required(), email: a.string().required() })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(ownerInviteCboFn)),
 
+  getJoinRequest: a.query()
+    .arguments({ requestId: a.string().required() })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated(), allow.authenticated('identityPool')])
+    .handler(a.handler.function(getJoinRequestFn)),
+
+  cboCompleteSignup: a.mutation()
+    .arguments({
+      token: a.string().required(),      // signed invite token
+      firstName: a.string().required(),
+      lastName: a.string().required(),
+      phone: a.string(),
+      street: a.string(),
+      city: a.string(),
+      state: a.string(),
+      postalCode: a.string(),
+      country: a.string(),
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()]) // CBO must be signed-in
+    .handler(a.handler.function(cboCompleteSignupFn)),
+  memberGetAvailableQuotes: a.query()
+    .arguments({
+      memberID: a.string().required(), // the TargetUser value (e.g., CBOID/email)
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(memberGetAvailableQuotesFn)),
 });
 
 export type Schema = ClientSchema<typeof schema>;

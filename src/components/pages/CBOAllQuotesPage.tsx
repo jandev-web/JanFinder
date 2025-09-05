@@ -13,42 +13,12 @@ import { useRouter } from 'next/navigation';
 
 
 interface CBOAllQuotesPageProps {
-    user: any;
+    cboData: any;
 }
 
-const CBOAllQuotesPage: React.FC<CBOAllQuotesPageProps> = ({ user }) => {
+const CBOAllQuotesPage: React.FC<CBOAllQuotesPageProps> = ({ cboData }) => {
     const router = useRouter()
-    const [cboData, setCBOData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-          try {
-            if (!user) {
-              redirect('/members/sign-in');
-              return;
-            }
-    
-            
-            const fetchedOwnerData = await fetchCBOById(user.userId);
-            setCBOData(fetchedOwnerData);
-          } catch (error) {
-            console.error('Error fetching current user:', error);
-            router.push('/error'); // Redirect to an error page if needed
-          } finally {
-            setIsLoading(false);
-          }
-        };
-    
-        fetchUser();
-      }, [user, router]);
-
-
-
-
-      if (isLoading) {
-        return <LoadingSpinner />
-      }
+  
       if (!cboData) {
         return (
           <div className="flex items-center justify-center min-h-screen">
@@ -58,17 +28,16 @@ const CBOAllQuotesPage: React.FC<CBOAllQuotesPageProps> = ({ user }) => {
       }
 
 
-    //console.log("pages/MemberPage.tsx:", user);
-    //console.log(isOwner)
+    
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex w-full flex-col min-h-screen">
             {/* Header with padding-bottom */}
             <div className="pb-10">
                 <CBOHeader user={cboData} />
             </div>
 
             <div className='pt-24'>
-              <AllQuotes user={cboData} />
+              <AllQuotes />
             </div>
             <CBOFooter />
             

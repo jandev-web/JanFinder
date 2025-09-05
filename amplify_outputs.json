@@ -329,6 +329,48 @@
               "isRequired": true
             }
           }
+        },
+        "getCBOById": {
+          "name": "getCBOById",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "id": {
+              "name": "id",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "getJoinRequest": {
+          "name": "getJoinRequest",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "requestId": {
+              "name": "requestId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "memberGetAvailableQuotes": {
+          "name": "memberGetAvailableQuotes",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "memberID": {
+              "name": "memberID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
         }
       },
       "mutations": {
@@ -449,6 +491,26 @@
             }
           }
         },
+        "addCBOFranchise": {
+          "name": "addCBOFranchise",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "franchiseID": {
+              "name": "franchiseID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "member": {
+              "name": "member",
+              "isArray": false,
+              "type": "AWSJSON",
+              "isRequired": true
+            }
+          }
+        },
         "testFranchiseQuoteTemplate": {
           "name": "testFranchiseQuoteTemplate",
           "isArray": false,
@@ -477,6 +539,32 @@
             }
           }
         },
+        "memberAcceptSellRequest": {
+          "name": "memberAcceptSellRequest",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "requestID": {
+              "name": "requestID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "memberCBOID": {
+              "name": "memberCBOID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "timezone": {
+              "name": "timezone",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            }
+          }
+        },
         "deleteFranchiseQuoteTemplate": {
           "name": "deleteFranchiseQuoteTemplate",
           "isArray": false,
@@ -502,6 +590,88 @@
               "isArray": false,
               "type": "String",
               "isRequired": true
+            }
+          }
+        },
+        "ownerInviteCBO": {
+          "name": "ownerInviteCBO",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "franchiseID": {
+              "name": "franchiseID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "email": {
+              "name": "email",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "cboCompleteSignup": {
+          "name": "cboCompleteSignup",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "token": {
+              "name": "token",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "firstName": {
+              "name": "firstName",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "lastName": {
+              "name": "lastName",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "phone": {
+              "name": "phone",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "street": {
+              "name": "street",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "city": {
+              "name": "city",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "state": {
+              "name": "state",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "postalCode": {
+              "name": "postalCode",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "country": {
+              "name": "country",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
             }
           }
         }

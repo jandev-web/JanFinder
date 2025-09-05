@@ -7,16 +7,15 @@ import { useRouter } from 'next/navigation';
 
 interface QuoteCardProps {
   quote: any;
-  userAddress: any;
   timezone: any;
 }
 
 const CBOAvaQuoteCard: React.FC<QuoteCardProps> = ({ quote, timezone }) => {
-  const { cost, quotePackage, customerAddress, company, facility, frequency, sqft, offerTime, requestID } = quote;
+  const { Package, customerData, quoteInfo, customerMeasurements, ConfirmationTimestamp, QuoteID } = quote;
   const router = useRouter();
-  console.log(timezone)
+  console.log(quote)
   // Parse the offerTime into a Date object.
-  const date = new Date(offerTime);
+  const date = new Date(ConfirmationTimestamp);
   
   // Define options for date formatting (literal types) and include the user's timeZone if provided.
   const formattedDateTime = date.toLocaleString('en-US', {
@@ -29,12 +28,19 @@ const CBOAvaQuoteCard: React.FC<QuoteCardProps> = ({ quote, timezone }) => {
   });
   
   
-  // Format the address (from customerAddress)
+  const customerAddress = customerData.address
+  const company = customerData.company
+  const cost = Package.packageChoice.packageCost
+  const facility = quoteInfo.facilityType
+  const sqft = customerMeasurements.sqft
+  const frequency = quoteInfo.frequency
+  const quotePackage = Package.packageChoice.packageName
+
   const address = `${customerAddress.street}, ${customerAddress.city} ${customerAddress.state} ${customerAddress.postalCode}`;
   
   const handleClick = () => {
     // Navigate to the route with the requestID as a URL parameter.
-    router.push(`/members/cbo/quote/available?id=${requestID}`);
+    router.push(`/members/cbo/quote/available?id=${QuoteID}`);
   };
 
   return (
@@ -63,7 +69,7 @@ const CBOAvaQuoteCard: React.FC<QuoteCardProps> = ({ quote, timezone }) => {
           <span className="font-bold">Package:</span> {quotePackage}
         </p>
         <p className="text-sm text-gray-700">
-          <span className="font-bold">Offer Sent:</span> {formattedDateTime}
+          <span className="font-bold">Confirmed:</span> {formattedDateTime}
         </p>
       </div>
     </button>

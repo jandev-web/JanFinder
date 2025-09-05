@@ -29,7 +29,8 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
 
     (async () => {
       try {
-        const session = await fetchAuthSession();
+        const session = await fetchAuthSession({ forceRefresh: true });
+        const groups = (session.tokens?.idToken?.payload?.['cognito:groups'] as string[]) || [];
         const p = session.tokens?.idToken?.payload ?? {};
 
         const sub = p.sub as string | undefined;
@@ -37,7 +38,6 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
         const given = (p['given_name'] as string) || '';
         const family = (p['family_name'] as string) || '';
         const phone = (p['phone_number'] as string) || '';
-        const groups: string[] = (p['cognito:groups'] as string[]) || [];
 
         console.log(sub)
         console.log(groups)

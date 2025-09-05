@@ -1,0 +1,67 @@
+type Mutation {
+  ownerAcceptQuote(quoteID: String!, franchiseID: String!, ownerID: String!): AWSJSON @function(name: "FnOwnerAcceptQuote") @auth(rules: [{allow: private}])
+  setFranchiseTemplate(franchiseID: String!, templateType: String!, isThere: Boolean!): AWSJSON @function(name: "FnSetFranchiseTemplate") @auth(rules: [{allow: private}])
+  sendTransferRequest(quoteID: String!, ownerID: String!, targetUser: String!): AWSJSON @function(name: "FnSendTransferRequest") @auth(rules: [{allow: private}])
+  updateFranchiseInfo(franchiseID: String!, ownerID: String!, franchiseName: String!, franchiseAddress: AWSJSON!, serviceRegions: [String]!): AWSJSON @function(name: "FnUpdateFranchiseInfo") @auth(rules: [{allow: private}])
+  addCBOFranchise(franchiseID: String!, member: AWSJSON!): AWSJSON @function(name: "FnAddCBOFranchise") @auth(rules: [{allow: private}])
+  testFranchiseQuoteTemplate(franchiseID: String!): AWSJSON @function(name: "FnTestFranchiseQuoteTemplate") @auth(rules: [{allow: private},
+  {allow: private, provider: iam}])
+  testFranchiseContractTemplate(franchiseID: String!): AWSJSON @function(name: "FnTestFranchiseContractTemplate") @auth(rules: [{allow: private},
+  {allow: private, provider: iam}])
+  deleteFranchiseQuoteTemplate(franchiseID: String!): AWSJSON @function(name: "FnDeleteFranchiseQuoteTemplate") @auth(rules: [{allow: private},
+  {allow: private, provider: iam}])
+  deleteFranchiseContractTemplate(franchiseID: String!): AWSJSON @function(name: "FnDeleteFranchiseContractTemplate") @auth(rules: [{allow: private},
+  {allow: private, provider: iam}])
+  ownerInviteCBO(franchiseID: String!, email: String!): AWSJSON @function(name: "FnOwnerInviteCBO") @auth(rules: [{allow: private}])
+  cboCompleteSignup(token: String!, firstName: String!, lastName: String!, phone: String, street: String, city: String, state: String, postalCode: String, country: String): AWSJSON @function(name: "FnCboCompleteSignup") @auth(rules: [{allow: private}])
+}
+
+type Query {
+  getFacilityOptions: AWSJSON @function(name: "FnGetFacilityOptions") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  createCustomerQuote: AWSJSON @function(name: "FnCreateCustomerQuote") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  calculatePackageOptions(quoteID: String): AWSJSON @function(name: "FnCalculatePackageOptions") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateQuoteBudget(quoteID: String, budget: Float): AWSJSON @function(name: "FnUpdateQuoteBudget") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateCustomerInfo(quoteID: String, customerInfo: AWSJSON): AWSJSON @function(name: "FnUpdateCustomerInfo") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateFacilityType(quoteID: String, facilityType: String): AWSJSON @function(name: "FnUpdateFacilityType") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateFloorInfo(quoteID: String, floorInfo: AWSJSON): AWSJSON @function(name: "FnUpdateFloorInfo") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  confirmQuote(quoteID: String): AWSJSON @function(name: "FnConfirmQuote") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  getQuote(quoteID: String): AWSJSON @function(name: "FnGetQuote") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateQuoteRooms(quoteID: String, formInfo: AWSJSON): AWSJSON @function(name: "FnUpdateQuoteRooms") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updatePackageChoice(quoteID: String, packageInfo: AWSJSON): AWSJSON @function(name: "FnUpdatePackageChoice") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  sendQuoteConfirmationEmail(quoteID: String): AWSJSON @function(name: "FnSendQuoteConfirmationEmail") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  updateQuoteFrequency(quoteID: String, frequency: String): AWSJSON @function(name: "FnUpdateQuoteFrequency") @auth(rules: [{allow: private, provider: iam},
+  {allow: private},
+  {allow: public, provider: iam}])
+  getOwnerById(id: String!): AWSJSON @function(name: "FnGetOwnerById") @auth(rules: [{allow: private}])
+  getFranchiseInfo(franchiseID: String!): AWSJSON @function(name: "FnGetFranchiseInfo") @auth(rules: [{allow: private}])
+  getAvailableQuotesOwner: AWSJSON @function(name: "FnGetAvailableQuotesOwner") @auth(rules: [{allow: private}])
+  getAcceptedQuotesOwner(franchiseID: String!, ownerID: String!): AWSJSON @function(name: "FnGetAcceptedQuotesOwner") @auth(rules: [{allow: private},
+  {allow: private, provider: iam}])
+  ownerGetAllMembers(ownerID: String!): AWSJSON @function(name: "FnOwnerGetAllMembers") @auth(rules: [{allow: private}])
+  getJoinRequest(requestId: String!): AWSJSON @function(name: "FnGetJoinRequest") @auth(rules: [{allow: private},
+  {allow: private, provider: iam}])
+}

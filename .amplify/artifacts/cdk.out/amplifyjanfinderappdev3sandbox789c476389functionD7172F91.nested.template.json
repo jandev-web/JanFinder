@@ -2969,7 +2969,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "65ae94517374e95e304153048586e181a466ebbb587c185f1f78261e1419bcd1.zip"
+     "S3Key": "164b6242ef813301b869bb390e918d31e3e443d5d4fc042eac5076fe9f886cd3.zip"
     },
     "Environment": {
      "Variables": {
@@ -3014,7 +3014,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/owner-get-all-members-lambda/Resource",
-    "aws:asset:path": "asset.65ae94517374e95e304153048586e181a466ebbb587c185f1f78261e1419bcd1",
+    "aws:asset:path": "asset.164b6242ef813301b869bb390e918d31e3e443d5d4fc042eac5076fe9f886cd3",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -3196,6 +3196,853 @@
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/update-franchise-info-lambda/Resource",
     "aws:asset:path": "asset.3f50a08a8dfd7f63985bed3fc915b3c3ab18b6ca9cab0fa5a8c683b1899f33e7",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "addcbofranchiselambdaServiceRoleE10D0760": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "add-cbo-franchise"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/add-cbo-franchise-lambda/ServiceRole/Resource"
+   }
+  },
+  "addcbofranchiselambdaServiceRoleDefaultPolicy2DC82090": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:PutItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":table/CBO_DB"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "cognito-idp:AdminCreateUser",
+        "cognito-idp:AdminSetUserPassword",
+        "cognito-idp:AdminAddUserToGroup",
+        "cognito-idp:AdminUpdateUserAttributes"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "addcbofranchiselambdaServiceRoleDefaultPolicy2DC82090",
+    "Roles": [
+     {
+      "Ref": "addcbofranchiselambdaServiceRoleE10D0760"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/add-cbo-franchise-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "addcbofranchiselambda13E0A3E8": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "6fad8b1bde79db3722d3b4e900416be2cc9f74bb64354999aff74c39bc4419b4.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "CBO_TABLE": "CBO_DB",
+      "MEMBERS_GROUP": "Member",
+      "AMPLIFY_SSM_ENV_CONFIG": "{}",
+      "USER_POOL_ID": {
+       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef"
+      }
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "addcbofranchiselambdaServiceRoleE10D0760",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "add-cbo-franchise"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "addcbofranchiselambdaServiceRoleDefaultPolicy2DC82090",
+    "addcbofranchiselambdaServiceRoleE10D0760"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/add-cbo-franchise-lambda/Resource",
+    "aws:asset:path": "asset.6fad8b1bde79db3722d3b4e900416be2cc9f74bb64354999aff74c39bc4419b4",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getcbolambdaServiceRole5C1562A4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "get-cbo"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/get-cbo-lambda/ServiceRole/Resource"
+   }
+  },
+  "getcbolambdaServiceRoleDefaultPolicy18E5B081": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":table/CBO_DB"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "getcbolambdaServiceRoleDefaultPolicy18E5B081",
+    "Roles": [
+     {
+      "Ref": "getcbolambdaServiceRole5C1562A4"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/get-cbo-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "getcbolambdaA1B2C4AF": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "9ede9082c9511265b1d1b898af8d58d74a43cb3965620fd464cdeac8055275aa.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "CBO_TABLE": "CBO_DB",
+      "AMPLIFY_SSM_ENV_CONFIG": "{}"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "getcbolambdaServiceRole5C1562A4",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "get-cbo"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "getcbolambdaServiceRoleDefaultPolicy18E5B081",
+    "getcbolambdaServiceRole5C1562A4"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/get-cbo-lambda/Resource",
+    "aws:asset:path": "asset.9ede9082c9511265b1d1b898af8d58d74a43cb3965620fd464cdeac8055275aa",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ownerinvitecbolambdaServiceRole022F4CE6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "owner-invite-cbo"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/owner-invite-cbo-lambda/ServiceRole/Resource"
+   }
+  },
+  "ownerinvitecbolambdaServiceRoleDefaultPolicy14262AB2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:PutItem",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":table/JoinRequest_DB"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ownerinvitecbolambdaServiceRoleDefaultPolicy14262AB2",
+    "Roles": [
+     {
+      "Ref": "ownerinvitecbolambdaServiceRole022F4CE6"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/owner-invite-cbo-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "ownerinvitecbolambda60F927A0": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "342e9a81a123d2977dcfbb11c22b512f1993c09cdac95a0e564aa1e82ec11e71.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "JOIN_TABLE": "JoinRequest_DB",
+      "FRONTEND_BASE_URL": "https://www.bid2clean.com",
+      "SES_FROM_EMAIL": "noreply@bid2clean.com",
+      "INVITE_TTL_HOURS": "48",
+      "INVITE_HMAC_SECRET": "yYt0vJPv2sM0J8sQm3fF1jR9kG5dNq7uLx4A2wZ6bH8cE3pT1U9rV7oQ5M3nD1sB",
+      "AMPLIFY_SSM_ENV_CONFIG": "{}"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "ownerinvitecbolambdaServiceRole022F4CE6",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "owner-invite-cbo"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "ownerinvitecbolambdaServiceRoleDefaultPolicy14262AB2",
+    "ownerinvitecbolambdaServiceRole022F4CE6"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/owner-invite-cbo-lambda/Resource",
+    "aws:asset:path": "asset.342e9a81a123d2977dcfbb11c22b512f1993c09cdac95a0e564aa1e82ec11e71",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getjoinrequestlambdaServiceRoleD6C6CE32": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "get-join-request"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/get-join-request-lambda/ServiceRole/Resource"
+   }
+  },
+  "getjoinrequestlambdaServiceRoleDefaultPolicyEB33A6B3": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:GetItem",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":table/JoinRequest_DB"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "getjoinrequestlambdaServiceRoleDefaultPolicyEB33A6B3",
+    "Roles": [
+     {
+      "Ref": "getjoinrequestlambdaServiceRoleD6C6CE32"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/get-join-request-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "getjoinrequestlambda4D940281": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "c3fd48ad2d9f155366dba9a022a903edf316b9686f845e592c944927a61f9a69.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "JOIN_TABLE": "JoinRequest_DB",
+      "AMPLIFY_SSM_ENV_CONFIG": "{}"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "getjoinrequestlambdaServiceRoleD6C6CE32",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "get-join-request"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "getjoinrequestlambdaServiceRoleDefaultPolicyEB33A6B3",
+    "getjoinrequestlambdaServiceRoleD6C6CE32"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/get-join-request-lambda/Resource",
+    "aws:asset:path": "asset.c3fd48ad2d9f155366dba9a022a903edf316b9686f845e592c944927a61f9a69",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "cbocompletesignuplambdaServiceRoleC2A73509": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "cbo-complete-signup"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/cbo-complete-signup-lambda/ServiceRole/Resource"
+   }
+  },
+  "cbocompletesignuplambdaServiceRoleDefaultPolicy6C81816F": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":table/JoinRequest_DB"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "dynamodb:PutItem",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":table/CBO_DB"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "cognito-idp:AdminGetUser",
+        "cognito-idp:AdminAddUserToGroup"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "cbocompletesignuplambdaServiceRoleDefaultPolicy6C81816F",
+    "Roles": [
+     {
+      "Ref": "cbocompletesignuplambdaServiceRoleC2A73509"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/cbo-complete-signup-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "cbocompletesignuplambda16B627BC": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "e6c425815192bf4bc9436b65a6bb0cb635ded8bf060327f58f7e43196b46520e.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "JOIN_TABLE": "JoinRequest_DB",
+      "CBO_TABLE": "CBO_DB",
+      "INVITE_HMAC_SECRET": "yYt0vJPv2sM0J8sQm3fF1jR9kG5dNq7uLx4A2wZ6bH8cE3pT1U9rV7oQ5M3nD1sB",
+      "MEMBERS_GROUP": "Member",
+      "AMPLIFY_SSM_ENV_CONFIG": "{}",
+      "USER_POOL_ID": {
+       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef"
+      }
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "cbocompletesignuplambdaServiceRoleC2A73509",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "cbo-complete-signup"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "cbocompletesignuplambdaServiceRoleDefaultPolicy6C81816F",
+    "cbocompletesignuplambdaServiceRoleC2A73509"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/cbo-complete-signup-lambda/Resource",
+    "aws:asset:path": "asset.e6c425815192bf4bc9436b65a6bb0cb635ded8bf060327f58f7e43196b46520e",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -3783,6 +4630,31 @@
     "Ref": "updatefranchiseinfolambda1AA8A6B8"
    }
   },
+  "amplifyjanfinderappdev3sandbox789c476389functionaddcbofranchiselambda47AF5445Ref": {
+   "Value": {
+    "Ref": "addcbofranchiselambda13E0A3E8"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functiongetcbolambdaF916071ERef": {
+   "Value": {
+    "Ref": "getcbolambdaA1B2C4AF"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functionownerinvitecbolambda633EE3B0Ref": {
+   "Value": {
+    "Ref": "ownerinvitecbolambda60F927A0"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCRef": {
+   "Value": {
+    "Ref": "getjoinrequestlambda4D940281"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functioncbocompletesignuplambdaCA8BB1E0Ref": {
+   "Value": {
+    "Ref": "cbocompletesignuplambda16B627BC"
+   }
+  },
   "amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref": {
    "Value": {
     "Ref": "sendquoteacceptanceemaillambda008F7CD2"
@@ -3808,6 +4680,30 @@
    "Value": {
     "Fn::GetAtt": [
      "updatefranchiseinfolambda1AA8A6B8",
+     "Arn"
+    ]
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functionaddcbofranchiselambda47AF5445Arn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "addcbofranchiselambda13E0A3E8",
+     "Arn"
+    ]
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functionownerinvitecbolambda633EE3B0Arn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "ownerinvitecbolambda60F927A0",
+     "Arn"
+    ]
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functioncbocompletesignuplambdaCA8BB1E0Arn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "cbocompletesignuplambda16B627BC",
      "Arn"
     ]
    }
@@ -3940,6 +4836,22 @@
     ]
    }
   },
+  "amplifyjanfinderappdev3sandbox789c476389functiongetcbolambdaF916071EArn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "getcbolambdaA1B2C4AF",
+     "Arn"
+    ]
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "getjoinrequestlambda4D940281",
+     "Arn"
+    ]
+   }
+  },
   "amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {
    "Value": {
     "Fn::GetAtt": [
@@ -3950,6 +4862,12 @@
   }
  },
  "Parameters": {
+  "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": {
+   "Type": "String"
+  },
   "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn": {
    "Type": "String"
   },

@@ -642,10 +642,11 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "f5ff048b109c8cdf30213851fa5de785342de615b41a945b4f0cf3a9ec5a3076.zip"
+     "S3Key": "44f7ab0377f870e1840a88064094c373b361d43d7d9fb45858628e45d31dc655.zip"
     },
     "Environment": {
      "Variables": {
+      "INVITE_HMAC_SECRET": "yYt0vJPv2sM0J8sQm3fF1jR9kG5dNq7uLx4A2wZ6bH8cE3pT1U9rV7oQ5M3nD1sB",
       "AMPLIFY_SSM_ENV_CONFIG": "{}"
      }
     },
@@ -684,7 +685,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/auth/pre-sign-up-lambda/Resource",
-    "aws:asset:path": "asset.f5ff048b109c8cdf30213851fa5de785342de615b41a945b4f0cf3a9ec5a3076",
+    "aws:asset:path": "asset.44f7ab0377f870e1840a88064094c373b361d43d7d9fb45858628e45d31dc655",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -840,11 +841,12 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "6440c89b5f0b8397a6ef1e03de1b4feb923153e55cbc04a2126fc4c2f13b1ba7.zip"
+     "S3Key": "f43966f22f77d2c024a8b6fbcd7a77c6c4fae7dfa8dcb31ea583e8dff54d2c30.zip"
     },
     "Environment": {
      "Variables": {
       "OWNER_TABLE": "Owner_DB",
+      "CBO_TABLE": "CBO_DB",
       "FRANCHISE_TABLE": "Franchise_DB",
       "AMPLIFY_SSM_ENV_CONFIG": "{}"
      }
@@ -885,7 +887,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/auth/post-confirmation-lambda/Resource",
-    "aws:asset:path": "asset.6440c89b5f0b8397a6ef1e03de1b4feb923153e55cbc04a2126fc4c2f13b1ba7",
+    "aws:asset:path": "asset.f43966f22f77d2c024a8b6fbcd7a77c6c4fae7dfa8dcb31ea583e8dff54d2c30",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1201,6 +1203,14 @@
   "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthunauthenticatedUserRoleC7C1F878Ref": {
    "Value": {
     "Ref": "amplifyAuthunauthenticatedUserRole2B524D9E"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "amplifyAuthUserPool4BA7F805",
+     "Arn"
+    ]
    }
   },
   "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthMemberGroupRole8B2C744ARef": {

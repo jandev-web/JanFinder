@@ -39,6 +39,16 @@ import { getAcceptedQuotesOwnerFn } from './functions/get-quotes-owner-accepted/
 import { sendTransferRequestFn } from './functions/owner-send-transfer-request/resource';
 import { ownerGetAllMembersFn } from './functions/owner-get-all-members/resource';
 import { updateFranchiseInfoFn } from './functions/update-franchise-info/resource';
+import { addCboFranchiseFn } from './functions/add-cbo-franchise/resource';
+import { ownerInviteCboFn } from './functions/owner-invite-cbo/resource';
+import { getJoinRequestFn } from './functions/get-join-request/resource';
+import { cboCompleteSignupFn } from './functions/cbo-complete-signup/resource';
+import { getCboFn } from './functions/get-cbo/resource';
+import { memberAcceptSellRequestFn } from './functions/member-accept-sell-request/resource';
+import { buildContractContextFn } from './functions/build-contract-context/resource';
+import { updateContractLinksFn } from './functions/update-contract-links/resource';
+import { sendContractCreatedEmailFn } from './functions/send-contract-created-email/resource';
+import { memberGetAvailableQuotesFn } from './functions/member-get-available-quotes/resource';
 
 // TS proxies that call Python validators
 import { validateQuoteTemplateProxyFn } from './functions/validate-quote-template-proxy/resource';
@@ -77,6 +87,17 @@ const backend = defineBackend({
   sendTransferRequestFn,
   ownerGetAllMembersFn,
   updateFranchiseInfoFn,
+  addCboFranchiseFn,
+  ownerInviteCboFn,
+  getJoinRequestFn,
+  cboCompleteSignupFn,
+  getCboFn,
+  memberAcceptSellRequestFn,
+  buildContractContextFn,
+  updateContractLinksFn,
+  sendContractCreatedEmailFn,
+  memberGetAvailableQuotesFn,
+
 });
 
 // === Locals ===
@@ -180,6 +201,16 @@ const getAcceptedQuotesOwnerLambda = backend.getAcceptedQuotesOwnerFn.resources.
 const sendTransferRequestLambda = backend.sendTransferRequestFn.resources.lambda as lambda.Function;
 const ownerGetAllMembersLambda = backend.ownerGetAllMembersFn.resources.lambda as lambda.Function;
 const updateFranchiseLambda = backend.updateFranchiseInfoFn.resources.lambda;
+const addCboLambda = backend.addCboFranchiseFn.resources.lambda as lambda.Function;
+const inviteFn = backend.ownerInviteCboFn.resources.lambda as lambda.Function;
+const getJRFn = backend.getJoinRequestFn.resources.lambda as lambda.Function;
+const completeFn = backend.cboCompleteSignupFn.resources.lambda as lambda.Function;
+const getCboLambda = backend.getCboFn.resources.lambda as lambda.Function;
+const memberAcceptLambda = backend.memberAcceptSellRequestFn.resources.lambda as lambda.Function;
+const buildCtxLambda = backend.buildContractContextFn.resources.lambda as lambda.Function;
+const updateLinksLambda = backend.updateContractLinksFn.resources.lambda as lambda.Function;
+const sendEmail2Lambda = backend.sendContractCreatedEmailFn.resources.lambda as lambda.Function;
+const memberGetAvailableQuotesLambda = backend.memberGetAvailableQuotesFn.resources.lambda as lambda.Function;
 
 // ===== Doc pipeline Lambdas (Python) =====
 const buildQuoteDocContextLambda = new lambda.Function(backend.data.stack, 'BuildQuoteDocContextFn', {
@@ -270,6 +301,12 @@ updateQuoteDocumentLinksLambda.addToRolePolicy(new PolicyStatement({
   resources: [tableArn('CustomerQuotes')],
 }));
 
+getCboLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:GetItem', 'dynamodb:DescribeTable'],
+  resources: [tableArn('CBO_DB')],
+}));
+
+
 // Email lambda perms
 sendOwnerAcceptanceEmailLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:GetItem'],
@@ -286,6 +323,22 @@ convertDocxToPdfLambda.addToRolePolicy(new PolicyStatement({
   actions: ['secretsmanager:GetSecretValue'],
   resources: [`arn:${partition}:secretsmanager:${region}:${account}:secret:adobe-credentials*`],
 }));
+
+buildCtxLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:GetItem', 'dynamodb:DescribeTable'],
+  resources: [tableArn('SellRequest_DB'), tableArn('CustomerQuotes'), tableArn('Owner_DB'), tableArn('CBO_DB'), tableArn('Franchise_DB')],
+}));
+
+updateLinksLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:UpdateItem'],
+  resources: [tableArn('SellRequest_DB'), tableArn('CustomerQuotes')],
+}));
+
+sendEmail2Lambda.addToRolePolicy(new PolicyStatement({
+  actions: ['ses:SendEmail', 'ses:SendRawEmail'],
+  resources: ['*'],
+}));
+
 
 // ===== Existing DDB access kept as-is =====
 ownerAcceptQuoteLambda.addToRolePolicy(new PolicyStatement({
@@ -399,6 +452,44 @@ updateFranchiseLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:UpdateItem', 'dynamodb:DescribeTable', 'dynamodb:GetItem'],
   resources: [tableArn('Franchise_DB'), tableArn('Owner_DB')],
 }));
+addCboLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:PutItem', 'dynamodb:DescribeTable'],
+  resources: [tableArn('CBO_DB')],
+}));
+inviteFn.addToRolePolicy(new PolicyStatement({ actions: ['dynamodb:PutItem'], resources: [tableArn('JoinRequest_DB')] }));
+getJRFn.addToRolePolicy(new PolicyStatement({ actions: ['dynamodb:GetItem'], resources: [tableArn('JoinRequest_DB')] }));
+completeFn.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:GetItem', 'dynamodb:UpdateItem'],
+  resources: [tableArn('JoinRequest_DB')],
+}));
+completeFn.addToRolePolicy(new PolicyStatement({ actions: ['dynamodb:PutItem'], resources: [tableArn('CBO_DB')] }));
+
+// IAM for SES (send invite)
+inviteFn.addToRolePolicy(new PolicyStatement({
+  actions: ['ses:SendEmail', 'ses:SendRawEmail'],
+  resources: ['*'], // or restrict with identities if you have them verified
+}));
+memberGetAvailableQuotesLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:Query', 'dynamodb:DescribeTable'],
+  resources: [
+    tableArn('SellRequest_DB'),
+    tableIndexArn('SellRequest_DB'), // covers TargetUser-index via /index/*
+  ],
+}));
+
+memberGetAvailableQuotesLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:BatchGetItem', 'dynamodb:GetItem'],
+  resources: [tableArn('CustomerQuotes')],
+}));
+// IAM for Cognito admin (complete signup: lookup and add to group)
+const userPoolArn = backend.auth.resources.userPool.userPoolArn;
+completeFn.addToRolePolicy(new PolicyStatement({
+  actions: ['cognito-idp:AdminGetUser', 'cognito-idp:AdminAddUserToGroup'],
+  resources: [userPoolArn],
+}));
+const BUCKET_NAME = publicBucket.bucketName;
+buildCtxLambda.addEnvironment('TEMPLATE_BUCKET', BUCKET_NAME);
+buildCtxLambda.addEnvironment('OUTPUT_BUCKET', BUCKET_NAME);
 // ===== Step Functions state machine (quote pipeline) =====
 const buildContext = new tasks.LambdaInvoke(backend.data.stack, 'BuildContextTask', {
   lambdaFunction: buildQuoteDocContextLambda,
@@ -478,11 +569,92 @@ const documentPipeline = new sfn.StateMachine(backend.data.stack, 'QuoteDocument
   timeout: Duration.minutes(5),
 });
 
+// tasks
+const buildContractCtx = new tasks.LambdaInvoke(backend.data.stack, 'BuildContractContextTask', {
+  lambdaFunction: backend.buildContractContextFn.resources.lambda as lambda.Function,
+  payload: sfn.TaskInput.fromObject({
+    'requestID.$': '$.requestID',
+    'memberCBOID.$': '$.memberCBOID',
+    'timezone.$': '$.timezone',
+    'requestId.$': '$.requestId',
+  }),
+  outputPath: '$.Payload',
+});
+
+const fillContractDocx = new tasks.LambdaInvoke(backend.data.stack, 'FillContractDocxTask', {
+  lambdaFunction: fillDocxPlaceholdersLambda,
+  payload: sfn.TaskInput.fromObject({
+    'template_bucket.$': '$.template_bucket',
+    'template_key.$': '$.template_key',
+    'output_bucket.$': '$.output_bucket',
+    'docx_key.$': '$.docx_key',
+    'placeholders.$': '$.placeholders',
+    'blocks': {}, // optional
+    'requestId.$': '$.requestId',
+  }),
+  resultPath: '$.fill',
+  payloadResponseOnly: true,
+});
+
+const convertContractPdf = new tasks.LambdaInvoke(backend.data.stack, 'ConvertContractToPdfTask', {
+  lambdaFunction: convertDocxToPdfLambda,
+  payload: sfn.TaskInput.fromObject({
+    'bucket.$': '$.output_bucket',
+    'docx_key.$': '$.docx_key',
+    'pdf_key.$': '$.pdf_key',
+    'requestId.$': '$.requestId',
+  }),
+  resultPath: '$.convert',
+  payloadResponseOnly: true,
+});
+
+const updateContractLinks = new tasks.LambdaInvoke(backend.data.stack, 'UpdateContractLinksTask', {
+  lambdaFunction: backend.updateContractLinksFn.resources.lambda as lambda.Function,
+  payload: sfn.TaskInput.fromObject({
+    'quoteID.$': '$.quoteID',
+    'requestID.$': '$.requestID',
+    'bucket.$': '$.output_bucket',
+    'pdf_key.$': '$.pdf_key',
+    'requestId.$': '$.requestId',
+  }),
+  resultPath: '$.ddb',
+  payloadResponseOnly: true,
+});
+
+const sendContractEmail = new tasks.LambdaInvoke(backend.data.stack, 'SendContractCreatedEmailTask', {
+  lambdaFunction: backend.sendContractCreatedEmailFn.resources.lambda as lambda.Function,
+  payload: sfn.TaskInput.fromObject({
+    'quoteID.$': '$.quoteID',
+    'recipients.$': '$.recipients',
+    'bucket.$': '$.output_bucket',
+    'pdf_key.$': '$.pdf_key',
+    'requestId.$': '$.requestId',
+  }),
+  resultPath: '$.email',
+  payloadResponseOnly: true,
+});
+
+const memberContractDefinition = buildContractCtx
+  .next(fillContractDocx)
+  .next(convertContractPdf)
+  .next(updateContractLinks)
+  .next(sendContractEmail);
+
+const memberContractSm = new sfn.StateMachine(backend.data.stack, 'MemberAcceptSellRequestPipeline', {
+  stateMachineName: 'member-accept-sell-request-pipeline',
+  definitionBody: sfn.DefinitionBody.fromChainable(memberContractDefinition),
+  timeout: Duration.minutes(5),
+});
+
+// allow the starter lambda to trigger it
+memberAcceptLambda.addEnvironment('STATE_MACHINE_ARN', memberContractSm.stateMachineArn);
+memberContractSm.grantStartExecution(memberAcceptLambda);
+
+
 // Owner lambda: env + permission to start the state machine
 ownerAcceptQuoteLambda.addEnvironment('DOC_PIPELINE_ARN', documentPipeline.stateMachineArn);
 ownerAcceptQuoteLambda.addEnvironment('DEFAULT_TIMEZONE', 'America/Chicago');
 documentPipeline.grantStartExecution(ownerAcceptQuoteLambda);
-
 // ===== Template validation: Python validators + Node proxies =====
 const validateQuoteTemplateLambda = new lambda.Function(backend.data.stack, 'ValidateQuoteTemplateFn', {
   functionName: 'validate-quote-template',
@@ -529,6 +701,18 @@ fillDocxPlaceholdersLambda.grantInvoke(validateContractTemplateLambda);
 convertDocxToPdfLambda.grantInvoke(validateQuoteTemplateLambda);
 convertDocxToPdfLambda.grantInvoke(validateContractTemplateLambda);
 
+addCboLambda.addEnvironment('USER_POOL_ID', backend.auth.resources.userPool.userPoolId);
+completeFn.addEnvironment('USER_POOL_ID', backend.auth.resources.userPool.userPoolId);
+
+addCboLambda.addToRolePolicy(new PolicyStatement({
+  actions: [
+    'cognito-idp:AdminCreateUser',
+    'cognito-idp:AdminSetUserPassword',
+    'cognito-idp:AdminAddUserToGroup',
+    'cognito-idp:AdminUpdateUserAttributes',
+  ],
+  resources: [userPoolArn],
+}));
 // Auth trigger policies
 const userPoolWildcardArn = `arn:${partition}:cognito-idp:${region}:${account}:userpool/*`;
 postConfFn.addToRolePolicy(new PolicyStatement({

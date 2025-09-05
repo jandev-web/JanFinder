@@ -1,54 +1,22 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { redirect } from 'next/navigation';
-import fetchCBOById from '@/utils/getCBOByID';
-import LoadingSpinner from '@/components/loadingScreen'
+
 import CBOAvaQuotes from '@/components/CBOAvailableQuotes';
 import CBOFooter from '../CBOFooter';
 import CBOHeader from '../CBOHeader';
 
-import { useRouter } from 'next/navigation';
+
 
 
 
 interface CBOAvaQuotesPageProps {
-    user: any;
+    cboData: any;
+    quotes: any;
 }
 
-const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ user }) => {
-    const router = useRouter()
-    const [cboData, setCBOData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-          try {
-            if (!user) {
-              redirect('/members/sign-in');
-              return;
-            }
-    
-            // Fetch owner data by user ID
-            const fetchedCBOData = await fetchCBOById(user.userId);
-            setCBOData(fetchedCBOData);
-          } catch (error) {
-            console.error('Error fetching current user:', error);
-            router.push('/error'); // Redirect to an error page if needed
-          } finally {
-            setIsLoading(false);
-          }
-        };
-    
-        fetchUser();
-      }, [user, router]);
-
-
-
-
-      if (isLoading) {
-        return <LoadingSpinner />
-      }
+const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ cboData, quotes }) => {
+      console.log(quotes)
       if (!cboData) {
         return (
           <div className="flex items-center justify-center min-h-screen">
@@ -57,18 +25,15 @@ const CBOAvaQuotesPage: React.FC<CBOAvaQuotesPageProps> = ({ user }) => {
         );
       }
 
-
-    //console.log("pages/MemberPage.tsx:", user);
-    //console.log(isOwner)
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex w-full flex-col min-h-screen">
             {/* Header with padding-bottom */}
             <div className="pb-10">
                 <CBOHeader user={cboData} />
             </div>
 
             <div className='pt-24'>
-                <CBOAvaQuotes user={cboData} />
+                <CBOAvaQuotes user={cboData} quotes={quotes} />
             </div>
             <CBOFooter />
 

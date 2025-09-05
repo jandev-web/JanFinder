@@ -136,7 +136,7 @@ function VerifiedGate({ children }: { children: ReactNode }) {
     let alive = true;
     (async () => {
       try {
-        const { tokens } = await fetchAuthSession();
+        const { tokens } = await fetchAuthSession({ forceRefresh: true });
         const ev = tokens?.idToken?.payload?.email_verified;
         const isVerified = ev === true || ev === "true";
         if (!alive) return;

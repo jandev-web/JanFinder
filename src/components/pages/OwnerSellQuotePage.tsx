@@ -39,9 +39,9 @@ export default function OwnerSellQuoteClient({
   const [email, setEmail] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-
-  const ownerID = owner?.OwnerID;
-
+  console.log(owner)
+  const ownerID = owner?.data?.OwnerID;
+  console.log(franchiseMembers)
   const targetUser = useMemo(() => {
     if (selectedMember) return selectedMember;
     if (cleanId.trim()) return cleanId.trim();
@@ -58,7 +58,8 @@ export default function OwnerSellQuoteClient({
       if (!ownerID) throw new Error('Missing owner ID.');
       if (!targetUser) throw new Error('Please select a member or provide a CleanID or email.');
       
-
+      const res = await sellQuoteAction({ quoteID, targetUser, ownerID });
+      if (!res?.ok) throw new Error('Failed to send quote.');
       alert('Quote sent successfully!');
       router.push(`/members/owner/quotes/accepted`);
     } catch (e: any) {
@@ -103,7 +104,7 @@ export default function OwnerSellQuoteClient({
                 <option value="">-- Select a member --</option>
                 {franchiseMembers.map((member, idx) => (
                   <option key={member.CBOID ?? idx} value={member.CBOID ?? ''}>
-                    {member.firstName} {member.lastName}
+                    {member.FirstName} {member.LastName}
                   </option>
                 ))}
               </select>

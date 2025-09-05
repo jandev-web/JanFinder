@@ -326,6 +326,20 @@
       "\",\"",
       {
        "Fn::GetAtt": [
+        "function1351588B",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389functionaddcbofranchiselambda47AF5445Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "function1351588B",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetcbolambdaF916071ERef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
         "data7552DF31",
         "Outputs.amplifyjanfinderappdev3sandbox789c476389datavalidatequotetemplateproxylambdaE1EE7BEARef"
        ]
@@ -335,6 +349,13 @@
        "Fn::GetAtt": [
         "data7552DF31",
         "Outputs.amplifyjanfinderappdev3sandbox789c476389datavalidatecontracttemplateproxylambda76DA8F54Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389datamemberacceptsellrequestlambda1E7514C6Ref"
        ]
       },
       "\",\"",
@@ -355,7 +376,56 @@
       {
        "Fn::GetAtt": [
         "function1351588B",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389functionownerinvitecbolambda633EE3B0Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "function1351588B",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCRef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "function1351588B",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389functioncbocompletesignuplambdaCA8BB1E0Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389datamembergetavailablequoteslambdaDD9903EDRef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "function1351588B",
         "Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389databuildcontractcontextlambda5E90C8ACRef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389dataupdatecontractlinkslambda1885C384Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389datasendcontractcreatedemaillambdaFB5251DFRef"
        ]
       },
       "\"]"
@@ -492,7 +562,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/ec7f51fd276a27e7ee6934350ba54b11d19bc6b767aa722f8d2f38c0f6f09ded.json"
+       "/61a81728b0ae09d528f17ef31fee22590a1b8d01893f24e7a13f3575b9e38e96.json"
       ]
      ]
     }
@@ -561,6 +631,24 @@
       "Fn::GetAtt": [
        "function1351588B",
        "Outputs.amplifyjanfinderappdev3sandbox789c476389functionupdatefranchiseinfolambda735BB146Arn"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionaddcbofranchiselambda47AF5445Arn": {
+      "Fn::GetAtt": [
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functionaddcbofranchiselambda47AF5445Arn"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownerinvitecbolambda633EE3B0Arn": {
+      "Fn::GetAtt": [
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functionownerinvitecbolambda633EE3B0Arn"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functioncbocompletesignuplambdaCA8BB1E0Arn": {
+      "Fn::GetAtt": [
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functioncbocompletesignuplambdaCA8BB1E0Arn"
       ]
      },
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": {
@@ -659,6 +747,18 @@
        "Outputs.amplifyjanfinderappdev3sandbox789c476389functionownergetallmemberslambda61F389FFArn"
       ]
      },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetcbolambdaF916071EArn": {
+      "Fn::GetAtt": [
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetcbolambdaF916071EArn"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn": {
+      "Fn::GetAtt": [
+       "function1351588B",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn"
+      ]
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {
       "Fn::GetAtt": [
        "function1351588B",
@@ -692,7 +792,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/b4613be5c29d4798e84f28903e38c0bf0447e8a23d336d41093deb02b412d286.json"
+       "/c62fe7c50d101b6001edfb55ff2f7c9944a73fb02d4d1997ef96ef4df1a4bb66.json"
       ]
      ]
     }
@@ -709,6 +809,18 @@
    "Type": "AWS::CloudFormation::Stack",
    "Properties": {
     "Parameters": {
+     "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn": {
+      "Fn::GetAtt": [
+       "auth179371D7",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": {
+      "Fn::GetAtt": [
+       "auth179371D7",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef"
+      ]
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DArn": {
       "Fn::GetAtt": [
        "storage0EC3F24A",
@@ -748,7 +860,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/e2ffe303f46ae871e22977aa32592e1f585818b26e770a592de0e152328db71f.json"
+       "/af411de3b4f75437c1a19a161e663a4104291c1c9e51524a47fd5be08a64f72a.json"
       ]
      ]
     }

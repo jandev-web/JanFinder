@@ -1,32 +1,47 @@
-import React from "react";
+import 'server-only';
+import React from 'react';
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { getCurrentUser } from 'aws-amplify/auth/server';
+import { runWithAmplifyServerContext } from '@/utils/amplify-server';
 import LoginError from '@/components/LoginErrorComponent';
-import AllQuotesCBO from "@/components/pages/AllQuotesCBO";
-import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
+import { getCboByIdServer } from '@/utils/getCboByIdServer';
 import CBOAllQuotesPage from "@/components/pages/CBOAllQuotesPage";
+
+type AmplifyUser = Awaited<ReturnType<typeof getCurrentUser>>;
+
 export const dynamic = "force-dynamic";
 
 
 export default async function AllQuotesPage() {
   try {
-    // Fetch the authenticated user on the server
-    const user = await AuthGetCurrentUserServer();
+    const authUser = await runWithAmplifyServerContext({
+      nextServerContext: { cookies },
+      operation: (ctx) => getCurrentUser(ctx).catch(() => null as AmplifyUser | null),
+    });
 
-    // Redirect to the login page if the user is not authenticated
-    if (!user) {
-      redirect('/login');
+    if (!authUser) {
+      redirect('/members/sign-in');
     }
 
-    // Render the page content with the authenticated user
+    const cboData = await getCboByIdServer(authUser.userId)
+    console.log(cboData);
+    if (!cboData) {
+      return (
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+          <LoginError />
+        </div>
+      );
+    }
+
     return (
-      <div className="flex w-full flex-col min-h-screen">
-        <CBOAllQuotesPage user={user} />
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <CBOAllQuotesPage cboData={cboData} />
       </div>
     );
   } catch (error) {
     console.error('Error fetching user:', error);
 
-    // Redirect to the login page if an error occurs
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <LoginError />

@@ -6,6 +6,7 @@ export const postConfirmation = defineFunction({
   resourceGroupName: 'auth',    // 👈 lives with auth resources
   environment: {
     OWNER_TABLE: 'Owner_DB',
+    CBO_TABLE: 'CBO_DB',
     FRANCHISE_TABLE: 'Franchise_DB',
   },
 });

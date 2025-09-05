@@ -818,6 +818,145 @@
     "aws:asset:property": "Code"
    }
   },
+  "memberacceptsellrequestlambdaServiceRole4B839AE7": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "member-accept-sell-request"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/member-accept-sell-request-lambda/ServiceRole/Resource"
+   }
+  },
+  "memberacceptsellrequestlambdaServiceRoleDefaultPolicyEDB1A861": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "states:StartExecution",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "MemberAcceptSellRequestPipeline999FFB08"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "memberacceptsellrequestlambdaServiceRoleDefaultPolicyEDB1A861",
+    "Roles": [
+     {
+      "Ref": "memberacceptsellrequestlambdaServiceRole4B839AE7"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/member-accept-sell-request-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "memberacceptsellrequestlambda8D58C3B3": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "482f0bb0517793497418bb3200337e89478c77832915e816e777a497aa56cbb3.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "STATE_MACHINE_ARN": {
+       "Ref": "MemberAcceptSellRequestPipeline999FFB08"
+      },
+      "AMPLIFY_SSM_ENV_CONFIG": "{}"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "memberacceptsellrequestlambdaServiceRole4B839AE7",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "member-accept-sell-request"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "memberacceptsellrequestlambdaServiceRoleDefaultPolicyEDB1A861",
+    "memberacceptsellrequestlambdaServiceRole4B839AE7"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/member-accept-sell-request-lambda/Resource",
+    "aws:asset:path": "asset.482f0bb0517793497418bb3200337e89478c77832915e816e777a497aa56cbb3",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
   "deletefranchisequotetemplatelambdaServiceRole8B877E5D": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -1210,6 +1349,211 @@
     "aws:asset:property": "Code"
    }
   },
+  "membergetavailablequoteslambdaServiceRoleD384D76F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "member-get-available-quotes"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/member-get-available-quotes-lambda/ServiceRole/Resource"
+   }
+  },
+  "membergetavailablequoteslambdaServiceRoleDefaultPolicy1C640ED9": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:Query",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/SellRequest_DB"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/SellRequest_DB/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetItem"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":dynamodb:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":table/CustomerQuotes"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "membergetavailablequoteslambdaServiceRoleDefaultPolicy1C640ED9",
+    "Roles": [
+     {
+      "Ref": "membergetavailablequoteslambdaServiceRoleD384D76F"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/member-get-available-quotes-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "membergetavailablequoteslambda0E04A3B4": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "d5e31abfe2806bb277890a7385edc5c7067ec1148b69cc4597734349c5131aa7.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "AMPLIFY_SSM_ENV_CONFIG": "{}"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "membergetavailablequoteslambdaServiceRoleD384D76F",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "member-get-available-quotes"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "membergetavailablequoteslambdaServiceRoleDefaultPolicy1C640ED9",
+    "membergetavailablequoteslambdaServiceRoleD384D76F"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/member-get-available-quotes-lambda/Resource",
+    "aws:asset:path": "asset.d5e31abfe2806bb277890a7385edc5c7067ec1148b69cc4597734349c5131aa7",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
   "amplifyDataGraphQLAPI42A6FA33": {
    "Type": "AWS::AppSync::GraphQLApi",
    "Properties": {
@@ -1259,7 +1603,7 @@
      ]
     },
     "DefinitionS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/b651c1f0933ecfe927db9a13eae88167ddee45f650e3d6ee33d1d7e61b5a8270.graphql"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/38a437b54a325e2f7403df5ee9f8d98155909f7941f1f871abbe6e0a1270dece.graphql"
     }
    },
    "UpdateReplacePolicy": "Delete",
@@ -1320,6 +1664,9 @@
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefranchiseinfolambda735BB146Arn": {
       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefranchiseinfolambda735BB146Arn"
      },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionaddcbofranchiselambda47AF5445Arn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionaddcbofranchiselambda47AF5445Arn"
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389datavalidatequotetemplateproxylambdaE1EE7BEAArn": {
       "Fn::GetAtt": [
        "validatequotetemplateproxylambdaB3E9E995",
@@ -1329,6 +1676,12 @@
      "referencetoamplifyjanfinderappdev3sandbox789c476389datavalidatecontracttemplateproxylambda76DA8F54Arn": {
       "Fn::GetAtt": [
        "validatecontracttemplateproxylambda80CA09B9",
+       "Arn"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389datamemberacceptsellrequestlambda1E7514C6Arn": {
+      "Fn::GetAtt": [
+       "memberacceptsellrequestlambda8D58C3B3",
        "Arn"
       ]
      },
@@ -1343,6 +1696,12 @@
        "deletefranchisecontracttemplatelambdaEF058CF0",
        "Arn"
       ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownerinvitecbolambda633EE3B0Arn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownerinvitecbolambda633EE3B0Arn"
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functioncbocompletesignuplambdaCA8BB1E0Arn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functioncbocompletesignuplambdaCA8BB1E0Arn"
      },
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": {
       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn"
@@ -1404,6 +1763,18 @@
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownergetallmemberslambda61F389FFArn": {
       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownergetallmemberslambda61F389FFArn"
      },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetcbolambdaF916071EArn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetcbolambdaF916071EArn"
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn"
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389datamembergetavailablequoteslambdaDD9903EDArn": {
+      "Fn::GetAtt": [
+       "membergetavailablequoteslambda0E04A3B4",
+       "Arn"
+      ]
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": {
       "Fn::GetAtt": [
        "amplifyDataGraphQLAPINONEDS684BF699",
@@ -1441,7 +1812,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/3d469bfd8dac4cc7fb8d19573bcd0fa7850197538ff7d87bd1fe88692c418d16.json"
+       "/08ecbe96559d7cf5dd993e34e5a84a7ac7666b13809080c691749fade4d148d8.json"
       ]
      ]
     }
@@ -1735,6 +2106,21 @@
            },
            "typeName": "Query",
            "fieldName": "getAcceptedQuotesOwner"
+          }
+         ]
+        },
+        {
+         "Fn::Sub": [
+          "arn:${AWS::Partition}:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+          {
+           "apiId": {
+            "Fn::GetAtt": [
+             "amplifyDataGraphQLAPI42A6FA33",
+             "ApiId"
+            ]
+           },
+           "typeName": "Query",
+           "fieldName": "getJoinRequest"
           }
          ]
         }
@@ -2151,7 +2537,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "dcb43f8a50ef53d2693e217276244584ebff923de3777c1c02adbf0db4563f89.zip"
+     "53cc09b788876d6245ad5bdbd35bf93c961c7e89ce7e04b3baa58f8e1813bb48.zip"
     ],
     "SourceMarkers": [
      {}
@@ -2663,7 +3049,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "e23eb2b782fcf817487ca2420503280f56bef3cac276585d9b7711cd05993fc6.zip"
+     "7fa32da82448fb5eddce72da4dc16082e04234ed152dcf38f223e92cd2d763ed.zip"
     ],
     "SourceMarkers": [
      {}
@@ -2753,6 +3139,570 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/AMPLIFY_DATA_DEFAULT_NAMEParameter/Resource"
+   }
+  },
+  "buildcontractcontextlambdaServiceRole554F88AC": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "build-contract-context"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/build-contract-context-lambda/ServiceRole/Resource"
+   }
+  },
+  "buildcontractcontextlambdaServiceRoleDefaultPolicy47700FB8": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/SellRequest_DB"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/CustomerQuotes"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/Owner_DB"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/CBO_DB"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/Franchise_DB"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "buildcontractcontextlambdaServiceRoleDefaultPolicy47700FB8",
+    "Roles": [
+     {
+      "Ref": "buildcontractcontextlambdaServiceRole554F88AC"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/build-contract-context-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "buildcontractcontextlambdaBDF12C5D": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "182a9e82ed6c2c11b2ab05f3da3d37c461bca7ca95ea8808cf1da43143d94721.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "SELL_REQUEST_TABLE": "SellRequest_DB",
+      "CUSTOMER_QUOTES_TABLE": "CustomerQuotes",
+      "OWNER_TABLE": "Owner_DB",
+      "CBO_TABLE": "CBO_DB",
+      "FRANCHISE_TABLE": "Franchise_DB",
+      "TEMPLATE_BUCKET": {
+       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef"
+      },
+      "OUTPUT_BUCKET": {
+       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389storageNestedStackstorageNestedStackResource577994F0Outputsamplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef"
+      },
+      "AMPLIFY_SSM_ENV_CONFIG": "{}"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "buildcontractcontextlambdaServiceRole554F88AC",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "build-contract-context"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "buildcontractcontextlambdaServiceRoleDefaultPolicy47700FB8",
+    "buildcontractcontextlambdaServiceRole554F88AC"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/build-contract-context-lambda/Resource",
+    "aws:asset:path": "asset.182a9e82ed6c2c11b2ab05f3da3d37c461bca7ca95ea8808cf1da43143d94721",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "updatecontractlinkslambdaServiceRole3F26D136": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "update-contract-links"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/update-contract-links-lambda/ServiceRole/Resource"
+   }
+  },
+  "updatecontractlinkslambdaServiceRoleDefaultPolicy0C19B49A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:UpdateItem",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/SellRequest_DB"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/CustomerQuotes"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "updatecontractlinkslambdaServiceRoleDefaultPolicy0C19B49A",
+    "Roles": [
+     {
+      "Ref": "updatecontractlinkslambdaServiceRole3F26D136"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/update-contract-links-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "updatecontractlinkslambda8AE23B40": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "c3353f6920f01f6ef89cecf9bb506010269b02e5541fa6c7b97dbaedff7ba7ef.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "SELL_REQUEST_TABLE": "SellRequest_DB",
+      "CUSTOMER_QUOTES_TABLE": "CustomerQuotes",
+      "AMPLIFY_SSM_ENV_CONFIG": "{}"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "updatecontractlinkslambdaServiceRole3F26D136",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "update-contract-links"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "updatecontractlinkslambdaServiceRoleDefaultPolicy0C19B49A",
+    "updatecontractlinkslambdaServiceRole3F26D136"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/update-contract-links-lambda/Resource",
+    "aws:asset:path": "asset.c3353f6920f01f6ef89cecf9bb506010269b02e5541fa6c7b97dbaedff7ba7ef",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "sendcontractcreatedemaillambdaServiceRoleBB699BA1": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "send-contract-created-email"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/send-contract-created-email-lambda/ServiceRole/Resource"
+   }
+  },
+  "sendcontractcreatedemaillambdaServiceRoleDefaultPolicy5B7411D7": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "sendcontractcreatedemaillambdaServiceRoleDefaultPolicy5B7411D7",
+    "Roles": [
+     {
+      "Ref": "sendcontractcreatedemaillambdaServiceRoleBB699BA1"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/send-contract-created-email-lambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "sendcontractcreatedemaillambda0FD76413": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "x86_64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "0d08e19a7be7c274e368281be04bae2f81ed804e86de0d6afb6970f639cbe6f0.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "FROM_EMAIL": "no-reply@yourdomain.com",
+      "AMPLIFY_SSM_ENV_CONFIG": "{}"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "sendcontractcreatedemaillambdaServiceRoleBB699BA1",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "send-contract-created-email"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "sendcontractcreatedemaillambdaServiceRoleDefaultPolicy5B7411D7",
+    "sendcontractcreatedemaillambdaServiceRoleBB699BA1"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/send-contract-created-email-lambda/Resource",
+    "aws:asset:path": "asset.0d08e19a7be7c274e368281be04bae2f81ed804e86de0d6afb6970f639cbe6f0",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
    }
   },
   "IdentityPoolGraphQLPolicyV2": {
@@ -3800,6 +4750,267 @@
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/QuoteDocumentPipeline/Resource"
    }
   },
+  "MemberAcceptSellRequestPipelineRole4DBA9A8E": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "states.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/MemberAcceptSellRequestPipeline/Role/Resource"
+   }
+  },
+  "MemberAcceptSellRequestPipelineRoleDefaultPolicy73D6FDAE": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "buildcontractcontextlambdaBDF12C5D",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "buildcontractcontextlambdaBDF12C5D",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "FillDocxPlaceholdersFn7D11A7C7",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "FillDocxPlaceholdersFn7D11A7C7",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ConvertDocxToPdfFn7C6C736D",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ConvertDocxToPdfFn7C6C736D",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "updatecontractlinkslambda8AE23B40",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "updatecontractlinkslambda8AE23B40",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "sendcontractcreatedemaillambda0FD76413",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "sendcontractcreatedemaillambda0FD76413",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "MemberAcceptSellRequestPipelineRoleDefaultPolicy73D6FDAE",
+    "Roles": [
+     {
+      "Ref": "MemberAcceptSellRequestPipelineRole4DBA9A8E"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/MemberAcceptSellRequestPipeline/Role/DefaultPolicy/Resource"
+   }
+  },
+  "MemberAcceptSellRequestPipeline999FFB08": {
+   "Type": "AWS::StepFunctions::StateMachine",
+   "Properties": {
+    "DefinitionString": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"StartAt\":\"BuildContractContextTask\",\"States\":{\"BuildContractContextTask\":{\"Next\":\"FillContractDocxTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"OutputPath\":\"$.Payload\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+       {
+        "Fn::GetAtt": [
+         "buildcontractcontextlambdaBDF12C5D",
+         "Arn"
+        ]
+       },
+       "\",\"Payload\":{\"requestID.$\":\"$.requestID\",\"memberCBOID.$\":\"$.memberCBOID\",\"timezone.$\":\"$.timezone\",\"requestId.$\":\"$.requestId\"}}},\"FillContractDocxTask\":{\"Next\":\"ConvertContractToPdfTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.fill\",\"Resource\":\"",
+       {
+        "Fn::GetAtt": [
+         "FillDocxPlaceholdersFn7D11A7C7",
+         "Arn"
+        ]
+       },
+       "\",\"Parameters\":{\"template_bucket.$\":\"$.template_bucket\",\"template_key.$\":\"$.template_key\",\"output_bucket.$\":\"$.output_bucket\",\"docx_key.$\":\"$.docx_key\",\"placeholders.$\":\"$.placeholders\",\"blocks\":{},\"requestId.$\":\"$.requestId\"}},\"ConvertContractToPdfTask\":{\"Next\":\"UpdateContractLinksTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.convert\",\"Resource\":\"",
+       {
+        "Fn::GetAtt": [
+         "ConvertDocxToPdfFn7C6C736D",
+         "Arn"
+        ]
+       },
+       "\",\"Parameters\":{\"bucket.$\":\"$.output_bucket\",\"docx_key.$\":\"$.docx_key\",\"pdf_key.$\":\"$.pdf_key\",\"requestId.$\":\"$.requestId\"}},\"UpdateContractLinksTask\":{\"Next\":\"SendContractCreatedEmailTask\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.ddb\",\"Resource\":\"",
+       {
+        "Fn::GetAtt": [
+         "updatecontractlinkslambda8AE23B40",
+         "Arn"
+        ]
+       },
+       "\",\"Parameters\":{\"quoteID.$\":\"$.quoteID\",\"requestID.$\":\"$.requestID\",\"bucket.$\":\"$.output_bucket\",\"pdf_key.$\":\"$.pdf_key\",\"requestId.$\":\"$.requestId\"}},\"SendContractCreatedEmailTask\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.email\",\"Resource\":\"",
+       {
+        "Fn::GetAtt": [
+         "sendcontractcreatedemaillambda0FD76413",
+         "Arn"
+        ]
+       },
+       "\",\"Parameters\":{\"quoteID.$\":\"$.quoteID\",\"recipients.$\":\"$.recipients\",\"bucket.$\":\"$.output_bucket\",\"pdf_key.$\":\"$.pdf_key\",\"requestId.$\":\"$.requestId\"}}},\"TimeoutSeconds\":300}"
+      ]
+     ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "MemberAcceptSellRequestPipelineRole4DBA9A8E",
+      "Arn"
+     ]
+    },
+    "StateMachineName": "member-accept-sell-request-pipeline",
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "DependsOn": [
+    "MemberAcceptSellRequestPipelineRoleDefaultPolicy73D6FDAE",
+    "MemberAcceptSellRequestPipelineRole4DBA9A8E"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/MemberAcceptSellRequestPipeline/Resource"
+   }
+  },
   "ValidateQuoteTemplateFnServiceRole6DAF9301": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -4659,6 +5870,11 @@
     "Ref": "validatecontracttemplateproxylambda80CA09B9"
    }
   },
+  "amplifyjanfinderappdev3sandbox789c476389datamemberacceptsellrequestlambda1E7514C6Ref": {
+   "Value": {
+    "Ref": "memberacceptsellrequestlambda8D58C3B3"
+   }
+  },
   "amplifyjanfinderappdev3sandbox789c476389datadeletefranchisequotetemplatelambda2872CF94Ref": {
    "Value": {
     "Ref": "deletefranchisequotetemplatelambda4A72F13B"
@@ -4667,6 +5883,26 @@
   "amplifyjanfinderappdev3sandbox789c476389datadeletefranchisecontracttemplatelambda57852061Ref": {
    "Value": {
     "Ref": "deletefranchisecontracttemplatelambdaEF058CF0"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389datamembergetavailablequoteslambdaDD9903EDRef": {
+   "Value": {
+    "Ref": "membergetavailablequoteslambda0E04A3B4"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389databuildcontractcontextlambda5E90C8ACRef": {
+   "Value": {
+    "Ref": "buildcontractcontextlambdaBDF12C5D"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389dataupdatecontractlinkslambda1885C384Ref": {
+   "Value": {
+    "Ref": "updatecontractlinkslambda8AE23B40"
+   }
+  },
+  "amplifyjanfinderappdev3sandbox789c476389datasendcontractcreatedemaillambdaFB5251DFRef": {
+   "Value": {
+    "Ref": "sendcontractcreatedemaillambda0FD76413"
    }
   },
   "amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPI6F01C1BDApiId": {
@@ -4722,6 +5958,15 @@
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionupdatefranchiseinfolambda735BB146Arn": {
    "Type": "String"
   },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionaddcbofranchiselambda47AF5445Arn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownerinvitecbolambda633EE3B0Arn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functioncbocompletesignuplambdaCA8BB1E0Arn": {
+   "Type": "String"
+  },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetfacilityoptionslambda2AABED78Arn": {
    "Type": "String"
   },
@@ -4768,6 +6013,12 @@
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionownergetallmemberslambda61F389FFArn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetcbolambdaF916071EArn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetjoinrequestlambda15B7DFBCArn": {
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {

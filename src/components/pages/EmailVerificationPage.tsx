@@ -1,6 +1,7 @@
-"use client";
+// components/pages/EmailVerificationPage.tsx
+'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   sendUserAttributeVerificationCode,
@@ -15,10 +16,29 @@ export default function VerifyEmail() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
+  // (Tiny guard) Ensure we actually have a signed-in user on this route.
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const s = await fetchAuthSession();
+        if (!s.tokens?.idToken && alive) {
+          // No user pool session here → go sign in (doesn't affect Owner flow)
+          router.replace("/members/sign-in?next=/members/sign-in/verify-email");
+        }
+      } catch {
+        router.replace("/members/sign-in?next=/members/sign-in/verify-email");
+      }
+    })();
+    return () => { alive = false; };
+  }, [router]);
+
   const sendCode = async () => {
     setBusy(true);
     setErr(null);
     try {
+      // ✅ make sure we have a fresh id token for this page
+      await fetchAuthSession({ forceRefresh: true });
       await sendUserAttributeVerificationCode({ userAttributeKey: "email" });
       setSent(true);
     } catch (e: any) {
@@ -32,12 +52,15 @@ export default function VerifyEmail() {
     setBusy(true);
     setErr(null);
     try {
+      // ✅ refresh again before confirm
+      await fetchAuthSession({ forceRefresh: true });
       await confirmUserAttribute({
         userAttributeKey: "email",
         confirmationCode: code,
       });
-      await fetchAuthSession({ forceRefresh: true }); // pick up email_verified=true
-      router.replace("/members/sign-in"); // or wherever you want to land
+      // pick up email_verified=true immediately
+      await fetchAuthSession({ forceRefresh: true });
+      router.replace("/members/sign-in"); // unchanged
     } catch (e: any) {
       setErr(e?.message ?? "Verification failed");
     } finally {
