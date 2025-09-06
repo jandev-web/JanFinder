@@ -1,6 +1,7 @@
 import { SESClient, SendRawEmailCommand } from '@aws-sdk/client-ses';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
-import type { Readable } from 'stream';
+import { Readable } from 'stream';
+import crypto from 'crypto';
 
 const ses = new SESClient({});
 const s3  = new S3Client({});
@@ -14,114 +15,96 @@ function streamToBuffer(stream: Readable): Promise<Buffer> {
   });
 }
 
-function escapeHtml(s: string) {
-  return s
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
 export const handler = async (event: any) => {
-  const {
-    recipients,
-    bucket,
-    pdf_key,
-    customerName,
-    customerCompany,
-    franchiseName,
-    member,
-    memberName,
-  } = event || {};
-
+  // Expecting: { recipients, emailContext, bucket, pdf_key }
+  const { recipients = {}, emailContext = {}, bucket, pdf_key } = event || {};
   const from = process.env.FROM_EMAIL!;
-  const to = [recipients?.ownerEmail, recipients?.memberEmail, recipients?.customerEmail]
+  if (!from) throw new Error('FROM_EMAIL env var is required');
+
+  const to = [recipients.ownerEmail, recipients.memberEmail, recipients.customerEmail]
     .filter(Boolean) as string[];
-  if (!from || to.length === 0) return { ok: true };
+  if (!to.length) return { ok: true };
 
-  // Derive names/text safely
-  const safeCustomerName   = customerName || 'there';
-  const safeCompany        = customerCompany || 'Your Company';
-  const safeFranchiseName  = franchiseName || 'Your Franchise';
-  const safeMemberName =
-    memberName ||
-    [member?.firstName, member?.lastName].filter(Boolean).join(' ').trim() ||
-    'our cleaning partner';
+  const franchiseName   = (emailContext.franchiseName ?? '').toString() || 'Franchise';
+  const cboName         = (emailContext.cboName ?? '').toString()       || 'Member';
+  const customerName    = (emailContext.customerName ?? '').toString()  || 'Customer';
+  const customerCompany = (emailContext.customerCompany ?? '').toString()|| 'Customer Company';
 
-  // Fetch the PDF from S3 to attach
+  const subject = `${customerCompany} — Contract Created`;
+  const fileName = `${franchiseName}-Contract.pdf`;
+
+  // Fetch the PDF from S3
   const obj = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: pdf_key }));
-  const body = obj.Body as Readable;
-  const pdfBuffer = await streamToBuffer(body);
+  const pdfBytes = await streamToBuffer(obj.Body as Readable);
+  const pdfBase64 = pdfBytes.toString('base64');
 
-  const fileName = `${safeFranchiseName}-Contract.pdf`;
+  const html = `
+    <p>Hello ${customerName},</p>
+    <p>Your contract has been <strong>accepted</strong>.</p>
+    <ul>
+      <li><strong>Service Provider (Franchise):</strong> ${franchiseName}</li>
+      <li><strong>Accepted By (CBO):</strong> ${cboName}</li>
+    </ul>
+    <p>The signed contract PDF is attached to this email.</p>
+    <p>Thank you!</p>
+  `.trim();
 
-  // Build a MIME message with attachment (SES requires CRLF line endings)
-  const boundary = `----=_Part_${Date.now()}`;
-  const subject  = `${safeCompany} — Contract Accepted`;
+  const text = [
+    `Hello ${customerName},`,
+    ``,
+    `Your contract has been accepted.`,
+    ``,
+    `Service Provider (Franchise): ${franchiseName}`,
+    `Accepted By (CBO): ${cboName}`,
+    ``,
+    `The signed contract PDF is attached to this email.`,
+    ``,
+    `Thank you!`,
+  ].join('\n');
 
-  const htmlBody = `
-<p>Hi ${escapeHtml(safeCustomerName)},</p>
-<p>Your contract has been <strong>accepted</strong> by <strong>${escapeHtml(
-    safeMemberName
-  )}</strong> with <strong>${escapeHtml(safeFranchiseName)}</strong>.</p>
-<p>The finalized contract PDF is attached to this email.</p>
-<p>Thank you,<br/>${escapeHtml(safeFranchiseName)}</p>
-`.trim();
+  // Build MIME with attachment
+  const boundary = `Mixed_${crypto.randomUUID()}`;
+  const altBoundary = `Alt_${crypto.randomUUID()}`;
 
-  const textBody = `Hi ${safeCustomerName},
+  const mime =
+    `From: ${from}\r\n` +
+    `To: ${to.join(', ')}\r\n` +
+    `Subject: ${subject}\r\n` +
+    `MIME-Version: 1.0\r\n` +
+    `Content-Type: multipart/mixed; boundary="${boundary}"\r\n` +
+    `\r\n` +
+    `--${boundary}\r\n` +
+    `Content-Type: multipart/alternative; boundary="${altBoundary}"\r\n` +
+    `\r\n` +
+    `--${altBoundary}\r\n` +
+    `Content-Type: text/plain; charset="UTF-8"\r\n` +
+    `Content-Transfer-Encoding: 7bit\r\n` +
+    `\r\n` +
+    `${text}\r\n` +
+    `\r\n` +
+    `--${altBoundary}\r\n` +
+    `Content-Type: text/html; charset="UTF-8"\r\n` +
+    `Content-Transfer-Encoding: 7bit\r\n` +
+    `\r\n` +
+    `${html}\r\n` +
+    `\r\n` +
+    `--${altBoundary}--\r\n` +
+    `\r\n` +
+    `--${boundary}\r\n` +
+    `Content-Type: application/pdf; name="${fileName}"\r\n` +
+    `Content-Description: ${fileName}\r\n` +
+    `Content-Disposition: attachment; filename="${fileName}"; size=${pdfBytes.length};\r\n` +
+    `Content-Transfer-Encoding: base64\r\n` +
+    `\r\n` +
+    `${pdfBase64}\r\n` +
+    `\r\n` +
+    `--${boundary}--`;
 
-Your contract has been accepted by ${safeMemberName} with ${safeFranchiseName}.
-
-The finalized contract PDF is attached to this email.
-
-Thank you,
-${safeFranchiseName}
-`.trim();
-
-  const mixedBoundary = boundary; // top-level multipart/mixed
-  const altBoundary   = `${boundary}_alt`; // inner multipart/alternative
-
-  const raw =
-    [
-      `From: ${from}`,
-      `To: ${to.join(', ')}`,
-      `Subject: ${subject}`,
-      'MIME-Version: 1.0',
-      `Content-Type: multipart/mixed; boundary="${mixedBoundary}"`,
-      '',
-      `--${mixedBoundary}`,
-      `Content-Type: multipart/alternative; boundary="${altBoundary}"`,
-      '',
-      `--${altBoundary}`,
-      'Content-Type: text/plain; charset=UTF-8',
-      'Content-Transfer-Encoding: 7bit',
-      '',
-      textBody,
-      '',
-      `--${altBoundary}`,
-      'Content-Type: text/html; charset=UTF-8',
-      'Content-Transfer-Encoding: 7bit',
-      '',
-      htmlBody,
-      '',
-      `--${altBoundary}--`,
-      '',
-      `--${mixedBoundary}`,
-      `Content-Type: application/pdf; name="${fileName}"`,
-      'Content-Description: Contract PDF',
-      `Content-Disposition: attachment; filename="${fileName}"`,
-      'Content-Transfer-Encoding: base64',
-      '',
-      pdfBuffer.toString('base64'),
-      '',
-      `--${mixedBoundary}--`,
-      '',
-    ].join('\r\n');
-
-  await ses.send(
-    new SendRawEmailCommand({
-      RawMessage: { Data: Buffer.from(raw) },
-    })
-  );
+  await ses.send(new SendRawEmailCommand({
+    RawMessage: { Data: Buffer.from(mime) },
+    Destinations: to,
+    Source: from,
+  }));
 
   return { ok: true };
 };

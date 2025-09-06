@@ -279,7 +279,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "59d5f53b0e514e1940aa249484494d887a328f5e4bff2567e21cdeb056e00978.zip"
+     "S3Key": "8a73ae068e5e9ad7aa643d115b88ef09f3bfc77910b73cb3507ed5cfef258beb.zip"
     },
     "Environment": {
      "Variables": {
@@ -325,7 +325,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/calc-package-options-lambda/Resource",
-    "aws:asset:path": "asset.59d5f53b0e514e1940aa249484494d887a328f5e4bff2567e21cdeb056e00978",
+    "aws:asset:path": "asset.8a73ae068e5e9ad7aa643d115b88ef09f3bfc77910b73cb3507ed5cfef258beb",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }

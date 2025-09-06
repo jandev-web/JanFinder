@@ -282,7 +282,7 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       pkg.otherMonthTime = round2(pkg.otherMonthTime);
       (pkg as any).totalDayTimeFromMonth = round2(pkg.totalMonthTime / 30.31);
       (pkg as any).otherDayTimeFromMonth = round2(pkg.otherMonthTime / 30.31);
-      pkg.packageCost = round2(pkg.totalMonthTime * 30);
+      pkg.packageCost = round2(pkg.totalMonthTime);
 
       for (const room of pkg.rooms) {
         room.totalDayTime = round2(room.totalDayTime);

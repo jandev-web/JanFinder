@@ -597,6 +597,7 @@ const fillContractDocx = new tasks.LambdaInvoke(backend.data.stack, 'FillContrac
     'output_bucket.$': '$.output_bucket',
     'docx_key.$': '$.docx_key',
     'placeholders.$': '$.placeholders',
+    'blocks.$': '$.blocks',
   }),
   payloadResponseOnly: true,
   resultPath: '$.fill', // <— IMPORTANT: do not clobber the context
@@ -638,6 +639,7 @@ const sendContractEmail = new tasks.LambdaInvoke(backend.data.stack, 'SendContra
     'recipients.$': '$.recipients',
     'bucket.$': '$.output_bucket',
     'pdf_key.$': '$.pdf_key',
+    'emailContext.$':  '$.emailContext',
   }),
   payloadResponseOnly: true,
   resultPath: '$.email',
