@@ -8,8 +8,8 @@ const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient(), {
 });
 
 const QUOTES = process.env.CUSTOMER_QUOTES_TABLE || 'CustomerQuotes';
-const TASKS  = process.env.ROOM_TASKS_TABLE || 'RoomTaskCalculations';
-const FAC    = process.env.FACILITY_TABLE || 'Facility_Data';
+const TASKS = process.env.ROOM_TASKS_TABLE || 'RoomTaskCalculations';
+const FAC = process.env.FACILITY_TABLE || 'Facility_Data';
 
 // -------------------- Helpers --------------------
 const round2 = (n: number) => Number((Math.round(n * 100) / 100).toFixed(2));
@@ -138,7 +138,7 @@ function pickMultiplier({
   if (pf === 'Daily') return customerMultiplier;
 
   if (pf === 'Daily-1') {
-    if (['2 Days a Week','3 Days a Week','4 Days a Week','5 Days a Week','6 Days a Week','7 Days a Week'].includes(cf)) {
+    if (['2 Days a Week', '3 Days a Week', '4 Days a Week', '5 Days a Week', '6 Days a Week', '7 Days a Week'].includes(cf)) {
       const downgraded = DAILY_1_DOWNGRADE[cf] || cf;
       return FREQ_MULTIPLIER[downgraded] ?? 0;
     }
@@ -222,7 +222,7 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       carpet?: { tasks: any[]; totalDayTime: number; totalMonthTime: number; totalDayTimeFromMonth?: number };
     };
     const packages: Record<PkgKey, Pkg> = {
-      top:    { packageName: 'top',    packageCost: 0, rooms: [], totalDayTime: 0, totalMonthTime: 0, otherDayTime: 0, otherMonthTime: 0 },
+      top: { packageName: 'top', packageCost: 0, rooms: [], totalDayTime: 0, totalMonthTime: 0, otherDayTime: 0, otherMonthTime: 0 },
       middle: { packageName: 'middle', packageCost: 0, rooms: [], totalDayTime: 0, totalMonthTime: 0, otherDayTime: 0, otherMonthTime: 0 },
       bottom: { packageName: 'bottom', packageCost: 0, rooms: [], totalDayTime: 0, totalMonthTime: 0, otherDayTime: 0, otherMonthTime: 0 },
     };
@@ -514,11 +514,17 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
     await ddbDoc.send(new UpdateCommand({
       TableName: QUOTES,
       Key: { QuoteID: quoteID },
-      UpdateExpression: 'SET #P = :packages',
-      ExpressionAttributeNames: { '#P': 'Package' },
-      ExpressionAttributeValues: { ':packages': { packageOptions } },
+      UpdateExpression: 'SET #pkg = :pkg',
+      ExpressionAttributeNames: { '#pkg': 'package' }, // ← lowercase to match your model
+      ExpressionAttributeValues: {
+        ':pkg': {
+          packageOptions,        // ← your computed options array
+          packageChoice: null,   // ← explicitly reset selection
+        },
+      },
       ReturnValues: 'NONE',
     }));
+
     log('persisted', { ms: Date.now() - tUpdate });
 
     // Final high-signal logs

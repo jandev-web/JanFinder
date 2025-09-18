@@ -73,7 +73,7 @@ const schema = a.schema({
   updateQuoteRooms: a.query().arguments({ quoteID: a.string(), formInfo: a.json() }).returns(a.json())
     .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updateQuoteRoomsFn)),
-  updatePackageChoice: a.query().arguments({ quoteID: a.string(), packageInfo: a.json() }).returns(a.json())
+  updatePackageChoice: a.query().arguments({ quoteID: a.string(), packageChoice: a.json() }).returns(a.json())
     .authorization(allow => [allow.authenticated('identityPool'), allow.authenticated(), allow.guest()])
     .handler(a.handler.function(updatePackageChoiceFn)),
   sendQuoteConfirmationEmail: a.query().arguments({ quoteID: a.string() }).returns(a.json())

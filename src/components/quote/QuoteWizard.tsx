@@ -11,7 +11,6 @@ import SqftRoomsStep from './steps/SqftRoomsStep';
 import FrequencyStep from './steps/FrequencyStep';
 import PackageStep from './steps/PackageStep';
 import ReviewStep from './steps/ReviewStep';
-import CongratsPanel from './CongratsPanel';
 import FormSummaryCard from './FormSummaryCard';
 
 import type { Quote } from '@/types/quotes';
@@ -26,14 +25,18 @@ import { clearPackages } from '@/utils/clearPackages';
 import { updateQuoteBudget } from '@/utils/updateQuoteBudget';
 import { changeFacilityType } from '@/utils/changeFacilityType';
 import { updatePackageChoice } from '@/utils/updatePackageChoice';
+import confirmQuote from '@/utils/confirmQuote'
 
 import { getRoomsForFacility } from '@/data/facilityOptions';
 import { calculateTime } from '@/utils/calculateTime';
 import recPackageUtil from '@/utils/recPackageUtil';
 
+import LoadingSpinner from '../loadingScreen';
+
+import { useRouter } from 'next/navigation';
+
 const TOTAL_STEPS = 8;
 const EMPTY_CHOICE = '' as PackageChoice;
-
 
 /** ---------------- UI-only types (form state) ---------------- */
 type WizardContact = {
@@ -62,6 +65,8 @@ type WizardForm = {
   rooms: WizardRoom[];
   frequency: CleaningFrequency;
   selectedPackage: PackageChoice;
+  selectedCost: number;
+  selectedName: string;
 };
 
 type ValidationErrors = Partial<Record<
@@ -133,13 +138,16 @@ function withPackage(
 export default function QuoteWizard({ quoteID, initialQuote }: Props) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showCongrats, setShowCongrats] = useState(false);
 
   const [initialForm, setInitialForm] = useState<Partial<Quote> | undefined>(initialQuote);
   const [roomOptions, setRoomOptions] = useState<any>(null);
   const [recType, setRecType] = useState<any>(null);
   const [packages, setPackages] = useState<PackageOption[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
 
   const [formData, setFormData] = useState<WizardForm>({
     contact: {
@@ -163,12 +171,37 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
     rooms: [],
     frequency: '',
     selectedPackage: EMPTY_CHOICE,
+    selectedCost: 0,
+    selectedName: '',
   });
 
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
     new Array(TOTAL_STEPS).fill(false)
   );
+
+  function getSelectedInfo(
+    options: PackageOption[] | undefined,
+    choice: PackageChoice | '' | null
+  ): { packageCost?: number; packageName?: string } {
+    const choiceStr = (choice ?? '').toString().trim();
+    if (!options?.length || !choiceStr) return {};
+
+    const hit = options.find(o => o.packageType === choiceStr);
+
+    return {
+      packageCost:
+        hit && typeof hit.packageCost === 'number' && !Number.isNaN(hit.packageCost)
+          ? hit.packageCost
+          : undefined,
+      packageName:
+        hit && typeof hit.packageName === 'string' && hit.packageName.trim().length > 0
+          ? hit.packageName
+          : undefined,
+    };
+  }
+
+
 
   /** ---------- Builders for payloads used by your utils ---------- */
   function buildCustomerInfoPayload() {
@@ -215,7 +248,16 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
     const cd = q?.customerData;
     const qi = q?.quoteInfo as any;
     const pkg = q?.package ?? DEFAULT_PACKAGE;
-    const sp = pkg?.packageChoice ?? EMPTY_CHOICE
+
+    const sp = (pkg?.packageChoice ?? EMPTY_CHOICE) as PackageChoice;
+
+    // find the cost of the option whose type matches the selected package (sp)
+    const hit = pkg?.packageOptions?.find(opt => opt.packageType === sp);
+    const scRaw = hit?.packageCost;
+    const snRaw = hit?.packageName;
+
+    const sc = (typeof scRaw === 'number' && !Number.isNaN(scRaw)) ? scRaw : undefined;
+    const sn = (typeof snRaw === 'string' && snRaw.trim() !== '') ? snRaw : undefined;
 
     return {
       contact: {
@@ -241,9 +283,12 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
       },
       rooms: Array.isArray(qi?.roomTypes) ? qi!.roomTypes : [],
       frequency: qi?.frequency ?? '',
-      selectedPackage: sp as PackageChoice
+      selectedPackage: sp,
+      selectedCost: sc ?? 0,
+      selectedName: sn ?? '',
+    };
   }
-}
+
 
   function stepChanged(): boolean {
     const prev = mapInitialToForm(initialForm);
@@ -269,7 +314,10 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
       case 6:
         return prev.frequency !== formData.frequency;
       case 7:
+        console.log(prev.selectedPackage)
+        console.log(prev.selectedPackage)
         return prev.selectedPackage !== formData.selectedPackage;
+
       default:
         return false;
     }
@@ -380,7 +428,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
               budget: prev?.quoteInfo?.budget ?? 0,
             }),
             // Keep types strict for Package and allow clearing selection
-            Package: withPackage(prev, { packageChoice: null }),
+            package: withPackage(prev, { packageChoice: null }),
           }));
 
           setFormData((p) => ({
@@ -394,6 +442,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
             floorTypePercentages: { hardfloor: 0, carpet: 0 },
             frequency: '',
             selectedPackage: EMPTY_CHOICE,
+            selectedCost: 0,
           }));
 
           setRecType(null);
@@ -449,23 +498,40 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
           setInitialForm((prev) => ({
             ...(prev ?? {}),
             quoteInfo: withQuoteInfo(prev, { frequency }),
-            Package: withPackage(prev, { packageOptions: options }),
+            package: withPackage(prev, { packageOptions: options }),
           }));
           break;
         }
 
         case 7: {
           // PACKAGE CHOICE
-          const packageChoice: PackageChoice | null = formData.selectedPackage || null;
-          console.log(packageChoice)
-          await updatePackageChoice(quoteID, packageChoice);
+          // Keep UI state strictly a string; only send null to backend if empty.
+          const raw = formData.selectedPackage ?? '';
+          const choiceForDb: PackageChoice | null = raw.trim() ? raw : null;
+
+          const allPackageOptions = initialForm?.package?.packageOptions
+          const newPackageInfo = getSelectedInfo(allPackageOptions, choiceForDb ?? EMPTY_CHOICE)
+          const newCost = newPackageInfo?.packageCost ?? 0;
+          const newName = newPackageInfo?.packageName ?? '';
+          await updatePackageChoice(quoteID, choiceForDb ?? EMPTY_CHOICE);
 
           setInitialForm((prev) => ({
             ...(prev ?? {}),
-            Package: withPackage(prev, { packageChoice }),
+            package: withPackage(prev, { packageChoice: choiceForDb }),
+          }));
+
+          console.log(choiceForDb)
+
+          // UI state must be a string (PackageChoice), never null
+          setFormData((p) => ({
+            ...p,
+            selectedPackage: choiceForDb ?? EMPTY_CHOICE,
+            selectedCost: newCost ?? 0,
+            selectedName: newName ?? 0,
           }));
           break;
         }
+
 
         default:
           break;
@@ -478,8 +544,9 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
   /** ---------- Hydrate from initialQuote on mount or change ---------- */
   useEffect(() => {
     if (!initialForm) return;
-
+    console.log(initialForm)
     const mapped = mapInitialToForm(initialForm);
+    console.log(mapped)
     setFormData(mapped);
 
     if (initialForm?.quoteInfo?.facilityType) {
@@ -488,9 +555,11 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
     }
 
     const opts: PackageOption[] = initialForm?.package?.packageOptions ?? [];
+    console.log(opts)
     if (Array.isArray(opts) && opts.length) {
       setPackages(opts);
       const newRecPackage = recPackageUtil(opts, mapped.budget);
+      console.log(newRecPackage)
       setRecType(newRecPackage);
     }
 
@@ -501,6 +570,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
     setCurrentStep(firstIncomplete === -1 ? TOTAL_STEPS : firstIncomplete + 1);
 
     setErrors({});
+    setLoading(false)
   }, [initialForm]);
 
   function deriveCompletedStepsFrom(form: WizardForm): boolean[] {
@@ -659,11 +729,14 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
   };
 
   const handleSubmit = async () => {
+    
     if (!validateCurrentStep()) return;
+    if (!quoteID) return;
     setIsSubmitting(true);
-    await new Promise((r) => setTimeout(r, 800)); // mock
+    await confirmQuote(quoteID);
+    setLoading(true)
+    router.push(`/get-a-quote/congratulations?qid=${encodeURIComponent(quoteID)}`)
     setIsSubmitting(false);
-    setShowCongrats(true);
   };
 
   /** ---------- Change handlers (unchanged) ---------- */
@@ -688,36 +761,6 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
   const updatePackage = (selectedPackage: WizardForm['selectedPackage']) =>
     setFormData((p) => ({ ...p, selectedPackage }));
 
-  /** ---------- Congrats handling ---------- */
-  const resetWizard = () => {
-    setCurrentStep(1);
-    setShowCongrats(false);
-    setErrors({});
-    setCompletedSteps(new Array(TOTAL_STEPS).fill(false));
-    setFormData({
-      contact: {
-        firstName: '',
-        lastName: '',
-        company: '',
-        email: '',
-        phone: '',
-        address: '',
-        city: '',
-        state: '',
-        postalCode: '',
-      },
-      budget: 0,
-      facilityType: '',
-      floors: 1,
-      stairwellsCarpeted: 0,
-      stairwellsHardfloor: 0,
-      sqft: 0,
-      floorTypePercentages: { hardfloor: 50, carpet: 50 },
-      rooms: [],
-      frequency: '',
-      selectedPackage: '',
-    });
-  };
 
   const getStepTitle = () => {
     const titles = [
@@ -747,13 +790,11 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
     return subtitles[currentStep - 1];
   };
 
-  if (showCongrats) {
+  if (loading) {
     return (
-      <CongratsPanel
-        data={formData}
-        onNewQuote={resetWizard}
-        onReturnHome={resetWizard}
-      />
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner />
+      </div>
     );
   }
 
@@ -853,7 +894,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
                     frequency={formData.frequency}
                   />
                 )}
-                {currentStep === 8 && <ReviewStep data={formData} />}
+                {currentStep === 8 && <ReviewStep data={formData} packageOptions={initialForm?.package?.packageOptions} />}
               </div>
 
               <StepControls
@@ -871,7 +912,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
 
           {/* Summary */}
           <div className="lg:col-span-1">
-            <FormSummaryCard data={formData} currentStep={currentStep} />
+            <FormSummaryCard data={formData} currentStep={currentStep} packageOptions={initialForm?.package?.packageOptions} />
           </div>
         </div>
       </div>

@@ -26,7 +26,7 @@ export const handler = async (event: AppSyncEvent) => {
         TableName: TABLE,
         Key: { QuoteID: quoteID }, // adjust if your PK is named differently
         UpdateExpression: 'SET #pkg = :pkg',
-        ExpressionAttributeNames: { '#pkg': 'Package' },
+        ExpressionAttributeNames: { '#pkg': 'package' },
         ExpressionAttributeValues: { ':pkg': pkg },
         ConditionExpression: 'attribute_exists(QuoteID)',
         ReturnValues: 'ALL_NEW',
@@ -36,7 +36,7 @@ export const handler = async (event: AppSyncEvent) => {
     return {
       message: 'Package cleared',
       quoteID,
-      package: (res.Attributes as any)?.Package ?? pkg,
+      package: (res.Attributes as any)?.package ?? pkg,
     };
   } catch (err: any) {
     if (err?.code === 'ConditionalCheckFailedException') {

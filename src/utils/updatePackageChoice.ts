@@ -2,24 +2,28 @@
 'use client';
 import { getDataClient } from './data-client';
 import { fetchAuthSession } from 'aws-amplify/auth';
+import type { PackageChoice } from '@/types/packages';
 
 type UpdateResult = { message: string };
 
 export async function updatePackageChoice(
   quoteID: string | null,
-  packageInfo: unknown
+  packageChoice: PackageChoice | null // allow clearing
 ): Promise<UpdateResult> {
   if (!quoteID) throw new Error('quoteID is required');
 
-  // Strip undefined (AWSJSON can’t carry undefined/NaN/Infinity)
-  const clean = JSON.parse(JSON.stringify(packageInfo ?? null));
+  // Enforce string | null at runtime
+  const clean: string | null =
+    packageChoice === null ? null : String(packageChoice).trim() || null;
 
-  // IMPORTANT: send AWSJSON as a string
-  const awsJson = JSON.stringify(clean);
+  // IMPORTANT: Amplify Data custom resolvers expect AWSJSON as a string
+  const awsJson = JSON.stringify(clean); // -> '"middle"' or 'null'
+
   const s = await fetchAuthSession({ forceRefresh: true });
   const mode = s.tokens ? 'userPool' : 'identityPool';
+
   const { data, errors } = await getDataClient().queries.updatePackageChoice(
-    { quoteID, packageInfo: awsJson },
+    { quoteID, packageChoice: awsJson }, // keep arg name to match the handler
     { authMode: mode }
   );
 
@@ -27,7 +31,7 @@ export async function updatePackageChoice(
 
   const payload = typeof data === 'string' ? JSON.parse(data) : data;
   if (!payload || typeof (payload as any).message !== 'string') {
-    throw new Error('Unexpected response from updatePackage');
+    throw new Error('Unexpected response from updatePackageChoice');
   }
   return payload as UpdateResult;
 }

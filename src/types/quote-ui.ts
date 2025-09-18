@@ -33,6 +33,8 @@ export interface QuoteInfo {
   frequency: string;
   /** Your UI stores an identifier/string here */
   selectedPackage: string;
+  selectedCost: number;
+  selectedName: string;
 }
 
 /** Generic UI error map */

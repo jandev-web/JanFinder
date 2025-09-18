@@ -32,6 +32,7 @@ export default function StepHeader({ currentStep, totalSteps, title, subtitle, o
             const stepNum = index + 1;
             const isCompleted = completedSteps[index];
             const isCurrent = stepNum === currentStep;
+          
             const isClickable = isCompleted || stepNum <= currentStep;
             
             return (

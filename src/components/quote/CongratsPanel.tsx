@@ -1,6 +1,6 @@
 'use client';
 
-import { QuoteInfo } from './types';
+import type { QuoteInfo } from '@/types/quote-ui';
 
 interface CongratsPanelProps {
   data: QuoteInfo;
@@ -40,8 +40,8 @@ export default function CongratsPanel({ data, onNewQuote, onReturnHome }: Congra
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Company:</span>
-                  <span className="font-medium text-[#001F54]">{data.contact.company}</span>
+                  <span className="text-gray-600">Package:</span>
+                  <span className="font-medium text-[#001F54]">{data.selectedName}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Facility Type:</span>
@@ -55,8 +55,8 @@ export default function CongratsPanel({ data, onNewQuote, onReturnHome }: Congra
               
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Package:</span>
-                  <span className="font-medium text-[#001F54]">{data.selectedPackage}</span>
+                  <span className="text-gray-600">Cost:</span>
+                  <span className="font-medium text-[#001F54]">{data.selectedCost}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Frequency:</span>
@@ -65,7 +65,7 @@ export default function CongratsPanel({ data, onNewQuote, onReturnHome }: Congra
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Rooms:</span>
                   <span className="font-medium text-[#001F54]">
-                    {data.rooms.reduce((sum, room) => sum + room.count, 0)}
+                    {data.rooms.reduce((sum: any, room: any) => sum + room.count, 0)}
                   </span>
                 </div>
               </div>

@@ -220,8 +220,8 @@
               "type": "String",
               "isRequired": false
             },
-            "packageInfo": {
-              "name": "packageInfo",
+            "packageChoice": {
+              "name": "packageChoice",
               "isArray": false,
               "type": "AWSJSON",
               "isRequired": false

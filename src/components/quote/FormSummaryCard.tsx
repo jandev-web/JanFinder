@@ -2,11 +2,15 @@
 
 import type { Quote } from '@/types/quotes';
 import type { QuoteInfo as UIQuoteInfo } from '@/types/quote-ui';
-import { PACKAGE_TIER_LABEL, type PackageTier } from '@/types/packages'; // 👈 add this
+import { PACKAGE_TIER_LABEL, type PackageTier } from '@/types/packages';
+
+// Derive from Quote to keep type identity consistent with backend
+type PackageOption = NonNullable<Quote['package']>['packageOptions'][number];
 
 interface FormSummaryCardProps {
   data: UIQuoteInfo | Quote;
   currentStep: number;
+  packageOptions?: PackageOption[]; // optional; used in UI mode
 }
 
 type ViewModel = {
@@ -19,7 +23,8 @@ type ViewModel = {
   sqft?: number;
   floorTypes?: { hardfloor?: number; carpet?: number };
   frequency?: string;
-  selectedPackage?: string; // <- we will ensure this is a NAME
+  selectedPackage?: string; // normalized NAME
+  cost?: number;
 };
 
 // ---- type guards ----
@@ -30,18 +35,39 @@ function isUIQuoteInfo(x: any): x is UIQuoteInfo {
   return x && typeof x === 'object' && 'contact' in x && 'floorTypePercentages' in x;
 }
 
+// ---- small helper ----
+function findSelectedOption(
+  opts: PackageOption[] | undefined,
+  { byTier, byName }: { byTier?: string | null | undefined; byName?: string | null | undefined }
+): PackageOption | undefined {
+  if (!opts?.length) return undefined;
+  if (byTier) {
+    const hit = opts.find(o => o.packageType === byTier);
+    if (hit) return hit;
+  }
+  if (byName) {
+    const hit = opts.find(o => o.packageName === byName);
+    if (hit) return hit;
+  }
+  return undefined;
+}
+
 // ---- normalizers ----
-function fromUI(ui: UIQuoteInfo): ViewModel {
-  // If UI gives us a tier, convert to label; if it already gave a name, keep it.
-  const uiChoice = ui.selectedPackage as string | undefined;
-  const nameFromTier = uiChoice && (PACKAGE_TIER_LABEL as Record<string, string>)[uiChoice as PackageTier];
+function fromUI(ui: UIQuoteInfo, opts?: PackageOption[]): ViewModel {
+  const uiTier = (ui.selectedPackage as string | undefined) ?? undefined;
+  const uiName = (ui as any).selectedPackageName as string | undefined;
+
+  // Resolve the selected option from props (preferred when available)
+  const selected = findSelectedOption(opts, { byTier: uiTier, byName: uiName });
+
+  // Name: prefer option.name; else explicit uiName; else map tier→label; else the raw tier string
   const selectedPackageName =
-    // prefer explicit field if your UI model has it
-    (ui as any).selectedPackageName ??
-    // otherwise map tier → label
-    nameFromTier ??
-    // otherwise just show whatever string we have
-    uiChoice;
+    selected?.packageName ??
+    uiName ??
+    (uiTier && (PACKAGE_TIER_LABEL as Record<string, string>)[uiTier as PackageTier]) ??
+    uiTier;
+
+  const cost = selected?.packageCost;
 
   return {
     contact: {
@@ -63,6 +89,7 @@ function fromUI(ui: UIQuoteInfo): ViewModel {
     },
     frequency: ui.frequency,
     selectedPackage: selectedPackageName,
+    cost,
   };
 }
 
@@ -71,19 +98,9 @@ function fromBackend(quote: Quote): ViewModel {
   const m = quote.customerMeasurements ?? quote.ownerMeasurements;
   const qi = quote.quoteInfo;
 
-  // Best: find exact packageName from options using the stored choice (tier)
-  const nameFromOptions =
-    quote?.package?.packageOptions?.find(
-      (opt) => opt.packageType === quote?.package?.packageChoice
-    )?.packageName;
-
-  // Fallback: if no options/name, map the choice tier → label
-  const nameFromTier =
-    (quote?.package?.packageChoice &&
-      (PACKAGE_TIER_LABEL as Record<string, string>)[quote.package.packageChoice as PackageTier]) ||
-    undefined;
-
-  const selectedPackageName = nameFromOptions ?? nameFromTier ?? undefined;
+  const selected = findSelectedOption(quote?.package?.packageOptions, {
+    byTier: quote?.package?.packageChoice ?? undefined,
+  });
 
   return {
     contact: {
@@ -104,18 +121,20 @@ function fromBackend(quote: Quote): ViewModel {
       hardfloor: m?.floorTypes?.hardfloor ?? qi?.floorTypes?.hardfloor,
     },
     frequency: (qi?.frequency as any) || '',
-    selectedPackage: selectedPackageName,
+    selectedPackage: selected?.packageName ?? undefined,
+    cost: selected?.packageCost ?? undefined,
   };
 }
 
-export default function FormSummaryCard({ data, currentStep }: FormSummaryCardProps) {
-  const vm: ViewModel = isBackendQuote(data) ? fromBackend(data) : isUIQuoteInfo(data) ? fromUI(data) : {};
+export default function FormSummaryCard({ data, currentStep, packageOptions }: FormSummaryCardProps) {
+  const vm: ViewModel = isBackendQuote(data)
+    ? fromBackend(data)
+    : isUIQuoteInfo(data)
+    ? fromUI(data, packageOptions)
+    : {};
 
-  console.log(vm.selectedPackage)
-  console.log(data)
-  const formatCurrency = (amount?: number) => {
-    return typeof amount === 'number' && !Number.isNaN(amount) ? `$${amount.toLocaleString()}` : 'Not set';
-  };
+  const formatCurrency = (amount?: number) =>
+    typeof amount === 'number' && !Number.isNaN(amount) ? `$${amount.toLocaleString()}` : 'Not set';
 
   const formatFloorTypes = () => {
     if (vm.floorTypes && (vm.floorTypes.hardfloor ?? vm.floorTypes.carpet) !== undefined) {
@@ -211,9 +230,8 @@ export default function FormSummaryCard({ data, currentStep }: FormSummaryCardPr
           <div className="pb-3">
             <h4 className="font-medium text-gray-900 mb-2">Package</h4>
             <div className="text-gray-600">
-              {typeof vm.selectedPackage === 'string'
-                ? vm.selectedPackage
-                : 'Selected'}
+              {vm.selectedPackage}
+              {typeof vm.cost === 'number' ? `: ${formatCurrency(vm.cost)}/month` : ''}
             </div>
           </div>
         )}

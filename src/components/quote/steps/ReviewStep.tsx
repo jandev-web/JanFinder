@@ -1,6 +1,7 @@
 'use client';
 
 import { PACKAGE_DETAILS } from '@/types/package-details';
+import { PACKAGE_TIER_LABEL, type PackageOption, type PackageTier } from '@/types/packages';
 
 /** ---- Minimal UI-only types used by this component ---- */
 type ReviewContact = {
@@ -28,36 +29,50 @@ type ReviewData = {
   floorTypePercentages: { hardfloor: number; carpet: number };
   rooms: ReviewRoom[];
   frequency: string;
-  selectedPackage: string; // name that matches PACKAGE_DETAILS entries
+  /** May be a tier ("top" | "middle" | "bottom") or a package name */
+  selectedPackage: string;
+  selectedCost: number;
 };
 
 interface ReviewStepProps {
   data: ReviewData;
+  /** Pass the computed options from the quote when available */
+  packageOptions?: PackageOption[];
 }
 
-export default function ReviewStep({ data }: ReviewStepProps) {
-  const selectedPackage = PACKAGE_DETAILS.find(
-    (pkg) => pkg.name === data.selectedPackage
-  );
+/** Resolve selected package by tier or name, and return name, cost, and features */
+function resolvePackage(
+  selected: string,
+  opts?: PackageOption[]
+): { name?: string; cost?: number; features?: string[] } {
+  const maybeTier = selected as PackageTier;
+  const nameFromTier =
+    (PACKAGE_TIER_LABEL as Record<string, string>)[maybeTier] ?? undefined;
 
-  const calculateEstimatedPrice = () => {
-    if (!selectedPackage || !data.sqft || !data.frequency) return 0;
+  const targetName = nameFromTier ?? selected;
+  console.log(opts)
+  // Prefer resolving against runtime package options
+  const fromType = opts?.find(o => o.packageType === maybeTier);
+  const fromName = opts?.find(o => o.packageName === targetName);
+  const chosen = fromType ?? fromName;
+  console.log(chosen)
+  const name = chosen?.packageName ?? targetName;
+  const cost = chosen?.packageCost;
+  console.log(cost)
+  // Feature list is static; map by resolved name
+  const detail = PACKAGE_DETAILS.find(d => d.name === name);
 
-    const frequencyMultipliers: Record<string, number> = {
-      'One Time': 2.5,
-      Weekly: 1.0,
-      '2 Days a Week': 1.8,
-      '3 Days a Week': 2.5,
-      '5 Days a Week': 3.8,
-      Daily: 5.0,
-    };
-
-    const multiplier = frequencyMultipliers[data.frequency] ?? 1;
-    const baseMonthlyPrice = data.sqft * selectedPackage?.packageCost * multiplier;
-
-    // Round to nearest $50
-    return Math.round(baseMonthlyPrice / 50) * 50;
+  return {
+    name,
+    cost: cost,
+    features: detail?.features ?? [],
   };
+}
+
+export default function ReviewStep({ data, packageOptions }: ReviewStepProps) {
+  console.log(packageOptions)
+  const sel = resolvePackage(data.selectedPackage, packageOptions);
+
 
   const InfoRow = ({ label, value }: { label: string; value: string | number }) => (
     <div className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0">
@@ -146,14 +161,14 @@ export default function ReviewStep({ data }: ReviewStepProps) {
           </h4>
           <div className="space-y-0">
             <InfoRow label="Cleaning Frequency" value={data.frequency} />
-            <InfoRow label="Selected Package" value={data.selectedPackage} />
+            <InfoRow label="Selected Package" value={sel.name ?? data.selectedPackage} />
           </div>
 
-          {selectedPackage && (
+          {!!sel.features?.length && (
             <div className="mt-4 pt-4 border-t border-gray-100">
               <h5 className="font-medium text-gray-700 mb-2">Package Features:</h5>
               <ul className="text-sm text-gray-600 space-y-1">
-                {selectedPackage.features.map((feature, index) => (
+                {sel.features.map((feature, index) => (
                   <li key={index} className="flex items-center">
                     <svg className="w-3 h-3 text-[#F5C542] mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path
@@ -177,12 +192,12 @@ export default function ReviewStep({ data }: ReviewStepProps) {
           <div>
             <h4 className="text-lg font-semibold mb-2">Estimated Monthly Investment</h4>
             <p className="text-blue-200 text-sm">
-              {data.selectedPackage} package • {data.frequency} • {data.sqft.toLocaleString()} sq ft
+              {(sel.name ?? data.selectedPackage)} package • {data.frequency} • {data.sqft.toLocaleString()} sq ft
             </p>
           </div>
           <div className="text-right">
             <div className="text-3xl font-bold text-[#F5C542] mb-1">
-              ${calculateEstimatedPrice().toLocaleString()}
+              ${data.selectedCost}
             </div>
             <div className="text-sm text-blue-200">
               {data.frequency === 'One Time' ? 'One-time service' : 'per month'}
