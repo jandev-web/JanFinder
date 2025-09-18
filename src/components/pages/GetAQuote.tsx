@@ -14,9 +14,10 @@ function GetAQuotePage() {
   const router = useRouter();
 
   const onClickStart = React.useCallback(() => {
+    setLoading(true);
     StartQuoteAction({
       push: (href: string) => router.push(href),
-      setLoading,
+      
     });
   }, [router]); // ✅ depend on router, not router.push
 

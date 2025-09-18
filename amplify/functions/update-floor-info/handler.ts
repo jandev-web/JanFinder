@@ -1,3 +1,4 @@
+// amplify/functions/update-floor-info/handler.ts
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import type { Schema } from '../../data/resource';
@@ -8,10 +9,13 @@ const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient(), {
 
 const QUOTES = process.env.CUSTOMER_QUOTES_TABLE || 'CustomerQuotes';
 
-type FloorInfo = {
-  floors?: number;
-  stairwells?: { carpet?: number; hardfloor?: number };
-};
+type FloorInfoPayload = Partial<{
+  floors: number;
+  stairwells: Partial<{
+    carpet: number;
+    hardfloor: number;
+  }>;
+}>;
 
 // ✅ Amplify Data ONLY
 export const handler: Schema['updateFloorInfo']['functionHandler'] = async (event) => {
@@ -19,8 +23,7 @@ export const handler: Schema['updateFloorInfo']['functionHandler'] = async (even
 
   // AWSJSON may arrive as string or object
   const raw = event.arguments?.floorInfo as unknown;
-  const floorInfo: FloorInfo =
-    typeof raw === 'string' ? JSON.parse(raw) : (raw ?? {});
+  const floorInfo: FloorInfoPayload = typeof raw === 'string' ? JSON.parse(raw) : (raw ?? {});
 
   if (!quoteID) throw new Error('quoteID is required');
   if (!floorInfo || typeof floorInfo !== 'object') {
@@ -31,20 +34,21 @@ export const handler: Schema['updateFloorInfo']['functionHandler'] = async (even
   const carpet = Number(floorInfo.stairwells?.carpet ?? 0);
   const hardfloor = Number(floorInfo.stairwells?.hardfloor ?? 0);
 
-  if ([floors, carpet, hardfloor].some(n => Number.isNaN(n))) {
+  if ([floors, carpet, hardfloor].some((n) => Number.isNaN(n))) {
     throw new Error('floors/stairwells must be numbers');
   }
 
   await ddbDoc.send(new UpdateCommand({
     TableName: QUOTES,
-    Key: { QuoteID: String(quoteID) },
-    UpdateExpression:
-      'SET quoteInfo.floors = :floors,' +
-      ' quoteInfo.stairwells.carpet = :carpet,' +
-      ' quoteInfo.stairwells.hardfloor = :hardfloor,' +
-      ' customerMeasurements.floors = :floors,' +
-      ' customerMeasurements.stairwells.carpet = :carpet,' +
-      ' customerMeasurements.stairwells.hardfloor = :hardfloor',
+    Key: { QuoteID: String(quoteID) }, // PK remains legacy attribute name
+    UpdateExpression: [
+      'SET quoteInfo.floors = :floors',
+      'quoteInfo.stairwells.carpet = :carpet',
+      'quoteInfo.stairwells.hardfloor = :hardfloor',
+      'customerMeasurements.floors = :floors',
+      'customerMeasurements.stairwells.carpet = :carpet',
+      'customerMeasurements.stairwells.hardfloor = :hardfloor',
+    ].join(', '),
     ExpressionAttributeValues: {
       ':floors': floors,
       ':carpet': carpet,

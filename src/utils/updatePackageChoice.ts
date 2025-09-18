@@ -5,7 +5,7 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 
 type UpdateResult = { message: string };
 
-export async function updatePackage(
+export async function updatePackageChoice(
   quoteID: string | null,
   packageInfo: unknown
 ): Promise<UpdateResult> {
@@ -32,4 +32,4 @@ export async function updatePackage(
   return payload as UpdateResult;
 }
 
-export default updatePackage;
+export default updatePackageChoice;

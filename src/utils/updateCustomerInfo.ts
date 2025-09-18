@@ -1,15 +1,18 @@
 // src/utils/updateCustomerInfo.ts
 'use client';
 
-import { getDataClient } from './data-client';
 import { fetchAuthSession } from 'aws-amplify/auth';
+import { getDataClient } from './data-client';
 
-type Address = {
-  street?: string; city?: string; state?: string; postalCode?: string; country?: string;
-};
-type CustomerInfo = {
-  firstName?: string; lastName?: string; email?: string; phone?: string; company?: string; address?: Address;
-};
+import type { Address } from '@/types/address';
+import type { Quote } from '@/types/quotes';
+
+type CustomerInfoInput =
+  Partial<Quote['customerData']> & {
+    /** mirror of the top-level email on the Quote */
+    email?: string;
+  };
+
 type UpdateResult = { message: string };
 
 export async function updateCustomerInfo(
@@ -19,19 +22,30 @@ export async function updateCustomerInfo(
   email?: string,
   phone?: string,
   company?: string,
-  address?: Address
+  address?: Partial<Address>
 ): Promise<UpdateResult> {
-  const customerInfo: CustomerInfo = { firstName, lastName, email, phone, company, address };
-  const clean = JSON.parse(JSON.stringify(customerInfo)); // remove undefined
+  const customerInfo: CustomerInfoInput = {
+    firstName,
+    lastName,
+    email,
+    phone,
+    company,
+    address,
+  };
+
+  // strip undefined so DDB marshaller can remove them server-side
+  const clean = JSON.parse(JSON.stringify(customerInfo)) as CustomerInfoInput;
+
   const s = await fetchAuthSession({ forceRefresh: true });
-  const mode = s.tokens ? 'userPool' : 'identityPool';
-  // ⬇️ send as JSON string for AWSJSON
+  const authMode = s.tokens ? 'userPool' : 'identityPool';
+
+  // Send as AWSJSON (string) to AppSync
   const { data, errors } = await getDataClient().queries.updateCustomerInfo(
     { quoteID, customerInfo: JSON.stringify(clean) as unknown as any },
-    { authMode: mode }
+    { authMode }
   );
 
-  if (errors?.length) throw new Error(errors.map(e => e.message).join('; '));
+  if (errors?.length) throw new Error(errors.map((e) => e.message).join('; '));
 
   const payload = typeof data === 'string' ? JSON.parse(data) : data;
   if (!payload || typeof payload.message !== 'string') {

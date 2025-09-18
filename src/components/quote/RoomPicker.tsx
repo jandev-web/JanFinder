@@ -1,17 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { RoomSelection, ROOM_TYPES } from './types';
+import { RoomSelection } from './types';
 
 interface RoomPickerProps {
   selectedRooms: RoomSelection[];
+  roomOptions: any;
   onChange: (rooms: RoomSelection[]) => void;
 }
 
-export default function RoomPicker({ selectedRooms, onChange }: RoomPickerProps) {
+export default function RoomPicker({ selectedRooms, onChange, roomOptions }: RoomPickerProps) {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredRoomTypes = ROOM_TYPES.filter(roomType =>
+  const filteredRoomTypes = roomOptions.filter((roomType: any) =>
     roomType.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -62,7 +63,7 @@ export default function RoomPicker({ selectedRooms, onChange }: RoomPickerProps)
       <div>
         <h4 className="font-semibold text-gray-700 mb-3">Available Room Types</h4>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-          {filteredRoomTypes.map((roomType) => (
+          {filteredRoomTypes.map((roomType: any) => (
             <button
               key={roomType}
               onClick={() => addRoom(roomType)}

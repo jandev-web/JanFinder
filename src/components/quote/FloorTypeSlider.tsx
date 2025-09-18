@@ -1,10 +1,10 @@
 'use client';
 
-import { FloorTypePercentages } from './types';
+
 
 interface FloorTypeSliderProps {
-  percentages: FloorTypePercentages;
-  onChange: (percentages: FloorTypePercentages) => void;
+  percentages: any;
+  onChange: (percentages: any) => void;
 }
 
 export default function FloorTypeSlider({ percentages, onChange }: FloorTypeSliderProps) {

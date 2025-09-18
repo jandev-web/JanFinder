@@ -2,7 +2,7 @@
 /// <reference types="@types/google.maps" />
 
 import React, { useEffect, useRef } from 'react';
-import type { ContactInfo, ValidationErrors } from '../types';
+import type { ContactInfo, ValidationErrors } from '@/types/quote-ui';
 
 interface ContactStepProps {
   data: ContactInfo;
@@ -29,7 +29,7 @@ function formatUSPhone(raw: string): string {
 
 export default function ContactStep({ data, onChange, errors }: ContactStepProps) {
   const addrInputRef = useRef<HTMLInputElement | null>(null);
-  const dataRef = useRef(data);
+  const dataRef = useRef<ContactInfo>(data);
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
@@ -114,10 +114,11 @@ export default function ContactStep({ data, onChange, errors }: ContactStepProps
             type="text"
             value={data.firstName}
             onChange={(e) => updateField('firstName', e.target.value)}
-            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${errors.firstName
+            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${
+              errors.firstName
                 ? 'border-red-500 ring-2 ring-red-500'
                 : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
-              }`}
+            }`}
             placeholder="Enter your first name"
             autoComplete="given-name"
           />
@@ -133,10 +134,11 @@ export default function ContactStep({ data, onChange, errors }: ContactStepProps
             type="text"
             value={data.lastName}
             onChange={(e) => updateField('lastName', e.target.value)}
-            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${errors.lastName
+            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${
+              errors.lastName
                 ? 'border-red-500 ring-2 ring-red-500'
                 : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
-              }`}
+            }`}
             placeholder="Enter your last name"
             autoComplete="family-name"
           />
@@ -154,10 +156,11 @@ export default function ContactStep({ data, onChange, errors }: ContactStepProps
           type="text"
           value={data.company}
           onChange={(e) => updateField('company', e.target.value)}
-          className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${errors.company
+          className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${
+            errors.company
               ? 'border-red-500 ring-2 ring-red-500'
               : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
-            }`}
+          }`}
           placeholder="Enter your company name"
           autoComplete="organization"
         />
@@ -175,10 +178,11 @@ export default function ContactStep({ data, onChange, errors }: ContactStepProps
             type="email"
             value={data.email}
             onChange={(e) => updateField('email', e.target.value)}
-            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${errors.email
+            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${
+              errors.email
                 ? 'border-red-500 ring-2 ring-red-500'
                 : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
-              }`}
+            }`}
             placeholder="your@email.com"
             autoComplete="email"
             inputMode="email"
@@ -195,15 +199,16 @@ export default function ContactStep({ data, onChange, errors }: ContactStepProps
             type="tel"
             value={data.phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
-            onPaste={(e) => {
+            onPaste={(e: React.ClipboardEvent<HTMLInputElement>) => {
               e.preventDefault();
-              const paste = (e.clipboardData || (window as any).clipboardData).getData('text');
+              const paste = e.clipboardData.getData('text');
               handlePhoneChange(paste);
             }}
-            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${errors.phone
+            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${
+              errors.phone
                 ? 'border-red-500 ring-2 ring-red-500'
                 : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
-              }`}
+            }`}
             placeholder="(555) 123-4567"
             autoComplete="tel"
             inputMode="numeric"
@@ -224,10 +229,11 @@ export default function ContactStep({ data, onChange, errors }: ContactStepProps
           type="text"
           value={data.address}
           onChange={(e) => updateField('address', e.target.value)}
-          className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${errors.address
+          className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${
+            errors.address
               ? 'border-red-500 ring-2 ring-red-500'
               : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
-            }`}
+          }`}
           placeholder="123 Business Street"
           autoComplete="street-address"
         />
@@ -244,10 +250,11 @@ export default function ContactStep({ data, onChange, errors }: ContactStepProps
             type="text"
             value={data.city}
             onChange={(e) => updateField('city', e.target.value)}
-            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${errors.city
+            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${
+              errors.city
                 ? 'border-red-500 ring-2 ring-red-500'
                 : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
-              }`}
+            }`}
             placeholder="City"
             autoComplete="address-level2"
           />
@@ -263,10 +270,11 @@ export default function ContactStep({ data, onChange, errors }: ContactStepProps
             type="text"
             value={data.state}
             onChange={(e) => updateField('state', e.target.value)}
-            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${errors.state
+            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${
+              errors.state
                 ? 'border-red-500 ring-2 ring-red-500'
                 : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
-              }`}
+            }`}
             placeholder="State"
             autoComplete="address-level1"
           />
@@ -282,10 +290,11 @@ export default function ContactStep({ data, onChange, errors }: ContactStepProps
             type="text"
             value={data.postalCode}
             onChange={(e) => updateField('postalCode', e.target.value)}
-            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${errors.postalCode
+            className={`w-full rounded-xl border px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 ${
+              errors.postalCode
                 ? 'border-red-500 ring-2 ring-red-500'
                 : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
-              }`}
+            }`}
             placeholder="12345"
             autoComplete="postal-code"
             inputMode="numeric"

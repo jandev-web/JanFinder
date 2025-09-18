@@ -8,6 +8,8 @@ import { runWithAmplifyServerContext } from '@/utils/amplify-server';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { createServerDataClient } from '@/utils/data-server'
 
+
+
 import Footer from '@/components/Footer';
 import QuoteWizard from '@/components/quote/QuoteWizard';
 
@@ -21,32 +23,43 @@ export default async function CustomerStartQuotePage({ searchParams }: { searchP
   const sp = await searchParams;
   const raw = sp?.qid;
   const quoteID = Array.isArray(raw) ? raw[0] : raw ?? '';
-
+  console.log(quoteID)
   if (!quoteID) {
     // No quote id — bounce to entry page (or show a friendly message)
     redirect('/get-a-quote');
   }
-  const s = await fetchAuthSession({ forceRefresh: true });
-  const mode = s.tokens ? 'userPool' : 'identityPool';
-
+  const authUser = await runWithAmplifyServerContext({
+    nextServerContext: { cookies },
+    operation: (ctx) => getCurrentUser(ctx).catch(() => null as AmplifyUser | null),
+  });
 
   const client = createServerDataClient(cookies);
-  const quoteRes = await client.queries.getQuote({ quoteID }, { authMode: mode });
-  if (quoteRes.errors?.length) {
+
+  let quoteRes = null;
+  if (authUser) {
+        quoteRes = await client.queries.getQuote({ quoteID }, { authMode: 'userPool' });
+
+  }
+  else {
+        quoteRes = await client.queries.getQuote({ quoteID }, { authMode: 'identityPool' });
+
+  }
+  console.log(quoteRes)
+  if (quoteRes?.errors?.length) {
     //redirect('/error');
     console.log(quoteRes.errors);
   }
-  
+
   const quoteData = typeof quoteRes.data === 'string' ? JSON.parse(quoteRes.data) : quoteRes.data;
   const initialQuote = quoteData?.quote ?? quoteData ?? null;
-
+  console.log(quoteData)
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-100">
-      
+
 
       <div className="pb-2 pt-8">
-        
-        <QuoteWizard initialQuote={initialQuote} />
+
+        <QuoteWizard initialQuote={initialQuote} quoteID={quoteID} />
       </div>
 
       <Footer />

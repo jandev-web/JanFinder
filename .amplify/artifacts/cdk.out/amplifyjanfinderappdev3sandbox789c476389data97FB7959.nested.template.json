@@ -106,7 +106,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "c219e434440175a5aa9f0f1b7fdafb01a9aae0b25f793757034a70c850b87696.zip"
+     "S3Key": "587062f90fa2048018f4b61031dd803d7bca903a8cc7d2cf41d8720b375c5615.zip"
     },
     "Environment": {
      "Variables": {
@@ -150,7 +150,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/create-customer-quote-lambda/Resource",
-    "aws:asset:path": "asset.c219e434440175a5aa9f0f1b7fdafb01a9aae0b25f793757034a70c850b87696",
+    "aws:asset:path": "asset.587062f90fa2048018f4b61031dd803d7bca903a8cc7d2cf41d8720b375c5615",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -260,7 +260,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "07c4f14356ea6598a2e79e029d77963781f16d28d95d691f05b4726f6b0bb2cd.zip"
+     "S3Key": "e1176267e3bcd8d2dcf0b661ffee5d0ea0db3d776bf3ccc4de49381d2cf4e0a1.zip"
     },
     "Environment": {
      "Variables": {
@@ -304,7 +304,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/data/update-quote-frequency-lambda/Resource",
-    "aws:asset:path": "asset.07c4f14356ea6598a2e79e029d77963781f16d28d95d691f05b4726f6b0bb2cd",
+    "aws:asset:path": "asset.e1176267e3bcd8d2dcf0b661ffee5d0ea0db3d776bf3ccc4de49381d2cf4e0a1",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1603,7 +1603,7 @@
      ]
     },
     "DefinitionS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f0e66fd72310ffaf71395e972733145e7e38479a6588a89a9e4911a37548b32f.graphql"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/d8a95ee7150a07ea930941cb1e2f1eb7cb4f80497f7ce6808f88a4cf8faac63c.graphql"
     }
    },
    "UpdateReplacePolicy": "Delete",
@@ -1778,6 +1778,9 @@
      "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn": {
       "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn"
      },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Arn": {
+      "Ref": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Arn"
+     },
      "referencetoamplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": {
       "Fn::GetAtt": [
        "amplifyDataGraphQLAPINONEDS684BF699",
@@ -1815,7 +1818,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/6454269b7441068dc6886ca644217374dfad98ecf4cda18e53d0ea68c137cb1b.json"
+       "/41888421dc904c4f40b3893b8a3928bd3b9a009ca815d68434e53be51437f91f.json"
       ]
      ]
     }
@@ -2126,6 +2129,21 @@
            "fieldName": "getJoinRequest"
           }
          ]
+        },
+        {
+         "Fn::Sub": [
+          "arn:${AWS::Partition}:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+          {
+           "apiId": {
+            "Fn::GetAtt": [
+             "amplifyDataGraphQLAPI42A6FA33",
+             "ApiId"
+            ]
+           },
+           "typeName": "Query",
+           "fieldName": "clearPackages"
+          }
+         ]
         }
        ]
       }
@@ -2349,6 +2367,21 @@
            "fieldName": "updateQuoteFrequency"
           }
          ]
+        },
+        {
+         "Fn::Sub": [
+          "arn:${AWS::Partition}:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+          {
+           "apiId": {
+            "Fn::GetAtt": [
+             "amplifyDataGraphQLAPI42A6FA33",
+             "ApiId"
+            ]
+           },
+           "typeName": "Query",
+           "fieldName": "clearPackages"
+          }
+         ]
         }
        ]
       }
@@ -2540,7 +2573,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "f1eead899a43329291046a06bb84f05f5d3cc745b8954f234f0930ab57632e72.zip"
+     "ca789d43c40811b3377f33a26928971b8f9f9c8e617fd7177a574d0757d45c82.zip"
     ],
     "SourceMarkers": [
      {}
@@ -3052,7 +3085,7 @@
      }
     ],
     "SourceObjectKeys": [
-     "d5813313d508f45d57c3ebdf573437e7e78b8e078bc8c51b7b17190f36a37c86.zip"
+     "ab522604b8c428bde3156e1bf4b10c1bd1c77ea5887bc2be03ccdf905e908d9f.zip"
     ],
     "SourceMarkers": [
      {}
@@ -6045,6 +6078,9 @@
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn": {
+   "Type": "String"
+  },
+  "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Arn": {
    "Type": "String"
   },
   "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": {

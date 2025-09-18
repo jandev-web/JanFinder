@@ -1,6 +1,6 @@
 'use client';
 
-import { ValidationErrors } from '../types';
+import type { ValidationErrors } from '@/types/quote-ui';
 
 interface FloorsStairsStepProps {
   floors: number;

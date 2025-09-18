@@ -2,7 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import type { Schema } from '../../data/resource';
 
-// DDB setup
+// -------------------- DDB setup --------------------
 const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient(), {
   marshallOptions: { removeUndefinedValues: true },
 });
@@ -11,7 +11,7 @@ const QUOTES = process.env.CUSTOMER_QUOTES_TABLE || 'CustomerQuotes';
 const TASKS  = process.env.ROOM_TASKS_TABLE || 'RoomTaskCalculations';
 const FAC    = process.env.FACILITY_TABLE || 'Facility_Data';
 
-// Helpers
+// -------------------- Helpers --------------------
 const round2 = (n: number) => Number((Math.round(n * 100) / 100).toFixed(2));
 const num = (v: any) => (typeof v === 'number' ? v : Number(v || 0));
 
@@ -37,10 +37,41 @@ const FREQ_MULTIPLIER: Record<string, number> = {
   '7 Days a Week': 30.31,
   'Bi-Weekly': 2.17,
   'Monthly': 1,
-  'Quarterly': 0.333333, // note: data sometimes uses "Quaterly"
+  'Quarterly': 0.333333,
   'Yearly': 0.083333,
   'NA': 0,
 };
+
+// --- NEW: Frequency normalization (drop-in resilient against typos) ---
+const FREQ_ALIASES: Record<string, string> = {
+  // common typos/cases
+  'quaterly': 'Quarterly',
+  'quarterly': 'Quarterly',
+  'one time': 'One Time',
+  'biweekly': 'Bi-Weekly',
+  'bi-weekly': 'Bi-Weekly',
+  'daily-1': 'Daily-1',
+  'daily': 'Daily',
+  'monthly': 'Monthly',
+  'weekly': 'Weekly',
+  'na': 'NA',
+  '1 day a week': '1 Day a Week',
+  '2 days a week': '2 Days a Week',
+  '3 days a week': '3 Days a Week',
+  '4 days a week': '4 Days a Week',
+  '5 days a week': '5 Days a Week',
+  '6 days a week': '6 Days a Week',
+  '7 days a week': '7 Days a Week',
+};
+
+function normFreq(input: any, dbg?: (from: string, to: string) => void): string {
+  const raw = String(input ?? '').trim();
+  if (!raw) return '';
+  const key = raw.toLowerCase();
+  const normalized = FREQ_ALIASES[key] ?? raw;
+  if (dbg && normalized !== raw) dbg(raw, normalized); // hook for logging where we fixed it
+  return normalized;
+}
 
 function normalizeFormula(formula: string) {
   return String(formula)
@@ -58,36 +89,125 @@ function evalFormula(formula: string, vars: { roomNumber: number; roomSqft: numb
   return out;
 }
 
-// ✅ Amplify Data ONLY
-export const handler: Schema['calculatePackageOptions']['functionHandler'] = async (event) => {
+// --- NEW: Package/Room name normalization (defensive) ---
+function normPkgName(s: string): 'top' | 'middle' | 'bottom' | '' {
+  const k = String(s || '').trim().toLowerCase();
+  if (k.startsWith('top')) return 'top';
+  if (k.startsWith('mid')) return 'middle';
+  if (k.startsWith('bot')) return 'bottom';
+  return '' as const;
+}
+
+const ROOM_ALIASES: Record<string, string> = {
+  'treatment/procedure rooms': 'Treatment / Procedure Rooms',
+  'treatment - procedure rooms': 'Treatment / Procedure Rooms',
+  'exam room': 'Exam Rooms',
+};
+
+function normRoomKey(name: string): string {
+  const s = String(name || '')
+    .replace(/\s*\/\s*/g, ' / ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const key = s.toLowerCase();
+  return ROOM_ALIASES[key] ?? s;
+}
+
+// --- NEW: single source of truth for multipliers ---
+function pickMultiplier({
+  customerFrequency,
+  customerMultiplier,
+  packageFrequency,
+}: {
+  customerFrequency: string;
+  customerMultiplier: number;
+  packageFrequency: string;
+}) {
+  const cf = normFreq(customerFrequency);
+  const pf = normFreq(packageFrequency);
+
+  if (cf === 'Quarterly' || cf === 'One Time') {
+    return customerMultiplier;
+  }
+
+  if (cf === 'Monthly') {
+    if (pf === 'Quarterly') return FREQ_MULTIPLIER['Quarterly'];
+    return customerMultiplier;
+  }
+
+  if (pf === 'Daily') return customerMultiplier;
+
+  if (pf === 'Daily-1') {
+    if (['2 Days a Week','3 Days a Week','4 Days a Week','5 Days a Week','6 Days a Week','7 Days a Week'].includes(cf)) {
+      const downgraded = DAILY_1_DOWNGRADE[cf] || cf;
+      return FREQ_MULTIPLIER[downgraded] ?? 0;
+    }
+    return FREQ_MULTIPLIER[cf] ?? 0;
+  }
+
+  return FREQ_MULTIPLIER[pf] ?? 0;
+}
+
+export const handler: Schema['calculatePackageOptions']['functionHandler'] = async (event, context) => {
+  const reqId = context?.awsRequestId || 'no-reqid';
+  const t0 = Date.now();
+  let ddbReads = 0;
+
+  // --- lightweight counters ---
+  let tasksEvaluated = 0, tasksSkippedNoFormula = 0, tasksSkippedNoFreq = 0, tasksErrored = 0;
+  let freqTyposFound = 0; // counts places we saw and auto-normalized 'quaterly' (or other aliases)
+
+  const log = (msg: string, extra?: Record<string, any>) =>
+    console.log(JSON.stringify({ at: 'calcPackageOptions', reqId, msg, ...(extra || {}) }));
+
   try {
     const quoteID = event.arguments?.quoteID as string | undefined;
     if (!quoteID) throw new Error('quoteID is required');
 
+    log('start', { quoteID });
+
     // Load quote
+    const tLoadQuote = Date.now();
     const quoteRes = await ddbDoc.send(new GetCommand({
       TableName: QUOTES,
       Key: { QuoteID: quoteID },
     }));
+    ddbReads++;
     const quoteItem = quoteRes.Item as any;
     if (!quoteItem) {
-      // benign payload to avoid breaking client code
+      log('quote-not-found');
       return { message: 'Quote not found', packageOptions: [] };
     }
+    log('quote-loaded', { ms: Date.now() - tLoadQuote });
 
     const quoteInfo = quoteItem.quoteInfo ?? {};
     const roomTypes = Array.isArray(quoteInfo.roomTypes) ? quoteInfo.roomTypes : [];
     const totalSqft = num(quoteInfo.sqft);
     const floorTypes = quoteInfo.floorTypes ?? {};
-    const customerFrequency = String(quoteInfo.frequency ?? '');
     const customerFacility = quoteInfo.facilityType;
 
+    // --- normalize customer frequency with debug hook
+    let customerFreqNormalizationLogged = false;
+    const customerFrequency = normFreq(String(quoteInfo.frequency ?? ''), (from, to) => {
+      if (!customerFreqNormalizationLogged) {
+        log('normalized-customer-frequency', { from, to });
+        customerFreqNormalizationLogged = true;
+        if (from.toLowerCase() === 'quaterly') freqTyposFound++;
+      }
+    });
+    const customerMultiplier = FREQ_MULTIPLIER[customerFrequency] ?? 0;
+
+    log('input-summary', {
+      facility: customerFacility || '(none)',
+      frequency: customerFrequency || '(none)',
+      roomsCount: roomTypes.length,
+      totalSqft,
+    });
+
     if (!customerFacility) {
-      // benign payload; client reads packageOptions
+      log('missing-facilityType');
       return { message: 'Missing facilityType', packageOptions: [] };
     }
-
-    const customerMultiplier = FREQ_MULTIPLIER[customerFrequency] ?? 0;
 
     type PkgKey = 'top' | 'middle' | 'bottom';
     type Pkg = {
@@ -98,8 +218,8 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       totalMonthTime: number;
       otherDayTime: number;
       otherMonthTime: number;
-      hardfloor?: { tasks: any[]; totalDayTime: number; totalMonthTime: number };
-      carpet?: { tasks: any[]; totalDayTime: number; totalMonthTime: number };
+      hardfloor?: { tasks: any[]; totalDayTime: number; totalMonthTime: number; totalDayTimeFromMonth?: number };
+      carpet?: { tasks: any[]; totalDayTime: number; totalMonthTime: number; totalDayTimeFromMonth?: number };
     };
     const packages: Record<PkgKey, Pkg> = {
       top:    { packageName: 'top',    packageCost: 0, rooms: [], totalDayTime: 0, totalMonthTime: 0, otherDayTime: 0, otherMonthTime: 0 },
@@ -107,7 +227,52 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       bottom: { packageName: 'bottom', packageCost: 0, rooms: [], totalDayTime: 0, totalMonthTime: 0, otherDayTime: 0, otherMonthTime: 0 },
     };
 
-    // Initial per-room sqft estimates
+    // --- Cache & instrumented loader that reports *exact* typo locations ---
+    const taskCache = new Map<string, any>();
+    const getTaskData = async (roomName: string) => {
+      const lookup = normRoomKey(roomName);
+      if (taskCache.has(lookup)) return taskCache.get(lookup);
+
+      const res = await ddbDoc.send(new GetCommand({
+        TableName: TASKS,
+        Key: { RoomName: lookup }, // ensure this matches your PK
+      }));
+      ddbReads++;
+      const item = (res.Item as any) ?? {};
+      taskCache.set(lookup, item);
+
+      if (!item || Object.keys(item).length === 0) {
+        log('warn-missing-taskData', { requested: roomName, lookup });
+      } else {
+        // Scan the nested arrays for bad spellings and log precise paths
+        const tasksArr = Array.isArray(item.roomTasks) ? item.roomTasks : [];
+        for (let ti = 0; ti < tasksArr.length; ti++) {
+          const t = tasksArr[ti];
+          const freqs = Array.isArray(t?.taskFrequency) ? t.taskFrequency : [];
+          for (let fi = 0; fi < freqs.length; fi++) {
+            const raw = String(freqs[fi]?.packageFrequency ?? '');
+            const normalized = normFreq(raw);
+            if (normalized !== raw) {
+              // *** This log points at the exact item & indexes where the typo is ***
+              log('DATA-TYPO-frequency', {
+                roomKey: lookup,
+                roomNameOriginal: roomName,
+                taskIndex: ti,
+                freqIndex: fi,
+                valueFound: raw,
+                normalizedTo: normalized,
+                pathHint: `RoomTaskCalculations[RoomName="${lookup}"].roomTasks[${ti}].taskFrequency[${fi}].packageFrequency`,
+              });
+              freqTyposFound++;
+            }
+          }
+        }
+      }
+      return item;
+    };
+
+    // ---------- Room sqft estimates ----------
+    const tRooms = Date.now();
     let totalEstimatedSqft = 0;
     const roomEstimates: Array<{
       roomName: string;
@@ -119,15 +284,12 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       weightedCount?: number;
     }> = [];
 
-    for (const r of roomTypes) {
-      const roomName = String(r.roomName);
-      const roomNumber = num(r.numberOfRooms);
+    log('rooms-processing-begin', { roomsPreview: roomTypes.slice(0, 5).map((r: any) => r.roomName || r.roomType) });
 
-      const taskDataRes = await ddbDoc.send(new GetCommand({
-        TableName: TASKS,
-        Key: { RoomName: roomName },
-      }));
-      const taskData = (taskDataRes.Item as any) ?? {};
+    for (const r of roomTypes) {
+      const roomName = String((r.roomName ?? r.roomType) ?? '');
+      const roomNumber = num(r.count);
+      const taskData = await getTaskData(roomName);
 
       let avgRoomSize: number;
       const percent = taskData?.avgRoomSizePercent;
@@ -141,16 +303,21 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       totalEstimatedSqft += estSqft;
       roomEstimates.push({ roomName, roomNumber, avgRoomSize, baseSqft: estSqft });
     }
+    log('rooms-estimated', { ms: Date.now() - tRooms, totalEstimatedSqft });
 
     const discrepancy = totalSqft - totalEstimatedSqft;
 
-    // Facility weights
+    // ---------- Facility weights ----------
+    const tFac = Date.now();
     const facRes = await ddbDoc.send(new GetCommand({
       TableName: FAC,
       Key: { FacilityName: customerFacility },
     }));
+    ddbReads++;
     const facilityItem = (facRes.Item as any) ?? {};
     const roomsArr = Array.isArray(facilityItem.Rooms) ? facilityItem.Rooms : [];
+    if (!roomsArr.length) log('warn-missing-facility-rooms', { customerFacility });
+
     const roomWeights = new Map<string, number>(roomsArr.map((r: any) => [String(r.roomName), num(r.roomWeight ?? 1)]));
 
     let totalWeighted = 0;
@@ -165,21 +332,19 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       const sqftAdj = ratio * discrepancy;
       est.adjustedSqft = est.baseSqft + sqftAdj;
     }
+    log('facility-weights-applied', { ms: Date.now() - tFac, totalWeighted });
 
-    // Build per-room tasks into packages
+    // ---------- Build per-room tasks into packages ----------
+    const tTasks = Date.now();
     for (const room of roomEstimates) {
       const roomName = room.roomName;
       const roomNumber = room.roomNumber || 1;
       const adjustedSqft = num(room.adjustedSqft);
 
-      const taskDataRes = await ddbDoc.send(new GetCommand({
-        TableName: TASKS,
-        Key: { RoomName: roomName },
-      }));
-      const taskData = (taskDataRes.Item as any) ?? {};
-      const distributedSqft = roomNumber ? adjustedSqft / roomNumber : adjustedSqft;
+      const taskData = await getTaskData(roomName);
+      const distributedSqft = roomNumber ? adjustedSqft / roomNumber : adjustedSqft; // per-room sqft
 
-      // create room in each package
+      // Create room in each package
       for (const p of Object.values(packages)) {
         p.rooms.push({
           roomName,
@@ -192,55 +357,57 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       }
 
       const tasksArr = Array.isArray(taskData?.roomTasks) ? taskData.roomTasks : [];
-      for (const t of tasksArr) {
+      if (!tasksArr.length) {
+        log('warn-no-roomTasks', { roomName });
+        continue;
+      }
+
+      for (let ti = 0; ti < tasksArr.length; ti++) {
+        const t = tasksArr[ti];
         const taskName = String(t.taskName);
         const formula = t.taskCalculation;
         const freqs = Array.isArray(t.taskFrequency) ? t.taskFrequency : [];
-        if (!formula || freqs.length === 0) continue;
+        if (!formula) { tasksSkippedNoFormula++; continue; }
+        if (freqs.length === 0) { tasksSkippedNoFreq++; continue; }
 
         let dailyTime = 0;
         try {
-          dailyTime = evalFormula(String(formula), { roomNumber: Number(roomNumber), roomSqft: Number(adjustedSqft) });
-        } catch {
+          // *** FIX: use PER-ROOM sqft, not aggregate ***
+          dailyTime = evalFormula(String(formula), { roomNumber: Number(roomNumber), roomSqft: Number(distributedSqft) });
+        } catch (err: any) {
+          tasksErrored++;
+          log('warn-eval-formula', { roomName, taskName, err: String(err).slice(0, 200) });
           continue;
         }
 
-        for (const freq of freqs) {
-          const pkgName = String(freq.packageName) as PkgKey;
-          let frequency = String(freq.packageFrequency);
+        for (let fi = 0; fi < freqs.length; fi++) {
+          const f = freqs[fi];
+          const pkgName = normPkgName(String(f.packageName));
+          if (!pkgName) { log('warn-unknown-pkg', { forTask: taskName, raw: f.packageName }); continue; }
 
-          let multiplier: number | undefined;
-          if (customerFrequency === 'Quaterly' || customerFrequency === 'One Time') {
-            frequency = customerFrequency;
-            multiplier = customerMultiplier;
-          } else if (customerFrequency === 'Monthly') {
-            if (frequency !== 'Quaterly') {
-              frequency = customerFrequency;
-              multiplier = customerMultiplier;
-            } else {
-              multiplier = FREQ_MULTIPLIER[frequency];
-            }
-          } else {
-            if (frequency === 'Daily') {
-              multiplier = customerMultiplier;
-            } else if (frequency === 'Daily-1') {
-              if (['2 Days a Week','3 Days a Week','4 Days a Week','5 Days a Week','6 Days a Week','7 Days a Week'].includes(customerFrequency)) {
-                const newFreq = DAILY_1_DOWNGRADE[customerFrequency] || customerFrequency;
-                multiplier = FREQ_MULTIPLIER[newFreq];
-              } else {
-                multiplier = FREQ_MULTIPLIER[customerFrequency];
-              }
-            } else {
-              multiplier = FREQ_MULTIPLIER[frequency];
-            }
-          }
+          // normalize and record if we changed it
+          let frequency = normFreq(f.packageFrequency, (from, to) => {
+            log('DATA-TYPO-frequency', {
+              roomKey: normRoomKey(roomName),
+              taskIndex: ti,
+              freqIndex: fi,
+              valueFound: from,
+              normalizedTo: to,
+              pathHint: `RoomTaskCalculations[RoomName="${normRoomKey(roomName)}"].roomTasks[${ti}].taskFrequency[${fi}].packageFrequency`,
+            });
+            freqTyposFound++;
+          });
 
-          multiplier ??= 0;
+          const multiplier = pickMultiplier({
+            customerFrequency,
+            customerMultiplier,
+            packageFrequency: frequency,
+          });
+
           const monthlyTime = dailyTime * multiplier;
           const pkg = packages[pkgName];
-          if (!pkg) continue;
-
           const lastRoom = pkg.rooms[pkg.rooms.length - 1];
+
           lastRoom.roomTasks.push({
             taskName,
             frequency,
@@ -252,20 +419,30 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
           lastRoom.totalMonthTime += monthlyTime;
           pkg.totalDayTime += dailyTime;
           pkg.totalMonthTime += monthlyTime;
+
+          tasksEvaluated++;
         }
       }
     }
+    log('room-tasks-finished', { ms: Date.now() - tTasks });
 
-    // Floor tasks
+    // ---------- Floor tasks ----------
+    const tFloor = Date.now();
     await processFloorTasks({
       totalSqft,
       floorTypes,
       customerFrequency,
       customerMultiplier,
       packages,
+      reqId,
+      ddbReadsRef: { v: ddbReads },
+      getTaskData,
+      log,
+      onFreqTypo: () => { freqTyposFound++; },
     });
+    log('floor-tasks-finished', { ms: Date.now() - tFloor });
 
-    // Other time (travel, misc)
+    // ---------- Other time ----------
     const otherTime = totalSqft * 0.004; // minutes/day
     for (const pkg of Object.values(packages)) {
       pkg.otherDayTime = otherTime;
@@ -274,7 +451,7 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       pkg.totalMonthTime += pkg.otherMonthTime;
     }
 
-    // Round and finalize
+    // ---------- Round and finalize ----------
     for (const pkg of Object.values(packages)) {
       pkg.totalDayTime = round2(pkg.totalDayTime);
       pkg.totalMonthTime = round2(pkg.totalMonthTime);
@@ -309,9 +486,9 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
     }
 
     const packageNameMap: Record<PkgKey, string> = {
-      bottom: 'Pure Essentials',
-      middle: 'Radiant Results',
-      top: 'Elite Pristine',
+      bottom: 'Essentials',
+      middle: 'Pristine',
+      top: 'Elite',
     };
 
     const packageOptions = (Object.keys(packages) as PkgKey[]).map((k) => {
@@ -332,7 +509,8 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       };
     });
 
-    // Persist to the quote
+    // Persist
+    const tUpdate = Date.now();
     await ddbDoc.send(new UpdateCommand({
       TableName: QUOTES,
       Key: { QuoteID: quoteID },
@@ -341,11 +519,33 @@ export const handler: Schema['calculatePackageOptions']['functionHandler'] = asy
       ExpressionAttributeValues: { ':packages': { packageOptions } },
       ReturnValues: 'NONE',
     }));
+    log('persisted', { ms: Date.now() - tUpdate });
+
+    // Final high-signal logs
+    log('task-stats', {
+      tasksEvaluated,
+      tasksSkippedNoFormula,
+      tasksSkippedNoFreq,
+      tasksErrored,
+      freqTyposFound,
+    });
+
+    log('done', {
+      totalMs: Date.now() - t0,
+      ddbReads,
+      pkgCosts: packageOptions.map(p => ({ type: p.packageType, cost: p.packageCost })),
+    });
 
     return { message: 'OK', packageOptions };
   } catch (e: any) {
-    console.error('calcPackageOptions error:', e);
-    // For AppSync, throwing returns a GraphQL error
+    console.error(JSON.stringify({
+      at: 'calcPackageOptions',
+      level: 'error',
+      reqId,
+      errName: e?.name,
+      errMessage: e?.message,
+      stack: e?.stack?.split('\n').slice(0, 5).join('\n'),
+    }));
     throw new Error(e?.message || 'Internal server error');
   }
 };
@@ -356,8 +556,13 @@ async function processFloorTasks(args: {
   customerFrequency: string;
   customerMultiplier: number;
   packages: Record<'top' | 'middle' | 'bottom', any>;
+  reqId: string;
+  ddbReadsRef: { v: number };
+  getTaskData: (roomName: string) => Promise<any>;
+  log: (msg: string, extra?: Record<string, any>) => void;
+  onFreqTypo: () => void;
 }) {
-  const { totalSqft, floorTypes, customerFrequency, customerMultiplier, packages } = args;
+  const { totalSqft, floorTypes, customerFrequency, customerMultiplier, packages, getTaskData, log, onFreqTypo } = args;
   const floorRoomTypes: Record<string, string> = { hardfloor: 'Hardfloor', carpet: 'Carpet' };
 
   for (const [floorKey, roomLabel] of Object.entries(floorRoomTypes)) {
@@ -366,18 +571,18 @@ async function processFloorTasks(args: {
     const pct = num(floorTypes[floorKey]); // % of total
     const sqft = totalSqft * (pct / 100);
 
-    const taskDataRes = await ddbDoc.send(new GetCommand({
-      TableName: TASKS,
-      Key: { RoomName: roomLabel },
-    }));
-    const taskData = (taskDataRes.Item as any) ?? {};
+    const taskData = await getTaskData(roomLabel);
     const tasksArr = Array.isArray(taskData?.roomTasks) ? taskData.roomTasks : [];
-    if (tasksArr.length === 0) continue;
+    if (tasksArr.length === 0) {
+      log('warn-no-floorTasks', { floorKey, roomLabel });
+      continue;
+    }
 
     for (const [pkgKey, pkg] of Object.entries(packages)) {
       (pkg as any)[floorKey] = { tasks: [], totalDayTime: 0, totalMonthTime: 0 };
 
-      for (const t of tasksArr) {
+      for (let ti = 0; ti < tasksArr.length; ti++) {
+        const t = tasksArr[ti];
         const taskName = String(t.taskName);
         const formula = t.taskCalculation;
         const freqs = Array.isArray(t.taskFrequency) ? t.taskFrequency : [];
@@ -386,42 +591,37 @@ async function processFloorTasks(args: {
         let dailyTime = 0;
         try {
           dailyTime = evalFormula(String(formula), { roomNumber: 1, roomSqft: Number(sqft) });
-        } catch {
+        } catch (err: any) {
+          log('warn-eval-floor-formula', { floorKey, taskName, err: String(err).slice(0, 200) });
           continue;
         }
 
-        for (const f of freqs) {
-          if (String(f.packageName) !== pkgKey) continue;
+        for (let fi = 0; fi < freqs.length; fi++) {
+          const f = freqs[fi];
 
-          let frequency = String(f.packageFrequency);
-          let multiplier: number | undefined;
+          // only apply to the relevant package
+          const normalizedPkgName = normPkgName(String(f.packageName));
+          if (normalizedPkgName !== pkgKey) continue;
 
-          if (customerFrequency === 'Quaterly' || customerFrequency === 'One Time') {
-            frequency = customerFrequency;
-            multiplier = customerMultiplier;
-          } else if (customerFrequency === 'Monthly') {
-            if (frequency !== 'Quaterly') {
-              frequency = customerFrequency;
-              multiplier = customerMultiplier;
-            } else {
-              multiplier = FREQ_MULTIPLIER[frequency];
-            }
-          } else {
-            if (frequency === 'Daily') {
-              multiplier = customerMultiplier;
-            } else if (frequency === 'Daily-1') {
-              if (['2 Days a Week','3 Days a Week','4 Days a Week','5 Days a Week','6 Days a Week','7 Days a Week'].includes(customerFrequency)) {
-                const newFreq = DAILY_1_DOWNGRADE[customerFrequency] || customerFrequency;
-                multiplier = FREQ_MULTIPLIER[newFreq];
-              } else {
-                multiplier = FREQ_MULTIPLIER[customerFrequency];
-              }
-            } else {
-              multiplier = FREQ_MULTIPLIER[frequency];
-            }
-          }
+          // normalize and log exact path if we changed it
+          let frequency = normFreq(f.packageFrequency, (from, to) => {
+            log('DATA-TYPO-frequency', {
+              roomKey: roomLabel,
+              taskIndex: ti,
+              freqIndex: fi,
+              valueFound: from,
+              normalizedTo: to,
+              pathHint: `RoomTaskCalculations[RoomName="${roomLabel}"].roomTasks[${ti}].taskFrequency[${fi}].packageFrequency`,
+            });
+            onFreqTypo();
+          });
 
-          multiplier ??= 0;
+          const multiplier = pickMultiplier({
+            customerFrequency,
+            customerMultiplier,
+            packageFrequency: frequency,
+          });
+
           const monthlyTime = dailyTime * multiplier;
 
           (pkg as any)[floorKey].tasks.push({

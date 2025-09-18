@@ -391,6 +391,20 @@
               "isRequired": true
             }
           }
+        },
+        "clearPackages": {
+          "name": "clearPackages",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "quoteID": {
+              "name": "quoteID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
         }
       },
       "mutations": {

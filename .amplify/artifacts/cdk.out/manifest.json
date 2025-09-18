@@ -22,7 +22,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4de6ec55f898472819f685290ffa29a46826cfa370b871eb588734af29a4853d.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/90572206d5bbdc173e522a956b0c47e885e4f625916375b424135601644b7e48.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -2211,6 +2211,54 @@
             "data": "Query.getPendingSellRequests"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnClearPackagesLambdaDataSource": [
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnClearPackagesLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnClearPackagesLambdaDataSource/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnClearPackagesLambdaDataSourceServiceRoleC07A870B"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnClearPackagesLambdaDataSource/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnClearPackagesLambdaDataSourceServiceRoleDefaultPolicy5035822A"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/FnClearPackagesLambdaDataSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FnClearPackagesLambdaDataSource"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "FnClearPackagesLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/InvokeFnClearPackagesLambdaDataSource/InvokeFnClearPackagesLambdaDataSource.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InvokeFnClearPackagesLambdaDataSourceInvokeFnClearPackagesLambdaDataSourceAppSyncFunction0FE8E88C"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "InvokeFnClearPackagesLambdaDataSource"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/queryClearPackagesResolver": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryclearPackagesResolver"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "Query.clearPackages"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/MutationOwnerAcceptQuoteAuthFN/MutationOwnerAcceptQuoteAuthFN.AppSyncFunction": [
           {
             "type": "aws:cdk:logicalId",
@@ -2551,6 +2599,16 @@
             "data": "QueryGetPendingSellRequestsAuthFN"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/QueryClearPackagesAuthFN/QueryClearPackagesAuthFN.AppSyncFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryClearPackagesAuthFNQueryClearPackagesAuthFNAppSyncFunction76271F67"
+          },
+          {
+            "type": "graphqltransformer:resourceName",
+            "data": "QueryClearPackagesAuthFN"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
@@ -2789,6 +2847,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Arn"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/amplifyData/FunctionDirectiveStack/reference-to-amplifyjanfinderappdev3sandbox789c476389dataamplifyDataGraphQLAPINONEDSA9875379Name": [
@@ -3439,6 +3503,12 @@
             "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "referencetoamplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputsamplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Arn"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/data/reference-to-amplifyjanfinderappdev3sandbox789c476389functionNestedStackfunctionNestedStackResourceB1007764Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": [
           {
             "type": "aws:cdk:logicalId",
@@ -3913,6 +3983,24 @@
             "data": "getpendingsellrequestslambda1E8533A3"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/clear-packages-lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "clearpackageslambdaServiceRole4FBAE64A"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/clear-packages-lambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "clearpackageslambdaServiceRoleDefaultPolicyBC16044E"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/clear-packages-lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "clearpackageslambdaC9042094"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/function/send-quote-acceptance-email-lambda/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -4093,6 +4181,12 @@
             "data": "amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFERef"
           }
         ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Ref": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Ref"
+          }
+        ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref": [
           {
             "type": "aws:cdk:logicalId",
@@ -4247,6 +4341,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "amplifyjanfinderappdev3sandbox789c476389functiongetpendingsellrequestslambdaBD6B6AFEArn"
+          }
+        ],
+        "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "amplifyjanfinderappdev3sandbox789c476389functionclearpackageslambda666AC0B8Arn"
           }
         ],
         "/amplify-janfinderapp-dev3-sandbox-789c476389/function/amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Arn": [

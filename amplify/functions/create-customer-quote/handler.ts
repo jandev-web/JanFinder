@@ -1,88 +1,73 @@
+// amplify/functions/create-customer-quote/handler.ts
 import type { Schema } from "../../data/resource";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
 
-const ddbDoc = DynamoDBDocumentClient.from(
-  new DynamoDBClient({})
-);
+const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient(), {
+  marshallOptions: { removeUndefinedValues: true }, // leaves out undefined props
+});
+const TABLE = process.env.CUSTOMER_QUOTES_TABLE || "CustomerQuotes";
 
-// prefer env; falls back to literal for local
-const CUSTOMER_QUOTES_TABLE = process.env.CUSTOMER_QUOTES_TABLE || "CustomerQuotes";
-
-
-// ✅ Use the Amplify Data handler type and return your payload directly
-export const handler: Schema["createCustomerQuote"]["functionHandler"] = async (event, context) => {
-  const timestamp = new Date().toISOString();
-  const quoteId = uuidv4();
-
-  const ident = (event as any)?.identity ?? (event as any)?.request?.identity ?? {};
-  console.log('[createCustomerQuote] invoked', {
-    awsRequestId: (context as any)?.awsRequestId,
-    authType: ident?.authenticationType || ident?.type || 'Unknown',
-    identityId: ident?.identityId || ident?.sub || 'unknown',
-    sourceIp: Array.isArray(ident?.sourceIp) ? ident.sourceIp[0] : ident?.sourceIp ?? 'unknown',
-    table: CUSTOMER_QUOTES_TABLE,
-    region: process.env.AWS_REGION,
-  });
+export const handler: Schema["createCustomerQuote"]["functionHandler"] = async () => {
+  const now = new Date().toISOString();
+  const QuoteID = uuid();
 
   const item = {
-    QuoteID: quoteId,
-    ConfirmationNumber: "None",
-    Franchise: "None",
-    OwnerID: "None",
-    IsAccepted: false,
-    email: "None",
+    QuoteID,                 // PK
+    isAvailable: "FALSE" as const,
+    isAccepted:  "FALSE" as const,
+    isSold:      "FALSE" as const,
+
+    createdAt: now,
+    updatedAt: now,
     memberMade: false,
-    customerData: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      company: "",
-      address: { street: "", city: "", state: "", postalCode: "", country: "" },
+
+    // OMIT owner/franchise/email/confirmation until you have real values
+    // ownerID: undefined,
+    // franchiseID: undefined,
+    // email: undefined,
+    // confirmationNumber: undefined,
+    // latestRequestID: undefined,
+
+    customerData: { firstName: "", lastName: "", phone: "", company: "", email: "", address: { street: "", city: "", state: "", postalCode: "", country: "" }},
+    customerMeasurements: {
+      sqft: 0, floors: 0,
+      stairwells: { carpet: 0, hardfloor: 0 },
+      floorTypes: { hardfloor: 0, carpet: 0 },
+      roomTypes: [],
+    },
+    ownerMeasurements: {
+      sqft: 0, floors: 0,
+      stairwells: { carpet: 0, hardfloor: 0 },
+      floorTypes: { hardfloor: 0, carpet: 0 },
+      roomTypes: [],
     },
     quoteInfo: {
       budget: 0,
       facilityType: "",
+      floorTypes: { hardfloor: 0, carpet: 0 },
+      floors: 0,
+      frequency: "",
       roomTypes: [],
       sqft: 0,
-      floorTypes: { hardfloor: 0, carpet: 0 },
-      frequency: "",
       stairwells: { carpet: 0, hardfloor: 0 },
-      floors: 0,
     },
-    costCalculations: { salary: 0, payrollTax: 0, overhead: 0, profitPercent: 0 },
-    Package: { packageOptions: { packageOne: null, packageTwo: null, packageThree: null }, packageChoice: null },
-    costInfo: { finalCost: 0, customCost: null, baseCost: 0 },
-    Timestamp: timestamp,
-    AcceptedTimestamp: "None",
-    Confirmed: false,
-    QuotePDF: null,
-    ContractPDF: null,
-    ConfirmationTimestamp: "None",
-    isAvailable: "False",
-    isSold: "False",
-    siteVerified: { verificationStatus: "False", verificationTimestamp: "None", verifiedBy: "None" },
-    customerMeasurements: { roomTypes: [], floorTypes: { hardfloor: 0, carpet: 0 }, sqft: 0, stairwells: { carpet: 0, hardfloor: 0 }, floors: 0 },
-    ownerMeasurements: { roomTypes: [], floorTypes: { hardfloor: 0, carpet: 0 }, sqft: 0, stairwells: { carpet: 0, hardfloor: 0 }, floors: 0 },
-    latestRequest: null,
+    costCalculations: { salary: 0, payrollTax: 0, profitPercent: 0, overhead: 0 },
+    costInfo: { baseCost: 0, finalCost: 0, customCost: null },
+    package: { packageOptions: [], packageChoice: null },
+    siteVerified: { verificationStatus: false, verifiedBy: null, verificationTimestamp: null },
+    quotePDF: null,
+    contractPDF: null,
+    confirmationTimestamp: null,
+    acceptedTimestamp: null,
   };
 
-  try {
-    await ddbDoc.send(new PutCommand({ TableName: CUSTOMER_QUOTES_TABLE, Item: item, ConditionExpression: 'attribute_not_exists(QuoteID)' }));
-  } catch (e: any) {
-    console.error('[createCustomerQuote] DDB Put failed', {
-      name: e?.name,
-      code: e?.code,
-      message: e?.message,
-      requestId: e?.$metadata?.requestId,
-      status: e?.$metadata?.httpStatusCode,
-    });
-    throw e;
-  }
+  await ddbDoc.send(new PutCommand({
+    TableName: TABLE,
+    Item: item,
+    ConditionExpression: "attribute_not_exists(QuoteID)",
+  }));
 
-
-  // 👇 return the payload, NOT {statusCode, body}
-  return { message: "Quote added successfully", quoteID: quoteId };
+  return { message: "Quote added successfully", QuoteID };
 };

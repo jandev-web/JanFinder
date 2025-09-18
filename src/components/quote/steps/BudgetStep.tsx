@@ -1,6 +1,6 @@
 'use client';
 
-import { ValidationErrors } from '../types';
+import type { ValidationErrors } from '@/types/quote-ui';
 
 interface BudgetStepProps {
   budget: number;
@@ -36,7 +36,7 @@ export default function BudgetStep({ budget, onChange, errors }: BudgetStepProps
                 ? 'border-red-500 ring-2 ring-red-500' 
                 : 'border-gray-300 focus:ring-[#001F54] focus:border-[#001F54]'
             }`}
-            placeholder="2500"
+            placeholder="Enter Budget"
           />
         </div>
         {errors.budget && (

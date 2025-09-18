@@ -1,20 +1,16 @@
 'use client';
+
 import { getDataClient } from './data-client';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
-type StartQuoteResponse = { quoteID: string; message?: string };
+type StartQuoteResponse = { QuoteID: string; message?: string };
 
 export async function startQuote(): Promise<StartQuoteResponse> {
-  console.log('[startQuote] begin');
+  
 
   const s = await fetchAuthSession({ forceRefresh: true });
   const mode = s.tokens ? 'userPool' : 'identityPool';
-  console.log('[startQuote] session', {
-    identityId: s.identityId,
-    hasCreds: !!s.credentials,
-    hasTokens: !!s.tokens,
-    chosenMode: mode,
-  });
+  
 
   // no-arg op: pass only the options object
   const res = await getDataClient().queries.createCustomerQuote({ authMode: mode });
@@ -26,6 +22,6 @@ export async function startQuote(): Promise<StartQuoteResponse> {
   }
 
   const payload = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
-  if (!payload?.quoteID) throw new Error('Unexpected response from createCustomerQuote');
+  if (!payload?.QuoteID) throw new Error('Unexpected response from createCustomerQuote');
   return payload;
 }

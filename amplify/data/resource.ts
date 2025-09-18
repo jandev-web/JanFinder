@@ -29,6 +29,7 @@ import { getCboFn } from '../functions/get-cbo/resource';
 import { memberAcceptSellRequestFn } from '../functions/member-accept-sell-request/resource';
 import { memberGetAvailableQuotesFn } from '../functions/member-get-available-quotes/resource';
 import { getPendingSellRequestsFn } from '../functions/get-pending-sell-requests/resource';
+import { clearPackagesFn } from '../functions/clear-packages/resource';
 
 // Proxies (Node) → Python validators
 import { validateQuoteTemplateProxyFn as testFranchiseQuoteTemplateFn } from '../functions/validate-quote-template-proxy/resource';
@@ -154,7 +155,7 @@ const schema = a.schema({
   getCBOById: a.query()
     .arguments({ id: a.string().required() })
     .returns(a.json())
-    .authorization(allow => [allow.authenticated()])   
+    .authorization(allow => [allow.authenticated()])
     .handler(a.handler.function(getCboFn)),
   // ===== Validators =====
   testFranchiseQuoteTemplate: a.mutation()
@@ -232,6 +233,17 @@ const schema = a.schema({
     .returns(a.json())
     .authorization(allow => [allow.authenticated()]) // same as your other owner queries
     .handler(a.handler.function(getPendingSellRequestsFn)),
+  clearPackages: a
+    .query() 
+    .arguments({ quoteID: a.string().required() })
+    .returns(a.json())
+    .authorization(allow => [
+      allow.authenticated('identityPool'),
+      allow.authenticated(),
+      allow.guest(),
+    ])
+    .handler(a.handler.function(clearPackagesFn)),
+
 });
 
 export type Schema = ClientSchema<typeof schema>;

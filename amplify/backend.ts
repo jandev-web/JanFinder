@@ -50,6 +50,7 @@ import { updateContractLinksFn } from './functions/update-contract-links/resourc
 import { sendContractCreatedEmailFn } from './functions/send-contract-created-email/resource';
 import { memberGetAvailableQuotesFn } from './functions/member-get-available-quotes/resource';
 import { getPendingSellRequestsFn } from './functions/get-pending-sell-requests/resource';
+import { clearPackagesFn } from './functions/clear-packages/resource';
 
 // TS proxies that call Python validators
 import { validateQuoteTemplateProxyFn } from './functions/validate-quote-template-proxy/resource';
@@ -99,6 +100,7 @@ const backend = defineBackend({
   sendContractCreatedEmailFn,
   memberGetAvailableQuotesFn,
   getPendingSellRequestsFn,
+  clearPackagesFn,
 });
 
 // === Locals ===
@@ -213,6 +215,7 @@ const updateLinksLambda = backend.updateContractLinksFn.resources.lambda as lamb
 const sendEmail2Lambda = backend.sendContractCreatedEmailFn.resources.lambda as lambda.Function;
 const memberGetAvailableQuotesLambda = backend.memberGetAvailableQuotesFn.resources.lambda as lambda.Function;
 const getPendingSellRequestsLambda = backend.getPendingSellRequestsFn.resources.lambda as lambda.Function;
+const clearPackagesLambda = backend.clearPackagesFn.resources.lambda as lambda.Function;
 
 // ===== Doc pipeline Lambdas (Python) =====
 const buildQuoteDocContextLambda = new lambda.Function(backend.data.stack, 'BuildQuoteDocContextFn', {
@@ -415,6 +418,11 @@ createQuoteFn.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:PutItem'],
   resources: [tableArn('CustomerQuotes')],
 }));
+clearPackagesLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:UpdateItem'],
+  resources: [tableArn('CustomerQuotes')], // matches your existing table name usage
+}));
+
 setFranchiseTemplateLambda.addToRolePolicy(new PolicyStatement({
   actions: [
     'dynamodb:GetItem',

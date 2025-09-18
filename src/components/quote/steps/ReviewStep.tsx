@@ -1,29 +1,61 @@
 'use client';
 
-import { QuoteInfo, PACKAGE_DETAILS } from '../types';
+import { PACKAGE_DETAILS } from '@/types/package-details';
+
+/** ---- Minimal UI-only types used by this component ---- */
+type ReviewContact = {
+  firstName: string;
+  lastName: string;
+  company: string;
+  email: string;
+  phone: string;
+  address: string; // street
+  city: string;
+  state: string;
+  postalCode: string;
+};
+
+type ReviewRoom = { roomType: string; count: number };
+
+type ReviewData = {
+  contact: ReviewContact;
+  budget: number;
+  facilityType: string;
+  floors: number;
+  stairwellsCarpeted: number;
+  stairwellsHardfloor: number;
+  sqft: number;
+  floorTypePercentages: { hardfloor: number; carpet: number };
+  rooms: ReviewRoom[];
+  frequency: string;
+  selectedPackage: string; // name that matches PACKAGE_DETAILS entries
+};
 
 interface ReviewStepProps {
-  data: QuoteInfo;
+  data: ReviewData;
 }
 
 export default function ReviewStep({ data }: ReviewStepProps) {
-  const selectedPackage = PACKAGE_DETAILS.find(pkg => pkg.name === data.selectedPackage);
-  
+  const selectedPackage = PACKAGE_DETAILS.find(
+    (pkg) => pkg.name === data.selectedPackage
+  );
+
   const calculateEstimatedPrice = () => {
     if (!selectedPackage || !data.sqft || !data.frequency) return 0;
-    
-    const frequencyMultipliers = {
+
+    const frequencyMultipliers: Record<string, number> = {
       'One Time': 2.5,
-      'Weekly': 1.0,
+      Weekly: 1.0,
       '2 Days a Week': 1.8,
       '3 Days a Week': 2.5,
       '5 Days a Week': 3.8,
-      'Daily': 5.0
+      Daily: 5.0,
     };
-    
-    const multiplier = frequencyMultipliers[data.frequency as keyof typeof frequencyMultipliers] || 1;
-    const baseMonthlyPrice = data.sqft * selectedPackage.basePrice * multiplier;
-    
+
+    const multiplier = frequencyMultipliers[data.frequency] ?? 1;
+    const baseMonthlyPrice = data.sqft * selectedPackage?.packageCost * multiplier;
+
+    // Round to nearest $50
     return Math.round(baseMonthlyPrice / 50) * 50;
   };
 
@@ -64,7 +96,10 @@ export default function ReviewStep({ data }: ReviewStepProps) {
             <InfoRow label="Company" value={data.contact.company} />
             <InfoRow label="Email" value={data.contact.email} />
             <InfoRow label="Phone" value={data.contact.phone} />
-            <InfoRow label="Address" value={`${data.contact.address}, ${data.contact.city}, ${data.contact.state} ${data.contact.postalCode}`} />
+            <InfoRow
+              label="Address"
+              value={`${data.contact.address}, ${data.contact.city}, ${data.contact.state} ${data.contact.postalCode}`}
+            />
           </div>
         </div>
 
@@ -113,7 +148,7 @@ export default function ReviewStep({ data }: ReviewStepProps) {
             <InfoRow label="Cleaning Frequency" value={data.frequency} />
             <InfoRow label="Selected Package" value={data.selectedPackage} />
           </div>
-          
+
           {selectedPackage && (
             <div className="mt-4 pt-4 border-t border-gray-100">
               <h5 className="font-medium text-gray-700 mb-2">Package Features:</h5>
@@ -121,7 +156,11 @@ export default function ReviewStep({ data }: ReviewStepProps) {
                 {selectedPackage.features.map((feature, index) => (
                   <li key={index} className="flex items-center">
                     <svg className="w-3 h-3 text-[#F5C542] mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     {feature}
                   </li>
@@ -150,10 +189,10 @@ export default function ReviewStep({ data }: ReviewStepProps) {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-4 pt-4 border-t border-blue-400">
           <p className="text-blue-100 text-sm">
-            🌟 <strong>Final pricing will be customized</strong> based on your specific requirements, 
+            🌟 <strong>Final pricing will be customized</strong> based on your specific requirements,
             location factors, and any additional services discussed during our consultation.
           </p>
         </div>
@@ -163,13 +202,17 @@ export default function ReviewStep({ data }: ReviewStepProps) {
         <div className="flex items-start space-x-3">
           <div className="w-6 h-6 rounded-full bg-[#001F54] flex items-center justify-center flex-shrink-0 mt-0.5">
             <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
           <div>
             <h4 className="font-semibold text-[#001F54] mb-2">Next Steps</h4>
             <p className="text-gray-700 text-sm leading-relaxed">
-              After submitting your quote request, our team will review your requirements and contact you 
+              After submitting your quote request, our team will review your requirements and contact you
               within 24 hours to schedule a facility walkthrough and provide a detailed, customized proposal.
             </p>
           </div>

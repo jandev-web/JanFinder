@@ -1,3 +1,4 @@
+// amplify/functions/update-quote-rooms/handler.ts
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import type { Schema } from '../../data/resource';
@@ -8,8 +9,14 @@ const ddbDoc = DynamoDBDocumentClient.from(new DynamoDBClient(), {
 
 const QUOTES = process.env.CUSTOMER_QUOTES_TABLE || 'CustomerQuotes';
 
-type FloorTypes = { hardfloor?: number; carpet?: number };
-type FormInfo = { roomTypes?: any[]; sqft?: number; floorTypes?: FloorTypes };
+type RoomTypeSelection = { roomType: string; count: number };
+type FloorTypePercentages = { hardfloor: number; carpet: number };
+
+type FormInfo = Partial<{
+  roomTypes: RoomTypeSelection[];
+  sqft: number;
+  floorTypes: Partial<FloorTypePercentages>;
+}>;
 
 // ✅ Amplify Data ONLY
 export const handler: Schema['updateQuoteRooms']['functionHandler'] = async (event) => {
@@ -24,35 +31,45 @@ export const handler: Schema['updateQuoteRooms']['functionHandler'] = async (eve
     throw new Error('formInfo is required and must be an object');
   }
 
-  const roomTypes = Array.isArray(formInfo.roomTypes) ? formInfo.roomTypes : [];
+  // Sanitize shapes & coerce numbers
+  const roomTypes: RoomTypeSelection[] = Array.isArray(formInfo.roomTypes)
+    ? formInfo.roomTypes.map((r: any) => ({
+        roomType: String(r?.roomType ?? ''),
+        count: Number(r?.count ?? 0),
+      }))
+    : [];
+
   const sqft = Number(formInfo.sqft ?? 0);
-  const floorTypes = {
+
+  const floorTypes: FloorTypePercentages = {
     hardfloor: Number(formInfo.floorTypes?.hardfloor ?? 0),
     carpet: Number(formInfo.floorTypes?.carpet ?? 0),
   };
 
-  if ([sqft, floorTypes.hardfloor, floorTypes.carpet].some(n => Number.isNaN(n))) {
+  if ([sqft, floorTypes.hardfloor, floorTypes.carpet].some((n) => Number.isNaN(n))) {
     throw new Error('sqft and floorTypes.hardfloor/carpet must be numbers');
   }
 
-  await ddbDoc.send(new UpdateCommand({
-    TableName: QUOTES,
-    Key: { QuoteID: String(quoteID) },
-    UpdateExpression:
-      'SET quoteInfo.roomTypes = :roomTypes,' +
-      ' quoteInfo.sqft = :sqft,' +
-      ' quoteInfo.floorTypes = :floorTypes,' +
-      ' customerMeasurements.roomTypes = :roomTypes,' +
-      ' customerMeasurements.sqft = :sqft,' +
-      ' customerMeasurements.floorTypes = :floorTypes',
-    ExpressionAttributeValues: {
-      ':roomTypes': roomTypes,
-      ':sqft': sqft,
-      ':floorTypes': floorTypes,
-    },
-    ConditionExpression: 'attribute_exists(QuoteID)', // 404-like behavior if not found
-    ReturnValues: 'NONE',
-  }));
+  await ddbDoc.send(
+    new UpdateCommand({
+      TableName: QUOTES,
+      Key: { QuoteID: String(quoteID) }, // PK name as in table
+      UpdateExpression:
+        'SET quoteInfo.roomTypes = :roomTypes,' +
+        ' quoteInfo.sqft = :sqft,' +
+        ' quoteInfo.floorTypes = :floorTypes,' +
+        ' customerMeasurements.roomTypes = :roomTypes,' +
+        ' customerMeasurements.sqft = :sqft,' +
+        ' customerMeasurements.floorTypes = :floorTypes',
+      ExpressionAttributeValues: {
+        ':roomTypes': roomTypes,
+        ':sqft': sqft,
+        ':floorTypes': floorTypes,
+      },
+      ConditionExpression: 'attribute_exists(QuoteID)', // 404-like behavior if not found
+      ReturnValues: 'NONE',
+    })
+  );
 
   return { message: 'OK' };
 };

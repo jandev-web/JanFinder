@@ -1,18 +1,21 @@
 // src/utils/updateFloorInfo.ts
 'use client';
-import { getDataClient } from './data-client';
-import { fetchAuthSession } from 'aws-amplify/auth';
 
-type FloorInfo = {
+import { fetchAuthSession } from 'aws-amplify/auth';
+import { getDataClient } from './data-client';
+
+import type { Stairwells } from '@/types/quotes';
+
+type FloorInfoInput = {
   floors: number;
-  stairwells?: { carpet?: number; hardfloor?: number };
+  stairwells?: Partial<Stairwells>;
 };
 
 type UpdateResult = { message: string };
 
 export default async function updateFloorInfo(
   quoteID: string | null,
-  floorInfo: FloorInfo
+  floorInfo: FloorInfoInput
 ): Promise<UpdateResult> {
   if (!quoteID) throw new Error('quoteID is required');
 
@@ -21,13 +24,18 @@ export default async function updateFloorInfo(
   const carpet = Number(floorInfo?.stairwells?.carpet ?? 0);
   const hardfloor = Number(floorInfo?.stairwells?.hardfloor ?? 0);
 
-  const clean = { floors, stairwells: { carpet, hardfloor } };
-  const json = JSON.stringify(clean); // <-- IMPORTANT for AWSJSON
+  const clean: { floors: number; stairwells: Stairwells } = {
+    floors,
+    stairwells: { carpet, hardfloor },
+  };
+
   const s = await fetchAuthSession({ forceRefresh: true });
-  const mode = s.tokens ? 'userPool' : 'identityPool';
+  const authMode = s.tokens ? 'userPool' : 'identityPool';
+
+  // Send as AWSJSON (string)
   const { data, errors } = await getDataClient().queries.updateFloorInfo(
-    { quoteID, floorInfo: json as any }, // send JSON string
-    { authMode: mode }
+    { quoteID, floorInfo: JSON.stringify(clean) as unknown as any },
+    { authMode }
   );
 
   if (errors?.length) throw new Error(errors.map(e => e.message).join('; '));

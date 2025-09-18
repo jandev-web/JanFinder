@@ -17,7 +17,7 @@ export async function StartQuoteAction({
 
     const res = await startQuote();
     const quoteID =
-      res?.quoteID;
+      res?.QuoteID;
 
     if (!quoteID) {
       throw new Error('startQuote() did not return a quoteID');
