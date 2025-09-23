@@ -366,10 +366,20 @@ sendEmailLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:GetItem'],
   resources: [tableArn('CustomerQuotes')],
 }));
+
 sendEmailLambda.addToRolePolicy(new PolicyStatement({
-  actions: ['ses:SendEmail', 'ses:SendRawEmail'],
-  resources: ['*'],
+  actions: [
+    'ses:SendTemplatedEmail',
+    'ses:SendEmail',
+    'ses:SendRawEmail',
+    'ses:CreateTemplate',
+    'ses:UpdateTemplate',
+    'ses:GetTemplate',
+    'ses:ListTemplates' // optional, handy for diagnostics
+  ],
+  resources: ['*'] // SES template APIs don’t support resource-level ARNs
 }));
+
 updatePkgLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:UpdateItem'],
   resources: [tableArn('CustomerQuotes')],

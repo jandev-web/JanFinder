@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, Suspense } from 'react';
-import { LandingPage } from "../components/index";
+import LandingPage from "../components/pages/LandingPage";
 
 // Amplify.configure(awsExports);
 

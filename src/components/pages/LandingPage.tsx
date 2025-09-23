@@ -149,7 +149,7 @@ const Index = () => {
             <div className="bg-white border border-gray-200 rounded-lg p-6 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="text-6xl mb-4">📝</div>
               <h4 className="text-2xl font-bold text-[#001F54] mb-4">1. Submit Your Needs</h4>
-              <p className="text-gray-600 text-lg">Fill out our comprehensive form detailing your facility's cleaning requirements. No phone calls or site visits needed.</p>
+              <p className="text-gray-600 text-lg">Fill out our comprehensive form detailing your facility&apos;s cleaning requirements. No phone calls or site visits needed.</p>
             </div>
             
             <div className="bg-white border border-gray-200 rounded-lg p-6 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
@@ -160,7 +160,7 @@ const Index = () => {
             
             <div className="bg-white border border-gray-200 rounded-lg p-6 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="text-6xl mb-4">✅</div>
-              <h4 className="text-2xl font-bold text-[#001F54] mb-4">3. Choose & Save</h4>
+              <h4 className="text-2xl font-bold text-[#001F54] mb-4">3. Choose &amp; Save</h4>
               <p className="text-gray-600 text-lg">Review quotes, compare services, and select the best option. Start saving immediately on professional cleaning.</p>
             </div>
           </div>
@@ -202,7 +202,7 @@ const Index = () => {
               Why Choose Bid2Clean?
             </h3>
             <p className="text-xl opacity-90 max-w-3xl mx-auto">
-              We've eliminated everything you hate about finding cleaning services
+              We&apos;ve eliminated everything you hate about finding cleaning services
             </p>
           </div>
           

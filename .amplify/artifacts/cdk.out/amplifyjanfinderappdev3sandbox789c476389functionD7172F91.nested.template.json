@@ -1647,8 +1647,13 @@
       },
       {
        "Action": [
+        "ses:SendTemplatedEmail",
         "ses:SendEmail",
-        "ses:SendRawEmail"
+        "ses:SendRawEmail",
+        "ses:CreateTemplate",
+        "ses:UpdateTemplate",
+        "ses:GetTemplate",
+        "ses:ListTemplates"
        ],
        "Effect": "Allow",
        "Resource": "*"
@@ -1679,7 +1684,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "cc999a60eb102e9c6fb6efc193e755ab51e215f0dfc3d8eb22f7abf5f3677cb9.zip"
+     "S3Key": "4ab639b3c019a35756abbaf5f4fbcacab2da2a6869769cdd1c00fd249a62e368.zip"
     },
     "Environment": {
      "Variables": {
@@ -1725,7 +1730,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-janfinderapp-dev3-sandbox-789c476389/function/send-quote-confirmation-email-lambda/Resource",
-    "aws:asset:path": "asset.cc999a60eb102e9c6fb6efc193e755ab51e215f0dfc3d8eb22f7abf5f3677cb9",
+    "aws:asset:path": "asset.4ab639b3c019a35756abbaf5f4fbcacab2da2a6869769cdd1c00fd249a62e368",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }

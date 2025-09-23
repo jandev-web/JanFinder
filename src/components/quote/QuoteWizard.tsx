@@ -163,7 +163,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
     },
     budget: 0,
     facilityType: '',
-    floors: 1,
+    floors: 0,
     stairwellsCarpeted: 0,
     stairwellsHardfloor: 0,
     sqft: 0,
@@ -273,7 +273,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
       },
       budget: Number(qi?.budget ?? 0),
       facilityType: qi?.facilityType ?? '',
-      floors: Number(qi?.floors ?? 1),
+      floors: Number(qi?.floors ?? 0),
       stairwellsCarpeted: Number(qi?.stairwells?.carpet ?? 0),
       stairwellsHardfloor: Number(qi?.stairwells?.hardfloor ?? 0),
       sqft: Number(qi?.sqft ?? 0),
@@ -402,7 +402,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
 
           if (hasPostFacilityValues(formData)) {
             const resetFloors = updateFloorInfo(quoteID, {
-              floors: 1,
+              floors: 0,
               stairwells: { carpet: 0, hardfloor: 0 },
             });
             const resetRooms = updateQuoteRooms(quoteID, {
@@ -419,7 +419,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
             ...(prev ?? {}),
             quoteInfo: withQuoteInfo(prev, {
               facilityType,
-              floors: 1,
+              floors: 0,
               stairwells: { carpet: 0, hardfloor: 0 },
               sqft: 0,
               roomTypes: [],
@@ -434,7 +434,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
           setFormData((p) => ({
             ...p,
             facilityType,
-            floors: 1,
+            floors: 0,
             stairwellsCarpeted: 0,
             stairwellsHardfloor: 0,
             sqft: 0,
@@ -591,7 +591,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
 
     if (form.budget && form.budget > 0) { done[1] = true; } else { return done; }
     if (form.facilityType) { done[2] = true; } else { return done; }
-    if (form.floors && form.floors >= 1) { done[3] = true; } else { return done; }
+    if (form.floors && form.floors > 0) { done[3] = true; } else { return done; }
 
     const roomsOk = Array.isArray(form.rooms) && form.rooms.some((r) => (r?.count ?? 0) > 0);
     if (form.sqft > 0 && roomsOk) { done[4] = true; } else { return done; }
@@ -813,9 +813,7 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
                 <div className="h-1 w-16 rounded-full bg-[#F5C542]" />
               </div>
             </div>
-            <div className="text-sm text-gray-600">
-              Quote #{quoteID ?? '—'}
-            </div>
+            
           </div>
         </div>
       </div>

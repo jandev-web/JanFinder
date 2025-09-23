@@ -49,7 +49,7 @@ export default function CongratulationPage({ data }: CongratulationPageProps) {
           </h1>
 
           <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-            Thank you for choosing Bid2Clean! We've received your request for the{' '}
+            Thank you for choosing Bid2Clean! We&apos;ve received your request for the{' '}
             <span className="font-semibold text-[#001F54]">{data.selectedPackage}</span> package
             and will contact you within 24 hours to schedule your facility assessment.
           </p>
@@ -116,7 +116,7 @@ export default function CongratulationPage({ data }: CongratulationPageProps) {
                 <div className="w-6 h-6 rounded-full bg-[#F5C542] text-white text-xs flex items-center justify-center font-bold flex-shrink-0 mt-0.5">
                   2
                 </div>
-                <p>We'll contact you within 24 hours to schedule a facility walkthrough</p>
+                <p>We&apos;ll contact you within 24 hours to schedule a facility walkthrough</p>
               </div>
 
               <div className="flex items-start space-x-3">

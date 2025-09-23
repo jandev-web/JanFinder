@@ -1,7 +1,7 @@
 'use client'
 
-import { Contact } from "../../components";
-import { Header } from "../../components";
+import Contact from "@/components/pages/Contact";
+import Header from "@/components/Header";
 function CustomerInfoPage() {
   
   return (

@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { RoomSelection } from './types';
+
 
 interface RoomPickerProps {
-  selectedRooms: RoomSelection[];
+  selectedRooms: any[];
   roomOptions: any;
-  onChange: (rooms: RoomSelection[]) => void;
+  onChange: (rooms: any[]) => void;
 }
 
 export default function RoomPicker({ selectedRooms, onChange, roomOptions }: RoomPickerProps) {
