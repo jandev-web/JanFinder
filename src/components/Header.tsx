@@ -45,7 +45,7 @@ const dropdownData = {
     ],
   },
   why: {
-    title: 'Why Use anFinder?',
+    title: 'Why Bid2Clean?',
     image: '/images/dropdownWhy.png',
     links: [
       { name: 'Our Quote Process', href: '/quote-process' },
@@ -59,116 +59,133 @@ const dropdownData = {
 };
 
 const Header = () => {
-
-
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  const handleMouseEnter = (type: string) => {
-    setActiveDropdown(type);
-  };
-
-  const handleMouseLeave = () => {
-    setActiveDropdown(null);
-  };
-
+  const handleMouseEnter = (type: string) => setActiveDropdown(type);
+  const handleMouseLeave = () => setActiveDropdown(null);
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-white shadow-lg">
-      <div className="mx-auto flex w-full relative z-20">
-        {/* Logo on the Left */}
-        <div className="flex-shrink-0 pr-6 pl-6 pt-8 z-20">
-          <Link href="/" className="text-[#001F54] font-bold">
-            <h1 className="text-5xl">Bid<span className="text-yellow-500">2</span>Clean</h1>
-          </Link>
-        </div>
-
-        {/* Navigation and Gradient Bar */}
-        <div className="flex flex-col w-full">
-          {/* Gradient Bar */}
-          <div className="h-10 bg-gradient-to-r from-white to-[#001F54] flex items-center justify-between px-4">
-            {/* Placeholder for additional content */}
-            <div></div>
-            {/* Right side */}
-            <div>
-              <Link
-                href="/members"
-                className="text-white text-lg mr-6 font-medium hover:text-yellow-500 transition duration-300"
-              >
-                Log In
-              </Link>
-              <Link
-                href="/quote-status"
-                className="text-white text-lg font-medium hover:text-yellow-500 transition duration-300"
-              >
-                Check Quote Status
-              </Link>
+    <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo (LandingPage look) */}
+          <Link href="/" className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-[#001F54] rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold text-xl">B2C</span>
             </div>
-          </div>
+            <div>
+              <span className="text-2xl font-bold text-[#001F54] block">Bid2Clean</span>
+              <span className="h-1 w-20 bg-yellow-400 rounded-full block" />
+            </div>
+          </Link>
 
-          {/* Navigation Links */}
-          <nav className="flex items-center justify-center space-x-6  mt-4 pr-6">
-            <div className="flex items-center space-x-6">
-              <div
-                className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
-                onMouseEnter={() => handleMouseEnter('industries')}
-                onMouseLeave={handleMouseLeave}
+          {/* Nav (LandingPage layout) + dropdown functionality from Header */}
+          <nav className="hidden lg:flex items-center space-x-6">
+            {/* Left set: menu triggers with dropdowns (also anchor to sections on LandingPage) */}
+            <div
+              className="relative"
+              onMouseEnter={() => handleMouseEnter('industries')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <a
+                href="#industries"
+                className="text-gray-600 hover:text-[#001F54] font-medium transition-colors"
               >
-                Supported Industries
-                <div className="h-[2px] bg-yellow-500 w-full mt-1 transition duration-300 group-hover:bg-[#001F54]"></div>
-                {activeDropdown === 'industries' && (
-                  <HomeHeaderDropdown title={dropdownData.industries.title} image={dropdownData.industries.image} links={dropdownData.industries.links} />
-                )}
-              </div>
-              <div className="h-8 border-l border-gray-300"></div>
-              <div
-                className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
-                onMouseEnter={() => handleMouseEnter('customers')}
-                onMouseLeave={handleMouseLeave}
-              >
-                Quote Seekers
-                <div className="h-[2px] bg-yellow-500 w-full mt-1 transition duration-300 group-hover:bg-[#001F54]"></div>
-                {activeDropdown === 'customers' && (
-                  <HomeHeaderDropdown title={dropdownData.customers.title} image={dropdownData.customers.image} links={dropdownData.customers.links} />
-                )}
-              </div>
-              <div className="h-8 border-l border-gray-300"></div>
-              <div
-                className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
-                onMouseEnter={() => handleMouseEnter('owners')}
-                onMouseLeave={handleMouseLeave}
+                Industries
+              </a>
+              {activeDropdown === 'industries' && (
+                <HomeHeaderDropdown
+                  title={dropdownData.industries.title}
+                  image={dropdownData.industries.image}
+                  links={dropdownData.industries.links}
+                />
+              )}
+            </div>
+
+            <div
+              className="relative"
+              onMouseEnter={() => handleMouseEnter('owners')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <a
+                href="#business-owners"
+                className="text-gray-600 hover:text-[#001F54] font-medium transition-colors"
               >
                 Business Owners
-                <div className="h-[2px] bg-yellow-500 w-full mt-1 transition duration-300 group-hover:bg-[#001F54]"></div>
-                {activeDropdown === 'owners' && (
-                  <HomeHeaderDropdown title={dropdownData.owners.title} image={dropdownData.owners.image} links={dropdownData.owners.links} />
-                )}
-              </div>
-              <div className="h-8 border-l border-gray-300"></div>
-              <div
-                className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
-                onMouseEnter={() => handleMouseEnter('why')}
-                onMouseLeave={handleMouseLeave}
+              </a>
+              {activeDropdown === 'owners' && (
+                <HomeHeaderDropdown
+                  title={dropdownData.owners.title}
+                  image={dropdownData.owners.image}
+                  links={dropdownData.owners.links}
+                />
+              )}
+            </div>
+
+            <div
+              className="relative"
+              onMouseEnter={() => handleMouseEnter('customers')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <a
+                href="#quote-seekers"
+                className="text-gray-600 hover:text-[#001F54] font-medium transition-colors"
+              >
+                Quote Seekers
+              </a>
+              {activeDropdown === 'customers' && (
+                <HomeHeaderDropdown
+                  title={dropdownData.customers.title}
+                  image={dropdownData.customers.image}
+                  links={dropdownData.customers.links}
+                />
+              )}
+            </div>
+
+            <div
+              className="relative"
+              onMouseEnter={() => handleMouseEnter('why')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <a
+                href="#why-bid2clean"
+                className="text-gray-600 hover:text-[#001F54] font-medium transition-colors"
               >
                 Why Bid2Clean
-                <div className="h-[2px] bg-yellow-500 w-full mt-1 transition duration-300 group-hover:bg-[#001F54]"></div>
-                {activeDropdown === 'why' && (
-                  <HomeHeaderDropdown title={dropdownData.why.title} image={dropdownData.why.image} links={dropdownData.why.links} />
-                )}
-              </div>
-              <div className="h-8 border-l border-gray-300"></div>
-              <Link
-                href="/get-a-quote"
-                className="bg-yellow-400 text-[#001F54] text-lg font-medium px-4 py-2 rounded transition duration-300 hover:bg-[#001F54] hover:text-white"
-              >
-                Get a Quote Now!
-              </Link>
+              </a>
+              {activeDropdown === 'why' && (
+                <HomeHeaderDropdown
+                  title={dropdownData.why.title}
+                  image={dropdownData.why.image}
+                  links={dropdownData.why.links}
+                />
+              )}
             </div>
-          </nav>
 
+            {/* Utility links from original Header (kept, styled to match) */}
+            <Link
+              href="/members"
+              className="text-gray-600 hover:text-[#001F54] font-medium transition-colors"
+            >
+              Log In
+            </Link>
+            <Link
+              href="/quote-status"
+              className="text-gray-600 hover:text-[#001F54] font-medium transition-colors"
+            >
+              Check Quote Status
+            </Link>
+
+            {/* CTA (LandingPage style) */}
+            <Link href="/get-a-quote">
+              <button className="bg-[#001F54] text-white hover:bg-yellow-500 font-semibold px-6 py-2 rounded-md transition-colors">
+                Get a Quote Now!
+              </button>
+            </Link>
+          </nav>
         </div>
       </div>
     </header>
-
   );
 };
 

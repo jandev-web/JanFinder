@@ -1,50 +1,23 @@
-import Link from "next/link";
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import heroBackground from '@/assets/homePicSecond.jpeg';
+'use client';
 
-const Index = () => {
+import Link from 'next/link';
+import Header from '@/components/Header'; // <-- use the new Header
+import heroBackground from '@/assets/homePicSecond.jpeg';
+const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-yellow-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-[#001F54] rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-xl">B2C</span>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-[#001F54]">Bid2Clean</h1>
-                <div className="h-1 w-20 bg-yellow-400 rounded-full"></div>
-              </div>
-            </div>
-            <nav className="hidden lg:flex items-center space-x-6">
-              <a href="#industries" className="text-gray-600 hover:text-[#001F54] font-medium transition-colors">Industries</a>
-              <a href="#business-owners" className="text-gray-600 hover:text-[#001F54] font-medium transition-colors">Business Owners</a>
-              <a href="#quote-seekers" className="text-gray-600 hover:text-[#001F54] font-medium transition-colors">Quote Seekers</a>
-              <a href="#why-bid2clean" className="text-gray-600 hover:text-[#001F54] font-medium transition-colors">Why Bid2Clean</a>
-              <Link href="/get-a-quote">
-                <button className="bg-[#001F54] text-white hover:bg-yellow-500 font-semibold px-6 py-2 rounded-md transition-colors">
-                  Get a Quote Now!
-                </button>
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </div>
+      {/* Header (replaced) */}
+      <Header />
 
       {/* Hero Section */}
       <div className="relative overflow-hidden min-h-[80vh] flex items-center">
-        {/* Background Image */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroBackground.src})` }}
         >
           <div className="absolute inset-0 bg-blue-900/60"></div>
         </div>
-        
-        {/* Content Overlay */}
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 py-20 md:py-32">
           <div className="text-center">
             <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight drop-shadow-lg">
@@ -52,20 +25,20 @@ const Index = () => {
               <br />
               <span className="text-yellow-400 drop-shadow-lg">Competitive Bidding</span>
             </h2>
-            
+
             <p className="text-xl md:text-2xl text-white/95 mb-12 max-w-4xl mx-auto leading-relaxed drop-shadow-md">
-              Get multiple cleaning companies competing for your business. 
-              <span className="text-yellow-400 font-semibold"> No salesmen, no site visits, no hassle.</span> 
+              Get multiple cleaning companies competing for your business.
+              <span className="text-yellow-400 font-semibold"> No salesmen, no site visits, no hassle.</span>
               Just transparent quotes and professional service.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
               <Link href="/get-a-quote">
                 <button className="bg-yellow-400 text-white hover:bg-yellow-500 text-xl px-12 py-6 rounded-xl font-bold shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300">
                   Get Competitive Quotes
                 </button>
               </Link>
-              
+
               <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 text-xl px-12 py-6 rounded-xl font-semibold transition-all duration-300 bg-white/10 backdrop-blur-sm">
                 Join as Cleaning Company
               </button>
@@ -381,4 +354,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default LandingPage;
