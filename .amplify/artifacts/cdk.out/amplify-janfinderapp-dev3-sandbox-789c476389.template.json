@@ -417,6 +417,20 @@
       "\",\"",
       {
        "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389datagetcustomersbyfranchiselambda717AFDC4Ref"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
+        "data7552DF31",
+        "Outputs.amplifyjanfinderappdev3sandbox789c476389datadeletecbolambda8B53F34ERef"
+       ]
+      },
+      "\",\"",
+      {
+       "Fn::GetAtt": [
         "function1351588B",
         "Outputs.amplifyjanfinderappdev3sandbox789c476389functionsendquoteacceptanceemaillambda508ECD87Ref"
        ]
@@ -576,7 +590,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/61a81728b0ae09d528f17ef31fee22590a1b8d01893f24e7a13f3575b9e38e96.json"
+       "/0881f77dec3bd9e7c9612c6496da69682892bf45b75684a04eed1d79f3daa13c.json"
       ]
      ]
     }
@@ -603,6 +617,12 @@
       "Fn::GetAtt": [
        "storage0EC3F24A",
        "Outputs.amplifyjanfinderappdev3sandbox789c476389storageQuoteStorageBucket53ADCA2DRef"
+      ]
+     },
+     "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn": {
+      "Fn::GetAtt": [
+       "auth179371D7",
+       "Outputs.amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn"
       ]
      },
      "referencetoamplifyjanfinderappdev3sandbox789c476389authNestedStackauthNestedStackResource11275F88Outputsamplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DRef": {
@@ -818,7 +838,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/9ec942e186a3d96f98d975916575db8bf4afdede871fc15e9ca4a413a09bb422.json"
+       "/31a2fc3bb81dfd02b0a5a143afd60c8f45cbac81fef5354fb384aab352d13866.json"
       ]
      ]
     }
@@ -886,7 +906,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/6cdaa591d3197227a71ef306355c5741fefe89b3fa3e0c632389bb74b3205729.json"
+       "/ca6d869de3947bbdc88e01181ded58ddc526bb3c97de9c5924e67228ca766a34.json"
       ]
      ]
     }

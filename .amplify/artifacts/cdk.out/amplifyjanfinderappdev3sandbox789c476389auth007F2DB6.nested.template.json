@@ -1195,6 +1195,14 @@
     "Ref": "postconfirmationlambda195D98D2"
    }
   },
+  "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "amplifyAuthUserPool4BA7F805",
+     "Arn"
+    ]
+   }
+  },
   "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthauthenticatedUserRoleECB76169Ref": {
    "Value": {
     "Ref": "amplifyAuthauthenticatedUserRoleD8DA3689"
@@ -1203,14 +1211,6 @@
   "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthunauthenticatedUserRoleC7C1F878Ref": {
    "Value": {
     "Ref": "amplifyAuthunauthenticatedUserRole2B524D9E"
-   }
-  },
-  "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthUserPool896BB88DArn": {
-   "Value": {
-    "Fn::GetAtt": [
-     "amplifyAuthUserPool4BA7F805",
-     "Arn"
-    ]
    }
   },
   "amplifyjanfinderappdev3sandbox789c476389authamplifyAuthMemberGroupRole8B2C744ARef": {

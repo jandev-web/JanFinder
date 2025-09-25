@@ -1,4 +1,5 @@
 // src/components/navigation/AppSidebar.tsx
+'use client';
 import React from 'react';
 import {
   Building2,

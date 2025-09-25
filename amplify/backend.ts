@@ -51,6 +51,9 @@ import { sendContractCreatedEmailFn } from './functions/send-contract-created-em
 import { memberGetAvailableQuotesFn } from './functions/member-get-available-quotes/resource';
 import { getPendingSellRequestsFn } from './functions/get-pending-sell-requests/resource';
 import { clearPackagesFn } from './functions/clear-packages/resource';
+import { getCustomersByFranchiseFn } from './functions/get-customers-by-franchise/resource';
+import { deleteCboFn } from './functions/delete-cbo/resource';
+
 
 // TS proxies that call Python validators
 import { validateQuoteTemplateProxyFn } from './functions/validate-quote-template-proxy/resource';
@@ -101,6 +104,8 @@ const backend = defineBackend({
   memberGetAvailableQuotesFn,
   getPendingSellRequestsFn,
   clearPackagesFn,
+  getCustomersByFranchiseFn,
+  deleteCboFn,
 });
 
 // === Locals ===
@@ -216,6 +221,8 @@ const sendEmail2Lambda = backend.sendContractCreatedEmailFn.resources.lambda as 
 const memberGetAvailableQuotesLambda = backend.memberGetAvailableQuotesFn.resources.lambda as lambda.Function;
 const getPendingSellRequestsLambda = backend.getPendingSellRequestsFn.resources.lambda as lambda.Function;
 const clearPackagesLambda = backend.clearPackagesFn.resources.lambda as lambda.Function;
+const getCustomersByFranchiseLambda = backend.getCustomersByFranchiseFn.resources.lambda as lambda.Function;
+const deleteCboLambda = backend.deleteCboFn.resources.lambda as lambda.Function;
 
 // ===== Doc pipeline Lambdas (Python) =====
 const buildQuoteDocContextLambda = new lambda.Function(backend.data.stack, 'BuildQuoteDocContextFn', {
@@ -431,6 +438,10 @@ createQuoteFn.addToRolePolicy(new PolicyStatement({
 clearPackagesLambda.addToRolePolicy(new PolicyStatement({
   actions: ['dynamodb:UpdateItem'],
   resources: [tableArn('CustomerQuotes')], // matches your existing table name usage
+}));
+getCustomersByFranchiseLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['appsync:GraphQL'],
+  resources: [appsyncResourceArn, appsyncTypesArn],
 }));
 
 setFranchiseTemplateLambda.addToRolePolicy(new PolicyStatement({
@@ -701,6 +712,27 @@ const validateQuoteTemplateLambda = new lambda.Function(backend.data.stack, 'Val
     CONVERT_LAMBDA_NAME: convertDocxToPdfLambda.functionName,
   },
 });
+
+deleteCboLambda.addEnvironment('USER_POOL_ID', backend.auth.resources.userPool.userPoolId);
+deleteCboLambda.addEnvironment('CBO_TABLE', 'CBO_DB');                 // adjust if different
+deleteCboLambda.addEnvironment('CBO_PK', 'CBOID');                     // adjust if different
+deleteCboLambda.addEnvironment('CBO_PIC_BUCKET', publicBucket.bucketName);
+deleteCboLambda.addEnvironment('DEFAULT_PROFILE_KEY', 'defaultProfilePic.jpg');
+
+// DDB perms (Get/Delete)
+deleteCboLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['dynamodb:GetItem', 'dynamodb:DeleteItem', 'dynamodb:DescribeTable'],
+  resources: [tableArn('CBO_DB')],
+}));
+
+// S3 delete access
+publicBucket.grantDelete(deleteCboLambda);
+
+
+deleteCboLambda.addToRolePolicy(new PolicyStatement({
+  actions: ['cognito-idp:AdminDeleteUser'],
+  resources: [userPoolArn],
+}));
 
 const validateContractTemplateLambda = new lambda.Function(backend.data.stack, 'ValidateContractTemplateFn', {
   functionName: 'validate-contract-template',

@@ -8,13 +8,17 @@ import { Quote, GroupedQuotes } from './types';
 import { getTimeGroup } from '../../utils/ranking';
 import { Clock, DollarSign, TrendingUp, Award } from 'lucide-react';
 
-export const OwnerBiddingBoard: React.FC = () => {
+interface BiddingPlatformProps {
+  availableQuotes: any;
+}
+
+export const OwnerBiddingBoard: React.FC<BiddingPlatformProps> = ({ availableQuotes }) => {
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('open');
 
+  console.log(availableQuotes)
   const { 
-    quotes, 
     currentProvider,
     fetchQuotes,
     myStanding,
@@ -27,7 +31,7 @@ export const OwnerBiddingBoard: React.FC = () => {
   }, [fetchQuotes]);
 
   // Group quotes by time remaining
-  const groupQuotesByTime = (quotes: Quote[]): GroupedQuotes => {
+  const groupQuotesByTime = (quotes: any[]): GroupedQuotes => {
     const grouped: GroupedQuotes = {
       '5min': [],
       '1hour': [],
@@ -36,18 +40,17 @@ export const OwnerBiddingBoard: React.FC = () => {
     };
 
     quotes.forEach(quote => {
-      const group = getTimeGroup(quote.expiresAt);
+      const group = getTimeGroup(quote.confirmationTimestamp);
       grouped[group].push(quote);
     });
 
     return grouped;
   };
 
-  const openQuotes = quotes.filter(q => q.status === 'OPEN');
-  const groupedQuotes = groupQuotesByTime(openQuotes);
+  const groupedQuotes = groupQuotesByTime(availableQuotes);
 
   // Mock data for other tabs
-  const myBids = openQuotes.filter(q => myBidForQuote(q.id));
+  const myBids = availableQuotes.filter((q: any) => myBidForQuote(q.id));
   const wonQuotes = []; // Mock - would come from backend
   const lostQuotes = []; // Mock - would come from backend
 
@@ -56,7 +59,7 @@ export const OwnerBiddingBoard: React.FC = () => {
     setSheetOpen(true);
   };
 
-  const renderQuoteGroup = (title: string, quotes: Quote[], icon: React.ReactNode) => {
+  const renderQuoteGroup = (title: string, quotes: any[], icon: React.ReactNode) => {
     if (quotes.length === 0) return null;
 
     return (
@@ -70,10 +73,10 @@ export const OwnerBiddingBoard: React.FC = () => {
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {quotes.map(quote => {
-            const standing = myStanding(quote.id);
+            const standing = myStanding(quote.QuoteID);
             return (
               <QuoteCard
-                key={quote.id}
+                key={quote.QuoteID}
                 quote={quote}
                 standing={standing.rank > 0 ? standing : undefined}
                 credits={currentProvider?.credits}
@@ -131,7 +134,7 @@ export const OwnerBiddingBoard: React.FC = () => {
             value="open" 
             className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm py-2 text-sm font-medium rounded-sm"
           >
-            Open ({openQuotes.length})
+            Open ({availableQuotes.length})
           </TabsTrigger>
           <TabsTrigger 
             value="my-bids"
@@ -157,7 +160,7 @@ export const OwnerBiddingBoard: React.FC = () => {
         <TabsContent value="open" className="space-y-6">
           {loading ? (
             <div className="text-center py-8 text-gray-500">Loading quotes...</div>
-          ) : openQuotes.length === 0 ? (
+          ) : availableQuotes.length === 0 ? (
             <div className="bg-gray-50 rounded-lg p-12 text-center border border-gray-200">
               <div className="h-12 w-12 mx-auto mb-4 text-gray-400 opacity-50" />
               <h3 className="text-base font-medium mb-2 text-gray-900">No Open Quotes</h3>
@@ -199,7 +202,7 @@ export const OwnerBiddingBoard: React.FC = () => {
             </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {myBids.map(quote => {
+              {myBids.map((quote: any) => {
                 const standing = myStanding(quote.id);
                 return (
                   <QuoteCard

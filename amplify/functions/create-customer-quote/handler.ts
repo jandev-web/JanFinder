@@ -19,6 +19,8 @@ export const handler: Schema["createCustomerQuote"]["functionHandler"] = async (
     isAccepted:  "FALSE" as const,
     isSold:      "FALSE" as const,
 
+    confirmed: "FALSE" as const,
+    
     createdAt: now,
     updatedAt: now,
     memberMade: false,
@@ -61,6 +63,7 @@ export const handler: Schema["createCustomerQuote"]["functionHandler"] = async (
     contractPDF: null,
     confirmationTimestamp: null,
     acceptedTimestamp: null,
+    
   };
 
   await ddbDoc.send(new PutCommand({

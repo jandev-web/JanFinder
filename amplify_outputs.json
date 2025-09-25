@@ -405,6 +405,26 @@
               "isRequired": true
             }
           }
+        },
+        "getCustomersByFranchise": {
+          "name": "getCustomersByFranchise",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "franchiseID": {
+              "name": "franchiseID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "ownerID": {
+              "name": "ownerID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
         }
       },
       "mutations": {
@@ -706,6 +726,20 @@
               "isArray": false,
               "type": "String",
               "isRequired": false
+            }
+          }
+        },
+        "deleteCBO": {
+          "name": "deleteCBO",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "arguments": {
+            "cboID": {
+              "name": "cboID",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
             }
           }
         }

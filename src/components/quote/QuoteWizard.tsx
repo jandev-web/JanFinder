@@ -411,8 +411,8 @@ export default function QuoteWizard({ quoteID, initialQuote }: Props) {
               floorTypes: { hardfloor: 0, carpet: 0 },
             });
             const resetFrequency = updateQuoteFrequency(quoteID, '');
-            const resetPackage = clearPackages(quoteID);
-            await Promise.all([resetFloors, resetRooms, resetFrequency, resetPackage]);
+            //const resetPackage = clearPackages(quoteID);
+            await Promise.all([resetFloors, resetRooms, resetFrequency]);
           }
 
           setInitialForm((prev) => ({

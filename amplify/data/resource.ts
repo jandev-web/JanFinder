@@ -30,6 +30,9 @@ import { memberAcceptSellRequestFn } from '../functions/member-accept-sell-reque
 import { memberGetAvailableQuotesFn } from '../functions/member-get-available-quotes/resource';
 import { getPendingSellRequestsFn } from '../functions/get-pending-sell-requests/resource';
 import { clearPackagesFn } from '../functions/clear-packages/resource';
+import { getCustomersByFranchiseFn } from '../functions/get-customers-by-franchise/resource';
+import { deleteCboFn } from "../functions/delete-cbo/resource";
+
 
 // Proxies (Node) → Python validators
 import { validateQuoteTemplateProxyFn as testFranchiseQuoteTemplateFn } from '../functions/validate-quote-template-proxy/resource';
@@ -234,7 +237,7 @@ const schema = a.schema({
     .authorization(allow => [allow.authenticated()]) // same as your other owner queries
     .handler(a.handler.function(getPendingSellRequestsFn)),
   clearPackages: a
-    .query() 
+    .query()
     .arguments({ quoteID: a.string().required() })
     .returns(a.json())
     .authorization(allow => [
@@ -243,6 +246,20 @@ const schema = a.schema({
       allow.guest(),
     ])
     .handler(a.handler.function(clearPackagesFn)),
+  getCustomersByFranchise: a.query()
+    .arguments({
+      franchiseID: a.string().required(),
+      ownerID: a.string().required(),
+    })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()]) // tighten as desired
+    .handler(a.handler.function(getCustomersByFranchiseFn)),
+  deleteCBO: a.mutation()
+    .arguments({ cboID: a.string().required() })
+    .returns(a.json())
+    .authorization(allow => [allow.authenticated()]) // tighten as needed
+    .handler(a.handler.function(deleteCboFn)),
+
 
 });
 

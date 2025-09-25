@@ -8,11 +8,12 @@ const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 // ---- Environment (set in resource.ts) ----
 const QUOTES_TABLE_NAME       = process.env.QUOTES_TABLE_NAME       ?? 'CustomerQuotes';
 const FRANCHISE_INDEX_NAME    = process.env.FRANCHISE_INDEX_NAME    ?? 'franchiseIndex';
-const OWNER_INDEX_NAME        = process.env.OWNER_INDEX_NAME        ?? 'ownerIndex';
 const SELL_REQUEST_TABLE_NAME = process.env.SELL_REQUEST_TABLE_NAME ?? 'SellRequest_DB';
 const SELL_REQUEST_QUOTE_GSI  = process.env.SELL_REQUEST_QUOTE_GSI  ?? 'QuoteID-index';
 
-// Small helper to page through a full GSI
+// ---- Helpers ----
+
+// Page through a full Query (GSI or main)
 async function* queryAll(params: Omit<QueryCommand['input'], 'ExclusiveStartKey'>) {
   let ExclusiveStartKey: Record<string, any> | undefined;
   do {
@@ -22,6 +23,10 @@ async function* queryAll(params: Omit<QueryCommand['input'], 'ExclusiveStartKey'
   } while (ExclusiveStartKey);
 }
 
+// Pull a best-effort QuoteID from an item
+const getQuoteID = (x: any) => x?.QuoteID ?? x?.quoteID ?? x?.id;
+
+
 export const handler: Schema['getAcceptedQuotesOwner']['functionHandler'] = async ({ arguments: args }) => {
   const franchiseID = (args as any)?.franchiseID as string | undefined;
   const ownerID     = (args as any)?.ownerID     as string | undefined;
@@ -30,57 +35,61 @@ export const handler: Schema['getAcceptedQuotesOwner']['functionHandler'] = asyn
   if (!ownerID)     throw new Error('Missing required argument: ownerID');
 
   // 1) Pull all quotes for the franchise (via franchiseIndex)
-  const franchItems: any[] = [];
+  const franchiseQuotesAll: any[] = [];
   for await (const items of queryAll({
     TableName: QUOTES_TABLE_NAME,
     IndexName: FRANCHISE_INDEX_NAME,
-    KeyConditionExpression: 'Franchise = :fr',
+    KeyConditionExpression: 'franchiseID = :fr',
     ExpressionAttributeValues: { ':fr': franchiseID },
   })) {
-    franchItems.push(...items);
+    franchiseQuotesAll.push(...items);
   }
 
-  // 2) Pull all quotes for the owner (via ownerIndex)
-  const ownerItems: any[] = [];
-  for await (const items of queryAll({
-    TableName: QUOTES_TABLE_NAME,
-    IndexName: OWNER_INDEX_NAME,
-    KeyConditionExpression: 'OwnerID = :own',
-    ExpressionAttributeValues: { ':own': ownerID },
-  })) {
-    ownerItems.push(...items);
-  }
-
-  // 3) Intersect by QuoteID (normalize a bit just in case)
-  const qidOf = (x: any) => x?.QuoteID ?? x?.quoteID ?? x?.id;
-  const ownerSet = new Set(ownerItems.map(qidOf).filter(Boolean));
-
-  const intersection = franchItems.filter((q) => {
-    const qid = qidOf(q);
-    return qid && ownerSet.has(qid);
-  });
-
-  // For quick lookup by QuoteID (use franchise version arbitrarily)
-  const franchMap = new Map(intersection.map((q) => [qidOf(q), q]));
-
-  // 4) For each quote in the intersection, attach SellRequest_DB records (by QuoteID-index)
-  const results = await Promise.all(
-    Array.from(franchMap.keys()).map(async (quoteID) => {
-      const reqResp = await ddb.send(new QueryCommand({
-        TableName: SELL_REQUEST_TABLE_NAME,
-        IndexName: SELL_REQUEST_QUOTE_GSI,
-        KeyConditionExpression: 'QuoteID = :qid',
-        ExpressionAttributeValues: { ':qid': quoteID },
-      }));
-
-      return {
-        quoteDetails: franchMap.get(quoteID),
-        requestDetails: reqResp.Items ?? [],
-      };
-    })
+  // 2) Partition into ownerQuotes (same owner) vs franchiseQuotes (different owner)
+  const ownerQuotesRaw = franchiseQuotesAll.filter(
+    (q) => (q?.OwnerID ?? q?.ownerID) === ownerID
   );
 
-  return results;
+  const franchiseQuotesRaw = franchiseQuotesAll.filter(
+    (q) => (q?.OwnerID ?? q?.ownerID) !== ownerID
+  );
+
+  // 3) For each quote, fetch its SellRequest_DB records by QuoteID and build the required shape.
+  async function enrich(quotes: any[]) {
+    return Promise.all(
+      quotes.map(async (q) => {
+        const quoteID = getQuoteID(q);
+        const reqResp = quoteID
+          ? await ddb.send(new QueryCommand({
+              TableName: SELL_REQUEST_TABLE_NAME,
+              IndexName: SELL_REQUEST_QUOTE_GSI,
+              KeyConditionExpression: 'QuoteID = :qid',
+              ExpressionAttributeValues: { ':qid': quoteID },
+            }))
+          : { Items: [] as any[] };
+
+        // Normalize keys so only "QuoteID" remains capitalized inside both blocks
+        const quoteDetails      = q;
+        const requestDetailsArr = reqResp.Items ?? [];
+
+        return {
+          quoteDetails,
+          requestDetails: requestDetailsArr,
+        };
+      })
+    );
+  }
+
+  const [ownerQuotes, franchiseQuotes] = await Promise.all([
+    enrich(ownerQuotesRaw),
+    enrich(franchiseQuotesRaw),
+  ]);
+
+  // 4) Return in requested shape
+  return {
+    franchiseQuotes,
+    ownerQuotes,
+  };
 };
 
 export default handler;

@@ -139,8 +139,8 @@ export const BidPlaceForm: React.FC<BidPlaceFormProps> = ({
             id="bid-amount"
             type="number"
             step="0.01"
-            min={floor}
-            max={max}
+            min={10}
+            max={10}
             value={amount}
             onChange={(e) => handleAmountChange(e.target.value)}
             placeholder="Enter your bid"

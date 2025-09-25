@@ -31,9 +31,9 @@ export const handler: Schema['confirmQuote']['functionHandler'] = async (event) 
       TableName: QUOTES,
       Key: { QuoteID: String(quoteID) },
       UpdateExpression:
-        'SET Confirmed = :c, ConfirmationNumber = :n, isAvailable = :a, ConfirmationTimestamp = :t',
+        'SET confirmed = :c, confirmationNumber = :n, isAvailable = :a, confirmationTimestamp = :t',
       ExpressionAttributeValues: {
-        ':c': true,
+        ':c': 'True',
         ':n': confirmationNumber,
         ':a': 'True', // keep your original string value
         ':t': timestamp,
