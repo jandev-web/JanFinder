@@ -39,7 +39,7 @@ const OwnerSingleAvailableQuote: React.FC<OwnerQuoteProps> = ({ initialQuote, ac
     });
   };
 
-  const goBack = () => router.push('/members/owner/quotes/available');
+  const goBack = () => router.push('/business/owner/quotes/available');
 
   if (!quote) {
     return (

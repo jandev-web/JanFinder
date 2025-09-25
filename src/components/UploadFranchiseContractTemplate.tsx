@@ -35,7 +35,7 @@ const UploadFranchisePDFTemplate: React.FC<UploadPDFProps> = ({ franchiseID, use
         maxFileCount={1}
         isResumable
         autoUpload={false}
-        onUploadSuccess={() => router.push('/members/owner/franchise')}
+        onUploadSuccess={() => router.push('/business/owner/franchise')}
       />
 
     </div>

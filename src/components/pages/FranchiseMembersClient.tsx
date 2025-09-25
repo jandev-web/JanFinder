@@ -32,7 +32,7 @@ export default function FranchiseMembersClient({
     <div className="mx-auto max-w-4xl px-4 py-10">
       <div className="mb-4">
         <Link
-          href="/members/owner"
+          href="/business/owner"
           className="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 transition hover:bg-gray-50"
         >
           {/* optional icon: ← */}
@@ -70,7 +70,7 @@ export default function FranchiseMembersClient({
               return (
                 <li key={id} className="p-0">
                   <Link
-                    href={`/members/franchise/owner/members/${encodeURIComponent(id)}`}
+                    href={`/business/franchise/owner/business/${encodeURIComponent(id)}`}
                     className="block p-4 hover:bg-gray-50 transition"
                   >
                     <span className="font-medium text-[#001F54]">{display}</span>

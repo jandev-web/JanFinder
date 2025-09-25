@@ -1,12 +1,19 @@
 /* src/styles/globals.css */
 @import "tailwindcss";
 
+/* --- Tailwind v4 dark mode: manual toggle with `.dark` --- */
+@custom-variant dark (&:where(.dark, .dark *));
 
-/* Add any custom global styles here if needed */
+/* ---------------------------------------
+   Base app resets / demo styles (optional)
+---------------------------------------- */
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Demo-only container styles; safe to remove if not needed */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -14,46 +21,10 @@ All colors MUST be HSL.
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-
-
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-
+/* ---------------------------------------
+   Design Tokens (HSL only, as requested)
+   Keep these as regular CSS variables you own.
+---------------------------------------- */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -85,31 +56,26 @@ All colors MUST be HSL.
     --ring: 217 100% 17%;
 
     --radius: 0.5rem;
-    
-    /* Brand Colors */
+
+    /* Brand */
     --brand-blue: 217 100% 17%;
     --brand-yellow: 43 96% 56%;
     --brand-light-blue: 214 100% 95%;
-    
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(214, 100%, 95%), hsl(0, 0%, 100%));
-    --gradient-hero: linear-gradient(135deg, hsl(217, 100%, 17%), hsl(217, 70%, 25%));
-    --gradient-card: linear-gradient(135deg, hsl(0, 0%, 100%), hsl(214, 100%, 98%));
+    --brand-green: 148 48% 43%; /* #38a169 -> hsl(148 48% 43%) */
 
+    /* Gradients (regular CSS vars are fine) */
+    --gradient-primary: linear-gradient(135deg, hsl(214 100% 95%), hsl(0 0% 100%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 100% 17%), hsl(217 70% 25%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(214 100% 98%));
+
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -141,6 +107,7 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -150,71 +117,106 @@ All colors MUST be HSL.
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Make borders follow your token */
   *, ::before, ::after { border-color: hsl(var(--border)); }
 }
 
+/* ---------------------------------------
+   Map your tokens to Tailwind v4 theme vars
+   so you can use utilities like bg-primary, text-accent, rounded-lg, animate-*
+---------------------------------------- */
+@theme inline {
+  /* Colors */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
 
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
 
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  width: 100%;
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  /* Brand aliases (optional) */
+  --color-brand-blue: hsl(var(--brand-blue));
+  --color-brand-yellow: hsl(var(--brand-yellow));
+  --color-brand-light-blue: hsl(var(--brand-light-blue));
+  --color-brand-green: hsl(var(--brand-green));
+
+  /* Radius */
+  --radius-lg: var(--radius);
+
+  /* Animations (register utilities) */
+  --animate-spin-slow: spin-slow 5s linear infinite;
+  --animate-reverse-spin-slow: reverse-spin-slow 5s linear infinite;
+  --animate-continuous-fade: continuous-fade 6s linear infinite;
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes reverse-spin-slow {
+    from { transform: rotate(360deg); }
+    to   { transform: rotate(0deg); }
+  }
+  @keyframes continuous-fade {
+    0%   { background-position: 0% 0; }
+    50%  { background-position: 100% 0; }
+    100% { background-position: 200% 0; }
+  }
 }
 
+/* ---------------------------------------
+   Your custom utilities/components
+---------------------------------------- */
 @layer utilities {
   .slanted-divider {
     width: 80px;
     height: 100px;
-    background-color: #38a169; /* Green background matching the header */
+    background-color: hsl(var(--brand-green)); /* HSL (was #38a169) */
     clip-path: polygon(100% 0, 100% 100%, 0 100%);
-    
-    transform: skewX(-15deg); /* Apply a slant */
+    transform: skewX(-15deg);
   }
 }
 
-@keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+/* ---------------------------------------
+   Optional demo/logo bits (safe to remove)
+---------------------------------------- */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover { filter: drop-shadow(0 0 2em hsl(240 6% 62% / 0.67)); }
+.logo.react:hover { filter: drop-shadow(0 0 2em hsl(193 95% 62% / 0.73)); }
+
+@keyframes logo-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
   }
 }
 
-.animate-spin-slow {
-  animation: spin-slow 10s linear infinite;
-}
-
-@keyframes reverse-spin-slow {
-  from {
-    transform: rotate(360deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
-}
-
-.animate-spin-slow {
-  animation: spin-slow 5s linear infinite;
-}
-
-.animate-reverse-spin-slow {
-  animation: reverse-spin-slow 5s linear infinite;
-}
-@keyframes continuous-fade {
-  0% {
-    background-position: 0% 0;
-  }
-  50% {
-    background-position: 100% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.animate-continuous-fade {
-  animation: continuous-fade 6s linear infinite; /* Smooth and continuous fading */
-}
+.card { padding: 2em; }
+.read-the-docs { color: hsl(0 0% 53%); }

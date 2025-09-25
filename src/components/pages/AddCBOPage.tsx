@@ -56,7 +56,7 @@ export default function AddCBOForm({ action }: Props) {
   const [phoneError, setPhoneError] = React.useState<string>('');
 
   React.useEffect(() => {
-    if (state.ok) router.replace('/members/owner/cbo');
+    if (state.ok) router.replace('/business/owner/cbo');
   }, [state.ok, router]);
 
   const onAddressChange = (field: string, value: string) =>

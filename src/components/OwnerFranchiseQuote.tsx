@@ -121,7 +121,7 @@ const OwnerFranchiseQuote: React.FC<OwnerFranchiseQuoteProps> = ({ user, quoteID
   
     const goBack = async () => {
   
-      router.push('/members/owner/quotes/franchise');
+      router.push('/business/owner/quotes/franchise');
   
     };
   

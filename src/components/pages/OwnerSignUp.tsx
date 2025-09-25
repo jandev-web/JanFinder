@@ -96,7 +96,7 @@ const CreateOwnerForm: React.FC = () => {
 
 
       setSuccess('Account created! Check your email to verify, then sign in to finish setup.');
-      router.push('/members/sign-in');
+      router.push('/business/sign-in');
     } catch (err: any) {
       setError(err?.message || 'Failed to create account. Please try again.');
     } finally {
@@ -193,7 +193,7 @@ const CreateOwnerForm: React.FC = () => {
         {success && <div className="mt-4 text-green-500 text-sm">{success}</div>}
 
         <div className="mt-4 text-center">
-          <Link href="/members/sign-in" className="text-[#001F54] text-sm hover:underline">
+          <Link href="/business/sign-in" className="text-[#001F54] text-sm hover:underline">
             Already Have a Members Account? Sign In
           </Link>
         </div>

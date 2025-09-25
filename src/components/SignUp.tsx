@@ -7,11 +7,11 @@ const SignUp: React.FC = () => {
   const router = useRouter();
 
   const handleOwnerSignUp = () => {
-    router.push('/members/sign-up/owner');
+    router.push('/business/sign-up/owner');
   };
 
   const handleMemberSignUp = () => {
-    router.push('/members/sign-up/cbo');
+    router.push('/business/sign-up/cbo');
   };
 
   return (

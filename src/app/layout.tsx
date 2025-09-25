@@ -11,14 +11,14 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}) { 
   return (
     <html lang="en">
       <head>
         <title>{metadata.title}</title>
         <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
       </head>
-      <body className={`${inter.className} w-full`}>
+      <body className={`${inter.className} bg-background text-foreground w-full`}>
         <AmplifyClientProvider>{children}</AmplifyClientProvider>
       </body>
     </html>

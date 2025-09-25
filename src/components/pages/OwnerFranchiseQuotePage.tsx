@@ -25,7 +25,7 @@ const OwnerFranchiseQuotePage: React.FC<OwnerFranchiseQuoteProps> = ({ user, quo
         const fetchUser = async () => {
           try {
             if (!user) {
-              redirect('/members/sign-in');
+              redirect('/business/sign-in');
               return;
             }
     

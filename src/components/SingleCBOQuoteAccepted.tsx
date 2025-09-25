@@ -206,7 +206,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
 
     const goBack = async () => {
 
-        router.push('/members/cbo/quotes/available');
+        router.push('/business/cbo/quotes/available');
 
     };
 
@@ -392,7 +392,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID }) => {
                             <button
                                 onClick={() =>
                                     router.push(
-                                        `/members/cbo/quote/accepted/site-visit?id=${quoteID}`
+                                        `/business/cbo/quote/accepted/site-visit?id=${quoteID}`
                                     )
                                 }
                                 className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition"

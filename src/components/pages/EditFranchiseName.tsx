@@ -20,7 +20,7 @@ const EditFranchiseName: React.FC<EditFranchiseNameProps> = ({ user }) => {
     const fetchData = async () => {
       try {
         if (!user) {
-          router.push('/members/sign-in');
+          router.push('/business/sign-in');
           return;
         }
 
@@ -43,7 +43,7 @@ const EditFranchiseName: React.FC<EditFranchiseNameProps> = ({ user }) => {
     <div className="max-w-md mx-auto bg-white p-6">
         <button
         className="absolute top-4 left-4 pt-2 pb-10 pl-4 pr-4 text-lg font-semibold text-[#001F54] hover:text-yellow-500 transition duration-300"
-        onClick={() => router.push('/members/owner/franchise')}
+        onClick={() => router.push('/business/owner/franchise')}
       >
         &lt; Back to Franchise Info
       </button>

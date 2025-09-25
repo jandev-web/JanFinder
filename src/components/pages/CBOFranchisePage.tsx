@@ -26,7 +26,7 @@ const FranchisePage: React.FC<FranchisePageProps> = ({ user }) => {
     const fetchData = async () => {
       try {
         if (!user) {
-          router.push('/members/sign-in');
+          router.push('/business/sign-in');
           return;
         }
 

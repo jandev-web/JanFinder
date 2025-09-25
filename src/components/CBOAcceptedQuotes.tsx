@@ -53,7 +53,7 @@ const CBOAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
   
 
   const handleQuoteClick = (quote: Quote) => {
-    router.push(`/members/cbo/quote/accepted?id=${quote.QuoteID}`);
+    router.push(`/business/cbo/quote/accepted?id=${quote.QuoteID}`);
   };
 
   useEffect(() => {
@@ -91,7 +91,7 @@ const CBOAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
 
       <button
         className="absolute top-4 left-4 pt-2 pb-2 pl-4 pr-4 text-lg font-semibold hover:text-yellow-500 text-[#001F54] transition duration-300"
-        onClick={() => router.push('/members/cbo/quotes')}
+        onClick={() => router.push('/business/cbo/quotes')}
       >
         &lt; Back to All Contracts
       </button>
@@ -117,7 +117,7 @@ const CBOAccQuotes: React.FC<AccQuotesProps> = ({ user }) => {
                 <div className="mt-4 mb-4 text-[#001F54]">No Purchased Contracts Yet.</div>
                 <button
                   className="px-6 py-3 bg-yellow-500 text-[#001F54] text-lg font-semibold rounded-lg shadow-md hover:bg-yellow-400 hover:shadow-lg hover:scale-105 transform transition duration-300"
-                  onClick={() => router.push('/members/cbo/quotes/available')}
+                  onClick={() => router.push('/business/cbo/quotes/available')}
                 >
                   Click here to purchase contracts!
                 </button>

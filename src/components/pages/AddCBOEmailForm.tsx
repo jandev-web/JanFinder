@@ -33,7 +33,7 @@ export default function AddCBOEmailForm({ action }: Props) {
   React.useEffect(() => {
     if (state.ok) {
       // Go back to list or show a toast in your app shell
-      router.replace('/members/owner/cbo?invited=1');
+      router.replace('/business/owner/cbo?invited=1');
     }
   }, [state.ok, router]);
 

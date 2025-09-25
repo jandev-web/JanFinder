@@ -20,7 +20,7 @@ function MemberLandingFooter() {
                 <h3 className="text-lg font-bold mb-2">Quick Links</h3>
                 <ul className="text-sm space-y-2">
                   <li><a href="/forgot-password" className="hover:underline">Forgot Password</a></li>
-                  <li><a href="/members/sign-up" className="hover:underline">Sign Up</a></li>
+                  <li><a href="/business/sign-up" className="hover:underline">Sign Up</a></li>
                   <li><a href="/help" className="hover:underline">Help</a></li>
                   <li><a href="/faq" className="hover:underline">FAQ</a></li>
                 </ul>

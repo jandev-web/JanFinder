@@ -139,7 +139,7 @@ const SelfCBOSignUp: React.FC<SelfCBOSignUpProps> = ({ ownerID, cboEmail }) => {
         const cboData = { email, firstName, lastName, ownerID, address, phone };
         const result = await createCBO(cboData);
         setSuccess('CBO created successfully!');
-        router.push('/members/sign-in');
+        router.push('/business/sign-in');
       } else {
         console.error('No Owner ID');
       }
@@ -176,7 +176,7 @@ const SelfCBOSignUp: React.FC<SelfCBOSignUpProps> = ({ ownerID, cboEmail }) => {
               {emailExists && (
                 <p className="text-red-500 text-sm mt-1">
                   This email is already in use. Have an account?{' '}
-                  <Link href="/members/sign-in" className="underline hover:text-yellow-500">
+                  <Link href="/business/sign-in" className="underline hover:text-yellow-500">
                     Click here to sign in.
                   </Link>
                 </p>

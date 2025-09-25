@@ -56,7 +56,7 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user, quotes, franchise }) =
     if (!hasTemplates) {
       setShowTemplatesModal(true);
     } else {
-      router.push(`/members/owner/quote/available?quoteID=${quote.QuoteID}`);
+      router.push(`/business/owner/quote/available?quoteID=${quote.QuoteID}`);
     }
   };
 
@@ -100,7 +100,7 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user, quotes, franchise }) =
     <div className="relative">
       <button
         className="absolute top-4 left-4 pt-2 pb-10 pl-4 pr-4 text-lg font-semibold text-blue-700 hover:text-yellow-500 transition duration-300"
-        onClick={() => router.push('/members/owner/quotes')}
+        onClick={() => router.push('/business/owner/quotes')}
       >
         &lt; Back to All Quotes
       </button>
@@ -145,7 +145,7 @@ const OwnerAvaQuotes: React.FC<AvaQuotesProps> = ({ user, quotes, franchise }) =
             </button>
             <p className="text-xl font-bold text-red-600 mb-6">{missingMessage}</p>
             <button
-              onClick={() => router.push('/members/owner/franchise')}
+              onClick={() => router.push('/business/owner/franchise')}
               className="w-full py-3 bg-yellow-500 text-blue-900 font-semibold rounded-lg hover:bg-yellow-600 transition-colors"
             >
               Add Templates

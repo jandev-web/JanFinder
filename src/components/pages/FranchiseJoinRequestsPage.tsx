@@ -24,7 +24,7 @@ const FranchiseJoinRequestsPage: React.FC<FranchiseJoinRequestsPageProps> = ({ u
         const fetchUser = async () => {
           try {
             if (!user) {
-              redirect('/members/sign-in');
+              redirect('/business/sign-in');
               return;
             }
     

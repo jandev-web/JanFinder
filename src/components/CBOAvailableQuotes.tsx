@@ -55,7 +55,7 @@ const CBOAvaQuotes: React.FC<AvaQuotesProps> = ({ user, quotes }) => {
     <div className="relative">
       <button
         className="absolute top-4 left-4 pt-2 pb-10 pl-4 pr-4 text-lg font-semibold text-blue-700 hover:text-yellow-500 transition duration-300"
-        onClick={() => router.push('/members/cbo/quotes')}
+        onClick={() => router.push('/business/cbo/quotes')}
       >
         &lt; Back to All Quotes
       </button>

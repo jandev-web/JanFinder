@@ -53,7 +53,7 @@ const FranchiseQuotes: React.FC<FranchiseQuotesProps> = ({ user }) => {
   
 
   const handleQuoteClick = (quote: Quote) => {
-    router.push(`/members/owner/quote/franchise?quoteID=${quote.QuoteID}`);
+    router.push(`/business/owner/quote/franchise?quoteID=${quote.QuoteID}`);
   };
 
   useEffect(() => {
@@ -94,7 +94,7 @@ const FranchiseQuotes: React.FC<FranchiseQuotesProps> = ({ user }) => {
 
       <button
         className="absolute top-4 left-4 pt-2 pb-2 pl-4 pr-4 text-lg font-semibold hover:text-yellow-500 text-[#001F54] transition duration-300"
-        onClick={() => router.push('/members/owner/quotes')}
+        onClick={() => router.push('/business/owner/quotes')}
       >
         &lt; Back to All Quotes
       </button>
@@ -120,7 +120,7 @@ const FranchiseQuotes: React.FC<FranchiseQuotesProps> = ({ user }) => {
                 <div className="mt-4 mb-4 text-[#001F54]">No Franchise Quotes Yet.</div>
                 <button
                   className="px-6 py-3 bg-yellow-500 text-[#001F54] text-lg font-semibold rounded-lg shadow-md hover:bg-yellow-400 hover:shadow-lg hover:scale-105 transform transition duration-300"
-                  onClick={() => router.push('/members/owner/quotes/available')}
+                  onClick={() => router.push('/business/owner/quotes/available')}
                 >
                   Click here to start bidding!
                 </button>

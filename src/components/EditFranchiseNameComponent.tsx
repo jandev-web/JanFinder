@@ -27,7 +27,7 @@ const EditFranchiseNameComponent: React.FC<EditFranchiseNameComponentProps> = ({
     setError('');
     try {
       await updateFranchiseName(franchise.FranchiseID, franchiseName);
-      router.push('/members/owner/franchise');
+      router.push('/business/owner/franchise');
     } catch (err) {
       console.error('Error updating franchise name:', err);
       setError('Failed to update franchise name. Please try again.');

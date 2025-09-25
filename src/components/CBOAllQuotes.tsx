@@ -23,7 +23,7 @@ const AllQuotes: React.FC = () => {
                 </p>
                 <button
                     className="mt-4 w-56 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
-                    onClick={() => router.push('/members/cbo/quotes/accepted')}
+                    onClick={() => router.push('/business/cbo/quotes/accepted')}
                 >
                     Purchased Contracts
                 </button>
@@ -36,7 +36,7 @@ const AllQuotes: React.FC = () => {
                 </p>
                 <button
                     className="mt-4 w-56 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
-                    onClick={() => router.push('/members/cbo/quotes/available')}
+                    onClick={() => router.push('/business/cbo/quotes/available')}
                 >
                     Available Contracts
                 </button>

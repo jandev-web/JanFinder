@@ -40,7 +40,7 @@ const CBOAvaQuoteCard: React.FC<QuoteCardProps> = ({ quote, timezone }) => {
   
   const handleClick = () => {
     // Navigate to the route with the requestID as a URL parameter.
-    router.push(`/members/cbo/quote/available?id=${QuoteID}`);
+    router.push(`/business/cbo/quote/available?id=${QuoteID}`);
   };
 
   return (

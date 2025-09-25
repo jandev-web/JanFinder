@@ -70,7 +70,7 @@ export default function SetupForm({ action, states }: Props) {
   );
 
   React.useEffect(() => {
-    if (state.ok) router.replace('/members/owner');
+    if (state.ok) router.replace('/business/owner');
   }, [state.ok, router]);
 
   return (
@@ -133,7 +133,7 @@ export default function SetupForm({ action, states }: Props) {
 
       <div className="flex items-center justify-end gap-3 border-t pt-6">
         <a
-          href="/members/owner"
+          href="/business/owner"
           className="rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm transition hover:bg-gray-50"
         >
           Cancel

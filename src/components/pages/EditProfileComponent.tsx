@@ -80,7 +80,7 @@ const EditProfileComponent: React.FC<EditProfileProps> = ({ user }) => {
         }
         await updateCBOInfo(user.sub, { firstName, lastName, franchiseName });
         alert('Info updated successfully!');
-        router.push('/members/cbo/profile');
+        router.push('/business/cbo/profile');
       } catch (err) {
         console.error('Failed to update user info', err);
         setError('Failed to update user info');

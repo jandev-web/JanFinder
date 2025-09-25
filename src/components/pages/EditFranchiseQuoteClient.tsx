@@ -46,7 +46,7 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
         ? 'quote-template.docx'
         : null;
 
-  const handleBack = () => router.push('/members/owner/franchise');
+  const handleBack = () => router.push('/business/owner/franchise');
 
   const downloadQuoteTemplate = async () => {
     if (!franchiseID) return;
@@ -77,7 +77,7 @@ export default function FranchiseEditQuoteClient({ owner, franchise, setTemplate
     setDeleteBusy(true);
     try {
       await deleteTemplateAndUnset(franchiseID);
-      router.push('/members/owner/franchise');
+      router.push('/business/owner/franchise');
     } catch (e: any) {
       console.error('Delete error:', e);
       setError('Failed to delete template. Please try again.');

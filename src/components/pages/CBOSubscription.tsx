@@ -43,7 +43,7 @@ const CBOSubscription: React.FC<CBOSubscriptionProps> = ({ user }) => {
       <div className="text-center p-6">
         <h1 className="text-2xl font-bold text-red-500">No Subscription</h1>
         <p className="text-lg mt-2">You are not currently subscribed to any plan.</p>
-        <Link href="/members/subscribe">
+        <Link href="/business/subscribe">
           <button className="bg-blue-500 text-white px-4 py-2 mt-4 rounded hover:bg-blue-600">
             Subscribe Now
           </button>

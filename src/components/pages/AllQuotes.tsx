@@ -53,7 +53,7 @@ const AllQuotes: React.FC<AllQuotesProps> = ({ user }) => {
     </p>
     <button
       className="mt-4 w-56 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
-      onClick={() => router.push('/members/owner/quotes/available')}
+      onClick={() => router.push('/business/owner/quotes/available')}
     >
       Enter the quote Bidding platform:
     </button>
@@ -67,7 +67,7 @@ const AllQuotes: React.FC<AllQuotesProps> = ({ user }) => {
     </p>
     <button
       className="mt-4 w-56 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
-      onClick={() => router.push('/members/owner/quotes/accepted')}
+      onClick={() => router.push('/business/owner/quotes/accepted')}
     >
       Purchased Quotes
     </button>
@@ -80,7 +80,7 @@ const AllQuotes: React.FC<AllQuotesProps> = ({ user }) => {
     </p>
     <button
       className="mt-4 w-56 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
-      onClick={() => router.push('/members/owner/quotes/franchise')}
+      onClick={() => router.push('/business/owner/quotes/franchise')}
     >
       Franchise Quotes
     </button>
@@ -94,7 +94,7 @@ const AllQuotes: React.FC<AllQuotesProps> = ({ user }) => {
     </p>
     <button
       className="mt-4 w-56 py-2 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
-      onClick={() => router.push('/members/owner/quotes/custom')}
+      onClick={() => router.push('/business/owner/quotes/custom')}
     >
       Custom Quotes
     </button>

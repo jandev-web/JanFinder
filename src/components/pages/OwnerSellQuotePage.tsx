@@ -119,7 +119,7 @@ export default function OwnerSellQuoteClient({
       const res = await sellQuoteAction({ quoteID, targetUser, ownerID });
       if (!res?.ok) throw new Error('Failed to send quote.');
       alert('Quote sent successfully!');
-      router.push(`/members/owner/quotes/accepted`);
+      router.push(`/business/owner/quotes/accepted`);
     } catch (e: any) {
       console.error('Error selling quote:', e);
       setError(e?.message || 'Something went wrong.');
@@ -145,7 +145,7 @@ export default function OwnerSellQuoteClient({
         <div className="flex items-center mb-8">
           <button
             onClick={() => {
-              if (quoteID) router.push(`/members/owner/quote/accepted?quoteID=${quoteID}`);
+              if (quoteID) router.push(`/business/owner/quote/accepted?quoteID=${quoteID}`);
               else router.back();
             }}
             className="inline-flex items-center text-[#001F54] hover:text-yellow-500 transition-colors"

@@ -18,7 +18,7 @@ export async function requireOwnerSetup() {
         nextServerContext: { cookies },
         operation: (ctx) => getCurrentUser(ctx).catch(() => null as AmplifyUser | null),
     });
-    if (!authUser) redirect('/members/sign-in');
+    if (!authUser) redirect('/business/sign-in');
     // Derive owner id — adjust this to match your Owner_DB PK
     const ownerID = authUser.userId;
 
@@ -37,7 +37,7 @@ export async function requireOwnerSetup() {
     // 3) Gate
     if (!firstSignIn) {
         // Add a hint param the setup page can read to show a banner/toast
-        redirect('/members/franchise/set-up');
+        redirect('/business/franchise/set-up');
     }
 
     // If we get here, the user is allowed through

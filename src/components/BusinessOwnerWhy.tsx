@@ -45,7 +45,7 @@ const BusinessOwnerWhy: React.FC = () => {
                                 Ready to join thousands of other business owners today? Make the upgrade with Bid2Clean.
                             </p>
                             <Link
-                                href="/members/sign-up"
+                                href="/business/sign-up"
                                 className="bg-yellow-400 text-[#001F54] text-base lg:text-lg font-medium px-6 py-3 rounded-lg shadow-md hover:bg-yellow-500 transition duration-300"
                             >
                                 Join Today

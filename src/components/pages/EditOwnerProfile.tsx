@@ -85,7 +85,7 @@ const EditOwnerProfileComponent: React.FC<EditProfileProps> = ({ user }) => {
         }
         await updateOwnerInfo(user.sub, { firstName, lastName, franchiseName });
         alert('Info updated successfully!');
-        router.push('/members/owner/profile')
+        router.push('/business/owner/profile')
       } catch (err) {
         console.error('Failed to update user info', err);
         setError('Failed to update user info');

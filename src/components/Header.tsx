@@ -164,7 +164,7 @@ const Header = () => {
 
             {/* Utility links from original Header (kept, styled to match) */}
             <Link
-              href="/members"
+              href="/business"
               className="text-gray-600 hover:text-[#001F54] font-medium transition-colors"
             >
               Log In

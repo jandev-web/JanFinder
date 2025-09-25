@@ -54,7 +54,7 @@ export default function CBOJoinForm({ email = '', token, finishAction }: Props) 
   });
 
   React.useEffect(() => {
-    if (finishState.ok) router.replace('/members/cbo?joined=1');
+    if (finishState.ok) router.replace('/business/cbo?joined=1');
   }, [finishState.ok, router]);
 
   async function handleCreate(e: React.FormEvent) {

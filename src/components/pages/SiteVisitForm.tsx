@@ -245,7 +245,7 @@ const SiteVistForm: React.FC<SiteVistFormProps> = ({ quoteID, user }) => {
         hasChanged,
         newRoomTypes,
       })
-      router.push(`/members/cbo/quote/accepted?id=${quoteID}`)
+      router.push(`/business/cbo/quote/accepted?id=${quoteID}`)
     } catch (error) {
       console.error('Error confirming site verification:', error)
     }

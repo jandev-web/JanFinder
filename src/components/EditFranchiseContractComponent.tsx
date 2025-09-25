@@ -36,7 +36,7 @@ const EditFranchiseContractComponent: React.FC<EditFranchiseContractComponentPro
     try {
       deleteFranchiseTemplate(franchiseID, 'contract');
       setFranchisePDF(null);
-      router.push('/members/owner/franchise')
+      router.push('/business/owner/franchise')
     } catch (err: any) {
       console.error("Error deleting template:", err);
       setError("Failed to delete template. Please try again.");

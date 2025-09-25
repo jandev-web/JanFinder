@@ -65,7 +65,7 @@ const SmallHeader = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/members/sign-in" className="text-[#001F54] text-lg font-medium hover:text-yellow-500 transition duration-300">
+                        <Link href="/business/sign-in" className="text-[#001F54] text-lg font-medium hover:text-yellow-500 transition duration-300">
                             Log In
                         </Link>
                     </li>

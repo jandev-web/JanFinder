@@ -46,7 +46,7 @@ export default function FranchiseEditContractClient({ owner, franchise, setTempl
         ? 'contract-template.docx'
         : null;
 
-  const handleBack = () => router.push('/members/owner/franchise');
+  const handleBack = () => router.push('/business/owner/franchise');
 
   const downloadContractTemplate = async () => {
     if (!franchiseID) return;
@@ -77,7 +77,7 @@ export default function FranchiseEditContractClient({ owner, franchise, setTempl
     setDeleteBusy(true);
     try {
       await deleteTemplateAndUnset(franchiseID);
-      router.push('/members/owner/franchise');
+      router.push('/business/owner/franchise');
     } catch (e: any) {
       console.error('Delete error:', e);
       setError('Failed to delete template. Please try again.');

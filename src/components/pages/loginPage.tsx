@@ -24,7 +24,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ user, signOut, isSigningOut, isRe
       sessionStorage.removeItem('attributes');
       signOut();
       
-      router.push(isRedirect ? '/members/signIn' : '/members');
+      router.push(isRedirect ? '/business/signIn' : '/business');
       return;
     }
 
@@ -34,7 +34,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ user, signOut, isSigningOut, isRe
         //setAttributes(attributes);
 
         const isOwner = await checkIsOwner(attributes);
-        router.push(isOwner ? '/members/owner' : '/members/cbo');
+        router.push(isOwner ? '/business/owner' : '/business/cbo');
       } else {
         setIsLoading(false);
       }

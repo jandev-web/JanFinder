@@ -37,7 +37,7 @@ const OwnerAcceptedQuotesPage: React.FC<OwnerAcceptedQuotesPageProps> = ({
   const handleQuoteClick = (quote: any) => {
     const q = normalizeQuote(quote);
     if (q?.QuoteID) {
-      router.push(`/members/owner/quote/accepted?quoteID=${encodeURIComponent(q.QuoteID)}`);
+      router.push(`/business/owner/quote/accepted?quoteID=${encodeURIComponent(q.QuoteID)}`);
     }
   };
 
@@ -52,7 +52,7 @@ const OwnerAcceptedQuotesPage: React.FC<OwnerAcceptedQuotesPageProps> = ({
       <div className="pt-24 px-4 md:px-8">
         <button
           className="mb-6 text-lg font-semibold text-blue-700 hover:text-yellow-500 transition"
-          onClick={() => router.push('/members/owner/quotes')}
+          onClick={() => router.push('/business/owner/quotes')}
         >
           &lt; Back to All Quotes
         </button>
@@ -66,7 +66,7 @@ const OwnerAcceptedQuotesPage: React.FC<OwnerAcceptedQuotesPageProps> = ({
             <div className="mt-4 mb-4 text-[#001F54]">No accepted quotes yet.</div>
             <button
               className="px-6 py-3 bg-yellow-500 text-[#001F54] text-lg font-semibold rounded-lg shadow-md hover:bg-yellow-400 hover:shadow-lg hover:scale-105 transform transition"
-              onClick={() => router.push('/members/owner/quotes/available')}
+              onClick={() => router.push('/business/owner/quotes/available')}
             >
               Browse Available Quotes
             </button>

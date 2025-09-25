@@ -172,7 +172,7 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID, prevPage }) => {
   const acceptAvailableQuote = async (quoteID: string, franchiseID: string, cboID: string) => {
     try {
       //await acceptQuote(quoteID, franchiseID, cboID);
-      router.push(`/members/payment?quoteId=${quoteID}`);
+      router.push(`/business/payment?quoteId=${quoteID}`);
     } catch (error) {
       console.error('Error accepting quote:', error);
     }
@@ -183,10 +183,10 @@ const CBOQuote: React.FC<CBOQuoteProps> = ({ user, quoteID, prevPage }) => {
   const goBack = async () => {
     try {
       if (prevPage === 'ava') {
-        router.push('/members/cbo/quotes/availableQuotes')
+        router.push('/business/cbo/quotes/availableQuotes')
       }
       else if (prevPage === 'acc') {
-        router.push('/members/cbo/quotes/acceptedQuotes')
+        router.push('/business/cbo/quotes/acceptedQuotes')
       }
     } catch (error) {
       console.error('Error retrieving PDF:', error);

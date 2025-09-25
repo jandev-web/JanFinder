@@ -180,15 +180,15 @@ export default function FranchiseClient({
 
           {/* Details */}
           <div className="divide-y divide-gray-200">
-            <Row label="Email" editHref="/members/franchise/owner/edit-email">
+            <Row label="Email" editHref="/business/franchise/owner/edit-email">
               <span className="text-[#001F54]">{franchiseEmail}</span>
             </Row>
 
-            <Row label="Phone" editHref="/members/franchise/owner/edit-phone">
+            <Row label="Phone" editHref="/business/franchise/owner/edit-phone">
               <span className="text-[#001F54]">{franchisePhone}</span>
             </Row>
 
-            <Row label="Website" editHref="/members/franchise/owner/edit-website">
+            <Row label="Website" editHref="/business/franchise/owner/edit-website">
               {franchiseWebsite !== '—' ? (
                 <a
                   href={franchiseWebsite}
@@ -207,7 +207,7 @@ export default function FranchiseClient({
               <span className="text-[#001F54]">{createdOn}</span>
             </Row>
 
-            <Row label="Address" editHref="/members/franchise/owner/edit-address">
+            <Row label="Address" editHref="/business/franchise/owner/edit-address">
               <div className="text-[#001F54]">
                 <div>{street}</div>
                 <div>{city !== '—' || state !== '—' ? `${city}, ${state}` : ''}</div>
@@ -215,11 +215,11 @@ export default function FranchiseClient({
               </div>
             </Row>
 
-            <Row label="Description" editHref="/members/franchise/owner/edit-description">
+            <Row label="Description" editHref="/business/franchise/owner/edit-description">
               <p className="whitespace-pre-wrap text-[#001F54]">{description}</p>
             </Row>
 
-            <Row label="Logo" editHref="/members/franchise/owner/edit-logo">
+            <Row label="Logo" editHref="/business/franchise/owner/edit-logo">
               {logoUrl ? (
                 <img
                   src={logoUrl}
@@ -231,7 +231,7 @@ export default function FranchiseClient({
               )}
             </Row>
 
-            <Row label="Service Regions" editHref="/members/franchise/owner/edit-service-regions">
+            <Row label="Service Regions" editHref="/business/franchise/owner/edit-service-regions">
               {serviceRegions.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {serviceRegions.map((r) => (
@@ -269,7 +269,7 @@ export default function FranchiseClient({
                 )}
               </div>
               <a
-                href="/members/owner/franchise/edit-template/quote"
+                href="/business/owner/franchise/edit-template/quote"
                 className="ml-auto inline-flex items-center rounded-md bg-yellow-500 px-3 py-1.5 text-sm font-semibold text-[#001F54] shadow-sm transition hover:bg-yellow-400"
               >
                 Edit
@@ -296,7 +296,7 @@ export default function FranchiseClient({
                 )}
               </div>
               <a
-                href="/members/owner/franchise/edit-template/contract"
+                href="/business/owner/franchise/edit-template/contract"
                 className="ml-auto inline-flex items-center rounded-md bg-yellow-500 px-3 py-1.5 text-sm font-semibold text-[#001F54] shadow-sm transition hover:bg-yellow-400"
               >
                 Edit

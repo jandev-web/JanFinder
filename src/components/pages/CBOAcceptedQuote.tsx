@@ -26,7 +26,7 @@ const CBOSingleAcceptedQuote: React.FC<CBOSingleQuoteProps> = ({ user, quoteID }
         const fetchUser = async () => {
           try {
             if (!user) {
-              redirect('/members/sign-in');
+              redirect('/business/sign-in');
               return;
             }
     

@@ -96,7 +96,7 @@ const SingleCBOPage: React.FC<SingleCBOPageProps> = ({ user }) => {
           setLoading(true);
           await deleteCBO(cbo.CBOID);
           await deleteCBOQuoteID(cbo.franchiseID)
-          router.push('/members/owner/cbos'); // Redirect to the list of CBOs after deletion
+          router.push('/business/owner/cbos'); // Redirect to the list of CBOs after deletion
         } catch (error) {
           console.error('Error deleting CBO:', error);
           setError('Failed to delete CBO.');
@@ -126,7 +126,7 @@ const SingleCBOPage: React.FC<SingleCBOPageProps> = ({ user }) => {
       {/* Back Button */}
       <button
         className="absolute top-6 left-6 text-blue-800 font-medium hover:text-yellow-500 transition-colors duration-300"
-        onClick={() => router.push('/members/owner/CBOs')}
+        onClick={() => router.push('/business/owner/CBOs')}
       >
         &larr; Back
       </button>

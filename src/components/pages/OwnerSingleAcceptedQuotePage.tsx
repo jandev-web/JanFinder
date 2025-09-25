@@ -83,7 +83,7 @@ const OwnerQuoteClient: React.FC<OwnerQuoteClientProps> = ({
 
 
   const goBack = () => {
-    router.push('/members/owner/quotes/available');
+    router.push('/business/owner/quotes/available');
   };
 
   return (
@@ -261,7 +261,7 @@ const OwnerQuoteClient: React.FC<OwnerQuoteClientProps> = ({
               {/* Example: navigate to sell flow */}
               {quoteID && (
                 <button
-                  onClick={() => router.push(`/members/owner/quote/sell?quoteID=${quoteID}`)}
+                  onClick={() => router.push(`/business/owner/quote/sell?quoteID=${quoteID}`)}
                   className="px-6 py-3 bg-yellow-500 text-[#001F54] font-semibold rounded-lg hover:bg-yellow-400 transition"
                 >
                   Sell Quote

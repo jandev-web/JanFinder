@@ -13,10 +13,10 @@ const RestrictedQuote: React.FC<RestrictedQuoteProps> = ({ memberStatus }) => {
         console.log(memberStatus)
 
         if (memberStatus === 'Owner') {
-            router.push('/members/owner/quotes');
+            router.push('/business/owner/quotes');
         }
         if (memberStatus === 'cbo') {
-            router.push('/members/cbo/quotes');
+            router.push('/business/cbo/quotes');
         }
         
     };

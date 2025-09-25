@@ -44,7 +44,7 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
 
         if (!sub) {
           console.log('No sub found')
-          //router.push('/members/home');
+          //router.push('/business/home');
           return;
         }
 
@@ -54,7 +54,7 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
         // ---- OWNER FLOW ----
         if (isOwner) {
 
-          router.push('/members/owner'); // owner dashboard
+          router.push('/business/owner'); // owner dashboard
 
           return;
         }
@@ -77,16 +77,16 @@ const RoleRouter: React.FC<RoleRouterProps> = () => {
               phone,
             });
           }
-          router.push('/members/cbo');
+          router.push('/business/cbo');
           return;
         }
 
         // Fallback if no recognized group
         console.log('No recognized group found');
-        //router.push('/members/home');
+        //router.push('/business/home');
       } catch (err) {
         // On error, don't strand the user
-        //router.push('/members/home');
+        //router.push('/business/home');
       } finally {
         if (!cancelled) setBusy(false);
       }

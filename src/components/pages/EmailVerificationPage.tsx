@@ -24,10 +24,10 @@ export default function VerifyEmail() {
         const s = await fetchAuthSession();
         if (!s.tokens?.idToken && alive) {
           // No user pool session here → go sign in (doesn't affect Owner flow)
-          router.replace("/members/sign-in?next=/members/sign-in/verify-email");
+          router.replace("/business/sign-in?next=/business/sign-in/verify-email");
         }
       } catch {
-        router.replace("/members/sign-in?next=/members/sign-in/verify-email");
+        router.replace("/business/sign-in?next=/business/sign-in/verify-email");
       }
     })();
     return () => { alive = false; };
@@ -60,7 +60,7 @@ export default function VerifyEmail() {
       });
       // pick up email_verified=true immediately
       await fetchAuthSession({ forceRefresh: true });
-      router.replace("/members/sign-in"); // unchanged
+      router.replace("/business/sign-in"); // unchanged
     } catch (e: any) {
       setErr(e?.message ?? "Verification failed");
     } finally {

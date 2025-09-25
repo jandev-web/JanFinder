@@ -17,7 +17,7 @@ const CBOHeader: React.FC<CBOHeaderProps> = ({ user }) => {
         <div className="mx-auto flex w-full relative z-20">
           {/* Logo on the Left */}
           <div className="flex-shrink-0 pr-6 pl-6 pt-8 z-20">
-            <Link href="/members/sign-in" className="text-[#001F54] font-bold">
+            <Link href="/business/sign-in" className="text-[#001F54] font-bold">
               <h1 className="text-5xl">Bid<span className="text-yellow-500">2</span>Clean</h1>
             </Link>
             <p className='pl-10 italic'>Franchise Member Area</p>
@@ -32,7 +32,7 @@ const CBOHeader: React.FC<CBOHeaderProps> = ({ user }) => {
               {/* Right side */}
               <div>
                 <Link
-                  href="/members/logging-out"
+                  href="/business/logging-out"
                   className="text-white text-lg mr-6 font-medium hover:text-yellow-500 transition duration-300"
                 >
                   Log Out
@@ -44,7 +44,7 @@ const CBOHeader: React.FC<CBOHeaderProps> = ({ user }) => {
             <nav className="flex items-center justify-center space-x-6  mt-4 pr-6">
               <div className="flex items-center space-x-6">
                 <Link
-                  href="/members/cbo"
+                  href="/business/cbo"
                   className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
 
                 >
@@ -54,7 +54,7 @@ const CBOHeader: React.FC<CBOHeaderProps> = ({ user }) => {
                 </Link>
                 <div className="h-8 border-l border-gray-300"></div>
                 <Link
-                  href="/members/cbo/franchise"
+                  href="/business/cbo/franchise"
                   className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
 
                 >
@@ -64,7 +64,7 @@ const CBOHeader: React.FC<CBOHeaderProps> = ({ user }) => {
                 </Link>
                 <div className="h-8 border-l border-gray-300"></div>
                 <Link
-                  href="/members/cbo/quotes"
+                  href="/business/cbo/quotes"
                   className="flex flex-col items-center px-6 py-4 cursor-pointer text-[#001F54] text-lg font-medium hover:text-yellow-300 transition duration-300 group"
 
                 >
@@ -74,7 +74,7 @@ const CBOHeader: React.FC<CBOHeaderProps> = ({ user }) => {
                 </Link>
                 <div className="h-8 border-l border-gray-300"></div>
                 <Link
-                  href="/members/cbo/profile"
+                  href="/business/cbo/profile"
                   className="flex items-center justify-center bg-yellow-400 text-[#001F54] text-lg font-medium px-4 py-2 rounded-full transition duration-300 hover:bg-[#001F54] hover:text-white"
                 >
                   <FaUserCircle size={28} />

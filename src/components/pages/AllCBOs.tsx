@@ -55,15 +55,15 @@ const AllCBOs: React.FC<UserProps> = ({ user }) => {
     const handleClick = (cbo: CBO) => {
         //console.log('CBO:')
         //console.log(cbo.franchiseID)
-        router.push(`/members/owner/single-cbo?cboID=${cbo.CBOID}`);
+        router.push(`/business/owner/single-cbo?cboID=${cbo.CBOID}`);
     };
 
     const handleAddCBO = () => {
-        router.push('/members/owner/cbos/add-cbo'); // Adjust the path to match your routing structure
+        router.push('/business/owner/cbos/add-cbo'); // Adjust the path to match your routing structure
     };
 
     const handleRequests = () => {
-        router.push('/members/owner/cbos/requests'); // Adjust the path to match your routing structure
+        router.push('/business/owner/cbos/requests'); // Adjust the path to match your routing structure
     };
 
     //console.log('CBOs:')

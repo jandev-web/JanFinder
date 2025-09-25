@@ -22,7 +22,7 @@ const OneCBO: React.FC<OneCBOPageProps> = ({ user }) => {
         const fetchUser = async () => {
             try {
                 if (!user) {
-                    redirect('/members/sign-in');
+                    redirect('/business/sign-in');
 
                 }
 

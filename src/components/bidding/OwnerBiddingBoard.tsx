@@ -98,50 +98,71 @@ export const OwnerBiddingBoard: React.FC = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-5">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Bidding Dashboard</h1>
-          <p className="text-gray-500">
+          <h1 className="text-xl font-medium text-gray-900">Bidding Dashboard</h1>
+          <p className="text-gray-600 text-sm">
             Compete for cleaning contracts in your region
           </p>
         </div>
         
         {currentProvider && (
-          <Card className="p-4">
+          <div className="bg-gray-50 rounded-md p-3 border border-gray-200">
             <div className="flex items-center gap-4 text-sm">
               <div className="text-center">
-                <div className="font-bold text-lg">{currentProvider.credits}</div>
-                <div className="text-gray-500">Credits</div>
+                <div className="font-medium text-base text-gray-900">{currentProvider.credits}</div>
+                <div className="text-gray-500 text-xs">Credits</div>
               </div>
               <div className="text-center">
-                <div className="font-bold text-lg">{Math.round(currentProvider.winRate * 100)}%</div>
-                <div className="text-gray-500">Win Rate</div>
+                <div className="font-medium text-base text-gray-900">{Math.round(currentProvider.winRate * 100)}%</div>
+                <div className="text-gray-500 text-xs">Win Rate</div>
               </div>
             </div>
-          </Card>
+          </div>
         )}
       </div>
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="open">Open ({openQuotes.length})</TabsTrigger>
-          <TabsTrigger value="my-bids">My Bids ({myBids.length})</TabsTrigger>
-          <TabsTrigger value="won">Won ({wonQuotes.length})</TabsTrigger>
-          <TabsTrigger value="lost">Lost ({lostQuotes.length})</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 h-auto rounded-md">
+          <TabsTrigger 
+            value="open" 
+            className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm py-2 text-sm font-medium rounded-sm"
+          >
+            Open ({openQuotes.length})
+          </TabsTrigger>
+          <TabsTrigger 
+            value="my-bids"
+            className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm py-2 text-sm font-medium rounded-sm"
+          >
+            My Bids ({myBids.length})
+          </TabsTrigger>
+          <TabsTrigger 
+            value="won"
+            className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm py-2 text-sm font-medium rounded-sm"
+          >
+            Won ({wonQuotes.length})
+          </TabsTrigger>
+          <TabsTrigger 
+            value="lost"
+            className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm py-2 text-sm font-medium rounded-sm"
+          >
+            Lost ({lostQuotes.length})
+          </TabsTrigger>
         </TabsList>
 
         {/* Open Quotes Tab */}
         <TabsContent value="open" className="space-y-6">
           {loading ? (
-            <div className="text-center py-8">Loading quotes...</div>
+            <div className="text-center py-8 text-gray-500">Loading quotes...</div>
           ) : openQuotes.length === 0 ? (
-            renderEmptyState(
-              "No Open Quotes",
-              "No open quotes in your region. Try expanding your radius or check back soon."
-            )
+            <div className="bg-gray-50 rounded-lg p-12 text-center border border-gray-200">
+              <div className="h-12 w-12 mx-auto mb-4 text-gray-400 opacity-50" />
+              <h3 className="text-base font-medium mb-2 text-gray-900">No Open Quotes</h3>
+              <p className="text-gray-600 text-sm">No open quotes in your region. Try expanding your radius or check back soon.</p>
+            </div>
           ) : (
             <>
               {renderQuoteGroup(
@@ -171,10 +192,11 @@ export const OwnerBiddingBoard: React.FC = () => {
         {/* My Bids Tab */}
         <TabsContent value="my-bids" className="space-y-6">
           {myBids.length === 0 ? (
-            renderEmptyState(
-              "No Active Bids",
-              "You haven't placed any bids yet. Browse open quotes to get started."
-            )
+            <div className="bg-gray-50 rounded-lg p-12 text-center border border-gray-200">
+              <div className="h-12 w-12 mx-auto mb-4 text-gray-400 opacity-50" />
+              <h3 className="text-base font-medium mb-2 text-gray-900">No Active Bids</h3>
+              <p className="text-gray-600 text-sm">You haven't placed any bids yet. Browse open quotes to get started.</p>
+            </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {myBids.map(quote => {
@@ -196,18 +218,20 @@ export const OwnerBiddingBoard: React.FC = () => {
 
         {/* Won Tab */}
         <TabsContent value="won">
-          {renderEmptyState(
-            "No Won Contracts",
-            "Your won contracts will appear here. Keep bidding to win your first contract!"
-          )}
+          <div className="bg-gray-50 rounded-lg p-12 text-center border border-gray-200">
+            <div className="h-12 w-12 mx-auto mb-4 text-gray-400 opacity-50" />
+            <h3 className="text-base font-medium mb-2 text-gray-900">No Won Contracts</h3>
+            <p className="text-gray-600 text-sm">Your won contracts will appear here. Keep bidding to win your first contract!</p>
+          </div>
         </TabsContent>
 
         {/* Lost Tab */}
         <TabsContent value="lost">
-          {renderEmptyState(
-            "No Lost Bids",
-            "Your unsuccessful bids will appear here for review and learning."
-          )}
+          <div className="bg-gray-50 rounded-lg p-12 text-center border border-gray-200">
+            <div className="h-12 w-12 mx-auto mb-4 text-gray-400 opacity-50" />
+            <h3 className="text-base font-medium mb-2 text-gray-900">No Lost Bids</h3>
+            <p className="text-gray-600 text-sm">Your unsuccessful bids will appear here for review and learning.</p>
+          </div>
         </TabsContent>
       </Tabs>
 

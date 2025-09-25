@@ -171,7 +171,7 @@ const RequestFranchiseFound: React.FC<SelfCBOSignUpProps> = ({ franchise }) => {
               {emailExists && (
                 <p className="text-red-500 text-sm mt-1">
                   This email is already in use. Have an account?{' '}
-                  <Link href="/members/sign-in" className="underline hover:text-yellow-500">
+                  <Link href="/business/sign-in" className="underline hover:text-yellow-500">
                     Click here to sign in.
                   </Link>
                 </p>

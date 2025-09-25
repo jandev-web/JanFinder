@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import FranchiseInfo from './FranchiseInfo';
+import FranchiseInfo from './OldFranchiseInfo';
 interface OwnerFranchisePageProps {
     user: any;
     userInfo: any;

@@ -45,19 +45,19 @@ const AllQuotesCBO: React.FC<AllQuotesProps> = ({ user }) => {
     <div className="flex flex-col items-center gap-4 py-10">
       <button
         className="w-48 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
-        onClick={() => router.push('/members/cbo/quotes/acceptedQuotes')}
+        onClick={() => router.push('/business/cbo/quotes/acceptedQuotes')}
       >
         Accepted Quotes
       </button>
       <button
         className="w-48 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
-        onClick={() => router.push('/members/cbo/quotes/availableQuotes')}
+        onClick={() => router.push('/business/cbo/quotes/availableQuotes')}
       >
         Available Quotes
       </button>
       <button
         className="w-48 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
-        onClick={() => router.push('/members/cbo/quotes/startQuote')}
+        onClick={() => router.push('/business/cbo/quotes/startQuote')}
       >
         Start Quote
       </button>

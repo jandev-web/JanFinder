@@ -101,7 +101,7 @@ const OwnerProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
           {/* Edit Info Button */}
           <div className="mt-6 flex justify-center">
             <a
-              href="/members/owner/profile/edit"
+              href="/business/owner/profile/edit"
               className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-300 hover:text-green-500 transition"
             >
               Edit Info

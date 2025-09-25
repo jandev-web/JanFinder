@@ -59,7 +59,7 @@ export default function CBOAvailableQuoteClient({
     return `${d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} at ${d.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}`;
   };
 
-  const goBack = () => router.push('/members/cbo/quotes/available');
+  const goBack = () => router.push('/business/cbo/quotes/available');
 
   const onAccept = async () => {
     try {
@@ -67,7 +67,7 @@ export default function CBOAvailableQuoteClient({
       setLoading(true);
       await acceptQuoteAction({ requestID, memberCBOID });
       alert('Offer accepted! Contract generation has started.');
-      router.push('/members/cbo/quotes/available');
+      router.push('/business/cbo/quotes/available');
     } catch (e: any) {
       console.error('Accept error:', e);
       setError(e?.message || 'Something went wrong.');

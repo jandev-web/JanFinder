@@ -20,7 +20,7 @@ const FranchiseJoinRequestCard: React.FC<FranchiseJoinRequestCardProps> = ({ req
       await acceptRequest(request.RequestID, ownerID);
       setActionStatus('Accepted');
       // Reload/navigate to the requests page
-      router.push('/members/owner/cbos/requests');
+      router.push('/business/owner/cbos/requests');
     } catch (error) {
       setActionStatus('Error accepting request');
       console.error(error);
@@ -32,7 +32,7 @@ const FranchiseJoinRequestCard: React.FC<FranchiseJoinRequestCardProps> = ({ req
       await denyRequest(request.RequestID, ownerID);
       setActionStatus('Denied');
       // Reload/navigate to the requests page
-      router.push('/members/owner/cbos/requests');
+      router.push('/business/owner/cbos/requests');
     } catch (error) {
       setActionStatus('Error denying request');
       console.error(error);

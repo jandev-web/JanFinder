@@ -24,7 +24,7 @@ const OwnerCBOsPage: React.FC<OwnerCBOsPageProps> = ({ user }) => {
         const fetchUser = async () => {
           try {
             if (!user) {
-              redirect('/members/sign-in');
+              redirect('/business/sign-in');
               return;
             }
     
